@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사인법칙·코사인법칙 — 삼각형 해석의 본질 | 학습자료</title>
+
+  <!-- KaTeX CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <!-- Pretendard 폰트 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --border: #e0e0e0;
+      --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9;
+      --warning-border: #4caf50;
+      --basic: #4caf50;
+      --standard: #2196f3;
+      --advanced: #ff9800;
+      --exam: #f44336;
+      --button-bg: #e8e8ec;
+      --button-active: #1a1a1a;
+      --button-active-text: #ffffff;
+    }
+
+    body.dark {
+      --bg: #1a1a1a;
+      --text: #e0e0e0;
+      --border: #444;
+      --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23;
+      --button-bg: #333;
+      --button-active: #fff;
+      --button-active-text: #1a1a1a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    header h1 { font-size: 1.8em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0;
+      align-items: center;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--button-bg);
+      color: var(--text);
+      font-size: 0.95em;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+
+    button:hover { opacity: 0.85; }
+    button.active {
+      background: var(--button-active);
+      color: var(--button-active-text);
+      border-color: var(--button-active);
+    }
+
+    section { margin: 32px 0; }
+    section h2 {
+      font-size: 1.3em;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .concept-block { margin: 16px 0; }
+    .concept-block h3 { font-size: 1.1em; margin-top: 24px; }
+    .concept-block .tree {
+      font-family: 'D2Coding', 'Consolas', monospace;
+      background: var(--summary-bg);
+      padding: 12px 16px;
+      border-radius: 6px;
+      white-space: pre-wrap;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+    .concept-block .callout {
+      background: var(--summary-bg);
+      border-left: 4px solid var(--standard);
+      padding: 10px 14px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+
+    article.problem {
+      margin: 16px 0;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--basic);
+      border-radius: 8px;
+      background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details {
+      margin-top: 12px;
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      padding: 8px 12px;
+      background: var(--summary-bg);
+      border-radius: 4px;
+      list-style: none;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: "▶ ";
+      font-size: 0.85em;
+    }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic;
+      opacity: 0.85;
+      border-left: 3px solid var(--border);
+      padding-left: 12px;
+      margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border);
+      background: var(--warning-bg);
+      padding: 16px 20px;
+      margin: 32px 0 16px;
+      border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer {
+      text-align: center;
+      opacity: 0.6;
+      font-size: 0.9em;
+      margin-top: 40px;
+    }
+
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 1.2em;
+      padding: 0;
+      display: none;
+      z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+      .concept-block .tree { background: #f4f4f7 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>사인법칙·코사인법칙 — 삼각형 해석의 본질</h1>
+    <p class="meta-row">📺 영상: <a href="https://www.youtube.com/live/W9ReLryydQg" target="_blank">https://www.youtube.com/live/W9ReLryydQg</a> (어썸 현경, 22분)</p>
+    <p class="meta-row">🎯 학습 목표: 사인·코사인 법칙으로 삼각형 6요소 추리, 직각 유무로 도구 선택, 외접원 R과의 연계, 변형식·넓이 공식 활용</p>
+    <p class="meta-row">📚 단원: [고1-수학Ⅰ-삼각함수의 활용] (12수학Ⅰ02-04, 02-05)</p>
+    <p class="meta-row">⏱️ 예상 소요시간: 55분 (개념 25분 + 문항 30분)</p>
+  </header>
+
+  <div class="controls">
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span style="flex:1"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+  <main>
+
+    <!-- 도입 -->
+    <section id="example">
+      <h2>📌 도입: 예시 문항</h2>
+      <article class="problem basic">
+        <h3>예시 — 직각이 보이는 가장 쉬운 케이스</h3>
+        <p class="problem-body"><strong>문제:</strong> 직각삼각형 $ABC$에서 $\angle C = 90°$, $\overline{AB} = 5$, $\angle B = 60°$ 일 때 $\overline{AC}$의 길이를 구하시오.</p>
+        <details open>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> $\overline{AC}$는 $\angle B$의 대변. $\sin B = \dfrac{\overline{AC}}{\overline{AB}}$.</p>
+            <p><strong>STEP 2:</strong> $\overline{AC} = 5\sin 60° = 5\cdot \dfrac{\sqrt{3}}{2} = \dfrac{5\sqrt{3}}{2}$.</p>
+            <p class="answer"><strong>정답:</strong> $\dfrac{5\sqrt{3}}{2}$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 직각이 보이면 삼각비 한 줄로 끝. 사인·코사인 법칙은 <em>직각이 안 보일 때</em> 꺼내는 도구다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <!-- 개념 설명 -->
+    <section id="concept">
+      <h2>💡 개념 설명 (파인만식 4단계)</h2>
+
+      <div class="concept-block">
+        <h3>① 정의 (한 줄)</h3>
+        <p><strong>삼각형의 해석</strong>이란, 삼각형의 6요소(3각 + 3변) 중 부분 정보로 나머지를 구하는 작업. 도구는 4가지 — 피타고라스 정리, 삼각비, 사인법칙, 코사인법칙.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 비유</h3>
+        <p>삼각형은 <strong>6명이 사는 동아리방</strong>이에요. 이름표 6개(각 3 + 변 3) 중 일부만 보고도 가려진 이름표를 추리해야 해요. <strong>'직각'이라는 특별 손님</strong>이 있으면 가장 쉬운 도구(피타고라스·삼각비)가 통하고, 없으면 두 가지 새 도구(사인·코사인 법칙)를 꺼내요.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 작동 원리</h3>
+
+        <p><strong>의사결정 트리 (가장 중요)</strong></p>
+        <div class="tree">문제에서 직각이 보이는가?
+├─ YES → 피타고라스 정리 / 삼각비 (가장 간단)
+└─ NO  → ┬─ (변, 대각) 짝 또는 외접원 R 등장? → 사인법칙
+         ├─ 두 변 + 끼인각, 또는 세 변 모두?  → 코사인법칙
+         └─ 직각이 필요하면?                 → 수선의 발 그리기</div>
+
+        <div class="callout">
+          <p><strong>사인법칙</strong> &nbsp; $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=\dfrac{c}{\sin C}=2R$</p>
+          <p>$R$은 외접원의 반지름 (외접원 = 세 꼭짓점을 모두 지나는 원).</p>
+          <p><strong>왜 $2R$이 튀어나오나?</strong> 한 호에 대한 원주각은 모두 같다는 중3 정리를 이용. 원주각으로 직각삼각형 $A'BC$를 만들면 빗변이 지름 $2R$이 되고, $\sin A = \sin A' = \dfrac{a}{2R}$가 자연스레 나옵니다.</p>
+        </div>
+
+        <div class="callout">
+          <p><strong>코사인법칙</strong> &nbsp; $a^2 = b^2 + c^2 - 2bc\cos A$ (순환적으로 3가지 형태)</p>
+          <p>변형식: $\cos A = \dfrac{b^2+c^2-a^2}{2bc}$ (세 변에서 각을 추출할 때)</p>
+          <p><strong>왜 이렇게 되나?</strong> 한 꼭짓점에서 마주보는 변에 <strong>수선의 발</strong>을 내리면 직각삼각형 두 개가 생기고, 그 안에서 피타고라스 + 삼각비가 결합되어 위 식이 나옵니다. 즉 코사인법칙은 <strong>피타고라스 정리의 확장판</strong>입니다 ($A=90°$이면 $\cos A=0$이라 정확히 피타고라스로 환원).</p>
+        </div>
+
+        <div class="callout">
+          <p><strong>삼각형 넓이</strong> &nbsp; $S = \dfrac{1}{2}bc\sin A$ (두 변과 끼인각 패턴)</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 자주 하는 실수</h3>
+        <ol>
+          <li><strong>변의 비 ≠ 각의 비.</strong> $A:B:C = 1:2:3$ 이라고 $a:b:c = 1:2:3$ 이 아닙니다. 사인법칙에 의해 $a:b:c = \sin A:\sin B:\sin C$ — <strong>사인 값의 비</strong>와 같습니다.</li>
+          <li><strong>코사인법칙의 음수 부호 빠짐.</strong> $-2bc\cos A$의 마이너스 누락이 가장 흔한 실수. 둔각이면 $\cos A &lt; 0$ 이라 부호가 다시 뒤집히니 끝까지 부호 추적!</li>
+          <li><strong>외접원 R, 한 쌍이면 충분.</strong> $(a, A)$ 한 쌍만 알면 $2R = \dfrac{a}{\sin A}$ 로 즉시 R을 구할 수 있어요. 세 쌍 모두 필요하다고 착각 금지.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 수준별 문항 -->
+    <section id="problems">
+      <h2>📝 수준별 문항 (기초 3 / 기본 3 / 심화 2 / 수능 대비 2)</h2>
+
+      <h3 style="color: var(--basic);">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 사인법칙 단순 적용</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $a=4$, $\angle A = 30°$, $\angle B = 45°$ 일 때 $b$의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 사인법칙 $\dfrac{a}{\sin A} = \dfrac{b}{\sin B}$ 적용.</p>
+            <p><strong>STEP 2:</strong> $\dfrac{4}{\sin 30°} = \dfrac{b}{\sin 45°}$ → $\dfrac{4}{1/2} = \dfrac{b}{\sqrt{2}/2}$ → $8 = \dfrac{2b}{\sqrt{2}}$ → $b = 4\sqrt{2}$.</p>
+            <p class="answer"><strong>정답:</strong> $4\sqrt{2}$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> (변, 대각) 쌍이 보이면 사인법칙 1순위.</p>
+            <p class="warning"><strong>오답 주의:</strong> $\sin 30°$ 와 $\sin 45°$ 의 위치(분자·분모)를 바꿔 대입 — 변과 대각의 짝을 헷갈리지 말 것.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 코사인법칙 단순 적용</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $b=3$, $c=5$, $\angle A = 60°$ 일 때 $a$의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 두 변 + 끼인각 → 코사인법칙 $a^2 = b^2 + c^2 - 2bc\cos A$.</p>
+            <p><strong>STEP 2:</strong> $a^2 = 9 + 25 - 2\cdot 3\cdot 5\cdot \dfrac{1}{2} = 34 - 15 = 19$.</p>
+            <p><strong>STEP 3:</strong> $a = \sqrt{19}$.</p>
+            <p class="answer"><strong>정답:</strong> $\sqrt{19}$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> "두 변 + 끼인각" 패턴은 항상 코사인법칙.</p>
+            <p class="warning"><strong>오답 주의:</strong> $-2bc\cos A$ 의 음수 부호 누락이 가장 흔한 실수.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 3 — 외접원 R 직접 계산</h3>
+        <p class="problem-body"><strong>문제:</strong> 외접원의 반지름이 $R=4$ 인 삼각형 $ABC$ 에서 $\angle A = 30°$ 일 때 $a$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 사인법칙의 외접원 형태 $\dfrac{a}{\sin A} = 2R$ 적용.</p>
+            <p><strong>STEP 2:</strong> $a = 2R\sin A = 2\cdot 4 \cdot \sin 30° = 8 \cdot \dfrac{1}{2} = 4$.</p>
+            <p class="answer"><strong>정답:</strong> $4$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> $a = 2R\sin A$ 는 외접원이 등장하면 즉시 꺼내는 형태.</p>
+            <p class="warning"><strong>오답 주의:</strong> $R$ 과 $2R$ 헷갈림 — 사인법칙 분모는 <strong>지름</strong> $2R$.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--standard);">🟡 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 변형식으로 각 구하기</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $a=7$, $b=5$, $c=3$ 일 때 $\cos A$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 세 변에서 각을 구할 땐 코사인법칙 변형식 $\cos A = \dfrac{b^2 + c^2 - a^2}{2bc}$.</p>
+            <p><strong>STEP 2:</strong> $\cos A = \dfrac{25 + 9 - 49}{2\cdot 5\cdot 3} = \dfrac{-15}{30} = -\dfrac{1}{2}$. (따라서 $\angle A = 120°$, 둔각)</p>
+            <p class="answer"><strong>정답:</strong> $-\dfrac{1}{2}$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 세 변 모두 알면 변형식으로 각을 한 번에 추출.</p>
+            <p class="warning"><strong>오답 주의:</strong> $b^2+c^2-a^2$ 에서 $a$ 가 <strong>구하려는 각의 대변</strong>임을 혼동.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 변의 비 ↔ 사인의 비</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $\sin A : \sin B : \sin C = 3:5:7$ 이고 $b=10$ 일 때 $a + c$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 사인법칙 $\dfrac{a}{\sin A} = \dfrac{b}{\sin B} = \dfrac{c}{\sin C}$ 에서 $a:b:c = \sin A:\sin B:\sin C = 3:5:7$.</p>
+            <p><strong>STEP 2:</strong> $b=10$ 이므로 비례상수 $k = 2$. 따라서 $a = 6$, $c = 14$.</p>
+            <p><strong>STEP 3:</strong> $a + c = 20$.</p>
+            <p class="answer"><strong>정답:</strong> $20$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> <strong>사인의 비 = 변의 비</strong>. 각의 비가 아니라 사인 값의 비!</p>
+            <p class="warning"><strong>오답 주의:</strong> $\sin A:\sin B:\sin C$ 를 $\angle A:\angle B:\angle C$ 로 잘못 해석 — 영상이 강조한 함정.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 3 — 넓이 공식</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $b=6$, $c=8$, $\angle A = 30°$ 일 때 넓이 $S$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 두 변 + 끼인각 → 넓이 공식 $S = \dfrac{1}{2}bc\sin A$.</p>
+            <p><strong>STEP 2:</strong> $S = \dfrac{1}{2}\cdot 6\cdot 8\cdot \sin 30° = 24\cdot \dfrac{1}{2} = 12$.</p>
+            <p class="answer"><strong>정답:</strong> $12$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> "두 변 + 끼인각" 패턴은 → 넓이까지 한 번에 처리.</p>
+            <p class="warning"><strong>오답 주의:</strong> $\sin$ 대신 $\cos$ 를 적용 — 넓이는 항상 $\sin$.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--advanced);">🔴 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 외접원과 사인법칙 변형식 결합</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 의 외접원 반지름이 $R = \sqrt{3}$ 이고 $a^2 + b^2 + c^2 = 27$ 일 때 $\sin^2 A + \sin^2 B + \sin^2 C$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 사인법칙 $\dfrac{a}{\sin A} = 2R$ 에서 $\sin A = \dfrac{a}{2R}$.</p>
+            <p><strong>STEP 2:</strong> 양변 제곱: $\sin^2 A = \dfrac{a^2}{4R^2}$. $B$, $C$ 도 동일.</p>
+            <p><strong>STEP 3:</strong> $\sin^2 A + \sin^2 B + \sin^2 C = \dfrac{a^2 + b^2 + c^2}{4R^2}$.</p>
+            <p><strong>STEP 4:</strong> $= \dfrac{27}{4 \cdot 3} = \dfrac{27}{12} = \dfrac{9}{4}$.</p>
+            <p class="answer"><strong>정답:</strong> $\dfrac{9}{4}$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 사인법칙을 $\sin = \dfrac{변}{2R}$ 형태로 뒤집어 쓰면 사인 ↔ 변 통합 변환이 자유로워짐.</p>
+            <p class="warning"><strong>오답 주의:</strong> $4R^2$ 대신 $2R^2$ 또는 $R^2$ 사용 (제곱하면서 분모 처리 실수).</p>
+            <p class="intent"><strong>출제 의도:</strong> 사인법칙을 단순 적용이 아닌 변형식 형태로 다루는 능력 점검 (수능 단답형 단골 패턴).</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 코사인법칙 + 넓이 공식 연계</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $a=7$, $b=8$, $c=5$ 일 때 삼각형의 넓이 $S$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 세 변에서 각을 추출. 코사인법칙 변형식으로 $\angle A$ 부터: $\cos A = \dfrac{b^2 + c^2 - a^2}{2bc} = \dfrac{64 + 25 - 49}{2\cdot 8\cdot 5} = \dfrac{40}{80} = \dfrac{1}{2}$.</p>
+            <p><strong>STEP 2:</strong> $\cos A = \dfrac{1}{2}$ → $\angle A = 60°$ → $\sin A = \dfrac{\sqrt{3}}{2}$.</p>
+            <p><strong>STEP 3:</strong> 넓이 공식 $S = \dfrac{1}{2}bc\sin A = \dfrac{1}{2}\cdot 8\cdot 5\cdot \dfrac{\sqrt{3}}{2}$.</p>
+            <p><strong>STEP 4:</strong> $S = 20\cdot \dfrac{\sqrt{3}}{2} = 10\sqrt{3}$.</p>
+            <p class="answer"><strong>정답:</strong> $10\sqrt{3}$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 세 변만 주어진 경우 <strong>코사인법칙 → 각 → 넓이</strong> 의 두 단계 콤보.</p>
+            <p class="warning"><strong>오답 주의:</strong> $A$ 의 대변이 $a$ 임을 헷갈려 분자에 다른 변을 넣는 실수.</p>
+            <p class="intent"><strong>출제 의도:</strong> 두 도구(코사인법칙·넓이 공식)를 순차 결합 — 헤론 공식 없이도 넓이를 구할 수 있는 표준 경로.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--exam);">🟣 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 단답형 4점 유형 (외접원 결합)</h3>
+        <p class="problem-body"><strong>문제:</strong> 원에 내접하는 삼각형 $ABC$ 에서 $\overline{AB}=8$, $\overline{AC}=6$, $\angle A = 60°$ 이다. 외접원의 넓이를 $\dfrac{p}{q}\pi$ ($p$, $q$ 는 서로소인 자연수) 로 나타낼 때 $p+q$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 두 변 + 끼인각이므로 코사인법칙으로 마주보는 변 $\overline{BC}$ 추출. $\overline{BC}^2 = 8^2 + 6^2 - 2\cdot 8\cdot 6\cdot \cos 60° = 64 + 36 - 48 = 52$. 따라서 $\overline{BC} = 2\sqrt{13}$.</p>
+            <p><strong>STEP 2:</strong> $\overline{BC}$ 는 $\angle A$ 의 대변. 사인법칙 $\dfrac{\overline{BC}}{\sin A} = 2R$ 적용.</p>
+            <p><strong>STEP 3:</strong> $2R = \dfrac{2\sqrt{13}}{\sin 60°} = \dfrac{2\sqrt{13}}{\sqrt{3}/2} = \dfrac{4\sqrt{13}}{\sqrt{3}} = \dfrac{4\sqrt{39}}{3}$. 따라서 $R = \dfrac{2\sqrt{39}}{3}$.</p>
+            <p><strong>STEP 4:</strong> 외접원 넓이 $= \pi R^2 = \pi \cdot \dfrac{4\cdot 39}{9} = \dfrac{156}{9}\pi = \dfrac{52}{3}\pi$.</p>
+            <p><strong>STEP 5:</strong> $p = 52$, $q = 3$, $\gcd(52, 3) = 1$ 이므로 서로소 ✓. $p + q = 55$.</p>
+            <p class="answer"><strong>정답:</strong> $55$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> <strong>코사인법칙(변 추출) → 사인법칙(외접원 R)</strong> 의 표준 콤보.</p>
+            <p class="warning"><strong>오답 주의:</strong> $2R$ 과 $R$ 혼동 — 사인법칙 분모는 $2R$. 외접원 넓이 공식엔 $R$ 자체.</p>
+            <p class="intent"><strong>출제 의도:</strong> 두 법칙의 연계 + 분수 정수화 처리. 수능 단답형(4점) 단골 구조.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 21번 유형 (각의 비 + 직각 결합)</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $\angle A : \angle B : \angle C = 1 : 2 : 3$ 이고 외접원의 반지름이 $R = 4$ 이다. $a^2 + b^2 + c^2$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 각의 합 $= 180°$, 비 $1:2:3$ → 합 6 → 각각 $30°, 60°, 90°$. 따라서 $\angle A = 30°$, $\angle B = 60°$, $\angle C = 90°$.</p>
+            <p><strong>STEP 2:</strong> $\angle C = 90°$ 인 삼각형은 빗변 $c$ 가 외접원의 <strong>지름</strong>. 따라서 $c = 2R = 8$, $c^2 = 64$.</p>
+            <p><strong>STEP 3:</strong> 사인법칙으로 $a$, $b$ 추출. $a = 2R\sin A = 8\sin 30° = 4$ → $a^2 = 16$. $b = 2R\sin B = 8\sin 60° = 4\sqrt{3}$ → $b^2 = 48$.</p>
+            <p><strong>STEP 4:</strong> $a^2 + b^2 + c^2 = 16 + 48 + 64 = 128$.</p>
+            <p class="answer"><strong>정답:</strong> $128$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 각의 비 → 실제 각 변환 후, 직각이 보이면 <strong>빗변 = 지름</strong> 이라는 원의 성질을 즉시 활용 (영상의 "지름의 원주각=$90°$" 의 역방향 사용).</p>
+            <p class="warning"><strong>오답 주의:</strong> $1:2:3$ 을 변의 비로 착각해서 $a:b:c$ 에 그대로 대입 — 각의 비는 변의 비가 아니다.</p>
+            <p class="intent"><strong>출제 의도:</strong> 직각삼각형의 외접원 = 빗변 절반 이라는 사실을 사인법칙 안에서 일관되게 다루기. 수능 21번(준킬러) 도형 진입 패턴.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 검증 결과 — ★★ 플래그 항목 없음</h3>
+    <p>STAGE 4의 3중 검증(수학감수·난이도조정·학생시뮬)에서 <strong>★★/★ 등급 항목이 0건</strong> 발견되었습니다. 모든 정답은 재검산 완료, 풀이 단계 비약 없음, 학생 입장에서 막히는 표현 없음.</p>
+    <p>다만 다음 사항은 교사가 가볍게 확인해 주세요:</p>
+    <ul>
+      <li>자료의 자막 출처는 <strong>유튜브 자동자막(yt-dlp 추출)</strong>이며, 자동자막 특성상 일부 강의 표현(예: 강사 호칭, 일부 보조 설명)이 본 자료에 정확히 반영되지 않았을 수 있습니다.</li>
+      <li>심화·수능 대비 4개 문항은 <strong>수능 출제 패턴을 모방한 창작 문항</strong>이며, 실재 기출문제 출처(연도·번호) 표기는 의도적으로 사용하지 않았습니다. "수능 대비"라는 라벨은 출제 의도와 난이도 수준을 가리킬 뿐, 실제 수능 기출문제가 아님을 명시합니다.</li>
+      <li>영상 자막이 21:55에서 끊긴 부분의 <strong>삼각형 넓이 공식 보충</strong>은 교육과정 코드 12수학Ⅰ02-05에 따라 추가한 것으로, 영상 의도와 충돌하지 않으나 강사의 추가 설명이 자료에 누락되었을 가능성이 있습니다.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>생성일: 2026-05-05 | 영상 출처: <a href="https://www.youtube.com/live/W9ReLryydQg">https://www.youtube.com/live/W9ReLryydQg</a> (어썸 현경)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => {
+        if (b.id !== 'darkModeToggle') b.classList.remove('active');
+      });
+      if (btn) btn.classList.add('active');
+
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) {
+          a.classList.remove('hidden');
+        } else {
+          a.classList.add('hidden');
+        }
+      });
+
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling;
+        let hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('scrollTopBtn');
+      btn.style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+</body>
+</html>

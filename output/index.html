@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📚 학습자료 갤러리</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --bg: #f7f7f9; --card: #fff; --text: #1a1a1a; --muted: #666;
+    --border: #e0e0e0; --accent: #2196f3; --tag-bg: #eef2ff; --tag-text: #4338ca;
+    --grade-bg: #fef3c7; --grade-text: #92400e;
+    --warning-bg: #fef2f2; --warning-text: #991b1b; --warning-border: #fca5a5;
+  }
+  body.dark {
+    --bg: #0f0f12; --card: #1a1a1f; --text: #e0e0e0; --muted: #999;
+    --border: #2d2d33; --accent: #60a5fa; --tag-bg: #1e1b4b; --tag-text: #c7d2fe;
+    --grade-bg: #422006; --grade-text: #fbbf24;
+    --warning-bg: #2d1414; --warning-text: #fca5a5; --warning-border: #7f1d1d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+    background: var(--bg); color: var(--text); margin: 0; padding: 24px 16px 60px;
+    line-height: 1.5; transition: background 0.2s, color 0.2s;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  header { margin-bottom: 24px; }
+  header h1 { margin: 0 0 4px; font-size: 1.7em; }
+  .stats { color: var(--muted); font-size: 0.95em; }
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin: 18px 0; padding: 14px 16px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 10px;
+  }
+  .controls .group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .controls .group .label { color: var(--muted); font-size: 0.9em; margin-right: 4px; }
+  .controls input[type=search] {
+    flex: 1; min-width: 180px; padding: 8px 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg); color: var(--text); font: inherit;
+  }
+  .controls button {
+    padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg); color: var(--text); cursor: pointer; font: inherit; font-size: 0.9em;
+    transition: all 0.15s;
+  }
+  .controls button:hover { border-color: var(--accent); }
+  .controls button.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .gallery {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; transition: transform 0.15s, box-shadow 0.15s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .card.hidden { display: none; }
+  .thumb-wrap {
+    position: relative; aspect-ratio: 16/9; background: var(--border);
+    overflow: hidden;
+  }
+  .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb-wrap .badge {
+    position: absolute; top: 8px; left: 8px;
+    background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px;
+    border-radius: 4px; font-size: 0.78em; font-weight: 600;
+  }
+  .thumb-wrap .date {
+    position: absolute; bottom: 8px; right: 8px;
+    background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px;
+    border-radius: 4px; font-size: 0.78em;
+  }
+  .info { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .info h3 {
+    margin: 0; font-size: 1.0em; line-height: 1.35;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .info .channel { color: var(--muted); font-size: 0.85em; }
+  .info .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: 8px; }
+  .tag {
+    padding: 2px 8px; border-radius: 4px; font-size: 0.78em;
+    background: var(--tag-bg); color: var(--tag-text);
+  }
+  .tag.grade { background: var(--grade-bg); color: var(--grade-text); font-weight: 600; }
+  .actions { display: flex; border-top: 1px solid var(--border); }
+  .actions a {
+    flex: 1; text-align: center; padding: 9px 8px;
+    text-decoration: none; color: var(--text); font-size: 0.88em; font-weight: 500;
+    transition: background 0.1s;
+  }
+  .actions a:hover { background: var(--bg); }
+  .actions a.primary { color: var(--accent); }
+  .actions a + a { border-left: 1px solid var(--border); }
+  .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+  .duplicates {
+    background: var(--warning-bg); color: var(--warning-text);
+    border: 1px solid var(--warning-border); border-radius: 8px;
+    padding: 12px 16px; margin: 14px 0;
+  }
+  .duplicates summary { cursor: pointer; font-weight: 600; }
+  .duplicates ul { margin: 8px 0 0; padding-left: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>📚 학습자료 갤러리</h1>
+    <div class="stats">총 2개 자료 · 2개 학년 · 갱신 2026-05-05 09:59</div>
+  </header>
+
+  
+
+  <div class="controls">
+    <input type="search" id="q" placeholder="🔎 제목 · 주제 · 채널 검색">
+    <button id="darkBtn" type="button">🌙</button>
+  </div>
+
+  <div class="controls">
+    <div class="group">
+      <span class="label">학년</span>
+      <button data-grade="all" class="active">전체</button>
+      <button data-grade="고1">고1</button>
+      <button data-grade="고3">고3</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="group" id="unitFilter">
+      <span class="label">단원</span>
+      <button data-unit="all" class="active">전체</button>
+    </div>
+  </div>
+
+  <main class="gallery" id="gallery">
+    <article class="card" data-grade="고3" data-unit="수학Ⅱ-도함수의활용" data-search="3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 3차함수극값2대1분할 [정병훈t] 요리조리 수학 수학ⅱ-도함수의활용 고3">
+  <a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/00ByGXdH-mI/mqdefault.jpg" loading="lazy" alt="3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이">
+    <span class="badge">고3</span>
+    <span class="date">2026.05.05</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" style="color:inherit;text-decoration:none">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이</a></h3>
+    <div class="channel">📺 [정병훈T] 요리조리 수학</div>
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">수학Ⅱ-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=00ByGXdH-mI" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고1" data-unit="수학Ⅰ-삼각함수의활용" data-search="사인법칙·코사인법칙 — 삼각형 해석의 본질 사인법칙코사인법칙 어썸 현경 수학ⅰ-삼각함수의활용 고1">
+  <a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/W9ReLryydQg/mqdefault.jpg" loading="lazy" alt="사인법칙·코사인법칙 — 삼각형 해석의 본질">
+    <span class="badge">고1</span>
+    <span class="date">2026.05.05</span>
+  </a>
+  <div class="info">
+    <h3><a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" style="color:inherit;text-decoration:none">사인법칙·코사인법칙 — 삼각형 해석의 본질</a></h3>
+    <div class="channel">📺 어썸 현경</div>
+    <div class="tags">
+      <span class="tag grade">고1</span>
+      <span class="tag">수학Ⅰ-삼각함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/live/W9ReLryydQg" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+  </main>
+
+  <div class="empty" id="empty" style="display:none">조건에 맞는 자료가 없습니다.</div>
+</div>
+
+<script>
+const ITEMS = [{"grade": "고3", "unit": "수학Ⅱ-도함수의활용", "title": "3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이"}, {"grade": "고1", "unit": "수학Ⅰ-삼각함수의활용", "title": "사인법칙·코사인법칙 — 삼각형 해석의 본질"}];
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+let state = { grade: 'all', unit: 'all', q: '' };
+
+function rebuildUnitFilter() {
+  const units = new Set();
+  ITEMS.forEach(it => {
+    if (state.grade === 'all' || it.grade === state.grade) units.add(it.unit);
+  });
+  const wrap = $('#unitFilter');
+  wrap.querySelectorAll('button:not([data-unit="all"])').forEach(b => b.remove());
+  [...units].sort().forEach(u => {
+    const b = document.createElement('button');
+    b.dataset.unit = u; b.textContent = u;
+    b.onclick = () => { state.unit = u; setActive(wrap, b); apply(); };
+    wrap.appendChild(b);
+  });
+  if (![...units].includes(state.unit)) {
+    state.unit = 'all';
+    wrap.querySelector('[data-unit="all"]').classList.add('active');
+  }
+}
+
+function setActive(group, btn) {
+  group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function apply() {
+  const q = state.q.trim().toLowerCase();
+  let visible = 0;
+  $$('.card').forEach(card => {
+    const ok =
+      (state.grade === 'all' || card.dataset.grade === state.grade) &&
+      (state.unit === 'all' || card.dataset.unit === state.unit) &&
+      (!q || card.dataset.search.includes(q));
+    card.classList.toggle('hidden', !ok);
+    if (ok) visible++;
+  });
+  $('#empty').style.display = visible === 0 ? 'block' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $$('[data-grade]').forEach(b => {
+    b.onclick = () => {
+      state.grade = b.dataset.grade;
+      setActive(b.parentElement, b);
+      rebuildUnitFilter();
+      apply();
+    };
+  });
+  rebuildUnitFilter();
+  $('#q').oninput = e => { state.q = e.target.value; apply(); };
+  $('#darkBtn').onclick = () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('gallery-dark', document.body.classList.contains('dark') ? '1' : '0');
+  };
+  if (localStorage.getItem('gallery-dark') === '1') document.body.classList.add('dark');
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === 'd' || e.key === 'D') $('#darkBtn').click();
+    if (e.key === '/' && document.activeElement !== $('#q')) {
+      e.preventDefault(); $('#q').focus();
+    }
+  });
+});
+</script>
+</body>
+</html>

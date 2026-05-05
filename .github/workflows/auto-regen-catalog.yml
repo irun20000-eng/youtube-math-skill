@@ -1,0 +1,47 @@
+name: 자동 카탈로그 갱신
+
+# output/ 안의 .html 이 추가/변경되면 INDEX.md + index.html 자동 재생성
+# 사용자가 깜빡하고 regen_index.py 안 돌려도 GitHub가 알아서 처리
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'output/**/*.html'
+      - 'youtube-math-auto/scripts/regen_index.py'
+      - 'youtube-math-auto/scripts/output_path.py'
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # bot의 push가 다시 트리거하지 않도록 token 분리 가능 (현재는 단순)
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Regen INDEX.md + index.html
+        run: |
+          python youtube-math-auto/scripts/regen_index.py output/
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add output/INDEX.md output/index.html
+          if git diff --cached --quiet; then
+            echo "No catalog changes"
+          else
+            # [skip ci] 로 무한 트리거 방지
+            git commit -m "[bot] 카탈로그 자동 갱신 [skip ci]"
+            git push
+          fi
