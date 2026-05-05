@@ -1,0 +1,82 @@
+name: 📚 학습자료 추가
+description: Claude/Gemini 앱에서 만든 학습자료 HTML을 갤러리에 자동 추가합니다
+title: "[Add Lesson] "
+labels: ["add-lesson"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📌 사용 방법
+        1. 폰의 Claude/Gemini 앱에서 영상 + 자막(또는 요약) → 학습자료 HTML 생성
+        2. 받은 HTML 코드를 아래 마지막 칸에 그대로 붙여넣기
+        3. 위 4칸 (학년/단원/주제/영상ID) 채우기
+        4. **Submit new issue** 누르면 1~2분 후 갤러리에 자동 추가됩니다
+        ---
+
+  - type: dropdown
+    id: grade
+    attributes:
+      label: 학년
+      description: 자료의 대상 학년
+      options:
+        - 중1
+        - 중2
+        - 중3
+        - 고1
+        - 고2
+        - 고3
+        - 미분류
+      default: 3
+    validations:
+      required: true
+
+  - type: input
+    id: unit
+    attributes:
+      label: 단원
+      description: |
+        예시: `수학Ⅰ-삼각함수의방정식`, `수학Ⅱ-도함수의활용`, `미적분-적분의활용`
+        - 학년 코드 (`고1-`) 빼고 단원만
+        - 한글 + 로마숫자 그대로 사용 가능
+      placeholder: 수학Ⅰ-삼각함수의방정식
+    validations:
+      required: true
+
+  - type: input
+    id: topic
+    attributes:
+      label: 핵심 주제
+      description: |
+        16자 이내, 공백 없이 한글로
+        예시: `삼각함수방정식세관점`, `사인법칙코사인법칙`, `3차함수극값2대1분할`
+      placeholder: 삼각함수방정식세관점
+    validations:
+      required: true
+
+  - type: input
+    id: video_id
+    attributes:
+      label: 영상 ID (YouTube)
+      description: |
+        YouTube URL에서 `v=` 뒤 또는 `youtu.be/` 뒤의 11자
+        예: `https://youtu.be/4Z2CnsDMIG4` → `4Z2CnsDMIG4`
+      placeholder: 4Z2CnsDMIG4
+    validations:
+      required: true
+
+  - type: textarea
+    id: html
+    attributes:
+      label: HTML 코드
+      description: |
+        Claude/Gemini가 생성한 전체 HTML을 그대로 붙여넣으세요.
+        `<!DOCTYPE html>` 부터 `</html>` 까지 완전한 HTML 문서.
+      placeholder: |
+        <!DOCTYPE html>
+        <html lang="ko">
+        ...
+        </html>
+      render: html
+    validations:
+      required: true
