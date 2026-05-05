@@ -31,6 +31,10 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # 레포 Settings에서 Pages가 아직 활성화 안 되었다면 자동으로 시도
+          # (단, repository token 권한이 충분해야 함)
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
