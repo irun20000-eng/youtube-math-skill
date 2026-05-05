@@ -2,18 +2,42 @@
 
 이 파일은 Claude Code가 매 세션 시작 시 자동으로 읽는 컨텍스트입니다. 새 세션이든 이어가는 세션이든, 다음 규칙을 따라 작업하세요.
 
-## 🔄 세션 시작 시 (매번)
+## 🔄 세션 시작 시 (매번, 환경 불문)
 
-작업 시작 전 GitHub 레포에서 최신 변경사항을 가져옵니다 (다른 기기·세션이 push 했을 수 있음):
+작업 시작 전 **무조건** GitHub 레포에서 최신 변경사항을 가져옵니다. 다른 기기(모바일·PC·샌드박스)에서 push 했을 가능성이 있고, 동기화 안 하면 갤러리가 옛날 상태로 보입니다.
 
 ```bash
-cd C:/Users/user/Desktop/Claude_ProjecT/Youtube-math_skill  # 또는 사용자 OS 경로
-git pull --rebase
+# 작업 디렉토리로 이동 (사용자 OS 별)
+cd C:/Users/user/Desktop/Claude_ProjecT/Youtube-math_skill   # Windows PC
+# 또는 cd ~/youtube-math-skill   # Mac/Linux/샌드박스
+git fetch origin
+git checkout main && git pull --rebase
+git checkout <작업브랜치> 2>/dev/null && git rebase main 2>/dev/null || true
 ```
 
 git pull 결과:
 - "Already up to date" → 그대로 진행
-- 새 커밋 받음 → 어떤 파일이 변경됐는지 확인하고 사용자에게 공유
+- 새 커밋 받음 → 어떤 파일이 변경됐는지 확인하고 사용자에게 공유 (모바일·다른 PC 작업이 있을 수 있음)
+- 충돌 발생 → 사용자 결정 받기. 강제 해결 ❌.
+
+## 🌐 "갤러리는 항상 최신" 원칙 (사용자 명시 요청)
+
+사용자 요청 (2026-05-05): **"항시 갤러리 최신화되도록 작업"**.
+
+이를 보장하기 위해 모든 세션은 다음 두 조건을 반드시 만족시킨다.
+
+### A. 작업 종료 전 main 강제 동기화
+output/ 또는 카탈로그가 바뀌었으면 작업 끝나기 전에 무조건:
+1. 작업 브랜치에 commit + push
+2. main 으로 ff-merge + push (없으면 갤러리 배포 안 됨)
+3. 사용자에게 "갤러리 1~2분 내 갱신" 알림 + 갤러리 URL 명시
+
+### B. 사용자에게 "정답 보기" 안내
+PC 로컬 `output/index.html` 파일은 git pull 안 하면 옛날 그대로다. 사용자가 다른 기기 작업을 보려면 두 방법 중 하나:
+1. **권장 — 갤러리 URL 직접 열기**: https://irun20000-eng.github.io/youtube-math-skill/ (모든 기기에서 항상 최신, 캐시 의심되면 Ctrl+Shift+R)
+2. **PC 로컬 파일 쓸 거면**: 먼저 PC 에서 `git pull --rebase` 후 `output/index.html` 새로고침
+
+세션 마지막 멘트에 갤러리 URL 을 항상 포함해 사용자가 즉시 검증 가능하게 한다.
 
 ## 📁 단일 진실 소스 = GitHub 레포
 
