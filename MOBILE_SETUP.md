@@ -30,12 +30,16 @@ pkg update -y && pkg upgrade -y
 pkg install -y python git nodejs-lts openssh
 
 # yt-dlp 설치
-pip install --upgrade pip
+# 주의: Termux에서는 'pip install --upgrade pip' 가 의도적으로 차단됩니다.
+# (Termux 자체 패키지 시스템과 충돌 방지) — pip 업그레이드는 건너뛰고 yt-dlp만 설치하세요.
 pip install yt-dlp
 
 # 작동 확인
 python -m yt_dlp --version
+# → 2026.03.17 같은 버전 번호가 나오면 정상
 ```
+
+> 💡 만약 *"ERROR: Installing pip is forbidden"* 메시지가 보이면 Termux의 정상 동작입니다. yt-dlp 설치만 진행하세요. pip 업그레이드가 필요하면 `pkg upgrade python-pip` 으로 처리.
 
 ### 3. 저장 공간 권한 부여
 
