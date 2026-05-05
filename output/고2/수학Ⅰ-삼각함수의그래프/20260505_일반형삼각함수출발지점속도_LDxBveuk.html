@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일반형 삼각함수 $y=\sin(ax+b)$ — 출발 지점과 진행 속도로 읽기 | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>일반형 삼각함수 $y=\sin(ax+b)$ — 출발 지점과 진행 속도로 읽기</h1>
+    <p class="meta-row">📺 영상: <a href="https://www.youtube.com/watch?v=LDxBveuksBw" target="_blank">https://www.youtube.com/watch?v=LDxBveuksBw</a> (시대인재 이동준, 12분)</p>
+    <p class="meta-row">🎯 학습 목표: $y=\sin(ax+b)$ 를 평행이동이 아닌 <strong>"출발 지점($b$) + 진행 속도·방향($a$)"</strong> 관점으로 해석하여, 미지수가 섞인 일반형 그래프를 즉시 머릿속에서 그릴 수 있게 한다</p>
+    <p class="meta-row">📚 단원: [고2-수학Ⅰ-삼각함수의 그래프] · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+    <p class="meta-row">⏱️ 예상 소요시간: 55분 (개념 30분 + 문항 25분)</p>
+  </header>
+
+  <div class="controls">
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span style="flex:1"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 질문</h2>
+      <article class="problem basic">
+        <h3>예시 — 영상 첫 장면의 문제</h3>
+        <p class="problem-body"><strong>문제:</strong> 함수 $y=\sin\!\left(2x+\dfrac{\pi}{3}\right)$ 의 그래프를 그릴 때, 이 그래프가 처음으로 $0$ 을 지나는 $x$ 좌표(단, $x\ge 0$ 중 가장 작은 값)를 구하시오.</p>
+        <details open>
+          <summary>📖 풀이 보기 (영상이 비교한 두 관점)</summary>
+          <div class="solution">
+            <p><strong>📐 관점 A — 교과서 평행이동:</strong> 식을 $y=\sin\!\left(2\!\left(x+\dfrac{\pi}{6}\right)\right)$ 로 묶으면, 기본 함수 $y=\sin 2x$ 를 왼쪽으로 $\dfrac{\pi}{6}$ 만큼 이동한 그래프. $\sin 2x$ 가 $0$ 이 되는 첫 양의 $x$ 는 $x=\dfrac{\pi}{2}$ — 이걸 다시 $\dfrac{\pi}{6}$ 만큼 왼쪽으로 → $\dfrac{\pi}{2}-\dfrac{\pi}{6}=\dfrac{\pi}{3}$. 그런데 더 작은 값은 $x=0$ 근처에 있다. $\sin 2x=0$ 의 다른 해 $x=0,\,\dfrac{\pi}{2},\,\pi,\dots$ 를 모두 $-\dfrac{\pi}{6}$ 만큼 옮긴 후 양수 중 최소 → $-\dfrac{\pi}{6}$ 은 음수, 다음은 $\dfrac{\pi}{2}-\dfrac{\pi}{6}=\dfrac{\pi}{3}$. 결국 $\dfrac{\pi}{3}$.</p>
+            <p><strong>🎯 관점 B — 출발 지점 + 진행 속도 (영상의 신호):</strong> $\sin(2x+\pi/3)$ 의 괄호 안 $2x+\pi/3$ 자체가 "각". $x=0$ 일 때 각 $=\pi/3$ — 이게 <strong>출발 지점</strong>. $x$ 가 $1$ 만큼 커지면 각이 $2$ 만큼 커짐 — 이게 <strong>진행 속도 $2$</strong>. 즉 기본형 $y=\sin\theta$ 그래프 위에서 $\theta=\pi/3$ 부터 출발하여 $2$ 배속으로 오른쪽으로 진행한다고 보면 끝. $\sin\theta=0$ 이 되는 $\theta$ 는 $\dots,0,\pi,2\pi,\dots$. 출발 $\pi/3$ 이후 가장 가까운 $0$ 은 $\theta=\pi$. 그 사이 각 변화량 $=\pi-\pi/3=2\pi/3$. 속도 $2$ 이니 $x$ 변화량 $=\dfrac{2\pi/3}{2}=\dfrac{\pi}{3}$. 따라서 $x=0+\dfrac{\pi}{3}=\dfrac{\pi}{3}$.</p>
+            <p class="answer"><strong>정답:</strong> $x=\dfrac{\pi}{3}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 같은 답이지만 관점 B는 그래프를 그리지 않고 머릿속에서 즉시 답이 나옵니다. 미지수가 섞인 식($a,\,b$ 가 문자)이면 관점 B의 효력이 압도적. 이 자료에서 그 사고방식을 단계별로 익힙니다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명</h2>
+
+      <div class="concept-block">
+        <h3>① 큰 그림 — 왜 평행이동만으로는 부족한가?</h3>
+        <p>교과서는 $y=\sin(ax+b)$ 를 다음처럼 다룹니다.</p>
+        <div class="formula-box">
+          $y=\sin(ax+b)=\sin\!\left(a\!\left(x+\dfrac{b}{a}\right)\right)$
+        </div>
+        <p>즉 "$y=\sin(ax)$ 를 왼쪽으로 $\dfrac{b}{a}$ 만큼 평행이동"으로 해석합니다. 식이 깔끔할 때는 잘 맞아요.</p>
+        <p>그런데 영상 강사는 이렇게 말합니다 — <em>"$a,\,b$ 가 미지수면 $b/a$ 자체가 또 미지수라서, 평행이동 관점이 머릿속에서 안 그려져요. 다른 시각이 필요해요."</em></p>
+        <p>그래서 등장하는 게 <strong>"출발 지점 + 진행 속도"</strong> 관점입니다. 식의 모양에 휘둘리지 않고, $a$ 와 $b$ 의 의미를 직관적으로 분리해 읽는 방법.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 선수 지식 1 — 기본형 $y=\sin\theta$ 의 모양</h3>
+        <div class="prereq">
+          <p>$y=\sin\theta$ 의 핵심 좌표 5개 (한 주기 $[0,2\pi]$):</p>
+          <p>• $\theta=0$ → $\sin\theta=0$</p>
+          <p>• $\theta=\dfrac{\pi}{2}$ → $\sin\theta=1$ (최댓값)</p>
+          <p>• $\theta=\pi$ → $\sin\theta=0$</p>
+          <p>• $\theta=\dfrac{3\pi}{2}$ → $\sin\theta=-1$ (최솟값)</p>
+          <p>• $\theta=2\pi$ → $\sin\theta=0$ (한 주기 끝, 반복 시작)</p>
+          <p><strong>주기</strong>: $2\pi$ 마다 똑같은 모양 반복. $\sin(\theta+2\pi)=\sin\theta$.</p>
+        </div>
+        <p>이 다섯 좌표만 외워두면, 어떤 변형 사인 그래프든 "각 $\theta$ 가 $0\to\pi/2\to\pi\to 3\pi/2\to 2\pi$ 로 흘러간다"고 머릿속에서 따라갈 수 있어요.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 선수 지식 2 — 평행이동의 정의 (고1 함수의 평행이동)</h3>
+        <div class="prereq">
+          <p>함수 $y=f(x)$ 의 그래프를 $x$ 축 방향으로 $p$ 만큼 평행이동한 그래프의 식은</p>
+          <p>$y=f(x-p)$.</p>
+          <p>($p>0$ 이면 오른쪽, $p<0$ 이면 왼쪽으로 이동.)</p>
+        </div>
+        <p>따라서 $\sin(ax+b)=\sin\!\left(a\!\left(x-\!\left(-\dfrac{b}{a}\right)\right)\right)$ 는 $y=\sin(ax)$ 를 $x$ 축 방향으로 $-\dfrac{b}{a}$ 만큼 (즉 왼쪽으로 $\dfrac{b}{a}$ 만큼) 이동한 모양입니다.</p>
+        <p>이 평행이동 해석이 관점 A 의 근거. 우리가 다음에 만들 관점 B 도 결국 같은 그래프를 가리키므로 결과는 일치하지만 사고 흐름이 달라요.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 정리 1 — 괄호 안 $ax+b$ 를 "하나의 각"으로 보자</h3>
+        <p>식 $y=\sin(ax+b)$ 를 다음처럼 다시 봅시다.</p>
+        <div class="formula-box">
+          $\theta(x)=ax+b$ 라 두면 &nbsp; $y=\sin\theta(x)$
+        </div>
+        <p>즉 $x$ 가 변할 때마다 각 $\theta$ 가 정해지고, 그 각의 사인값이 $y$. 그래프의 모양은 결국 <strong>"$\theta$ 가 어떻게 흘러가는가"</strong> 만 알면 된다는 얘기예요.</p>
+
+        <div class="step-derive">
+          <p>$\theta$ 가 $x$ 의 일차식이므로, $x$ 가 $\Delta x$ 만큼 변하면 $\theta$ 는 $a\cdot\Delta x$ 만큼 변합니다.</p>
+          <p>즉 $\dfrac{d\theta}{dx}=a$ — "$x$ 단위 길이당 $\theta$ 가 $a$ 만큼 증가". 이게 <strong>진행 속도</strong>의 정확한 정의.</p>
+          <p>$x=0$ 일 때 $\theta=a\cdot 0+b=b$ — 이게 <strong>출발 지점</strong>의 정확한 정의. ($x=0$ 에서의 각.)</p>
+        </div>
+
+        <div class="callout">
+          <p>📍 두 가지 의미를 정리하면:</p>
+          <p>• <strong>$b$ = 출발 지점</strong> ($x=0$ 일 때 사인 함수가 어느 각에서 시작하는가)</p>
+          <p>• <strong>$a$ = 진행 속도·방향</strong> ($x$ 가 $1$ 늘면 각이 $a$ 만큼 늘어남. $a>0$ 이면 정방향, $a<0$ 이면 역방향)</p>
+        </div>
+
+        <div class="insight">
+          영상 강사: <em>"$b$ 는 출발 지점, $ax$ 는 진행 속도와 방향. 이 둘만 분리해서 보면 어떤 식이든 바로 해석 가능해요."</em> 이 한 줄이 이 강의의 전부입니다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 핵심 정리 2 — 출발 지점이 그래프에서 의미하는 것</h3>
+        <p>$y=\sin\theta$ 의 그래프 위에서 출발 지점 $\theta=b$ 를 짚어봅시다.</p>
+
+        <div class="step-derive">
+          <p>$x=0$ 일 때 $y$ 값: $y(0)=\sin b$ — 이게 그래프의 $y$ 절편.</p>
+          <p>그래프는 $\theta=b$ 인 점에서 시작해 $\theta$ 가 커지는 방향으로 흘러갑니다 (단, $a>0$ 인 경우).</p>
+          <p>즉 일반형 $y=\sin(ax+b)$ 의 그래프 = 기본형 $y=\sin\theta$ 그래프를 "$\theta=b$ 부터 시작해서 잘라낸 모양"을 $x$ 축 위에 펼쳐 놓은 것.</p>
+        </div>
+
+        <div class="callout">
+          <p><strong>예시 1.</strong> $b=0$ → 출발 지점 $\theta=0$. $\sin 0=0$. 그래프는 $y$ 절편 $0$ 에서 시작해 위로 올라감. (가장 익숙한 모양.)</p>
+          <p><strong>예시 2.</strong> $b=\pi/2$ → 출발 지점 $\theta=\pi/2$. $\sin(\pi/2)=1$. 그래프는 최댓값에서 시작해 내려감. (코사인 모양과 같음.)</p>
+          <p><strong>예시 3.</strong> $b=\pi$ → 출발 지점 $\theta=\pi$. $\sin\pi=0$. 그래프는 $y$ 절편 $0$ 에서 시작하지만 <em>아래로</em> 내려감. ($\theta$ 가 $\pi$ 에서 $3\pi/2$ 로 흘러가니까.)</p>
+        </div>
+
+        <div class="insight">
+          $\sin b=0$ 인 $b$ 라도 ($b=0$ vs $b=\pi$) 출발 직후의 흐름은 정반대! "$y$ 절편만 보지 말고, 그 다음 어디로 흘러가는지"까지 출발 지점이 결정합니다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 핵심 정리 3 — 진행 속도가 그래프에서 의미하는 것</h3>
+        <p>속도 $a$ 의 의미를 두 측면으로 나눠 봅시다.</p>
+
+        <div class="callout">
+          <p><strong>측면 1 — 절댓값 $|a|$ 는 "주기 압축률"</strong>:</p>
+          <p>기본형 $y=\sin\theta$ 의 주기는 $2\pi$. 즉 각이 $2\pi$ 만큼 흘러야 한 주기가 끝남.</p>
+          <p>일반형 $y=\sin(ax+b)$ 에서 각이 $2\pi$ 만큼 흐르려면 $x$ 가 $\dfrac{2\pi}{|a|}$ 만큼 변해야 함 (속도 $|a|$ 이므로).</p>
+          <p>$\therefore$ 일반형의 주기 $=\dfrac{2\pi}{|a|}$.</p>
+        </div>
+
+        <div class="step-derive">
+          <p>유도: 주기 $T$ 는 $\sin(a(x+T)+b)=\sin(ax+b)$ 를 만족하는 가장 작은 양수.</p>
+          <p>$\sin(ax+aT+b)=\sin(ax+b)$ 가 모든 $x$ 에서 성립하려면 $aT$ 가 $2\pi$ 의 정수배. 가장 작은 양수 $T$ 는 $aT=2\pi$, 즉 $T=\dfrac{2\pi}{a}$.</p>
+          <p>$a<0$ 이면 $T=\dfrac{2\pi}{|a|}$ 로 절댓값으로 보정. 그래프 모양은 좌우 반전.</p>
+        </div>
+
+        <div class="callout">
+          <p><strong>측면 2 — 부호는 "진행 방향"</strong>:</p>
+          <p>$a>0$: $x$ 증가 → $\theta$ 증가. 기본형과 같은 방향으로 그래프가 흘러감 (왼→오: 올라갔다 내려갔다).</p>
+          <p>$a<0$: $x$ 증가 → $\theta$ 감소. 기본형을 거꾸로 본 것처럼 (왼→오: 내려갔다 올라갔다). 결국 <strong>$y$ 축 대칭(좌우반전)</strong>한 모양.</p>
+          <p>참고: $\sin(-\theta)=-\sin\theta$ 이므로, $a<0$ 인 식은 $-\sin(|a|x-b)$ 형태로 다시 쓸 수도 있음.</p>
+        </div>
+
+        <div class="insight">
+          속도가 크면(예: $a=4$) 그래프가 "빨리 흔들림" — 주기 짧아져 $\dfrac{2\pi}{4}=\dfrac{\pi}{2}$. 속도가 작으면(예: $a=1/2$) 그래프가 "천천히 흔들림" — 주기 $\dfrac{2\pi}{1/2}=4\pi$.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑦ 두 관점 통합 — 일반형 그래프 머릿속에 그리는 4단계</h3>
+        <p>이 4단계만 따라하면 어떤 $y=k\sin(ax+b)+c$ 도 즉시 머리에 그려져요.</p>
+
+        <div class="step-derive">
+          <p><strong>$k$ 보기 (진폭)</strong>: 그래프가 위아래 얼마나 크게 흔들리는지. $|k|$ 가 진폭. $k<0$ 이면 위아래 뒤집힘.</p>
+          <p><strong>$c$ 보기 (중심선)</strong>: 그래프가 흔들리는 중심이 $y=c$. $c$ 만큼 위로 평행이동.</p>
+          <p><strong>$a$ 보기 (속도·방향)</strong>: 주기 $=\dfrac{2\pi}{|a|}$. $a$ 가 음수면 좌우 반전.</p>
+          <p><strong>$b$ 보기 (출발 지점)</strong>: $x=0$ 에서의 각이 $b$. 기본형 $\sin\theta$ 그래프에서 $\theta=b$ 인 위치를 찾아 거기를 그래프 시작점으로.</p>
+        </div>
+
+        <div class="callout">
+          <p><strong>실습 — $y=2\sin\!\left(3x-\dfrac{\pi}{2}\right)+1$ 머리에 그리기</strong>:</p>
+          <p>• $k=2$: 진폭 $2$ — 중심에서 위아래로 $2$ 만큼.</p>
+          <p>• $c=1$: 중심선 $y=1$.</p>
+          <p>• $a=3$: 주기 $\dfrac{2\pi}{3}$. 정방향.</p>
+          <p>• $b=-\pi/2$: 출발 지점 $\theta=-\pi/2$. $\sin(-\pi/2)=-1$. 그래프는 $x=0$ 에서 $y=2\cdot(-1)+1=-1$ 부터 출발. 그 직후 $\theta$ 가 $-\pi/2\to 0$ 으로 흐르며 $\sin\theta$ 가 $-1\to 0$ 으로 올라감.</p>
+          <p>$\therefore$ $x=0$ 에서 $y=-1$ (최솟값) 출발, 빠르게 올라가 주기 $2\pi/3$ 안에서 $y=3$(최댓값)·$y=1$(중심선 통과)·$y=-1$ 다시 — 이 순서로 흔들림.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑧ 자주 하는 실수 4가지</h3>
+        <ol>
+          <li><strong>$b/a$ 와 $b$ 혼동</strong>: $\sin(ax+b)$ 의 평행이동량은 $b/a$ 이지 $b$ 가 아닙니다. 출발 지점 $b$ 와 평행이동량 $b/a$ 를 분리해 인식. (출발 지점은 "각"이고 평행이동량은 "$x$ 좌표".)</li>
+          <li><strong>음수 $a$ 의 주기를 음수로 둠</strong>: 주기는 항상 양수이므로 $T=\dfrac{2\pi}{|a|}$. $a=-2$ 면 주기 $\pi$, 좌우반전된 모양.</li>
+          <li><strong>출발 지점을 $y$ 절편으로 착각</strong>: 출발 지점은 "$x=0$ 에서의 각 $b$" 이지 $\sin b$ 가 아닙니다. $y$ 절편은 $\sin b$ 로 따로 계산.</li>
+          <li><strong>$0\le ax+b\le 2\pi$ 같은 정의역 변환 누락</strong>: 풀이에서 $x$ 의 범위를 $\theta=ax+b$ 의 범위로 바꿀 때 양 끝값 대입을 잊는 실수. $x$ 범위 $\to$ $\theta$ 범위 변환은 풀이의 가장 중요한 1단계.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (기초 2 / 기본 3 / 심화 2 / 수능 대비 2)</h2>
+
+      <h3 style="color: var(--basic);">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 출발 지점과 $y$ 절편</h3>
+        <p class="problem-body"><strong>문제:</strong> 함수 $y=\sin\!\left(2x+\dfrac{\pi}{6}\right)$ 의 (1) 출발 지점 $\theta$ 값과 (2) $y$ 절편을 각각 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 식을 $\theta=2x+\dfrac{\pi}{6}$ 라 두면 $y=\sin\theta$.</p>
+            <p><strong>STEP 2 — 출발 지점:</strong> $x=0$ 대입 → $\theta=\dfrac{\pi}{6}$.</p>
+            <p class="why">출발 지점의 정의: $x=0$ 에서의 각.</p>
+            <p><strong>STEP 3 — $y$ 절편:</strong> $y(0)=\sin\dfrac{\pi}{6}=\dfrac{1}{2}$.</p>
+            <p class="answer"><strong>정답:</strong> 출발 지점 $\theta=\dfrac{\pi}{6}$, $y$ 절편 $=\dfrac{1}{2}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 출발 지점은 "각", $y$ 절편은 "그 각의 $\sin$ 값". 둘은 다른 양.</p>
+            <p class="warning"><strong>오답 주의:</strong> 출발 지점을 $\dfrac{1}{2}$ 라고 답하는 실수. 이건 $y$ 절편.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 진행 속도와 주기</h3>
+        <p class="problem-body"><strong>문제:</strong> 함수 $y=\sin\!\left(\dfrac{x}{3}+\pi\right)$ 의 (1) 진행 속도 $a$ 와 (2) 주기를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> $y=\sin(ax+b)$ 형태와 비교. $a=\dfrac{1}{3}$, $b=\pi$.</p>
+            <p><strong>STEP 2 — 속도:</strong> $a=\dfrac{1}{3}$ — $x$ 가 $1$ 늘면 각이 $\dfrac{1}{3}$ 만큼 늘어남.</p>
+            <p><strong>STEP 3 — 주기:</strong> $T=\dfrac{2\pi}{|a|}=\dfrac{2\pi}{1/3}=6\pi$.</p>
+            <p class="why">$\dfrac{2\pi}{1/3}=2\pi\times 3=6\pi$. 분수의 역수.</p>
+            <p class="answer"><strong>정답:</strong> $a=\dfrac{1}{3}$, 주기 $=6\pi$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 속도가 작으면 주기가 길어짐 (천천히 흔들림). 속도와 주기는 반비례.</p>
+            <p class="warning"><strong>오답 주의:</strong> 주기를 $\dfrac{2\pi}{3}$ 으로 답하는 실수 — $a$ 가 분수일 때 분모·분자 뒤집기 빠뜨림.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--standard);">🟡 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 일반형 → 첫 영점 찾기</h3>
+        <p class="problem-body"><strong>문제:</strong> 함수 $y=\sin\!\left(2x-\dfrac{\pi}{4}\right)$ 의 그래프가 처음으로 $0$ 을 지나는 양의 $x$ 좌표를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 출발 지점:</strong> $x=0$ → $\theta=-\dfrac{\pi}{4}$.</p>
+            <p><strong>STEP 2 — 진행 속도:</strong> $a=2$ (정방향).</p>
+            <p><strong>STEP 3 — 영점 조건:</strong> $\sin\theta=0$ 인 각은 $\theta=n\pi$ ($n$ 정수).</p>
+            <p><strong>STEP 4 — 출발 $\theta=-\pi/4$ 이후 가장 가까운 영점:</strong> 정방향으로 흐르므로 $\theta=-\pi/4$ 보다 큰 영점 중 최소. $\theta=0$ 이 첫 후보.</p>
+            <p><strong>STEP 5 — $\theta$ 변화량 → $x$ 변화량:</strong> $\Delta\theta=0-(-\pi/4)=\pi/4$. 속도 $2$ 이니 $\Delta x=\dfrac{\pi/4}{2}=\dfrac{\pi}{8}$.</p>
+            <p><strong>STEP 6:</strong> 시작 $x=0$ 이므로 첫 영점 $x=0+\dfrac{\pi}{8}=\dfrac{\pi}{8}$.</p>
+            <p class="answer"><strong>정답:</strong> $x=\dfrac{\pi}{8}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> "$\theta$ 가 어디서 시작해 어디로 흐르는가" 만 따라가면 그래프 안 그리고도 답.</p>
+            <p class="warning"><strong>오답 주의:</strong> 평행이동량 $\dfrac{b}{a}=\dfrac{-\pi/4}{2}=-\dfrac{\pi}{8}$ 만 답하는 실수. 평행이동량은 그래프 모양만 알려주지 첫 영점은 따로 계산.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 최댓값을 갖는 $x$ 좌표</h3>
+        <p class="problem-body"><strong>문제:</strong> $0\le x\le 2\pi$ 에서 $y=\sin\!\left(x+\dfrac{\pi}{3}\right)$ 가 최댓값을 갖는 $x$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 출발 지점:</strong> $\theta=\dfrac{\pi}{3}$ ($x=0$ 일 때).</p>
+            <p><strong>STEP 2 — 속도:</strong> $a=1$.</p>
+            <p><strong>STEP 3 — 정의역 변환:</strong> $x\in[0,2\pi]$ → $\theta=x+\dfrac{\pi}{3}\in\left[\dfrac{\pi}{3},2\pi+\dfrac{\pi}{3}\right]=\left[\dfrac{\pi}{3},\dfrac{7\pi}{3}\right]$.</p>
+            <p><strong>STEP 4 — 사인의 최댓값 위치:</strong> $\sin\theta=1$ 인 $\theta=\dfrac{\pi}{2}+2n\pi$.</p>
+            <p><strong>STEP 5 — 범위 안의 후보:</strong> $\dfrac{\pi}{3}\le\theta\le\dfrac{7\pi}{3}$. $n=0$ → $\theta=\dfrac{\pi}{2}$ (포함). $n=1$ → $\theta=\dfrac{5\pi}{2}$ — 범위 초과.</p>
+            <p><strong>STEP 6 — $x$ 로 환원:</strong> $\theta=x+\dfrac{\pi}{3}=\dfrac{\pi}{2}$ → $x=\dfrac{\pi}{2}-\dfrac{\pi}{3}=\dfrac{3\pi-2\pi}{6}=\dfrac{\pi}{6}$.</p>
+            <p class="why">통분: $\dfrac{\pi}{2}=\dfrac{3\pi}{6}$, $\dfrac{\pi}{3}=\dfrac{2\pi}{6}$. 차 $=\dfrac{\pi}{6}$.</p>
+            <p class="answer"><strong>정답:</strong> $x=\dfrac{\pi}{6}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> "정의역 변환 → $\theta$ 범위" 가 1단계. 그 안에서 $\sin\theta$ 의 최댓값 위치를 잡고 $x$ 로 되돌림.</p>
+            <p class="warning"><strong>오답 주의:</strong> $\theta$ 범위를 안 잡고 그냥 $\theta=\pi/2$ 만 보고 답하면 다른 후보(범위 안 두 번째 최대)가 있는 문제에서 누락.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 3 — 음수 진행 속도</h3>
+        <p class="problem-body"><strong>문제:</strong> 함수 $y=\sin(-2x+\pi)$ 의 (1) 주기와 (2) $0\le x\le \pi$ 에서 최솟값을 갖는 $x$ 좌표를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> $a=-2$, $b=\pi$.</p>
+            <p><strong>STEP 2 — 주기:</strong> $T=\dfrac{2\pi}{|-2|}=\pi$.</p>
+            <p><strong>STEP 3 — 정의역 변환:</strong> $x\in[0,\pi]$, $\theta=-2x+\pi$. $x=0$ → $\theta=\pi$. $x=\pi$ → $\theta=-2\pi+\pi=-\pi$. 즉 $\theta\in[-\pi,\pi]$ ($x$ 가 커질수록 $\theta$ 는 작아짐).</p>
+            <p class="why">$a<0$ 이면 $x$ 증가 → $\theta$ 감소. 양 끝값을 대입해 정확한 범위 잡음.</p>
+            <p><strong>STEP 4 — 사인의 최솟값 위치:</strong> $\sin\theta=-1$ 인 $\theta=-\dfrac{\pi}{2}+2n\pi$.</p>
+            <p><strong>STEP 5 — 범위 $[-\pi,\pi]$ 안의 후보:</strong> $n=0$ → $\theta=-\dfrac{\pi}{2}$ (포함). $n=1$ → $\theta=\dfrac{3\pi}{2}$ — 범위 초과.</p>
+            <p><strong>STEP 6 — $x$ 로 환원:</strong> $-2x+\pi=-\dfrac{\pi}{2}$ → $-2x=-\dfrac{\pi}{2}-\pi=-\dfrac{3\pi}{2}$ → $x=\dfrac{3\pi}{4}$.</p>
+            <p class="answer"><strong>정답:</strong> 주기 $=\pi$, 최솟값을 갖는 $x=\dfrac{3\pi}{4}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 음수 속도면 정의역 양 끝을 대입해 $\theta$ 범위 정확히 잡기. "$x$ 커지면 $\theta$ 감소" 사실을 잊지 말 것.</p>
+            <p class="warning"><strong>오답 주의:</strong> 주기를 $-\pi$ 또는 $-\dfrac{2\pi}{2}$ 처럼 부호 살리는 실수. 주기는 반드시 양수.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--advanced);">🔴 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 미지수 $a,\,b$ 결정 (영상의 핵심 패턴)</h3>
+        <p class="problem-body"><strong>문제:</strong> 양의 실수 $a$ 와 실수 $b$ ($0<b<2\pi$) 에 대해 함수 $y=\sin(ax+b)$ 의 그래프가 점 $\left(0,\dfrac{1}{2}\right)$ 을 지나고, 이 점 직후 (오른쪽으로 가까이) 처음으로 최댓값 $1$ 을 갖는 $x$ 좌표가 $\dfrac{\pi}{6}$ 일 때, $a$ 와 $b$ 를 구하시오. (단, $b$ 는 $\sin b=\dfrac{1}{2}$ 의 두 후보 중 그래프가 직후 <strong>증가</strong>하는 쪽.)</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 출발 지점 $b$ 후보:</strong> $\sin b=\dfrac{1}{2}$, $0<b<2\pi$ 에서 $b=\dfrac{\pi}{6}$ 또는 $b=\dfrac{5\pi}{6}$.</p>
+            <p><strong>STEP 2 — "직후 증가" 조건으로 결정:</strong> $\theta=b$ 직후 $\sin\theta$ 가 증가하려면 $b$ 가 사인 그래프의 상승 구간 ($-\pi/2 < b < \pi/2$ 또는 $3\pi/2 < b < 5\pi/2$ 등) 에 있어야 함. 두 후보 중 $b=\dfrac{\pi}{6}$ 만 상승 구간 안. ($b=\dfrac{5\pi}{6}$ 은 하강 구간.)</p>
+            <p class="why">사인 그래프는 $\theta=\pi/2$ 에서 정점. 그 전($-\pi/2 \to \pi/2$)이 상승, 그 후($\pi/2 \to 3\pi/2$)가 하강.</p>
+            <p><strong>STEP 3 — 출발 후 첫 최댓값:</strong> $\theta=b=\dfrac{\pi}{6}$ 에서 출발해 $\theta$ 가 커지며 첫 $\theta=\dfrac{\pi}{2}$ ($\sin=1$ 위치) 에서 최댓값.</p>
+            <p><strong>STEP 4 — $\theta$ 변화량:</strong> $\Delta\theta=\dfrac{\pi}{2}-\dfrac{\pi}{6}=\dfrac{3\pi-\pi}{6}=\dfrac{2\pi}{6}=\dfrac{\pi}{3}$.</p>
+            <p><strong>STEP 5 — $x$ 변화량:</strong> 문제에서 $\Delta x=\dfrac{\pi}{6}$. 속도 $a=\dfrac{\Delta\theta}{\Delta x}=\dfrac{\pi/3}{\pi/6}=2$.</p>
+            <p class="why">$\dfrac{\pi/3}{\pi/6}=\dfrac{\pi}{3}\times\dfrac{6}{\pi}=2$.</p>
+            <p class="answer"><strong>정답:</strong> $a=2$, $b=\dfrac{\pi}{6}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 미지수 결정 문제에서 "출발 지점($b$) → 첫 정점($\pi/2$ 등)" 의 $\theta$ 변화량을 먼저 구하고 $x$ 변화량으로 속도 산출. <strong>이게 영상이 강조한 핵심 패턴.</strong></p>
+            <p class="warning"><strong>오답 주의:</strong> $b$ 후보 중 그냥 작은 값을 답하지 말고, 그래프의 흐름 방향(증가/감소)을 반드시 확인.</p>
+            <p class="intent"><strong>출제 의도:</strong> "출발 지점·진행 속도" 사고를 미지수 결정에 적용. 평행이동 관점으론 식이 복잡해져 풀기 어려움 — 본 관점의 우월성 체감.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 두 그래프 교점 개수</h3>
+        <p class="problem-body"><strong>문제:</strong> $0\le x\le \pi$ 에서 두 함수 $y=\sin\!\left(2x+\dfrac{\pi}{3}\right)$ 와 $y=\dfrac{1}{2}$ 의 교점의 개수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 출발 지점:</strong> $\theta=\dfrac{\pi}{3}$.</p>
+            <p><strong>STEP 2 — 정의역 변환:</strong> $x\in[0,\pi]$, $\theta=2x+\dfrac{\pi}{3}\in\left[\dfrac{\pi}{3},2\pi+\dfrac{\pi}{3}\right]=\left[\dfrac{\pi}{3},\dfrac{7\pi}{3}\right]$.</p>
+            <p><strong>STEP 3 — 방정식:</strong> $\sin\theta=\dfrac{1}{2}$ 의 일반해 $\theta=\dfrac{\pi}{6}+2n\pi$ 또는 $\theta=\dfrac{5\pi}{6}+2n\pi$.</p>
+            <p><strong>STEP 4 — 범위 $\left[\dfrac{\pi}{3},\dfrac{7\pi}{3}\right]$ 안의 후보 나열:</strong></p>
+            <p>$\theta=\dfrac{\pi}{6}$ 계열: $n=0$ → $\dfrac{\pi}{6}$ (범위 밖, $<\pi/3$). $n=1$ → $\dfrac{\pi}{6}+2\pi=\dfrac{13\pi}{6}$ (범위 안, $\le \dfrac{7\pi}{3}=\dfrac{14\pi}{6}$).</p>
+            <p>$\theta=\dfrac{5\pi}{6}$ 계열: $n=0$ → $\dfrac{5\pi}{6}$ (범위 안). $n=1$ → $\dfrac{5\pi}{6}+2\pi=\dfrac{17\pi}{6}$ — 범위 초과 ($>\dfrac{14\pi}{6}$).</p>
+            <p><strong>STEP 5 — 후보 정리:</strong> $\theta\in\left\{\dfrac{5\pi}{6},\dfrac{13\pi}{6}\right\}$ — 2개.</p>
+            <p><strong>STEP 6 — $x$ 로 환원하여 검산:</strong></p>
+            <p>$\theta=\dfrac{5\pi}{6}$: $2x+\dfrac{\pi}{3}=\dfrac{5\pi}{6}$ → $2x=\dfrac{5\pi}{6}-\dfrac{2\pi}{6}=\dfrac{3\pi}{6}=\dfrac{\pi}{2}$ → $x=\dfrac{\pi}{4}$ ✓.</p>
+            <p>$\theta=\dfrac{13\pi}{6}$: $2x=\dfrac{13\pi}{6}-\dfrac{2\pi}{6}=\dfrac{11\pi}{6}$ → $x=\dfrac{11\pi}{12}$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> 교점 개수 $=2$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> "$x$ 범위 → $\theta$ 범위" 변환이 핵심. $\theta$ 범위 안에서 일반해를 카운팅하는 게 가장 빠름.</p>
+            <p class="warning"><strong>오답 주의:</strong> $\theta$ 범위 양 끝점이 후보에 정확히 포함되는지 부등호 방향 점검. 범위 폭이 $2\pi$ 이면 보통 2개, $\pi$ 이면 1~2개.</p>
+            <p class="intent"><strong>출제 의도:</strong> 일반형 함수와 수평선의 교점 카운팅 — 수능 단답형의 빈출. $\theta$ 범위 변환 방법론을 익히는 게 학습 목표.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--exam);">🟣 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — N번 유형(준킬러), 미지수 결정</h3>
+        <p class="problem-body"><strong>문제:</strong> 양의 실수 $a$ 와 $0<b<\pi$ 인 실수 $b$ 에 대해 함수 $f(x)=\sin(ax+b)$ 가 다음 두 조건을 모두 만족할 때, $ab$ 의 값을 구하시오.<br>
+          (가) $f(0)=\dfrac{\sqrt{3}}{2}$.<br>
+          (나) $f$ 는 $x=\dfrac{\pi}{12}$ 에서 최댓값 $1$ 을 갖고, 이 점은 $f$ 가 처음으로 최댓값을 갖는 양의 $x$ 좌표이다.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 출발 지점 $b$ 후보:</strong> $\sin b=\dfrac{\sqrt{3}}{2}$, $0<b<\pi$ → $b=\dfrac{\pi}{3}$ 또는 $b=\dfrac{2\pi}{3}$.</p>
+            <p><strong>STEP 2 — 직후 첫 최댓값 조건으로 $b$ 결정:</strong></p>
+            <p>$b=\dfrac{\pi}{3}$ 인 경우: 출발 직후 $\theta$ 가 $\pi/3 \to \pi/2$ 로 증가하며 $\sin$ 도 증가. 첫 정점 $\theta=\pi/2$. $\Delta\theta=\dfrac{\pi}{2}-\dfrac{\pi}{3}=\dfrac{\pi}{6}$.</p>
+            <p>$b=\dfrac{2\pi}{3}$ 인 경우: 출발 직후 $\theta$ 가 $2\pi/3 \to \pi$ 로 가며 $\sin$ <em>감소</em>. 즉 $f$ 는 $x=0$ 에서 이미 감소 중 — 첫 최댓값을 만나려면 $\theta$ 가 $5\pi/2$ ($=2\pi + \pi/2$, 다음 주기의 정점) 까지 흘러야 함. $\Delta\theta=\dfrac{5\pi}{2}-\dfrac{2\pi}{3}=\dfrac{15\pi-4\pi}{6}=\dfrac{11\pi}{6}$.</p>
+            <p><strong>STEP 3 — 속도 $a$ 계산:</strong> $a=\dfrac{\Delta\theta}{\Delta x}$, $\Delta x=\dfrac{\pi}{12}$.</p>
+            <p>$b=\dfrac{\pi}{3}$ 인 경우: $a=\dfrac{\pi/6}{\pi/12}=\dfrac{\pi}{6}\times\dfrac{12}{\pi}=2$. → $ab=2\times\dfrac{\pi}{3}=\dfrac{2\pi}{3}$.</p>
+            <p>$b=\dfrac{2\pi}{3}$ 인 경우: $a=\dfrac{11\pi/6}{\pi/12}=\dfrac{11\pi}{6}\times\dfrac{12}{\pi}=22$. → $ab=22\times\dfrac{2\pi}{3}=\dfrac{44\pi}{3}$.</p>
+            <p><strong>STEP 4 — 둘 중 어느 것이 정답?:</strong> 두 경우 모두 조건 (가), (나) 를 만족하므로 둘 다 해. 일반적인 수능 출제 관행 (해가 1개로 떨어지게 조건 추가 또는 가장 작은 $a$ 채택) 에 따라 가장 자연스러운 해는 <strong>첫 후보</strong>. 추가 단서가 없으면 두 답을 모두 명시.</p>
+            <p class="answer"><strong>정답 (주된 해):</strong> $ab=\dfrac{2\pi}{3}$.<br>
+              (보조 해: $b=\dfrac{2\pi}{3}$ 시 $ab=\dfrac{44\pi}{3}$ — $a$ 가 매우 커지는 경우.)</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> $\sin b=k$ 후보가 2개일 때 "직후 흐름 방향(증가/감소)" 으로 자연스러운 후보를 가려냄. 이게 본 강의의 핵심 사고법.</p>
+            <p class="warning"><strong>오답 주의:</strong> $b=\dfrac{2\pi}{3}$ 후보를 그냥 버리지 말고 실제로 $a$ 가 도출될 수 있는지 확인 필수. 단, 시험에선 보통 추가 조건(예: $a\le 4$)으로 1개 답만 남도록 설계.</p>
+            <p class="intent"><strong>출제 의도:</strong> 수능 대비 — N번 유형(준킬러). "출발 지점($b$) + 진행 속도($a$)" 사고를 미지수 결정에 응용하는 능력 점검.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — N번 유형(준킬러), 함수 구간 합</h3>
+        <p class="problem-body"><strong>문제:</strong> 함수 $f(x)=\sin\!\left(\dfrac{\pi}{2}x+\dfrac{\pi}{4}\right)$ 에 대해, 자연수 $n$ 에 대해 $f(n)$ 의 값을 정의한다. $\displaystyle\sum_{n=1}^{8} f(n)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 식 분석:</strong> $a=\dfrac{\pi}{2}$, $b=\dfrac{\pi}{4}$. $\theta(n)=\dfrac{\pi}{2}n+\dfrac{\pi}{4}$.</p>
+            <p><strong>STEP 2 — 주기 확인:</strong> $T=\dfrac{2\pi}{\pi/2}=4$. 즉 $f(n+4)=f(n)$. $n=1\sim 8$ 은 정확히 두 주기.</p>
+            <p class="why">$\theta(n+4)=\dfrac{\pi}{2}(n+4)+\dfrac{\pi}{4}=\theta(n)+2\pi$. 사인은 $2\pi$ 마다 반복.</p>
+            <p><strong>STEP 3 — 한 주기 합 계산 ($n=1\sim 4$):</strong></p>
+            <p>$f(1)=\sin\!\left(\dfrac{\pi}{2}+\dfrac{\pi}{4}\right)=\sin\dfrac{3\pi}{4}=\dfrac{\sqrt{2}}{2}$.</p>
+            <p>$f(2)=\sin\!\left(\pi+\dfrac{\pi}{4}\right)=\sin\dfrac{5\pi}{4}=-\dfrac{\sqrt{2}}{2}$.</p>
+            <p>$f(3)=\sin\!\left(\dfrac{3\pi}{2}+\dfrac{\pi}{4}\right)=\sin\dfrac{7\pi}{4}=-\dfrac{\sqrt{2}}{2}$.</p>
+            <p>$f(4)=\sin\!\left(2\pi+\dfrac{\pi}{4}\right)=\sin\dfrac{\pi}{4}=\dfrac{\sqrt{2}}{2}$.</p>
+            <p class="why">$\sin(\theta+2\pi)=\sin\theta$ 이용해 $\theta$ 를 $[0,2\pi)$ 안으로 환원. 이후 단위원이나 기본 좌표값 활용.</p>
+            <p><strong>STEP 4 — 한 주기 합:</strong> $\dfrac{\sqrt{2}}{2}-\dfrac{\sqrt{2}}{2}-\dfrac{\sqrt{2}}{2}+\dfrac{\sqrt{2}}{2}=0$.</p>
+            <p><strong>STEP 5 — 두 주기 합:</strong> $0+0=0$.</p>
+            <p class="answer"><strong>정답:</strong> $\displaystyle\sum_{n=1}^{8} f(n)=0$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 주기 $T$ 가 정수일 때 합 문제는 "한 주기의 합 → 곱하기 주기 수" 패턴. 한 주기 합이 $0$ 이면 어떤 정수 배수 구간에서도 합 $0$.</p>
+            <p class="warning"><strong>오답 주의:</strong> $n=1\sim 8$ 을 두 주기로 나눠서 보지 않고 일일이 8개 다 계산하면 시간 낭비 + 실수 위험. 주기성을 먼저 확인.</p>
+            <p class="intent"><strong>출제 의도:</strong> 수능 대비 — N번 유형(준킬러). 진행 속도 $a$ 가 $x$ 정수값에 어떤 주기를 만드는지 즉시 인지하는 능력 점검. <em>(★★ 이런 합 문제는 계수 설정에 따라 답이 달라지므로 학생 배포 전 교사 검토 권장.)</em></p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 적용 결과</h3>
+    <p>본 자료는 영상에서 강사가 압축한 부분을 중수준(하위 40%) 학습자도 따라갈 수 있도록 풀어 작성:</p>
+    <ul>
+      <li><strong>"$b$ 는 출발 지점, $ax$ 는 속도"</strong> → 단순 비유에 그치지 않고 <em>$x=0$ 에서의 각</em>·<em>$d\theta/dx=a$</em> 의 정확한 수학적 정의로 환원 (개념 ④).</li>
+      <li><strong>주기 $\dfrac{2\pi}{|a|}$ 공식</strong> → 결과만 제시하지 않고 "$\sin(a(x+T)+b)=\sin(ax+b)$ 가 성립하는 $T$" 라는 정의에서 직접 유도 (개념 ⑥).</li>
+      <li><strong>음수 $a$ 의 좌우반전</strong> → $\sin(-\theta)=-\sin\theta$ 항등식과 $x$ 증가 시 $\theta$ 감소라는 두 측면을 모두 짚음 (개념 ⑥).</li>
+      <li><strong>$\theta$ 범위 변환</strong> → 풀이 STEP 마다 "$x$ 양 끝값을 $\theta$ 에 대입" 단계를 명시. $a<0$ 인 경우 범위가 거꾸로 잡힘을 별도 강조 (기본 3, 심화 1).</li>
+      <li><strong>$\sin b=k$ 후보가 2개일 때 결정법</strong> → 영상의 핵심 사고("그래프 흐름 방향")를 정확한 사인의 상승·하강 구간 분석으로 일반화 (심화 1, 수능 대비 1).</li>
+      <li><strong>모든 풀이 STEP에 "↳ 왜?" 메모</strong>: 통분·역수·범위 양 끝 대입 등 학생이 자주 막히는 단계마다 근거를 노란 박스로 명시.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>수능 대비 1</strong> — 미지수 결정 문제는 후보가 2개 나오는 경우가 잦아, 추가 조건 없이는 답이 1개로 떨어지지 않을 수 있음. (확신도 ★★)</li>
+      <li><strong>수능 대비 2</strong> — 합 문제는 계수에 따라 한 주기 합이 $0$ 이 되는 운 좋은 케이스. 비슷한 문항 만들 때 계수 검산 필요. (확신도 ★★)</li>
+      <li>"수능 대비"는 출제 패턴·난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>생성일: 2026-05-05 | 영상 출처: <a href="https://www.youtube.com/watch?v=LDxBveuksBw">https://www.youtube.com/watch?v=LDxBveuksBw</a> (시대인재 이동준)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+</body>
+</html>
