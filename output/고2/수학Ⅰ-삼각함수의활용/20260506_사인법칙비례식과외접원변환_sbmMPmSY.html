@@ -391,19 +391,21 @@
       <h3 style="color: var(--standard);">🟡 기본</h3>
 
       <article class="problem standard">
-        <h3>기본 1 — 변의 비</h3>
-        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $A=45^\circ$, $B=60^\circ$, $C=75^\circ$ 일 때 $a:b:c$ 를 가장 간단한 정수·무리수 비로 나타내시오.</p>
+        <h3>기본 1 — 둔각 포함 변의 비와 둘레</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $A=30^\circ$, $B=120^\circ$, $c=4$ 일 때 (1) $a:b:c$ 를 가장 간단한 비로 나타내고 (2) 둘레 $a+b+c$ 를 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1 — 비례식:</strong> $a:b:c=\sin A:\sin B:\sin C=\sin 45^\circ:\sin 60^\circ:\sin 75^\circ$.</p>
-            <p><strong>STEP 2 — 각 값 대입:</strong> $\sin 45^\circ=\dfrac{\sqrt{2}}{2}$, $\sin 60^\circ=\dfrac{\sqrt{3}}{2}$, $\sin 75^\circ=\sin(45^\circ+30^\circ)=\sin 45^\circ\cos 30^\circ+\cos 45^\circ\sin 30^\circ=\dfrac{\sqrt{2}}{2}\cdot\dfrac{\sqrt{3}}{2}+\dfrac{\sqrt{2}}{2}\cdot\dfrac{1}{2}=\dfrac{\sqrt{6}+\sqrt{2}}{4}$.</p>
-            <p class="why">사인 덧셈 정리: $\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta$. $75^\circ=45^\circ+30^\circ$ 분해.</p>
-            <p><strong>STEP 3 — 분모 통일:</strong> 모두 분모 $4$ 로: $\dfrac{2\sqrt{2}}{4}:\dfrac{2\sqrt{3}}{4}:\dfrac{\sqrt{6}+\sqrt{2}}{4}$.</p>
-            <p><strong>STEP 4 — 분모 제거:</strong> $a:b:c=2\sqrt{2}:2\sqrt{3}:\sqrt{6}+\sqrt{2}$.</p>
-            <p class="answer"><strong>정답:</strong> $a:b:c=2\sqrt{2}:2\sqrt{3}:\sqrt{6}+\sqrt{2}$.</p>
-            <p class="key-point"><strong>핵심 포인트:</strong> 비례식 관점에서 변 비 = 사인 비. 모든 분모 통일하면 그대로 답.</p>
-            <p class="warning"><strong>오답 주의:</strong> 분모 안 통일하면 비율이 틀어짐. 같은 분모로 정리한 후 분모 무시 가능.</p>
+            <p><strong>STEP 1 — $C$ 결정:</strong> $A+B+C=180^\circ$ → $C=180^\circ-30^\circ-120^\circ=30^\circ$.</p>
+            <p><strong>STEP 2 — 비례식:</strong> $a:b:c=\sin A:\sin B:\sin C=\sin 30^\circ:\sin 120^\circ:\sin 30^\circ$.</p>
+            <p><strong>STEP 3 — 특수각 값:</strong> $\sin 30^\circ=\dfrac{1}{2}$, $\sin 120^\circ=\sin(180^\circ-60^\circ)=\sin 60^\circ=\dfrac{\sqrt{3}}{2}$.</p>
+            <p class="why">둔각 $\sin$ 은 보각의 사인과 같음 ($\sin\theta=\sin(180^\circ-\theta)$). 단위원 정의에서 직접 — $y$좌표가 같음.</p>
+            <p><strong>STEP 4 — 비 정리:</strong> $\dfrac{1}{2}:\dfrac{\sqrt{3}}{2}:\dfrac{1}{2}=1:\sqrt{3}:1$ (분모 $2$ 통일 후 제거).</p>
+            <p><strong>STEP 5 — 둘레:</strong> $c=4$ 가 비율 $1$ 에 대응. 비례 상수 $k=4$. 따라서 $a=4\cdot 1=4$, $b=4\cdot\sqrt{3}=4\sqrt{3}$, $c=4$.</p>
+            <p><strong>STEP 6 — 합:</strong> $a+b+c=4+4\sqrt{3}+4=8+4\sqrt{3}$.</p>
+            <p class="answer"><strong>정답:</strong> $a:b:c=1:\sqrt{3}:1$, 둘레 $=8+4\sqrt{3}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 비례식 → 한 변으로 비례 상수 결정 → 모든 변 산출. 둔각의 $\sin$ 은 보각으로 환원.</p>
+            <p class="warning"><strong>오답 주의:</strong> $\sin 120^\circ$ 를 $-\sin 60^\circ$ 로 잘못 적기. 사인은 둔각에서도 양수 (코사인만 음수).</p>
           </div>
         </details>
       </article>
@@ -449,23 +451,24 @@
       <h3 style="color: var(--advanced);">🔴 심화</h3>
 
       <article class="problem advanced">
-        <h3>심화 1 — 외접원 + 두 법칙 혼용</h3>
-        <p class="problem-body"><strong>문제:</strong> 외접원 반지름 $R=2\sqrt{3}$ 인 삼각형 $ABC$ 에서 $A=60^\circ$, $b=3$ 이다. 변 $c$ 의 값을 구하시오 (단 $C$ 는 예각).</p>
+        <h3>심화 1 — 외접원 즉시 치환 + 코사인법칙</h3>
+        <p class="problem-body"><strong>문제:</strong> 외접원 반지름 $R=2\sqrt{3}$ 인 삼각형 $ABC$ 에서 $A=60^\circ$, $b=3$ 일 때 변 $c$ 의 값을 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1 — $a$ 즉시 치환:</strong> $a=2R\sin A=2\cdot 2\sqrt{3}\cdot\sin 60^\circ=4\sqrt{3}\cdot\dfrac{\sqrt{3}}{2}=4\sqrt{3}\cdot\dfrac{\sqrt{3}}{2}=\dfrac{12}{2}=6$.</p>
-            <p><strong>STEP 2 — $\sin B$ 즉시 치환:</strong> $\sin B=\dfrac{b}{2R}=\dfrac{3}{4\sqrt{3}}=\dfrac{3}{4\sqrt{3}}\cdot\dfrac{\sqrt{3}}{\sqrt{3}}=\dfrac{3\sqrt{3}}{12}=\dfrac{\sqrt{3}}{4}$.</p>
-            <p><strong>STEP 3 — $\sin C$ 도출:</strong> $A+B+C=180^\circ$ → $C=120^\circ-B$. $\sin C=\sin(120^\circ-B)$.</p>
-            <p class="why">$A=60^\circ$ 이므로 $B+C=120^\circ$. $C=120^\circ-B$. 사인 빼기 정리: $\sin(120^\circ-B)=\sin 120^\circ\cos B-\cos 120^\circ\sin B$.</p>
-            <p><strong>STEP 4 — $\cos B$:</strong> $B$ 도 예각이므로 $\cos B=\sqrt{1-\sin^2 B}=\sqrt{1-3/16}=\sqrt{13/16}=\sqrt{13}/4$.</p>
-            <p><strong>STEP 5 — $\sin C$ 계산:</strong> $\sin C=\dfrac{\sqrt{3}}{2}\cdot\dfrac{\sqrt{13}}{4}-\left(-\dfrac{1}{2}\right)\cdot\dfrac{\sqrt{3}}{4}=\dfrac{\sqrt{39}}{8}+\dfrac{\sqrt{3}}{8}=\dfrac{\sqrt{39}+\sqrt{3}}{8}$.</p>
-            <p><strong>STEP 6 — $c$ 즉시 치환:</strong> $c=2R\sin C=4\sqrt{3}\cdot\dfrac{\sqrt{39}+\sqrt{3}}{8}=\dfrac{\sqrt{3}(\sqrt{39}+\sqrt{3})}{2}=\dfrac{\sqrt{117}+3}{2}=\dfrac{3\sqrt{13}+3}{2}=\dfrac{3(\sqrt{13}+1)}{2}$.</p>
-            <p class="why">$\sqrt{117}=\sqrt{9\cdot 13}=3\sqrt{13}$. $\sqrt{3}\cdot\sqrt{3}=3$.</p>
-            <p class="answer"><strong>정답:</strong> $c=\dfrac{3(\sqrt{13}+1)}{2}$.</p>
-            <p class="key-point"><strong>핵심 포인트:</strong> 외접원이 명시된 문제 → 변 ↔ 사인 즉시 치환. 모든 변을 사인 함수로 통일한 후 사인 덧셈 정리로 마무리.</p>
-            <p class="warning"><strong>오답 주의:</strong> $C$ 가 예각이라는 조건 무시하면 $\cos B$ 부호가 ±일 수 있음. 명시된 조건 따라 $+$ 선택.</p>
-            <p class="intent"><strong>출제 의도:</strong> 외접원 즉시 치환 + 사인 덧셈 정리 + 두 법칙 혼용. 영상 핵심 사고 종합.</p>
+            <p><strong>STEP 1 — $a$ 즉시 치환:</strong> $a=2R\sin A=2\cdot 2\sqrt{3}\cdot\sin 60^\circ=4\sqrt{3}\cdot\dfrac{\sqrt{3}}{2}=\dfrac{12}{2}=6$.</p>
+            <p class="why">외접원이 등장하면 $a=2R\sin A$ 즉시. 이로써 변 $a$ 가 확정.</p>
+            <p><strong>STEP 2 — 코사인법칙 적용:</strong> 이제 $a=6,\,b=3,\,A=60^\circ$ 를 알고 있고, $A$ 가 변 $a$ 의 마주보는 각. 코사인법칙 $a^2=b^2+c^2-2bc\cos A$ 에 대입.</p>
+            <p class="why">두 변($a,b$) + 한 각($A$) 조건. 코사인법칙으로 $c$ 에 대한 이차방정식 도출 가능.</p>
+            <p><strong>STEP 3 — 식 정리:</strong> $36=9+c^2-2\cdot 3\cdot c\cdot\dfrac{1}{2}=9+c^2-3c$.</p>
+            <p><strong>STEP 4 — 이차방정식:</strong> $c^2-3c-27=0$.</p>
+            <p><strong>STEP 5 — 근의 공식:</strong> $c=\dfrac{3\pm\sqrt{9+108}}{2}=\dfrac{3\pm\sqrt{117}}{2}=\dfrac{3\pm 3\sqrt{13}}{2}$.</p>
+            <p class="why">$\sqrt{117}=\sqrt{9\cdot 13}=3\sqrt{13}$. 판별식 $=9+108=117$.</p>
+            <p><strong>STEP 6 — 양수 채택:</strong> $\sqrt{13}\approx 3.6$ 이라 $\dfrac{3-3\sqrt{13}}{2}<0$ → 부적. 따라서 $c=\dfrac{3+3\sqrt{13}}{2}=\dfrac{3(1+\sqrt{13})}{2}$.</p>
+            <p class="answer"><strong>정답:</strong> $c=\dfrac{3(1+\sqrt{13})}{2}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 외접원으로 변 $a$ 즉시 도출 → 두 변 + 마주보는 각 조건이면 코사인법칙으로 셋째 변. <strong>이 흐름이 영상이 강조한 "법칙 선택" 의 정수.</strong></p>
+            <p class="warning"><strong>오답 주의:</strong> 이차방정식 근 두 개 중 음수 후보를 변의 길이로 잘못 채택. 변은 양수.</p>
+            <p class="intent"><strong>출제 의도:</strong> 외접원 즉시 치환 → 코사인법칙 → 이차방정식 종합. 영상의 두 핵심 도구를 자연스럽게 연결.</p>
           </div>
         </details>
       </article>
@@ -506,14 +509,14 @@
             <p class="why">변 = (외접원 지름) × 사인 이므로, 변의 합도 그대로 사인 합의 $2R$ 배.</p>
             <p class="answer"><strong>정답:</strong> $\sin A+\sin B+\sin C=\dfrac{3}{2}$.</p>
             <p class="key-point"><strong>핵심 포인트:</strong> 외접원이 명시된 순간 변 ↔ 사인 즉시 치환. $A+B=120^\circ$ 같은 보조 조건은 검산 용도로만 — 사실 안 써도 답.</p>
-            <p class="warning"><strong>오답 주의:</strong> $A+B=120^\circ$ 부터 $C=60^\circ$ 구해 사인 덧셈 정리로 풀려고 하면 시간 낭비. 외접원 등장 시 즉시 치환이 최단 경로.</p>
+            <p class="warning"><strong>오답 주의:</strong> $A+B=120^\circ$ 부터 $C=60^\circ$ 를 구해 일일이 사인값을 따로 다 계산하려고 하면 시간 낭비. 외접원 등장 시 즉시 치환이 최단 경로.</p>
             <p class="intent"><strong>출제 의도:</strong> 수능 대비 — N번 유형(준킬러). 외접원 즉시 치환 사고를 합 계산에 응용. 영상 핵심 메시지의 정수.</p>
           </div>
         </details>
       </article>
 
       <article class="problem exam-style">
-        <h3>수능 대비 2 — N번 유형(준킬러), 사인 덧셈 정리 종합</h3>
+        <h3>수능 대비 2 — N번 유형(준킬러), 변비·코사인법칙·넓이 종합</h3>
         <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $\sin A:\sin B:\sin C=3:5:7$ 이고 둘레가 $30$ 일 때, 삼각형의 넓이를 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
@@ -544,11 +547,11 @@
       <li><strong>"외접원 즉시 치환"</strong> → $a=2R\sin A$ 를 변 → 사인, 사인 → 변 양방향 치환 가능한 도구로 명시화 (개념 ⑥).</li>
       <li><strong>법칙 선택 기준</strong> → "각 정보 많음 → 사인, 변 정보 많음 → 코사인" 을 4가지 구체 패턴(두 각+한 변, 세 변, 두 변+끼인 각, 두 변+마주보는 각)으로 분해 (개념 ⑦, 기본 3).</li>
       <li><strong>둔각의 사인·코사인</strong> → 사인은 양수 유지, 코사인은 음수로 변함을 별도 짚음. 둔각이 정답인 케이스(심화 2, 수능 대비 2) 에 직접 적용.</li>
-      <li><strong>모든 풀이 STEP에 "↳ 왜?" 메모</strong>: 분수 나눗셈·분모 유리화·사인 덧셈 정리 등 학생이 자주 막히는 단계마다 근거 박스.</li>
+      <li><strong>모든 풀이 STEP에 "↳ 왜?" 메모</strong>: 분수 나눗셈·분모 유리화·이차방정식 근의 공식·둔각 사인 등 학생이 자주 막히는 단계마다 근거 박스.</li>
     </ul>
+    <p>📝 <strong>교육과정 메모 (2026-05-06)</strong>: 본 자료는 현 고2 학생 수능 범위(대수 + 미적분Ⅰ)에 맞춰 작성. 삼각함수의 덧셈정리 (선택 미적분 영역) 는 사용하지 않았으며, 풀이는 모두 사인법칙·코사인법칙·특수각·보각 정도로 해결. 둔각 사인은 보각으로 환원.</p>
     <p>다만 다음은 교사 검토 권장:</p>
     <ul>
-      <li><strong>심화 1</strong> — 사인 덧셈 정리 사용으로 계산이 길어짐. 원 영상이 어디까지 다뤘는지에 따라 난이도 조정 가능. (확신도 ★★)</li>
       <li>"수능 대비"는 출제 패턴·난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
     </ul>
   </div>
