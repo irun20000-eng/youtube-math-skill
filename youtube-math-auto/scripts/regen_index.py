@@ -37,6 +37,10 @@ def extract_meta(html_path: Path) -> dict:
     title = title_m.group(1).strip() if title_m else None
     if title:
         title = re.sub(r"\s*[—\|-]\s*학습자료.*$", "", title).strip()
+        # 갤러리는 KaTeX 미적용 → $...$ 수식이 그대로 노출되므로 제거.
+        # \sin, \cos 등 백슬래시 명령도 평문으로 보이므로 \ 제거.
+        title = title.replace("$", "").replace("\\", "")
+        title = re.sub(r"\s+", " ", title).strip()
     return {
         "title": title,
         "url": url_m.group(1) if url_m else None,
