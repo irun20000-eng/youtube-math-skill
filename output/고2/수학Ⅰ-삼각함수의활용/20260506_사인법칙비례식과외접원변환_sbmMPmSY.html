@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환($a=2R\sin A$) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 ($a=2R\sin A$)</h1>
+    <p class="meta-row">📺 영상: <a href="https://youtu.be/sbmMPmSYYTA" target="_blank">https://youtu.be/sbmMPmSYYTA</a> (수능 수학 공부법, 14분)</p>
+    <p class="meta-row">🎯 학습 목표: 사인법칙을 단순 공식이 아닌 <strong>비례식</strong> 으로 이해하고, 외접원 등장 시 변을 $2R\sin A$ 로 즉각 치환하여 풀이 시간을 획기적으로 단축</p>
+    <p class="meta-row">📚 단원: [고2-수학Ⅰ-삼각함수의 활용] · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+    <p class="meta-row">⏱️ 예상 소요시간: 60분 (개념 30분 + 문항 30분)</p>
+  </header>
+
+  <div class="controls">
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span style="flex:1"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 질문</h2>
+      <article class="problem basic">
+        <h3>예시 — 영상의 출발 문제</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $A=60^\circ$, $B=45^\circ$, $a=\sqrt{6}$ 일 때 변 $b$ 의 값을 구하시오.</p>
+        <details open>
+          <summary>📖 풀이 보기 (영상의 두 관점)</summary>
+          <div class="solution">
+            <p><strong>📐 관점 A — 외접원 반지름 거치는 정공법:</strong> 사인법칙 $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=2R$ 로 먼저 $2R$ 부터 구함. $2R=\dfrac{\sqrt{6}}{\sin 60^\circ}=\dfrac{\sqrt{6}}{\sqrt{3}/2}=\dfrac{2\sqrt{6}}{\sqrt{3}}=2\sqrt{2}$. 그다음 $b=2R\sin B=2\sqrt{2}\cdot\sin 45^\circ=2\sqrt{2}\cdot\dfrac{\sqrt{2}}{2}=2$. ⏱️ 약 40초.</p>
+            <p><strong>🎯 관점 B — 비례식 직진 (영상의 핵심):</strong> $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}$ 에서 $2R$ 안 거치고 바로 $b=a\cdot\dfrac{\sin B}{\sin A}=\sqrt{6}\cdot\dfrac{\sin 45^\circ}{\sin 60^\circ}=\sqrt{6}\cdot\dfrac{\sqrt{2}/2}{\sqrt{3}/2}=\sqrt{6}\cdot\dfrac{\sqrt{2}}{\sqrt{3}}=\sqrt{6}\cdot\sqrt{\dfrac{2}{3}}=\sqrt{4}=2$. ⏱️ 약 15초.</p>
+            <p class="answer"><strong>정답:</strong> $b=2$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 두 방법 결과는 같지만 비례식 관점은 <strong>$R$ 을 매개로 안 거치고 직진</strong>. 영상 강사 표현: <em>"내 키를 내 사인값으로 나누고 다른 사람 사인값을 곱하면 그 사람 키가 된다."</em> 이 자료에서 그 사고법을 단계별로 익힙니다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명</h2>
+
+      <div class="concept-block">
+        <h3>① 큰 그림 — 사인법칙은 공식인가, 비례식인가?</h3>
+        <p>교과서는 사인법칙을 다음처럼 적습니다.</p>
+        <div class="formula-box">
+          $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=\dfrac{c}{\sin C}=2R$ &nbsp;($R$ 은 외접원 반지름)
+        </div>
+        <p>이걸 통째로 외우면 "$R$ 이 항상 끼어 있는 공식"으로 보입니다. 그런데 영상 강사는 <strong>같은 식을 비례식으로 다시 읽으라</strong>고 해요.</p>
+        <div class="formula-box">
+          $a:b:c=\sin A:\sin B:\sin C$
+        </div>
+        <p>핵심 메시지: <em>"사인법칙의 본질은 변의 길이의 비가 사인값의 비와 같다는 것."</em></p>
+        <p>이렇게 보면 $R$ 을 거치지 않고 변·각만 직접 비례시켜 풀 수 있어요. 외접원 정보가 안 주어진 문제에서 시간이 크게 줄어듭니다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 선수 지식 1 — 삼각비의 정의 (중3)</h3>
+        <div class="prereq">
+          <p>직각삼각형에서 한 예각 $\theta$ 에 대해</p>
+          <p>$\sin\theta=\dfrac{\text{높이}}{\text{빗변}}$, &nbsp; $\cos\theta=\dfrac{\text{밑변}}{\text{빗변}}$, &nbsp; $\tan\theta=\dfrac{\text{높이}}{\text{밑변}}$.</p>
+          <p>고2 에서는 단위원·일반각으로 확장: $0\le\theta\le 180^\circ$ 까지 $\sin\theta$ 정의. 둔각도 $\sin\theta\ge 0$.</p>
+        </div>
+        <p>특수각 값 (자주 쓰임): $\sin 30^\circ=\dfrac{1}{2}$, $\sin 45^\circ=\dfrac{\sqrt{2}}{2}$, $\sin 60^\circ=\dfrac{\sqrt{3}}{2}$, $\sin 90^\circ=1$. $\cos$ 은 $30\leftrightarrow 60$ 바꿔 같은 값.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 선수 지식 2 — 외접원과 원주각 정리</h3>
+        <div class="prereq">
+          <p><strong>외접원</strong>: 삼각형의 세 꼭짓점을 모두 지나는 원. 모든 삼각형은 유일한 외접원을 가짐.</p>
+          <p><strong>원주각 정리</strong>: 같은 호에 대한 원주각의 크기는 모두 같다. 또한 한 원 위 호 $BC$ 에 대한 원주각 $A$ 와 중심각 $\angle BOC$ 사이에는 $\angle BOC=2A$ 의 관계.</p>
+          <p>지름이 빗변이 되는 직각삼각형 (탈레스의 정리): 지름을 마주보는 원주각은 $90^\circ$.</p>
+        </div>
+        <p>이 정리들이 사인법칙 유도의 뼈대. 다음 ④ 에서 직접 사용.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 정리 1 — 사인법칙 유도 ($\dfrac{a}{\sin A}=2R$)</h3>
+        <p>유명한 결과만 외우는 게 아니라, 한 번은 유도해 봐야 "$R$ 이 어디서 나오는지"가 머릿속에 박힙니다.</p>
+
+        <div class="step-derive">
+          <p>삼각형 $ABC$ 의 외접원 (반지름 $R$, 중심 $O$) 을 그린다.</p>
+          <p>변 $BC$ ($=a$) 와 마주보는 각이 $A$ 이다. 외접원 위에서 $BC$ 에 대한 원주각이 $A$.</p>
+          <p>지름이 $BC$ 인 원에서 마주보는 원주각이 $90^\circ$ 가 되도록 보조점 $A'$ 를 잡으면, 삼각형 $A'BC$ 에서 $\angle BA'C=A$ (같은 호 $BC$ 의 원주각이라 같음, 원주각 정리) 이고 $\angle CBA'=90^\circ$ (지름 $BA'$ 에 대한 원주각).</p>
+          <p>$A'$ 가 지름 끝점이면 빗변 $A'C=2R$. 직각삼각형 $A'BC$ 에서 $\sin A=\dfrac{BC}{A'C}=\dfrac{a}{2R}$.</p>
+          <p>정리: $\dfrac{a}{\sin A}=2R$. 마찬가지로 $\dfrac{b}{\sin B}=\dfrac{c}{\sin C}=2R$.</p>
+        </div>
+
+        <div class="formula-box">
+          <strong>사인법칙</strong>:&nbsp; $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=\dfrac{c}{\sin C}=2R$
+        </div>
+
+        <div class="insight">
+          $R$ 의 정체 = "변과 마주보는 각의 사인값의 비례 상수". 모든 변·각 비율의 공통 분모.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 핵심 정리 2 — 비례식 관점 ("서장훈 키" 비유)</h3>
+        <p>$\dfrac{a}{\sin A}=\dfrac{b}{\sin B}$ 의 양변에 $\sin A,\sin B$ 를 곱해 정리하면</p>
+        <div class="formula-box">
+          $b=a\cdot\dfrac{\sin B}{\sin A}$ &nbsp;(또는 $a:b=\sin A:\sin B$)
+        </div>
+
+        <p>영상 강사의 비유: <em>"내 키를 내 키의 비(내 사인값)로 나누고 서장훈 키의 비(서장훈 사인값)를 곱하면 서장훈 키가 됩니다."</em> 즉,</p>
+        <div class="step-derive">
+          <p>"내 키" = 내가 마주보는 변 $a$.</p>
+          <p>"내 키 비" = 내 사인값 $\sin A$.</p>
+          <p>"서장훈 키 비" = 다른 변에 대응하는 사인값 $\sin B$.</p>
+          <p>"서장훈 키" = 그 사인값에 대응하는 변 $b$.</p>
+          <p>따라서 $b=a\div\sin A\times\sin B=\dfrac{a\sin B}{\sin A}$.</p>
+        </div>
+
+        <div class="insight">
+          $R$ 을 매개로 거치지 않고 두 변·두 사인 직접 연결. <strong>외접원 정보가 안 주어졌을 때 가장 빠른 길.</strong>
+        </div>
+
+        <div class="callout">
+          <p><strong>일반화 — 변 비 vs 사인 비</strong>:</p>
+          <p>$a:b:c=\sin A:\sin B:\sin C$. 어떤 한 변의 길이를 알고 다른 변을 모를 때, 사인값들의 비만 계산해 비례식으로 풀이.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 핵심 정리 3 — 외접원 등장 시 즉시 치환 ($a=2R\sin A$)</h3>
+        <p>문제에 외접원의 반지름 $R$ (또는 지름 $2R$) 이 명시되어 있으면, 사인법칙을 다음처럼 다시 씁니다.</p>
+        <div class="formula-box">
+          $a=2R\sin A,\;\; b=2R\sin B,\;\; c=2R\sin C$
+        </div>
+        <p>즉 <strong>변 = (외접원 지름) × (마주보는 각의 사인)</strong>. 변의 길이를 보자마자 사인값으로, 사인값을 보자마자 변의 길이로 즉시 변환할 수 있어요.</p>
+
+        <div class="callout">
+          <p><strong>왜 이게 강력한가?</strong></p>
+          <p>외접원 등장 문제는 보통 "변의 길이를 묻는데 각도 정보가 흩어져 있는" 형태. $a=2R\sin A$ 로 즉시 치환해 두면 <strong>모든 변을 사인 함수로 통일</strong> 할 수 있어 코사인법칙·삼각함수 항등식 등을 바로 적용 가능.</p>
+        </div>
+
+        <div class="step-derive">
+          <p>예: 외접원 반지름 $R=5$ 인 삼각형 $ABC$ 에서 $A=30^\circ$ → $a=2\cdot 5\cdot\sin 30^\circ=10\cdot\dfrac{1}{2}=5$. 변의 길이 즉시 도출.</p>
+          <p>역방향: 변 $a=8$ 이면 $\sin A=\dfrac{a}{2R}=\dfrac{8}{2R}$. 외접원 반지름이 주어지면 사인값 즉시 도출.</p>
+        </div>
+
+        <div class="insight">
+          외접원이라는 단어가 보이면 <strong>반사적으로 $a=2R\sin A$ 적용</strong>. 영상 강사가 "실전적 감각"으로 강조한 부분.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑦ 핵심 정리 4 — 코사인법칙 (변 정보 많을 때) + 선택 기준</h3>
+        <p>영상이 보너스로 짚은 부분 — <strong>사인법칙 vs 코사인법칙 언제 쓸지 판단</strong>.</p>
+
+        <div class="formula-box">
+          <strong>코사인법칙</strong>:&nbsp; $a^2=b^2+c^2-2bc\cos A$
+        </div>
+
+        <p>변 두 개와 끼인 각이 주어지면 나머지 변, 또는 세 변이 다 주어지면 한 각의 코사인을 즉시 계산.</p>
+
+        <div class="callout">
+          <p><strong>선택 기준 (영상 강조점)</strong>:</p>
+          <p>• <strong>각 정보가 많을 때 → 사인법칙</strong>: 두 각 + 한 변, 또는 한 각 + 두 변(마주보는 변).</p>
+          <p>• <strong>변 정보가 많을 때 → 코사인법칙</strong>: 세 변, 또는 두 변 + 끼인 각.</p>
+        </div>
+
+        <div class="step-derive">
+          <p>판단 예시: 두 각과 한 변 → 사인법칙으로 다른 변 ($b=a\sin B/\sin A$).</p>
+          <p>세 변 모두 → 코사인법칙으로 각의 코사인 ($\cos A=(b^2+c^2-a^2)/(2bc)$).</p>
+          <p>두 변 + 끼인 각 → 코사인법칙으로 나머지 변 ($a^2=b^2+c^2-2bc\cos A$).</p>
+          <p>두 변 + 마주보는 각(끼인 각이 아닌 각) → 사인법칙으로 다른 각 ($\sin B=b\sin A/a$).</p>
+        </div>
+
+        <div class="insight">
+          "법칙 외워서 끼워 맞추기" ❌, "조건에 따른 필연적인 선택" ✅. 영상 강사가 단순 암기 넘어 강조한 핵심 사고.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑧ 자주 하는 실수 4가지</h3>
+        <ol>
+          <li><strong>$2R$ 항상 거침</strong>: 외접원 정보가 없는 문제에서 $2R$ 부터 구하면 시간 낭비. 비례식 직진 ($b=a\sin B/\sin A$) 으로 한 번에. 외접원 정보가 명시될 때만 $2R$ 활용.</li>
+          <li><strong>변의 비 vs 사인의 비 혼동</strong>: $a:b:c=\sin A:\sin B:\sin C$ 는 비율만 같음. 절대값은 $2R$ 배 차이. 비율 답에서 절대값 묻는 문제로 점프하면 오답.</li>
+          <li><strong>둔각 사인의 부호</strong>: 둔각도 사인은 양수 ($\sin 120^\circ=\sin 60^\circ=\sqrt{3}/2$). 코사인은 음수 ($\cos 120^\circ=-\cos 60^\circ=-1/2$). 사인법칙은 둔각이라도 그대로, 코사인법칙은 부호 주의.</li>
+          <li><strong>법칙 선택 잘못</strong>: 두 변과 끼인 각을 사인법칙으로 풀려고 시도 — 사인법칙은 변과 그 변에 마주보는 각의 쌍이 필요. 끼인 각만 알면 코사인법칙으로 가야.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (기초 2 / 기본 3 / 심화 2 / 수능 대비 2)</h2>
+
+      <h3 style="color: var(--basic);">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 비례식 직진</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $A=30^\circ$, $B=45^\circ$, $a=4$ 일 때 $b$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 비례식 적용:</strong> $b=a\cdot\dfrac{\sin B}{\sin A}$.</p>
+            <p><strong>STEP 2 — 사인값 대입:</strong> $\sin B=\sin 45^\circ=\dfrac{\sqrt{2}}{2}$, $\sin A=\sin 30^\circ=\dfrac{1}{2}$.</p>
+            <p><strong>STEP 3 — 계산:</strong> $b=4\cdot\dfrac{\sqrt{2}/2}{1/2}=4\cdot\sqrt{2}=4\sqrt{2}$.</p>
+            <p class="why">$\dfrac{\sqrt{2}/2}{1/2}=\dfrac{\sqrt{2}}{2}\cdot\dfrac{2}{1}=\sqrt{2}$. 분수 나눗셈은 역수 곱.</p>
+            <p class="answer"><strong>정답:</strong> $b=4\sqrt{2}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> $2R$ 안 거치고 비례식 직진. 외접원 정보 없는 문제에서 가장 빠른 길.</p>
+            <p class="warning"><strong>오답 주의:</strong> $b=a\cdot\sin A/\sin B$ 처럼 분자·분모 뒤집힘. "변 = 변 × (그 변 사인)/(원래 변 사인)" 순서 정확히.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 외접원 즉시 치환</h3>
+        <p class="problem-body"><strong>문제:</strong> 외접원 반지름이 $R=4$ 인 삼각형 $ABC$ 에서 $A=60^\circ$ 일 때 변 $a$ 의 길이를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 즉시 치환:</strong> $a=2R\sin A=2\cdot 4\cdot\sin 60^\circ$.</p>
+            <p><strong>STEP 2 — 계산:</strong> $a=8\cdot\dfrac{\sqrt{3}}{2}=4\sqrt{3}$.</p>
+            <p class="why">$\sin 60^\circ=\dfrac{\sqrt{3}}{2}$. $8\cdot\dfrac{\sqrt{3}}{2}=4\sqrt{3}$.</p>
+            <p class="answer"><strong>정답:</strong> $a=4\sqrt{3}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 외접원 반지름이 보이면 반사적으로 $a=2R\sin A$. 한 줄에 답.</p>
+            <p class="warning"><strong>오답 주의:</strong> $a=R\sin A$ 처럼 $2$ 빠뜨리기. 사인법칙은 $2R$ 이지 $R$ 이 아님.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--standard);">🟡 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 변의 비</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $A=45^\circ$, $B=60^\circ$, $C=75^\circ$ 일 때 $a:b:c$ 를 가장 간단한 정수·무리수 비로 나타내시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 비례식:</strong> $a:b:c=\sin A:\sin B:\sin C=\sin 45^\circ:\sin 60^\circ:\sin 75^\circ$.</p>
+            <p><strong>STEP 2 — 각 값 대입:</strong> $\sin 45^\circ=\dfrac{\sqrt{2}}{2}$, $\sin 60^\circ=\dfrac{\sqrt{3}}{2}$, $\sin 75^\circ=\sin(45^\circ+30^\circ)=\sin 45^\circ\cos 30^\circ+\cos 45^\circ\sin 30^\circ=\dfrac{\sqrt{2}}{2}\cdot\dfrac{\sqrt{3}}{2}+\dfrac{\sqrt{2}}{2}\cdot\dfrac{1}{2}=\dfrac{\sqrt{6}+\sqrt{2}}{4}$.</p>
+            <p class="why">사인 덧셈 정리: $\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta$. $75^\circ=45^\circ+30^\circ$ 분해.</p>
+            <p><strong>STEP 3 — 분모 통일:</strong> 모두 분모 $4$ 로: $\dfrac{2\sqrt{2}}{4}:\dfrac{2\sqrt{3}}{4}:\dfrac{\sqrt{6}+\sqrt{2}}{4}$.</p>
+            <p><strong>STEP 4 — 분모 제거:</strong> $a:b:c=2\sqrt{2}:2\sqrt{3}:\sqrt{6}+\sqrt{2}$.</p>
+            <p class="answer"><strong>정답:</strong> $a:b:c=2\sqrt{2}:2\sqrt{3}:\sqrt{6}+\sqrt{2}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 비례식 관점에서 변 비 = 사인 비. 모든 분모 통일하면 그대로 답.</p>
+            <p class="warning"><strong>오답 주의:</strong> 분모 안 통일하면 비율이 틀어짐. 같은 분모로 정리한 후 분모 무시 가능.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 코사인법칙 (변 정보 많음)</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $b=3$, $c=5$, $A=60^\circ$ 일 때 $a$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 법칙 선택:</strong> 두 변($b,c$) + 끼인 각($A$) 조건. <strong>코사인법칙</strong> 적용.</p>
+            <p><strong>STEP 2 — 식 대입:</strong> $a^2=b^2+c^2-2bc\cos A=9+25-2\cdot 3\cdot 5\cdot\cos 60^\circ$.</p>
+            <p><strong>STEP 3 — 계산:</strong> $a^2=34-30\cdot\dfrac{1}{2}=34-15=19$. $a=\sqrt{19}$.</p>
+            <p class="why">$\cos 60^\circ=\dfrac{1}{2}$. $30\cdot\dfrac{1}{2}=15$.</p>
+            <p class="answer"><strong>정답:</strong> $a=\sqrt{19}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 사인법칙으로는 풀리지 않음 (마주보는 각·변 쌍이 부족). 변 정보 많고 끼인 각 → 코사인법칙.</p>
+            <p class="warning"><strong>오답 주의:</strong> 사인법칙으로 시작해서 막힘 — 법칙 선택 단계에서 조건 분석 먼저.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 3 — 법칙 선택 판별</h3>
+        <p class="problem-body"><strong>문제:</strong> 다음 각 조건에서 $\triangle ABC$ 의 미지수를 구할 때, 사인법칙·코사인법칙 중 어느 것을 먼저 사용해야 하는지 판단하고 그 이유를 적으시오.<br>
+        (가) $A=40^\circ,\,B=60^\circ,\,a=5$ → $b$ 구하기.<br>
+        (나) $a=4,\,b=5,\,c=6$ → $A$ 구하기.<br>
+        (다) $a=7,\,b=8,\,C=45^\circ$ → $c$ 구하기.<br>
+        (라) $a=10,\,b=8,\,A=50^\circ$ → $B$ 구하기.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>(가):</strong> 두 각 + 한 변. <strong>사인법칙</strong>. ($a$ 와 $A$ 가 마주보는 쌍, $B$ 도 알므로 $b$ 비례식 가능.)</p>
+            <p><strong>(나):</strong> 세 변. <strong>코사인법칙</strong>. ($\cos A=(b^2+c^2-a^2)/(2bc)$ 로 즉시.)</p>
+            <p><strong>(다):</strong> 두 변 + 끼인 각. <strong>코사인법칙</strong>. ($c^2=a^2+b^2-2ab\cos C$.)</p>
+            <p><strong>(라):</strong> 두 변 + 마주보는 각 ($a$ 와 $A$ 가 쌍). <strong>사인법칙</strong>. ($\sin B=b\sin A/a$.)</p>
+            <p class="answer"><strong>정답:</strong> (가) 사인 / (나) 코사인 / (다) 코사인 / (라) 사인.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> "변·각 마주보는 쌍 있는가" → 있으면 사인법칙, "끼인 각만 있는가" 또는 "세 변" → 코사인법칙. 영상 강사의 선택 기준.</p>
+            <p class="warning"><strong>오답 주의:</strong> (라) 처럼 두 변이 있다고 무조건 코사인 ❌. $A$ 가 $a$ 의 마주보는 각이라 사인법칙으로 충분.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--advanced);">🔴 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 외접원 + 두 법칙 혼용</h3>
+        <p class="problem-body"><strong>문제:</strong> 외접원 반지름 $R=2\sqrt{3}$ 인 삼각형 $ABC$ 에서 $A=60^\circ$, $b=3$ 이다. 변 $c$ 의 값을 구하시오 (단 $C$ 는 예각).</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — $a$ 즉시 치환:</strong> $a=2R\sin A=2\cdot 2\sqrt{3}\cdot\sin 60^\circ=4\sqrt{3}\cdot\dfrac{\sqrt{3}}{2}=4\sqrt{3}\cdot\dfrac{\sqrt{3}}{2}=\dfrac{12}{2}=6$.</p>
+            <p><strong>STEP 2 — $\sin B$ 즉시 치환:</strong> $\sin B=\dfrac{b}{2R}=\dfrac{3}{4\sqrt{3}}=\dfrac{3}{4\sqrt{3}}\cdot\dfrac{\sqrt{3}}{\sqrt{3}}=\dfrac{3\sqrt{3}}{12}=\dfrac{\sqrt{3}}{4}$.</p>
+            <p><strong>STEP 3 — $\sin C$ 도출:</strong> $A+B+C=180^\circ$ → $C=120^\circ-B$. $\sin C=\sin(120^\circ-B)$.</p>
+            <p class="why">$A=60^\circ$ 이므로 $B+C=120^\circ$. $C=120^\circ-B$. 사인 빼기 정리: $\sin(120^\circ-B)=\sin 120^\circ\cos B-\cos 120^\circ\sin B$.</p>
+            <p><strong>STEP 4 — $\cos B$:</strong> $B$ 도 예각이므로 $\cos B=\sqrt{1-\sin^2 B}=\sqrt{1-3/16}=\sqrt{13/16}=\sqrt{13}/4$.</p>
+            <p><strong>STEP 5 — $\sin C$ 계산:</strong> $\sin C=\dfrac{\sqrt{3}}{2}\cdot\dfrac{\sqrt{13}}{4}-\left(-\dfrac{1}{2}\right)\cdot\dfrac{\sqrt{3}}{4}=\dfrac{\sqrt{39}}{8}+\dfrac{\sqrt{3}}{8}=\dfrac{\sqrt{39}+\sqrt{3}}{8}$.</p>
+            <p><strong>STEP 6 — $c$ 즉시 치환:</strong> $c=2R\sin C=4\sqrt{3}\cdot\dfrac{\sqrt{39}+\sqrt{3}}{8}=\dfrac{\sqrt{3}(\sqrt{39}+\sqrt{3})}{2}=\dfrac{\sqrt{117}+3}{2}=\dfrac{3\sqrt{13}+3}{2}=\dfrac{3(\sqrt{13}+1)}{2}$.</p>
+            <p class="why">$\sqrt{117}=\sqrt{9\cdot 13}=3\sqrt{13}$. $\sqrt{3}\cdot\sqrt{3}=3$.</p>
+            <p class="answer"><strong>정답:</strong> $c=\dfrac{3(\sqrt{13}+1)}{2}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 외접원이 명시된 문제 → 변 ↔ 사인 즉시 치환. 모든 변을 사인 함수로 통일한 후 사인 덧셈 정리로 마무리.</p>
+            <p class="warning"><strong>오답 주의:</strong> $C$ 가 예각이라는 조건 무시하면 $\cos B$ 부호가 ±일 수 있음. 명시된 조건 따라 $+$ 선택.</p>
+            <p class="intent"><strong>출제 의도:</strong> 외접원 즉시 치환 + 사인 덧셈 정리 + 두 법칙 혼용. 영상 핵심 사고 종합.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 변의 비 + 외접원 반지름</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $a:b:c=3:5:7$ 일 때 가장 큰 각의 코사인을 구하고, 외접원 반지름 $R$ 이 $a=3k$ ($k$ 는 양의 실수) 일 때 $R$ 을 $k$ 로 나타내시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 가장 큰 변·각:</strong> $c=7k$ 가 가장 큼. 마주보는 각 $C$ 가 가장 큰 각.</p>
+            <p><strong>STEP 2 — 코사인법칙:</strong> $\cos C=\dfrac{a^2+b^2-c^2}{2ab}=\dfrac{(3k)^2+(5k)^2-(7k)^2}{2\cdot 3k\cdot 5k}=\dfrac{9k^2+25k^2-49k^2}{30k^2}=\dfrac{-15k^2}{30k^2}=-\dfrac{1}{2}$.</p>
+            <p class="why">분자 $9+25-49=-15$. 분모 $30k^2$ 에서 $k^2$ 약분.</p>
+            <p><strong>STEP 3 — 각 $C$:</strong> $\cos C=-\dfrac{1}{2}$ 이므로 $C=120^\circ$. 둔각.</p>
+            <p><strong>STEP 4 — 외접원 반지름 ($a=3k$ 와 $A$ 사용):</strong> $\sin A$ 가 필요. 사인법칙은 모든 비에 적용 가능하므로 $C=120^\circ$ 부터: $\dfrac{c}{\sin C}=\dfrac{7k}{\sin 120^\circ}=\dfrac{7k}{\sqrt{3}/2}=\dfrac{14k}{\sqrt{3}}=2R$.</p>
+            <p><strong>STEP 5 — $R$:</strong> $R=\dfrac{7k}{\sqrt{3}}=\dfrac{7\sqrt{3}}{3}k$.</p>
+            <p class="why">분모 유리화: $\dfrac{7k}{\sqrt{3}}\cdot\dfrac{\sqrt{3}}{\sqrt{3}}=\dfrac{7\sqrt{3}k}{3}$.</p>
+            <p class="answer"><strong>정답:</strong> $\cos C=-\dfrac{1}{2}$, $R=\dfrac{7\sqrt{3}}{3}k$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 변 비 → 코사인법칙으로 가장 큰 각의 코사인 → 사인법칙으로 $R$. 두 법칙의 자연스러운 연결.</p>
+            <p class="warning"><strong>오답 주의:</strong> $\cos C=-1/2$ 에서 $C=60^\circ$ 라 답하기 ❌. 코사인이 음수면 둔각. $C=120^\circ$.</p>
+            <p class="intent"><strong>출제 의도:</strong> 변 비례식 + 코사인법칙 + 사인법칙 + 둔각 처리 종합.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 style="color: var(--exam);">🟣 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — N번 유형(준킬러), 외접원과 도형</h3>
+        <p class="problem-body"><strong>문제:</strong> 외접원 반지름 $R=6$ 인 삼각형 $ABC$ 에서 $a+b+c=18$ 이고 $A+B=120^\circ$ 일 때, $\sin A+\sin B+\sin C$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 변을 사인으로 즉시 치환:</strong> $a=2R\sin A=12\sin A$, $b=12\sin B$, $c=12\sin C$.</p>
+            <p><strong>STEP 2 — 합:</strong> $a+b+c=12(\sin A+\sin B+\sin C)$.</p>
+            <p><strong>STEP 3 — 조건 대입:</strong> $18=12(\sin A+\sin B+\sin C)$.</p>
+            <p><strong>STEP 4 — 풀이:</strong> $\sin A+\sin B+\sin C=\dfrac{18}{12}=\dfrac{3}{2}$.</p>
+            <p class="why">변 = (외접원 지름) × 사인 이므로, 변의 합도 그대로 사인 합의 $2R$ 배.</p>
+            <p class="answer"><strong>정답:</strong> $\sin A+\sin B+\sin C=\dfrac{3}{2}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 외접원이 명시된 순간 변 ↔ 사인 즉시 치환. $A+B=120^\circ$ 같은 보조 조건은 검산 용도로만 — 사실 안 써도 답.</p>
+            <p class="warning"><strong>오답 주의:</strong> $A+B=120^\circ$ 부터 $C=60^\circ$ 구해 사인 덧셈 정리로 풀려고 하면 시간 낭비. 외접원 등장 시 즉시 치환이 최단 경로.</p>
+            <p class="intent"><strong>출제 의도:</strong> 수능 대비 — N번 유형(준킬러). 외접원 즉시 치환 사고를 합 계산에 응용. 영상 핵심 메시지의 정수.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — N번 유형(준킬러), 사인 덧셈 정리 종합</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 에서 $\sin A:\sin B:\sin C=3:5:7$ 이고 둘레가 $30$ 일 때, 삼각형의 넓이를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 변 비 = 사인 비:</strong> $a:b:c=3:5:7$. $a=3k,\,b=5k,\,c=7k$ ($k>0$).</p>
+            <p><strong>STEP 2 — 둘레로 $k$ 결정:</strong> $a+b+c=15k=30$ → $k=2$. 따라서 $a=6,\,b=10,\,c=14$.</p>
+            <p><strong>STEP 3 — 가장 큰 각:</strong> $c=14$ 마주보는 $C$ 가 가장 큼. 코사인법칙: $\cos C=\dfrac{36+100-196}{2\cdot 6\cdot 10}=\dfrac{-60}{120}=-\dfrac{1}{2}$. → $C=120^\circ$.</p>
+            <p><strong>STEP 4 — $\sin C$:</strong> $\sin 120^\circ=\dfrac{\sqrt{3}}{2}$.</p>
+            <p><strong>STEP 5 — 넓이 (두 변과 끼인 각 공식):</strong> $S=\dfrac{1}{2}ab\sin C=\dfrac{1}{2}\cdot 6\cdot 10\cdot\dfrac{\sqrt{3}}{2}=15\sqrt{3}$.</p>
+            <p class="why">삼각형 넓이 = (1/2) × 두 변 × 끼인 각 사인. $C$ 의 끼인 두 변은 $a,b$.</p>
+            <p class="answer"><strong>정답:</strong> 넓이 $=15\sqrt{3}$.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 사인 비 → 변 비 → 둘레로 절대값 결정 → 코사인법칙 → 넓이. <strong>비례식 관점 첫 단계가 모든 풀이의 시작.</strong></p>
+            <p class="warning"><strong>오답 주의:</strong> $\sin A:\sin B:\sin C=3:5:7$ 에서 곧바로 사인 값 자체가 $3,5,7$ 인 것처럼 쓰면 오답 ($\sin\le 1$ 이므로 $3,5,7$ 자체일 수 없음). 비율만.</p>
+            <p class="intent"><strong>출제 의도:</strong> 수능 대비 — N번 유형(준킬러). 사인 비 → 변 비 → 코사인법칙 → 넓이 전 과정 종합. 영상의 비례식 관점 + 법칙 선택 기준 통합 적용.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 적용 결과</h3>
+    <p>본 자료는 영상에서 강사가 압축한 부분을 중수준(하위 40%) 학습자도 따라갈 수 있도록 풀어 작성:</p>
+    <ul>
+      <li><strong>"사인법칙 = $a/\sin A=2R$"</strong> 결과 공식만 외우는 게 아니라 → 외접원·원주각 정리·탈레스의 정리에서 직접 유도. $R$ 의 정체 명확화 (개념 ④).</li>
+      <li><strong>"서장훈 키" 비유</strong> → 단순 비유에 그치지 않고 비례식 $b=a\sin B/\sin A$ 의 단계별 의미를 "내 키 ÷ 내 비 × 다른 비"로 정확히 환원 (개념 ⑤).</li>
+      <li><strong>"외접원 즉시 치환"</strong> → $a=2R\sin A$ 를 변 → 사인, 사인 → 변 양방향 치환 가능한 도구로 명시화 (개념 ⑥).</li>
+      <li><strong>법칙 선택 기준</strong> → "각 정보 많음 → 사인, 변 정보 많음 → 코사인" 을 4가지 구체 패턴(두 각+한 변, 세 변, 두 변+끼인 각, 두 변+마주보는 각)으로 분해 (개념 ⑦, 기본 3).</li>
+      <li><strong>둔각의 사인·코사인</strong> → 사인은 양수 유지, 코사인은 음수로 변함을 별도 짚음. 둔각이 정답인 케이스(심화 2, 수능 대비 2) 에 직접 적용.</li>
+      <li><strong>모든 풀이 STEP에 "↳ 왜?" 메모</strong>: 분수 나눗셈·분모 유리화·사인 덧셈 정리 등 학생이 자주 막히는 단계마다 근거 박스.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>심화 1</strong> — 사인 덧셈 정리 사용으로 계산이 길어짐. 원 영상이 어디까지 다뤘는지에 따라 난이도 조정 가능. (확신도 ★★)</li>
+      <li>"수능 대비"는 출제 패턴·난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>생성일: 2026-05-06 | 영상 출처: <a href="https://youtu.be/sbmMPmSYYTA">https://youtu.be/sbmMPmSYYTA</a> (수능 수학 공부법 채널)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+</body>
+</html>
