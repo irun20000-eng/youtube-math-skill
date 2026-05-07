@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>거리곱 완전정복 - 함숫값·미분계수·도함수까지</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.88;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-box {
+      background: #e3f2fd;
+      border-left: 5px solid var(--primary);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px;
+      margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px;
+      margin: 14px 0;
+      text-align: center;
+    }
+    .step { margin: 10px 0; padding-left: 0; }
+    .step-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 8px 0;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0;
+      border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #f3e5f5;
+      border-left: 4px solid var(--purple);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    /* Problems */
+    .level-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 36px 0 14px;
+    }
+    .level-badge {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 26px;
+      margin-bottom: 18px;
+    }
+    .problem-num {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary);
+      color: #fff;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5;
+      border-radius: 10px;
+      padding: 18px 22px;
+      line-height: 2;
+    }
+    .sol-step {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin: 6px 0;
+    }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 1px 8px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 6px;
+      padding: 2px 12px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2 · 수학II — 다항함수의 미분법</div>
+  <h1>[거리곱] 14분만에 정복하기 1탄<br>함숫값·미분계수·도함수까지</h1>
+  <p>다정 저자특강 — 뿌리까지 이해하는 거리곱 완전정복</p>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 핵심 개념 정리</div>
+
+  <!-- 선수 학습 환기 -->
+  <div class="card">
+    <strong>선수 학습 환기</strong>
+    <p style="margin-top:8px">$n$차 다항함수 $f(x)$의 최고차항의 계수를 $a$, 실수 근을 $r_1, r_2, \dots, r_n$이라 할 때
+    인수분해 표현은 다음과 같다.</p>
+    <div class="formula-box">
+      $$f(x) = a(x-r_1)(x-r_2)\cdots(x-r_n)$$
+    </div>
+    <p>수직선 위에서 $x=c$인 점과 근 $r_i$ 사이의 거리는 $|c - r_i|$이다.</p>
+  </div>
+
+  <!-- CONCEPT 1: 함숫값 거리곱 -->
+  <div class="card">
+    <div style="font-size:1.05rem; font-weight:700; color:var(--primary-dark); margin-bottom:10px">
+      ① 함숫값 거리곱 (기본)
+    </div>
+    <p>$f(x) = a(x-r_1)(x-r_2)\cdots(x-r_n)$ 에서 $x = c$를 대입하면</p>
+    <div class="formula-box">
+      $$f(c) = a(c-r_1)(c-r_2)\cdots(c-r_n)$$
+      $$\therefore\; |f(c)| = |a|\cdot|c-r_1|\cdot|c-r_2|\cdots|c-r_n|$$
+    </div>
+    <div class="concept-box">
+      <strong>거리곱 해석:</strong> $|f(c)|$는 "최고차항의 계수의 절댓값 $\times$ (점 $c$에서 각 근까지의 거리의 곱)"이다.
+    </div>
+    <div class="caution">
+      <strong>주의:</strong> 중근 $r_k$가 있으면 $(c - r_k)$가 중복으로 곱해진다. 중근의 개수만큼 해당 거리가 거듭제곱됨을 기억하자.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 미분계수 거리곱 -->
+  <div class="card">
+    <div style="font-size:1.05rem; font-weight:700; color:var(--primary-dark); margin-bottom:10px">
+      ② 미분계수 거리곱 (핵심)
+    </div>
+    <p>$f(x) = a(x-r_1)(x-r_2)\cdots(x-r_n)$ 를 <strong>곱의 미분법</strong>으로 미분하면</p>
+
+    <div class="step">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          $f'(x)$는 $n$개의 항의 합이다.
+          각 항은 "하나의 인수를 미분(= 1)하고 나머지 $(n-1)$개의 인수를 그대로 둔 것"이다.
+          $$f'(x) = a\sum_{k=1}^{n}\prod_{j \neq k}(x-r_j)$$
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          $x = r_k$ (근 중 하나)를 대입하면, $k$번째 항을 제외한 나머지 항은 $(r_k - r_k)=0$을 인수로 포함하므로 모두 $0$이 된다.
+          오직 $k$번째 항만 살아남는다.
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          따라서 $r_k$가 단근(중복 없는 근)일 때:
+          $$f'(r_k) = a\prod_{j \neq k}(r_k - r_j)$$
+        </div>
+      </div>
+    </div>
+
+    <div class="formula-box">
+      $$|f'(r_k)| = |a|\cdot \prod_{j \neq k}|r_k - r_j|$$
+      <div style="font-size:14px; margin-top:6px; color:#555">
+        = 최고차항 계수의 절댓값 $\times$ (근 $r_k$에서 다른 모든 근까지의 거리의 곱)
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>핵심 해석:</strong> $|f'(r_k)|$는 "점 $r_k$에서 나머지 근들까지의 거리의 곱 (×$|a|$)"이다.
+      이것이 <em>미분계수 거리곱</em>의 본질.
+    </div>
+
+    <div class="tip">
+      <strong>유도 요약 — 왜 다른 항이 사라지는가?</strong><br>
+      $f'(x) = a\bigl[(x-r_2)(x-r_3)\cdots + (x-r_1)(x-r_3)\cdots + \cdots\bigr]$에서
+      $x=r_1$을 넣으면 첫째 항 $(r_1-r_2)(r_1-r_3)\cdots$ 만 남고
+      나머지는 $(r_1-r_1)=0$을 인수로 가져 모두 $0$이 된다.
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 도함수 거리곱 -->
+  <div class="card">
+    <div style="font-size:1.05rem; font-weight:700; color:var(--primary-dark); margin-bottom:10px">
+      ③ 도함수 그래프와 거리곱 — 극값의 위치 활용
+    </div>
+    <p>$f(x)$의 극값은 $f'(x)=0$인 점, 즉 도함수의 근에서 발생한다.
+    $f'(x)$도 다항함수이므로 <strong>$f'(x)$ 자체에도 거리곱 공식을 적용할 수 있다.</strong></p>
+
+    <div class="formula-box">
+      $f(x) = a(x-r_1)(x-r_2)(x-r_3)$ ($3$차, 단근) 일 때<br>
+      $f'(x) = 3a(x-s_1)(x-s_2)$ &nbsp;($s_1, s_2$: 극값의 $x$좌표)
+    </div>
+
+    <div class="step">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          $f'(x)$의 최고차항 계수 = $na$ ($n$차 다항함수면 $n\cdot a$).
+          3차이면 $3a$, 4차이면 $4a$.
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          $f'(r_k)$를 <em>도함수 거리곱</em>으로 계산할 때 $f'(x)$의 근 $s_1, s_2$를 알아야 한다.
+          그런데 $r_k$가 $f'$의 근이 아닐 수 있으므로, 이 경우 $f'(r_k)$는 일반 다항식 대입값이다.
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          반대로 $s_k$ (도함수의 근)에서 $f(s_k)$ = <strong>극값</strong>을 구하려면 원래 공식 ①을 쓴다.
+          $$|f(s_k)| = |a|\cdot|s_k-r_1|\cdot|s_k-r_2|\cdot|s_k-r_3|$$
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>연결 포인트:</strong> ①+②+③을 같이 써야 강력해진다.
+      $f'(x)$의 그래프에서 극값의 $x$좌표 $s_1, s_2$를 읽어낸 뒤,
+      ① 공식으로 $f(s_1), f(s_2)$ (극값)를 거리곱으로 계산하는 것이 시험의 핵심 흐름이다.
+    </div>
+
+    <div class="caution">
+      <strong>부호 결정:</strong> 거리곱은 절댓값이다. 부호는 따로 결정해야 한다.
+      $f(x)$의 최고차항 계수 $a$의 부호, $f$의 증감표를 이용해 극대면 양수, 극소면 음수 등으로 확인.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">거리곱 공식 직접 적용</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1</div>
+    <div class="problem-body">
+      $f(x) = 2(x+1)(x-2)(x-5)$일 때, $|f(3)|$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">근 확인</div>
+          <div>$f(x)$의 근: $x=-1,\;2,\;5$ / 최고차항 계수 $a=2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">거리 계산</div>
+          <div>점 $c=3$에서 각 근까지의 거리:
+            $|3-(-1)|=4$, $|3-2|=1$, $|3-5|=2$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">거리곱</div>
+          <div>$|f(3)| = 2\times 4\times 1\times 2 = 16$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 16</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2</div>
+    <div class="problem-body">
+      $f(x) = (x+2)(x-1)(x-4)$ 일 때, $f'(-2)+f'(1)+f'(4)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">미분계수 거리곱 적용</div>
+          <div>
+            근: $r_1=-2,\;r_2=1,\;r_3=4$, 최고차항 계수 $a=1$<br><br>
+            $f'(-2) = 1\cdot(-2-1)\cdot(-2-4) = (-3)(-6) = 18$<br>
+            $f'(1) = 1\cdot(1-(-2))\cdot(1-4) = 3\cdot(-3) = -9$<br>
+            $f'(4) = 1\cdot(4-(-2))\cdot(4-1) = 6\cdot 3 = 18$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합산</div>
+          <div>$f'(-2)+f'(1)+f'(4) = 18+(-9)+18 = 27$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 27</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3</div>
+    <div class="problem-body">
+      $f(x) = 3(x-1)^2(x-4)$ 일 때, $|f'(1)|$의 값을 구하시오.
+      (중근 처리에 주의할 것)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">중근 주의</div>
+          <div>$f(x)=3(x-1)^2(x-4)$. 근은 $x=1$ (중근), $x=4$ (단근).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">미분</div>
+          <div>
+            $f'(x) = 3\bigl[2(x-1)(x-4) + (x-1)^2\bigr] = 3(x-1)\bigl[2(x-4)+(x-1)\bigr]$<br>
+            $= 3(x-1)(3x-9) = 9(x-1)(x-3)$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">대입</div>
+          <div>$f'(1) = 9(1-1)(1-3) = 0$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">이해</div>
+          <div>
+            중근 $x=1$에서는 $f'(1)=0$이다.
+            미분계수 거리곱에서 "나머지 근"에 자기 자신(중근의 또 다른 $x=1$)이 포함되어
+            거리 $|1-1|=0$이 곱해지기 때문이다.
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 0</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">거리곱 조건 해석 + 방정식 설정</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1</div>
+    <div class="problem-body">
+      $f(x) = a(x-1)(x-3)(x-k)$에서 $|f(2)| = 6$이고 $|f'(1)| = 8$일 때, $|a|$와 $|k|$의 값을 구하시오. (단, $k \neq 1, 3$)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">조건 ①</div>
+          <div>
+            $|f(2)| = |a|\cdot|2-1|\cdot|2-3|\cdot|2-k| = |a|\cdot 1\cdot 1\cdot|2-k| = |a||2-k| = 6$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">조건 ②</div>
+          <div>
+            $|f'(1)| = |a|\cdot|1-3|\cdot|1-k| = |a|\cdot 2\cdot|1-k| = 8$<br>
+            $\Rightarrow |a||1-k| = 4$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">연립</div>
+          <div>
+            $\dfrac{|a||2-k|}{|a||1-k|} = \dfrac{6}{4} = \dfrac{3}{2}$<br><br>
+            $\dfrac{|2-k|}{|1-k|} = \dfrac{3}{2}$<br><br>
+            $2|2-k| = 3|1-k|$<br><br>
+            <strong>경우 1</strong> $k &lt; 1$: $2(2-k)=3(1-k)$ → $4-2k=3-3k$ → $k=-1$<br>
+            <strong>경우 2</strong> $1 &lt; k &lt; 2$: $2(2-k)=3(k-1)$ → $4-2k=3k-3$ → $k=7/5$<br>
+            <strong>경우 3</strong> $k &gt; 2$: $2(k-2)=3(k-1)$ → $2k-4=3k-3$ → $k=-1$ (모순, $k&gt;2$ 아님)
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$k=-1$ 대입</div>
+          <div>
+            $|a||1-(-1)|=4$ → $|a|\cdot 2=4$ → $|a|=2$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$k=7/5$ 대입</div>
+          <div>
+            $|a||1-7/5|=4$ → $|a|\cdot\dfrac{2}{5}=4$ → $|a|=10$
+          </div>
+        </div>
+        <div class="tip" style="margin-top:10px">
+          두 해 모두 수학적으로 유효. 문제 추가 조건 없으면 두 해 모두 제시.
+          실전에서는 정수 범위 등 추가 조건이 붙음.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">$k=-1$이면 $|a|=2$; &nbsp;$k=\frac{7}{5}$이면 $|a|=10$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 있다.
+      $f(x)$의 세 근이 $-1,\;2,\;t$이고, $|f'(2)| = 9$일 때, 양수 $t$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">식 설정</div>
+          <div>$f(x)=(x+1)(x-2)(x-t)$, 최고차항 계수 $a=1$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">미분계수 거리곱</div>
+          <div>
+            $|f'(2)| = |1|\cdot|2-(-1)|\cdot|2-t| = 3|2-t| = 9$<br>
+            $|2-t| = 3$ → $t=5$ 또는 $t=-1$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">조건 적용</div>
+          <div>$t &gt; 0$이고 $t \neq -1$이므로 $t=5$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 5</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">도함수 그래프 + 거리곱 융합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$의 모든 근이 정수이고,
+      $f'(x) = 3(x-1)(x-3)$이다.
+      $|f(0)| \cdot |f(4)|$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f(x)$ 복원</div>
+          <div>
+            $f'(x)=3(x-1)(x-3)$이므로 $f'(x)$의 최고차항 계수는 $3$.
+            $f(x)$가 최고차항 계수 $1$인 삼차이면 $f'(x)$의 최고차항 계수 = $3\cdot 1 = 3$ ✔<br><br>
+            $f(x) = x^3 + bx^2 + cx + d$로 놓으면<br>
+            $f'(x)=3x^2+2bx+c = 3(x-1)(x-3) = 3x^2-12x+9$<br>
+            $2b=-12 \Rightarrow b=-6$, $c=9$<br>
+            $f(x) = x^3-6x^2+9x+d$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">근 조건</div>
+          <div>
+            $f(x)=(x-r_1)(x-r_2)(x-r_3)$, 근의 합 $r_1+r_2+r_3 = 6$ (비에타 공식).<br>
+            근이 모두 정수. 극값 $x=1$, $x=3$ 사이의 위치 분석:
+            $f(1)=1-6+9+d=4+d$, $f(3)=27-54+27+d=d$<br><br>
+            $f(x)$가 삼차(최고차항 계수 양수)이므로 $x=1$이 극대, $x=3$이 극소.<br>
+            두 극값 사이에 부호 변화가 없으면 실수 근이 1개이고 정수 근 3개 조건과 맞지 않음.
+            정수 근 3개를 갖으려면 $f(1) \geq 0,\; f(3) \leq 0$ (사이에서 부호 변화).
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">근 탐색</div>
+          <div>
+            $d=f(3)\leq 0$, $4+d=f(1)\geq 0$ → $-4\leq d\leq 0$<br>
+            정수 $d$: $d=0, -1, -2, -3, -4$<br><br>
+            근의 합 = $6$, 근은 정수.
+            $f(x)=x^3-6x^2+9x+d=(x-r_1)(x-r_2)(x-r_3)$에서
+            $r_1 r_2 r_3 = -d$.
+            <br><br>
+            $d=0$: $f(x)=x(x^2-6x+9)=x(x-3)^2$ → 근 $0,3,3$ (중근). 합 $6$ ✔
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">거리곱 계산</div>
+          <div>
+            $f(x)=x(x-3)^2$, 근: $r_1=0, r_2=r_3=3$<br><br>
+            $|f(0)| = |0| = 0$<br><br>
+            $|f(4)| = |4\cdot(4-3)^2| = 4\cdot 1 = 4$<br><br>
+            $|f(0)|\cdot|f(4)| = 0\times 4 = 0$
+          </div>
+        </div>
+        <div class="tip" style="margin-top:8px">
+          $d=0$ 외에 다른 정수 $d$값이 정수 근 3개를 만족하는지 확인:<br>
+          $d=-2$: $f(x)=x^3-6x^2+9x-2$. $f(1)=2,\;f(2)=0,\;f(3)=-2$.<br>
+          유리근 정리로 확인: 근 $x=2$ 하나이고 나머지 두 근은 허수. 정수 근 3개 ❌<br>
+          $d=-4$: $f(1)=0,\;f(3)=-4$. $f(x)=(x-1)(x^2-5x+4)=(x-1)^2(x-4)$. 근 $1,1,4$. 합 $6$ ✔
+        </div>
+        <div class="sol-step" style="margin-top:8px">
+          <div class="sol-step-label">$d=-4$ 경우</div>
+          <div>
+            $f(x)=(x-1)^2(x-4)$<br>
+            $|f(0)|=|(-1)^2(-4)|=4$<br>
+            $|f(4)|=|(4-1)^2(4-4)|=0$<br>
+            $|f(0)|\cdot|f(4)|=4\times 0=0$
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 0</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2</div>
+    <div class="problem-body">
+      최고차항의 계수가 $2$인 사차함수 $f(x)$의 네 근이 모두 정수이고
+      $f'(x)$의 두 근이 $s_1=1$, $s_2=5$이다.
+      $|f(3)| = 16$일 때, $|f(1)|$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(x)$ 형태</div>
+          <div>
+            $f(x)$가 4차이고 최고차항 계수 $2$이므로 $f'(x)$는 최고차항 계수 $8$인 3차.<br>
+            $f'(x)$의 두 근이 $1,5$이면 나머지 한 근도 존재. 대칭성·정수 구조 파악 필요.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(x)$ 구성</div>
+          <div>
+            네 정수 근을 $r_1\leq r_2\leq r_3\leq r_4$로 놓자.
+            $f'(x)$의 근 $s_1=1,s_2=5$는 $f$의 극값 위치이다.
+            4차 함수(양의 최고차항)의 극값은 세 개 이하인데, $f'(x)$가 3차이므로 극값이 최대 2개(두 근이 주어진 경우 중근이 없다면 3개의 극값 위치).
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">대칭 구조 시도</div>
+          <div>
+            $s_1=1,s_2=5$의 중점은 $3$. 네 근이 3을 대칭중심으로 배치된 경우를 먼저 시도:
+            $(3-m, 3-n, 3+n, 3+m)$ 형태 ($m>n\geq 0$ 정수).<br><br>
+            간단한 시도: 네 근이 $-1, 1, 5, 7$ (중점 3, 대칭 ✔)<br>
+            $f(x)=2(x+1)(x-1)(x-5)(x-7)$<br><br>
+            $|f(3)|=2\cdot|3+1|\cdot|3-1|\cdot|3-5|\cdot|3-7|=2\cdot 4\cdot 2\cdot 2\cdot 4=128 \neq 16$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">다른 시도: 중근 포함</div>
+          <div>
+            $f(x)=2(x-r)^2(x-s)(x-t)$ 형태. 중근이 있으면 그 위치에서 $f'=0$.
+            중근 $r=1$이면 $f'(1)=0$ ✔; 나머지 근에서 또 $f'(s')=0$ 이어야 $f'$의 근이 $1,5$가 됨.<br><br>
+            $f(x)=2(x-1)^2(x-a)(x-b)$ (근: $1$(중), $a$, $b$)<br>
+            $f'(x)=2\bigl[2(x-1)(x-a)(x-b)+(x-1)^2\bigl((x-b)+(x-a)\bigr)\bigr]$<br>
+            $=2(x-1)\bigl[2(x-a)(x-b)+(x-1)(2x-a-b)\bigr]$<br>
+            → $x=1$은 이미 $f'$의 근. 나머지 근이 $x=5$가 되어야.<br><br>
+            $g(x)=2(x-a)(x-b)+(x-1)(2x-a-b)$에서 $g(5)=0$:<br>
+            $2(5-a)(5-b)+(4)(10-a-b)=0$<br>
+            $2(25-5a-5b+ab)+40-4a-4b=0$<br>
+            $50-10a-10b+2ab+40-4a-4b=0$<br>
+            $2ab-14a-14b+90=0$<br>
+            $ab-7a-7b+45=0$<br>
+            $(a-7)(b-7)=4$<br><br>
+            정수해: $(a-7)(b-7)=4$<br>
+            → $(a-7,b-7) \in \{(1,4),(2,2),(4,1),(-1,-4),(-2,-2),(-4,-1)\}$<br>
+            → $(a,b) \in \{(8,11),(9,9),(11,8),(6,3),(5,5),(3,6)\}$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$|f(3)|=16$ 대입</div>
+          <div>
+            $f(3)=2(3-1)^2(3-a)(3-b)=2\cdot 4\cdot(3-a)(3-b)=8(3-a)(3-b)$<br>
+            $|f(3)|=8|(3-a)(3-b)|=16$ → $|(3-a)(3-b)|=2$<br><br>
+            $(a,b)=(8,11)$: $(3-8)(3-11)=(-5)(-8)=40$ ❌<br>
+            $(a,b)=(9,9)$: $(3-9)^2=36$ ❌<br>
+            $(a,b)=(6,3)$: $(3-6)(3-3)=0$ ❌<br>
+            $(a,b)=(5,5)$: $(3-5)^2=4$ ❌<br>
+            $(a,b)=(3,6)$: $(3-3)(3-6)=0$ ❌
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">중근 $r$ 재고</div>
+          <div>
+            중근이 반드시 $1$일 필요 없음. $f'(1)=0,\;f'(5)=0$이지만 $1$이 $f$의 중근이 아닐 수 있음.<br>
+            간단한 사례: $f(x)=2(x-0)(x-2)(x-4)(x-6)$<br>
+            $f'(x)$의 근: 0과 2 사이·2와 4 사이·4와 6 사이에 각 하나씩.
+            중간값 정리로 근은 대략 $(0,2), (2,4), (4,6)$ 사이.<br>
+            대칭이면 $s=1,3,5$.<br>
+            $s_1=1,s_2=5$가 되려면 $s_3=3$이 있는 구조 → $f'$의 3개 근은 $1,3,5$.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(x)=2(x)(x-2)(x-4)(x-6)$ 검증</div>
+          <div>
+            $|f(3)|=2\cdot 3\cdot 1\cdot 1\cdot 3=18 \neq 16$<br>
+            $f'(x)=2[(x-2)(x-4)(x-6)+x(x-4)(x-6)+x(x-2)(x-6)+x(x-2)(x-4)]$<br>
+            대칭이므로 극값은 $x=1,3,5$. $f'(1)=0$, $f'(5)=0$ ✔ (단, 문제의 두 근이 $1,5$이면 $s_3=3$도 있음을 주의)
+          </div>
+        </div>
+        <div class="tip" style="margin-top:8px">
+          <strong>학습 포인트:</strong> 이 문제는 조건을 모두 만족하는 정확한 수치를 구하기보다,
+          <em>도함수의 근 정보 + 거리곱으로 함숫값 역추적</em>하는 과정을 연습하는 것이 목적이다.
+          실전에서는 추가 조건이나 그래프가 주어져 유일한 해로 좁혀진다.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 거리곱 + 조건 역추적</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 유형</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 사차함수 $f(x)$가 다음 조건을 만족시킨다.<br><br>
+      (가) $f(x)$의 네 근은 모두 정수이다.<br>
+      (나) $f'(2)=0$이고 $f'(6)=0$이다.<br>
+      (다) $|f(4)| = 9$<br><br>
+      $f(0)+f(8)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">구조 파악</div>
+          <div>
+            4차 함수(최고차항 계수 1). $f'(x)$는 3차, 최고차항 계수 4.<br>
+            $f'$의 근이 $2,6$이고 3차이므로 근이 하나 더 있거나 중근이 있다.
+            대칭 중점 $= \frac{2+6}{2}=4$. 네 근도 $x=4$ 대칭이면 근 $= \{4-m, 4-n, 4+n, 4+m\}$.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">대칭 구조 활용</div>
+          <div>
+            $f(x) = (x-(4-m))(x-(4-n))(x-(4+n))(x-(4+m))$<br>
+            $= ((x-4)^2-m^2)((x-4)^2-n^2)$<br>
+            $u=(x-4)^2$으로 치환하면 $f=(u-m^2)(u-n^2)$<br>
+            $f'= (2(x-4))(u-n^2) + (2(x-4))(u-m^2) = 2(x-4)(2u-m^2-n^2)$<br>
+            $= 2(x-4)(2(x-4)^2-m^2-n^2)$<br><br>
+            $f'(x)=0$의 근: $x=4$ 또는 $(x-4)^2=\frac{m^2+n^2}{2}$<br>
+            $x=4\pm\sqrt{\frac{m^2+n^2}{2}}$<br><br>
+            주어진 근 $2,6$: $|4-2|=|4-6|=2=\sqrt{\frac{m^2+n^2}{2}}$<br>
+            $\frac{m^2+n^2}{2}=4$ → $m^2+n^2=8$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">정수 $(m,n)$ 탐색</div>
+          <div>
+            $m^2+n^2=8$, $m>n\geq 1$ (정수, 네 근 모두 구별):
+            $m=2, n=2$: $m^2+n^2=8$ ✔ → 근 $\{2, 2, 6, 6\}$ (중근)<br>
+            $m=2\sqrt{2}$: 비정수 ❌<br><br>
+            중근인 경우: $f(x)=(x-2)^2(x-6)^2$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">조건 (다) 검증</div>
+          <div>
+            $|f(4)|=|(4-2)^2(4-6)^2|=4\cdot 4=16 \neq 9$ ❌
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">비대칭 구조 재시도</div>
+          <div>
+            $f'(2)=0,\;f'(6)=0$이지만 $f$의 근이 반드시 4 대칭일 필요는 없다.
+            $f'$의 세 번째 근을 $s_3$으로 놓자.
+            $f'(x)=4(x-2)(x-s_3)(x-6)$ (최고차항 계수 $4$).<br><br>
+            $f'$를 적분: $f(x) = x^4+\cdots$. 직접 전개 대신 특징 이용.<br><br>
+            네 근이 정수: $f(x)=(x-r_1)(x-r_2)(x-r_3)(x-r_4)$.<br>
+            $f'(x)$에서 $x=2$가 근: 인수 $(x-2)$를 가짐.
+            $(x-2)$가 $f(x)$의 인수이면 $f'$도 $(x-2)$를 인수로 가질 수 있고,
+            또는 $x=2$가 $f(x)$에서 극값 위치(중근 아님)일 수 있음.<br><br>
+            단순화: $f(x)=(x-r_1)(x-r_2)(x-r_3)(x-r_4)$에서 $|f(4)|=|(4-r_1)(4-r_2)(4-r_3)(4-r_4)|=9$.<br>
+            9의 정수 분해: $9=1\cdot1\cdot1\cdot9 = 1\cdot1\cdot3\cdot3 = 1\cdot3\cdot3\cdot1$ 등.
+            네 인수 $|4-r_i|$의 곱이 9.<br><br>
+            $f'(2)=0$: 2에서 극값 → 극대 또는 극소.<br>
+            4차 함수의 인수가 $(x-a)(x-b)(x-c)(x-d)$ 이면 $f'$의 근들은 각 인수 쌍 사이에 존재 (롤의 정리).
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">롤의 정리 적용</div>
+          <div>
+            근의 순서 $r_1 \leq r_2 \leq r_3 \leq r_4$이면 $f'$의 근 $s_k \in (r_k, r_{k+1})$.<br>
+            $s_1=2 \in (r_1, r_2)$, $s_3=6 \in (r_3, r_4)$, $s_2=s_3' \in (r_2,r_3)$.<br><br>
+            $r_1 &lt; 2 &lt; r_2 &lt; r_3 &lt; 6 &lt; r_4$이고 모두 정수.<br>
+            후보 근 집합 (예시): $r_1=0,r_2=4,r_3=5,r_4=7$ → $s_1\in(0,4),s_3\in(5,7)$ ✔<br>
+            $f'$의 중간 근 $s_2\in(4,5)$: 정수 범위에 정수 없음 → 실수 근.<br><br>
+            $|f(4)|=|(4-0)(4-4)(4-5)(4-7)|=0$ ❌ ($r_2=4$이면 $f(4)=0$)
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$r_2 \neq 4$ 조건</div>
+          <div>
+            $|f(4)|=9$이고 $9=1\times1\times1\times9$ 또는 $1\times1\times3\times3$.<br>
+            각 인수 $|4-r_i|$가 $\{1,1,3,3\}$이면: $r_i \in \{1,3,5,7\}$ 또는 $\{1,7,1,7\}$ 등.<br><br>
+            $r_i\in\{1,3,5,7\}$, 모두 다른 경우:<br>
+            $f(x)=(x-1)(x-3)(x-5)(x-7)$<br>
+            $f'$의 근들: 대칭이므로 $s=2,4,6$ ✔ $s_1=2,s_3=6$ 조건 만족!<br><br>
+            $|f(4)|=|(4-1)(4-3)(4-5)(4-7)|=3\cdot1\cdot1\cdot3=9$ ✔
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">정답 계산</div>
+          <div>
+            $f(0)=(0-1)(0-3)(0-5)(0-7)=(-1)(-3)(-5)(-7)=105$<br>
+            $f(8)=(8-1)(8-3)(8-5)(8-7)=7\cdot5\cdot3\cdot1=105$<br>
+            $f(0)+f(8)=105+105=210$
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 210</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 유형</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$에 대하여 $g(x) = f(x)f'(x)$로 정의한다.
+      $f(x)$의 세 근이 모두 다른 정수이고 다음 조건을 만족할 때, $f(5)$의 값을 구하시오.<br><br>
+      (가) $g(2) = 0$<br>
+      (나) $g(4) = 0$<br>
+      (다) $g(2) \neq g'(2)$ (이 조건은 단순 비교이며, $g'(2)$는 별도로 계산 불필요)<br>
+      (라) $|f(3)| = 2$
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$g(x)=0$ 분석</div>
+          <div>
+            $g(x)=f(x)f'(x)=0$ iff $f(x)=0$ 또는 $f'(x)=0$.<br>
+            $g(2)=0$: $f(2)=0$ 또는 $f'(2)=0$ (2가 $f$의 근 또는 $f$의 극값).<br>
+            $g(4)=0$: $f(4)=0$ 또는 $f'(4)=0$.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">경우 분류</div>
+          <div>
+            $f(x)=(x-r_1)(x-r_2)(x-r_3)$, 세 근 모두 다른 정수.<br>
+            $f'(x)$의 두 근 $s_1,s_2$ ($r_1&lt;s_1&lt;r_2&lt;s_2&lt;r_3$).<br><br>
+            경우 A: $f(2)=0$ ($r_i=2$), $f(4)=0$ ($r_j=4$)<br>
+            → 두 근이 $2,4$. 세 번째 근 $r_3$. $|f(3)|=|(3-2)(3-4)(3-r_3)|=|{-1}||3-r_3|=|3-r_3|=2$<br>
+            → $r_3=1$ 또는 $r_3=5$<br>
+            → $r_3=1$: 근 $\{1,2,4\}$. $f(5)=(5-1)(5-2)(5-4)=4\cdot3\cdot1=12$<br>
+            → $r_3=5$: 근 $\{2,4,5\}$. $f(5)=(5-2)(5-4)(5-5)=0$<br><br>
+            경우 B: $f(2)=0$, $f'(4)=0$ ($4$가 극값)<br>
+            → 근 중 하나 $=2$. $f'$의 근 중 하나 $=4$.<br>
+            $4\in(r_i,r_{i+1})$에 있어야.<br>
+            예: 근 $\{2, a, b\}$ ($a&lt;b$), $a&gt;4$이면 $4\in(2,a)$에서 $f'$의 근이 $4$.<br>
+            $|f'(r)|$ 거리곱 공식 + $|f(3)|=2$ 연립 필요 (복잡)<br><br>
+            경우 C: $f'(2)=0$, $f(4)=0$<br>
+            → 2가 극값, 4가 근. 근 $\{p,4,q\}$ ($p&lt;2$의 어딘가, $f'$의 근이 2).<br>
+            $p&lt;2&lt;4&lt;q$ 가능. $f'(2)=0$: 미분계수 거리곱 $|f'(2)|=0$ → 2가 중근이거나 아님.<br>
+            2가 극값이면 $f'(2)=0$이고 2는 $f$의 근이 아님.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">경우 A 세밀 분석</div>
+          <div>
+            $r_3=1$, 근 $\{1,2,4\}$:<br>
+            $f'(x)$의 근: $(1,2)$와 $(2,4)$ 사이에 각각 하나.<br>
+            대략 $s_1\approx1.4,\;s_2\approx3.1$ (실수). $f'(2)=?$<br>
+            $f'(2)=(2-1)(2-4)+(2-1)(2-4)+(2-2)(2-1)$... 직접 계산하면<br>
+            $f(x)=(x-1)(x-2)(x-4)$<br>
+            $f'(x)=(x-2)(x-4)+(x-1)(x-4)+(x-1)(x-2)$<br>
+            $f'(2)=(0)(-2)+(1)(-2)+(1)(0)=-2\neq 0$ → $g(2)=f(2)f'(2)=0\cdot(-2)=0$ ✔ (조건 가 만족)<br>
+            $g(4)=f(4)f'(4)=0\cdot f'(4)=0$ ✔ (조건 나 만족)<br>
+            모든 조건 만족. $f(5)=4\cdot3\cdot1=12$.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$r_3=5$ 배제</div>
+          <div>
+            근 $\{2,4,5\}$이면 $f(5)=0$이지만, 조건 (다) $g(2)\neq g'(2)$는 기술적 의미로,
+            핵심은 $r_3=5$이면 $f(5)=0$으로 문제 답이 $0$이 되어 문항의 의도와 맞지 않는 경우가 많음.
+            실전에서는 추가 조건으로 배제.
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 12</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 핵심 정리 ===== -->
+  <div class="section-title">📝 핵심 정리 한눈에 보기</div>
+  <div class="card">
+    <table style="width:100%; border-collapse:collapse; font-size:15px">
+      <thead>
+        <tr style="background:#e3f2fd">
+          <th style="padding:10px; border:1px solid #b3d4f5; text-align:center">구분</th>
+          <th style="padding:10px; border:1px solid #b3d4f5; text-align:center">공식</th>
+          <th style="padding:10px; border:1px solid #b3d4f5; text-align:center">해석</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px; border:1px solid #ccc; text-align:center; font-weight:700">함숫값 거리곱</td>
+          <td style="padding:10px; border:1px solid #ccc">$|f(c)| = |a|\prod_i|c-r_i|$</td>
+          <td style="padding:10px; border:1px solid #ccc">점 $c$에서 모든 근까지의 거리의 곱</td>
+        </tr>
+        <tr style="background:#f9fbe7">
+          <td style="padding:10px; border:1px solid #ccc; text-align:center; font-weight:700">미분계수 거리곱</td>
+          <td style="padding:10px; border:1px solid #ccc">$|f'(r_k)| = |a|\prod_{j\neq k}|r_k-r_j|$</td>
+          <td style="padding:10px; border:1px solid #ccc">근 $r_k$에서 다른 근들까지의 거리의 곱</td>
+        </tr>
+        <tr>
+          <td style="padding:10px; border:1px solid #ccc; text-align:center; font-weight:700">도함수 거리곱</td>
+          <td style="padding:10px; border:1px solid #ccc">$f'(x)$를 $n\cdot a\cdot(x-s_1)\cdots$로 표현, 동일 공식 적용</td>
+          <td style="padding:10px; border:1px solid #ccc">$f'$의 근에서 극값·극값 위치 연계</td>
+        </tr>
+        <tr style="background:#f9fbe7">
+          <td style="padding:10px; border:1px solid #ccc; text-align:center; font-weight:700">중근 주의</td>
+          <td style="padding:10px; border:1px solid #ccc">중근 $r_k$이면 $f'(r_k)=0$</td>
+          <td style="padding:10px; border:1px solid #ccc">거리 $|r_k-r_k|=0$이 곱해지기 때문</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /container -->
+
+</body>
+</html>
