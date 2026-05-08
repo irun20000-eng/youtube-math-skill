@@ -21,31 +21,51 @@ sys.path.insert(0, str(Path(__file__).parent))
 from output_path import extract_video_id_from_url, parse_output_path
 
 TITLE_RE = re.compile(r"<title>(.+?)</title>", re.IGNORECASE | re.DOTALL)
-URL_RE = re.compile(r'영상:\s*<a href="(https?://[^"]+)"', re.IGNORECASE)
-CHANNEL_RE = re.compile(r'\((.+?),\s*\d+분\)', re.IGNORECASE)
+# 표준 형식 (PC 자료): <p class="meta-row">📺 영상: <a href="...">
+URL_RE_STRICT = re.compile(r'영상[:\s]*<a[^>]*href="(https?://[^"]+)"', re.IGNORECASE)
+# 폴백: 본문 어디든 첫 YouTube URL 매칭 (모바일/타 세션 자료 호환)
+URL_RE_FALLBACK = re.compile(
+    r'href="(https?://(?:www\.|m\.)?'
+    r'(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/live/|youtube\.com/embed/|youtube\.com/shorts/)'
+    r'[A-Za-z0-9_-]{11}[^"]*)"',
+    re.IGNORECASE,
+)
+# 채널: 표준 패턴 + 폴백 (다른 형식)
+CHANNEL_RE_STRICT = re.compile(r'\((.+?),\s*\d+분\)', re.IGNORECASE)
+CHANNEL_RE_FALLBACK = re.compile(
+    r'(?:채널|channel)[:\s]*<[^>]*>([^<]+)<', re.IGNORECASE
+)
 
 
 def extract_meta(html_path: Path) -> dict:
-    """HTML 파일에서 title·URL·채널 정보 추출 (실패해도 None으로 채움)."""
+    """HTML 파일에서 title·URL·채널 정보 추출 (실패해도 None으로 채움).
+
+    URL 추출은 두 단계:
+    1. 표준 헤더 패턴 ("영상: <a href=...>") 우선
+    2. 못 찾으면 본문 어디서든 첫 YouTube URL 채택 (모바일·타 세션 자료 커버)
+    """
     try:
         text = html_path.read_text(encoding="utf-8", errors="ignore")
     except OSError:
         return {"title": None, "url": None, "channel": None}
+
     title_m = TITLE_RE.search(text)
-    url_m = URL_RE.search(text)
-    chan_m = CHANNEL_RE.search(text)
     title = title_m.group(1).strip() if title_m else None
     if title:
         title = re.sub(r"\s*[—\|-]\s*학습자료.*$", "", title).strip()
-        # 갤러리는 KaTeX 미적용 → $...$ 수식이 그대로 노출되므로 제거.
-        # \sin, \cos 등 백슬래시 명령도 평문으로 보이므로 \ 제거.
+        # 갤러리는 KaTeX 미적용 → $...$ 수식 평문으로 보이므로 제거.
         title = title.replace("$", "").replace("\\", "")
         title = re.sub(r"\s+", " ", title).strip()
-    return {
-        "title": title,
-        "url": url_m.group(1) if url_m else None,
-        "channel": chan_m.group(1) if chan_m else None,
-    }
+
+    # URL: 엄격 패턴 → 폴백 순으로 시도
+    url_m = URL_RE_STRICT.search(text) or URL_RE_FALLBACK.search(text)
+    url = url_m.group(1) if url_m else None
+
+    # 채널: 엄격 패턴 → 폴백
+    chan_m = CHANNEL_RE_STRICT.search(text) or CHANNEL_RE_FALLBACK.search(text)
+    channel = chan_m.group(1).strip() if chan_m else None
+
+    return {"title": title, "url": url, "channel": channel}
 
 
 def gather(output_dir: Path) -> list[dict]:
