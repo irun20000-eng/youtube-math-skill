@@ -1,8 +1,8 @@
-name: 작업브랜치 → main 자동 ff-merge
+name: 작업브랜치 → main + 카탈로그 + Pages 배포
 
-# claude/** 작업 브랜치에 push가 일어나면 main 으로 fast-forward 머지
-# 갤러리 자동 배포를 트리거하기 위한 핵심 워크플로우
-# main 직접 푸시가 환경 정책으로 막혀도 이 봇이 GITHUB_TOKEN 으로 처리
+# claude/** 작업 브랜치 push 한 번으로
+# (1) main ff-merge → (2) 카탈로그 재생성 → (3) GitHub Pages 배포
+# 까지 모두 처리. GITHUB_TOKEN 으로 인한 후속 워크플로우 미트리거 문제 회피.
 
 on:
   push:
@@ -11,11 +11,20 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  ff-merge-to-main:
+  merge-regen-deploy:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip merge]')"
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout main with full history
         uses: actions/checkout@v4
@@ -24,7 +33,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configure git
+      - name: Configure git identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -32,7 +41,7 @@ jobs:
       - name: Fetch source branch
         run: git fetch origin ${{ github.ref_name }}
 
-      - name: Attempt fast-forward merge
+      - name: Fast-forward merge into main
         run: |
           if git merge --ff-only origin/${{ github.ref_name }}; then
             echo "✅ Fast-forward merge succeeded"
@@ -41,3 +50,36 @@ jobs:
             echo "::warning::main 이 작업 브랜치보다 앞서 있어 ff-merge 불가. 수동 rebase 필요."
             exit 1
           fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Regen catalog (if needed)
+        run: |
+          if [ -f youtube-math-auto/scripts/regen_index.py ]; then
+            python youtube-math-auto/scripts/regen_index.py output/ || true
+            if [ -n "$(git status --porcelain output/INDEX.md output/index.html 2>/dev/null)" ]; then
+              git add output/INDEX.md output/index.html
+              git commit -m "[bot] 카탈로그 자동 갱신 [skip ci]"
+              git push origin main
+              echo "✅ Catalog regenerated and pushed"
+            else
+              echo "ℹ️ Catalog already up to date"
+            fi
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './output'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
