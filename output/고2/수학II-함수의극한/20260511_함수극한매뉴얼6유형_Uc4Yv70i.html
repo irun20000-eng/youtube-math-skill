@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>함수의 극한 - 하나의 매뉴얼 6유형 완전정복</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 60%, #8e24aa 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0;
+      position: relative;
+      display: block;
+      width: 200px;
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+    }
+    .video-card .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .video-card .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .video-card .info .v-meta {
+      font-size: 13px;
+      color: var(--sub);
+      margin-bottom: 8px;
+    }
+    .video-card .info .v-link {
+      font-size: 13px;
+      color: var(--primary);
+      word-break: break-all;
+    }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+    }
+    .concept-num {
+      background: var(--purple);
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #f3e5f5;
+      border-left: 5px solid var(--purple);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px;
+      margin: 14px 0;
+      text-align: center;
+    }
+    .step-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 10px 0;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0;
+      border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe;
+      border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa;
+      border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .manual { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14.5px; }
+    .manual th { background: #f3e5f5; color: var(--purple); padding: 12px; }
+    .manual td { padding: 12px; border: 1px solid #ddd; vertical-align: top; }
+    .example-card { background: #f9fbe7; border-left: 4px solid var(--green); border-radius: 0 10px 10px 0; padding: 18px 22px; margin: 16px 0; }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; }
+    summary:hover { background: var(--primary-dark); }
+    .solution { margin-top: 14px; background: #f5f5f5; border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px 16px; } .hero { padding: 36px 16px 30px; } }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2 · 수학Ⅱ — 함수의 극한</div>
+  <h1>함수의 극한값 계산<br>하나의 매뉴얼로 6유형 전부 풀기</h1>
+  <p>상수로 갈 때 · 무한대로 갈 때 · 음의 무한대 치환 — 세 가지 매뉴얼이면 끝</p>
+  <div class="quote">
+    "모든 문제에 스킬을 쓰려 하지 마라. <strong>일단 대입</strong>해서 답이 나오면 그게 답이다." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://www.youtube.com/watch?v=Uc4Yv70i5a8" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/Uc4Yv70i5a8/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">함수의 극한값 계산 / 하나의 매뉴얼로 전부 풀어내는 방법</div>
+      <div class="v-meta">📺 YouTube · 함수의 극한 — 매뉴얼화 강의</div>
+      <a class="v-link" href="https://www.youtube.com/watch?v=Uc4Yv70i5a8" target="_blank" rel="noopener">https://www.youtube.com/watch?v=Uc4Yv70i5a8</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section-title">📐 매뉴얼 — 3가지 상황에 따른 풀이법</div>
+
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <p>다음 도구는 자유롭게 쓸 수 있어야 한다:</p>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>인수분해 공식:</strong> $a^3+b^3 = (a+b)(a^2-ab+b^2)$, $a^2-b^2=(a-b)(a+b)$</li>
+      <li><strong>분모/분자 유리화:</strong> $\sqrt{A}-\sqrt{B}$ 꼴은 켤레무리식 $\sqrt{A}+\sqrt{B}$를 곱함</li>
+      <li><strong>유리식 통분:</strong> 분모가 다른 분수의 합·차는 통분으로 한 분수로</li>
+      <li><strong>절댓값:</strong> $|x-1|=\begin{cases}x-1 & (x\geq 1)\\ -(x-1) & (x&lt;1)\end{cases}$ → 좌극한·우극한 따로</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="concept-title">🗺 한눈에 보는 매뉴얼</div>
+    <table class="manual">
+      <thead><tr><th>상황</th><th>1단계</th><th>2단계 (부정형이면)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>$x \to a$ (상수)</strong></td><td>일단 대입 → 값이 나오면 끝</td><td>$\frac{0}{0}$이면 인수분해 / 유리화 / 통분으로 $(x-a)$ 약분</td></tr>
+        <tr><td><strong>$x \to \infty$</strong></td><td>차수 사회 — 최고차항만 비교</td><td>$\frac{\infty}{\infty}$이면 분자·분모 최고차 계수 비율</td></tr>
+        <tr><td><strong>$x \to -\infty$</strong></td><td>$-x = t$ 치환 → $t \to \infty$로 변환</td><td>그 후 위 매뉴얼 적용</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>$x \to a$ (상수) — 일단 대입, 부정형이면 약분</div>
+    <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>대입.</strong> $f(a)$ 값을 그냥 계산. 분모가 $0$이 아니면 그 값이 답.</div></div>
+    <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>분자·분모 모두 $0$이면 부정형 $\frac{0}{0}$.</strong> 셋 중 하나로 $(x-a)$ 인자 만들어 약분: <strong>인수분해 / 유리화(켤레 곱) / 통분</strong>.</div></div>
+    <div class="concept-box"><strong>왜 약분:</strong> $\frac{0}{0}$은 값 없음. 분자·분모 모두 $0$인 이유는 둘 다 $(x-a)$ 인자를 가져서. 그것을 없애야 진짜 극한이 보임.</div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 1 — 인수분해형</div>
+      <p>$\displaystyle\lim_{x \to -2} \dfrac{x^3+8}{2x^2+3x-2}$</p>
+      <div class="sol-step"><div class="sol-step-label">대입</div><div>분자 $0$, 분모 $0$ → 부정형.</div></div>
+      <div class="sol-step"><div class="sol-step-label">분자</div><div>$x^3+8 = (x+2)(x^2-2x+4)$</div></div>
+      <div class="sol-step"><div class="sol-step-label">분모</div><div>$2x^2+3x-2 = (2x-1)(x+2)$</div></div>
+      <div class="sol-step"><div class="sol-step-label">약분+대입</div><div>$\dfrac{x^2-2x+4}{2x-1} \xrightarrow{x\to -2} \dfrac{12}{-5} = -\dfrac{12}{5}$</div></div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 2 — 유리화형</div>
+      <p>$\displaystyle\lim_{x \to 2} \dfrac{\sqrt{x^2+5}-3}{x-2}$</p>
+      <div class="sol-step"><div class="sol-step-label">켤레 곱</div><div>$\dfrac{(x^2+5)-9}{(x-2)(\sqrt{x^2+5}+3)} = \dfrac{(x-2)(x+2)}{(x-2)(\sqrt{x^2+5}+3)}$</div></div>
+      <div class="sol-step"><div class="sol-step-label">약분+대입</div><div>$\dfrac{x+2}{\sqrt{x^2+5}+3} \to \dfrac{4}{6} = \dfrac{2}{3}$</div></div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 3 — 함정 (단순 대입)</div>
+      <p>$\displaystyle\lim_{x \to 1} (x^2-2x) \cdot \dfrac{x+5}{|x-1|}$</p>
+      <div class="sol-step"><div class="sol-step-label">대입</div><div>분자 $-6$, 분모 $0^+$ → $\dfrac{-6}{0^+} = -\infty$. 발산(극한 없음).</div></div>
+      <div class="tip"><strong>영상 핵심:</strong> $\frac{0}{0}$이 아니면 스킬 쓰지 마라. $\frac{(상수)}{0}$은 발산.</div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 6 — 통분형</div>
+      <p>$\displaystyle\lim_{x \to 3} \dfrac{2}{x-3} \cdot \left( x - \dfrac{9}{x} \right)$</p>
+      <div class="sol-step"><div class="sol-step-label">괄호 통분</div><div>$x - \dfrac{9}{x} = \dfrac{(x-3)(x+3)}{x}$</div></div>
+      <div class="sol-step"><div class="sol-step-label">약분</div><div>$\dfrac{2(x+3)}{x} \xrightarrow{x\to 3} \dfrac{12}{3} = 4$</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>$x \to \infty$ — 차수 사회</div>
+    <p>$x$가 무한히 커지면 <strong>최고차항이 지배</strong>. 낮은 차수는 무시.</p>
+    <div class="formula-box">분자/분모 차수 비교<br>• 분자 &gt; 분모 → $\infty$<br>• 분자 = 분모 → 최고차 계수 비<br>• 분자 &lt; 분모 → $0$</div>
+    <div class="concept-box"><strong>계급 사회:</strong> $x^3$은 왕, $x^2$는 귀족, $x$는 평민. 왕이 있으면 다른 계급은 보이지도 않는다.</div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 4 — 무한대 차수 비교</div>
+      <p>$\displaystyle\lim_{x \to \infty} \dfrac{3x^2+x-1}{x^2-2}$</p>
+      <div class="sol-step"><div class="sol-step-label">결과</div><div>분자·분모 2차, 계수 비 $\dfrac{3}{1} = \mathbf{3}$</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>$x \to -\infty$ — $-x=t$ 치환</div>
+    <p>음의 무한대는 부호 실수 빈출. <strong>$-x=t$ (즉 $x=-t$)</strong>로 $t \to \infty$ 문제로 변환.</p>
+    <div class="formula-box">$$\lim_{x \to -\infty} f(x) \stackrel{x=-t}{=} \lim_{t \to \infty} f(-t)$$</div>
+    <div class="caution"><strong>$\sqrt{x^2}$ 주의:</strong> $x &lt; 0$이면 $\sqrt{x^2}=-x$. 치환하면 $\sqrt{(-t)^2}=t$ ($t&gt;0$)로 깔끔.</div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 5 — 음의 무한대 + 유리화</div>
+      <p>$\displaystyle\lim_{x \to -\infty} \bigl(\sqrt{x^2-2x+3}+x\bigr)$</p>
+      <div class="sol-step"><div class="sol-step-label">치환</div><div>$x=-t$: $\sqrt{t^2+2t+3}-t$</div></div>
+      <div class="sol-step"><div class="sol-step-label">유리화</div><div>$\dfrac{2t+3}{\sqrt{t^2+2t+3}+t}$</div></div>
+      <div class="sol-step"><div class="sol-step-label">차수</div><div>분자/분모 1차, 계수 비 $\dfrac{2}{2}=\mathbf{1}$</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="concept-title">🔑 미정계수 결정 원리</div>
+    <div class="formula-box">$\displaystyle\lim_{x\to a}\dfrac{f(x)}{g(x)} = L$ 유한값 + $\lim g(x)=0$ → $\lim f(x)=0$</div>
+    <div class="concept-box"><strong>직관:</strong> 분모가 $0$으로 가는데 비율이 유한이면 분자도 같은 속도로 $0$으로 가야 함. 분자 $\neq 0$이면 발산.</div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="level-header"><span class="level-badge badge-basic">기초</span><span style="font-weight:600; color:#2e7d32">6유형 직접 적용</span></div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 인수분해형</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to 3}\dfrac{x^2-9}{x-3}$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>$\dfrac{(x-3)(x+3)}{x-3} = x+3 \to 6$</div><div style="margin-top:4px"><span class="answer-tag">정답: 6</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 유리화형</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to 0}\dfrac{\sqrt{x+4}-2}{x}$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>유리화: $\dfrac{x}{x(\sqrt{x+4}+2)} = \dfrac{1}{\sqrt{x+4}+2} \to \dfrac{1}{4}$</div><div style="margin-top:4px"><span class="answer-tag">정답: $\frac{1}{4}$</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 함정 (단순 대입)</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to 2}\dfrac{x^2+1}{x-3}$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>분모 $\neq 0$이므로 즉시 대입. $\dfrac{5}{-1} = -5$</div><div style="margin-top:4px"><span class="answer-tag">정답: $-5$</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 4 — 무한대 차수 비교</div>
+    <div class="problem-body">(1) $\displaystyle\lim_{x\to\infty}\dfrac{2x^2-x}{5x^2+1}$ &nbsp;&nbsp;(2) $\displaystyle\lim_{x\to\infty}\dfrac{3x+1}{x^2-4}$ &nbsp;&nbsp;(3) $\displaystyle\lim_{x\to\infty}\dfrac{x^3-1}{x^2+2}$</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>(1) 차수 같음, 계수 비 $\frac{2}{5}$<br>(2) 분모 차수 큼, $0$<br>(3) 분자 차수 큼, $\infty$</div><div style="margin-top:4px"><span class="answer-tag">정답: (1) $\frac{2}{5}$, (2) 0, (3) $\infty$</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 5 — 통분형</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to 2}\dfrac{1}{x-2}\cdot\left(\dfrac{1}{x}-\dfrac{1}{2}\right)$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>$\dfrac{1}{x}-\dfrac{1}{2} = -\dfrac{x-2}{2x}$ → 전체 $-\dfrac{1}{2x} \to -\dfrac{1}{4}$</div><div style="margin-top:4px"><span class="answer-tag">정답: $-\frac{1}{4}$</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 6 — 음의 무한대</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to -\infty}\dfrac{2x+1}{x-3}$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>$\sqrt{\;}$ 없음 → 차수 사회 그대로. 1차 계수 비 $\dfrac{2}{1}=2$</div><div style="margin-top:4px"><span class="answer-tag">정답: 2</span></div></div></details>
+  </div>
+
+  <div class="level-header"><span class="level-badge badge-standard">기본</span><span style="font-weight:600; color:#1565c0">조합·변형</span></div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 인수분해 + 약분</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to 1}\dfrac{x^3-3x+2}{x^2-1}$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>$x^3-3x+2 = (x-1)^2(x+2)$, $x^2-1=(x-1)(x+1)$<br>약분: $\dfrac{(x-1)(x+2)}{x+1} \to 0$</div><div style="margin-top:4px"><span class="answer-tag">정답: 0</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 분모 유리화</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to 0}\dfrac{x}{\sqrt{1+x}-\sqrt{1-x}}$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>분모 유리화: $\dfrac{x(\sqrt{1+x}+\sqrt{1-x})}{2x} = \dfrac{\sqrt{1+x}+\sqrt{1-x}}{2} \to 1$</div><div style="margin-top:4px"><span class="answer-tag">정답: 1</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 음의 무한대 + 유리화</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to -\infty}\bigl(\sqrt{x^2+4x}+x\bigr)$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>$x=-t$: $\sqrt{t^2-4t}-t$. 유리화: $\dfrac{-4t}{\sqrt{t^2-4t}+t} \to \dfrac{-4}{2} = -2$</div><div style="margin-top:4px"><span class="answer-tag">정답: $-2$</span></div></div></details>
+  </div>
+
+  <div class="level-header"><span class="level-badge badge-advanced">심화</span><span style="font-weight:600; color:#6a1b9a">미정계수</span></div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to 2}\dfrac{x^2+ax+b}{x-2} = 5$일 때, $a, b$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>분자 $\to 0$: $4+2a+b=0$. $(x-2)(x-r)$ 형태, $2-r=5 \Rightarrow r=-3$. $a=1, b=-6$</div><div style="margin-top:4px"><span class="answer-tag">정답: $a=1, b=-6$</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to\infty}\bigl(\sqrt{x^2+ax}-x\bigr) = 3$을 만족하는 $a$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>유리화: $\dfrac{ax}{\sqrt{x^2+ax}+x} \to \dfrac{a}{2} = 3 \Rightarrow a=6$</div><div style="margin-top:4px"><span class="answer-tag">정답: $a=6$</span></div></div></details>
+  </div>
+
+  <div class="level-header"><span class="level-badge badge-csat">수능 대비</span><span style="font-weight:600; color:#b71c1c">준킬러</span></div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러</div>
+    <div class="problem-body">다항함수 $f(x)$가 $\displaystyle\lim_{x\to\infty}\dfrac{f(x)}{x^2}=2$, $\displaystyle\lim_{x\to 1}\dfrac{f(x)}{x-1}=3$을 모두 만족할 때 $f(3)$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>조건 1: $f(x)=2x^2+px+q$. 조건 2: $f(1)=0 \Rightarrow 2+p+q=0$, $f(x)=(x-1)(2x+r)$, $\dfrac{f(x)}{x-1}=2x+r \to 2+r=3 \Rightarrow r=1$.<br>$f(x)=2x^2-x-1$, $f(3)=18-3-1=14$</div><div style="margin-top:4px"><span class="answer-tag">정답: 14</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to 1}\dfrac{\sqrt{x+a}-b}{x-1} = \dfrac{1}{4}$을 만족하는 양수 $a, b$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>분자$\to 0$: $b=\sqrt{1+a}$. 유리화 후 $\dfrac{1}{\sqrt{x+a}+b} \to \dfrac{1}{2b}=\dfrac{1}{4} \Rightarrow b=2, a=3$</div><div style="margin-top:4px"><span class="answer-tag">정답: $a=3, b=2$</span></div></div></details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (음의 무한대 + 미정계수)</div>
+    <div class="problem-body">$\displaystyle\lim_{x\to -\infty}\bigl(\sqrt{x^2+ax+1}+x\bigr) = 2$를 만족하는 $a$의 값을 구하시오.</div>
+    <details><summary>풀이 보기</summary><div class="solution"><div>$x=-t$ 치환 후 유리화: $\dfrac{-at+1}{\sqrt{t^2-at+1}+t} \to \dfrac{-a}{2}=2 \Rightarrow a=-4$</div><div style="margin-top:4px"><span class="answer-tag">정답: $a=-4$</span></div></div></details>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="section-title">📝 시험장 매뉴얼 (요약)</div>
+  <div class="card">
+    <table class="manual">
+      <thead><tr><th>상황</th><th>먼저</th><th>그 다음</th></tr></thead>
+      <tbody>
+        <tr><td><strong>$x\to a$</strong></td><td>대입</td><td>$\frac{0}{0}$이면 인수분해/유리화/통분</td></tr>
+        <tr style="background:#f9fbe7"><td><strong>$x\to \infty$</strong></td><td>차수 비교</td><td>같은 차수면 최고차 계수 비</td></tr>
+        <tr><td><strong>$x\to -\infty$</strong></td><td>$-x=t$ 치환</td><td>위 매뉴얼 적용</td></tr>
+        <tr style="background:#f9fbe7"><td><strong>미정계수</strong></td><td>분모$\to 0$+극한 유한 → 분자$\to 0$</td><td>차수·극한값 방정식</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 빈출 함정 5가지</div>
+    <div>① $\frac{0}{0}$이 <strong>아닐 때</strong> 스킬 쓰지 마라.<br>② $\frac{(상수)}{0}$은 발산.<br>③ $x\to -\infty$ + $\sqrt{x^2}$이면 반드시 치환.<br>④ 통분은 "괄호 안에 분수"일 때.<br>⑤ 미정계수는 "분자=0"부터.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:#616161">
+    📺 <strong>원본 영상</strong>: <a href="https://www.youtube.com/watch?v=Uc4Yv70i5a8" target="_blank" rel="noopener" style="color:#1a73e8">함수의 극한값 계산 / 하나의 매뉴얼로 전부 풀어내는 방법</a><br>
+    📅 자료 생성: 2026-05-11 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+</div>
+</body>
+</html>
