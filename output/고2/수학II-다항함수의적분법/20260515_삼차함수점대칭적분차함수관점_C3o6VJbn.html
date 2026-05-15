@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #004d40 0%, #00695c 60%, #00897b 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0;
+      position: relative;
+      display: block;
+      width: 200px;
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #00897b; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #e0f2f1;
+      border-left: 5px solid #00897b;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px;
+      margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0;
+      border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe;
+      border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa;
+      border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7;
+      border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px;
+      margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #e0f2f1; color: #004d40; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학II — 다항함수의 적분법 / 정적분의 활용</div>
+  <h1>삼차함수 점대칭 적분<br>차함수 관점과 변곡점 활용</h1>
+  <p>꺾은선·곡선을 분리해서 계산? ❌ — 본질 구조 + 변곡점 평균이면 끝</p>
+  <div class="quote">
+    "복잡한 적분 계산이 <strong>평균 × 밑변</strong>이라는 초등적 넓이 계산으로 바뀐다." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/C3o6VJbnHvU" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/C3o6VJbnHvU/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">올해 6평 문제도 이런 식으로 봐야 합니다.</div>
+      <div class="v-meta">📺 YouTube · 4분 43초 · 수능/모의 대비 적분 스킬</div>
+      <a class="v-link" href="https://youtu.be/C3o6VJbnHvU" target="_blank" rel="noopener">https://youtu.be/C3o6VJbnHvU</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 차함수 관점 + 변곡점 점대칭</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>삼차함수의 변곡점:</strong> $f(x)=ax^3+bx^2+cx+d$의 변곡점은 $f''(x)=0$인 점. $x = -\dfrac{b}{3a}$.</li>
+      <li><strong>점대칭(점 대칭):</strong> 모든 삼차함수는 변곡점에 대해 점대칭. 즉 $f(p+h) + f(p-h) = 2q$ (변곡점 $(p,q)$).</li>
+      <li><strong>정적분의 정의:</strong> $\displaystyle\int_a^b f(x)\,dx$ = "$x$축과 그래프 사이 부호 있는 넓이".</li>
+      <li><strong>평행이동:</strong> $g(x)=f(x-p)+q$ → $f$를 오른쪽 $p$, 위 $q$ 이동.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 차함수 관점 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>차함수 관점 — "쪼개지 말고 묶어라"</div>
+
+    <p>꺾인 직선 $p(x)$와 곡선 $f(x)$가 동시에 등장하는 문제는, 흔히 두 부분으로 나누어 적분한다. 그러나 1등급의 풀이는 다르다.</p>
+
+    <div class="formula-box">
+      $$\int_a^b p(x)\,dx - \int_a^b f(x)\,dx = \int_a^b \bigl[p(x)-f(x)\bigr]\,dx$$
+    </div>
+
+    <div class="concept-box">
+      <strong>핵심:</strong> 두 함수의 <em>차함수</em> $g(x) = p(x) - f(x)$를 먼저 만들어, 전체 구간에서 한 번에 적분한다. 차함수의 모양·근·점대칭 구조가 보이면 계산은 자동으로 풀린다.
+    </div>
+
+    <div class="visual">[일반적 풀이]                [차함수 관점]
+∫₋₃⁰ + ∫₀¹                ∫₋₃¹ (p - f) dx
+  ↓                          ↓
+구간 둘로 쪼개기          한 번에 (구조 분석 가능)
+계산 두 번                 → 변곡점·점대칭 발견 시 끝
+시간 ↑↑                   시간 ↓↓</div>
+
+    <div class="tip">
+      <strong>실전 팁:</strong> 직선 $p(x)$와 곡선 $f(x)$의 그래프를 머리에 그릴 때, 직선 자체보다 <strong>차이($p - f$)의 그래프</strong>를 떠올려라. 두 그래프 사이의 "갭"을 함수로 본 셈.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 변곡점 점대칭 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>삼차함수의 변곡점 점대칭 (핵심 무기)</div>
+
+    <p>모든 삼차함수 $f(x)$는 <strong>변곡점에 대해 점대칭</strong>이다. 변곡점을 $(p, q)$라 하면, 좌우 대칭 구간에서 함수값들이 짝지어 평균 $q$가 된다.</p>
+
+    <div class="formula-box">
+      <strong>점대칭 성질:</strong><br>
+      $f(p + h) + f(p - h) = 2q$ (모든 $h$에 대해)
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>적분 단순화:</strong> 변곡점 $x=p$가 적분 구간 $[a, b]$의 <strong>중점</strong>이라면
+        $$\int_a^b f(x)\,dx = q\cdot(b - a)$$
+      </div>
+    </div>
+
+    <div class="formula-box" style="background:#e0f2f1; border-color:#00897b">
+      $$\int_{p-L}^{p+L} f(x)\,dx = 2L \cdot q = (\text{구간 길이}) \times (\text{변곡점 } y\text{값})$$
+    </div>
+
+    <div class="concept-box">
+      <strong>왜 성립하나:</strong> 점대칭으로 $f(p+h) + f(p-h) = 2q$가 모든 $h$에서 성립 → 좌우 대칭 구간을 짝지어 평균을 내면 모두 $q$ → 적분(넓이의 합)은 $q$와 구간 길이의 곱.
+    </div>
+
+    <div class="visual">변곡점 (p, q) — 점대칭 비유
+
+       곡선
+       ╱╲                          평균 높이 q
+      ╱  ╲              ─────●──────  ← 변곡점 (p, q)
+     ╱    ╲   →       │              │
+    p-L    p+L         p-L          p+L
+                        ◀─── 2L ────▶
+                       (튀어나온 + 들어간 = 평평한 평균)
+
+   적분값 = q × 2L</div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 — 6평 유형 적용</div>
+      <p>변곡점 $(-1,\;2)$인 삼차함수 $f(x)$를 구간 $[-3,\;1]$에서 적분.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">중점 확인</div>
+        <div>$[-3, 1]$의 중점 = $-1$ = 변곡점 $x$좌표 ✔</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">변곡점 $y$값</div>
+        <div>$q = 2$</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">즉시 적분</div>
+        <div>$\displaystyle\int_{-3}^{1} f(x)\,dx = q\cdot(b-a) = 2\cdot 4 = \mathbf{8}$</div>
+      </div>
+      <div class="tip">
+        <strong>식조차 안 씀.</strong> 변곡점 좌표 두 수만 알면 끝. 영상에서 강사가 "복잡한 식에 대입할 필요 없이"라고 한 것이 이 의미.
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 기하학적 비유 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>"울퉁불퉁한 길의 평균 높이" 비유</div>
+
+    <p>아무리 굴곡이 심한 길이라도, 한 점에 대해 <strong>좌우가 대칭(높낮이 짝지어 평평)</strong>이라면 그 길의 평균 높이 = 대칭 중심의 높이.</p>
+
+    <div class="visual">              ╱╲
+             ╱  ╲
+        ╱╲ ╱    ╲ ╱╲          삼차함수 그래프
+       ╱  ╲      ╲  ╲             ↓
+            ●  ← 변곡점          이 길의
+                                평균 높이 = q
+
+   "넓이 = 평균 × 길이" 라는 초등 개념으로 회귀</div>
+
+    <div class="concept-box">
+      <strong>기하학적 의미:</strong> 점대칭 구간에서 정적분은 직사각형(가로 = 길이, 세로 = 평균 = $q$)의 넓이로 환원된다. <em>곡선이지만 답은 직사각형 넓이</em>.
+    </div>
+
+    <div class="caution">
+      <strong>주의 조건:</strong> 이 공식은 <strong>변곡점이 구간의 중점</strong>일 때만 그대로 통한다. 변곡점이 한쪽에 치우치면 좌우가 짝이 안 맞아 평균 $q$가 안 된다 (별도 처리 필요).
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">변곡점·점대칭 공식 직접 적용</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 변곡점 찾기</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 6x^2 + 5$의 변곡점의 좌표를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f''=0$</div>
+          <div>$f'(x) = 3x^2 - 12x$, $f''(x) = 6x - 12 = 0$ → $x = 2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$y$값</div>
+          <div>$f(2) = 8 - 24 + 5 = -11$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $(2, -11)$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 점대칭 적분 (변곡점 = 구간 중점)</div>
+    <div class="problem-body">
+      변곡점이 $(3, 5)$인 삼차함수 $f(x)$에 대해 $\displaystyle\int_1^5 f(x)\,dx$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">중점 확인</div>
+          <div>$[1, 5]$의 중점 = $3$ = 변곡점 $x$좌표 ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">계산</div>
+          <div>적분 = $q \times (b-a) = 5 \times 4 = \mathbf{20}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 20</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — $f(p+h)+f(p-h)=2q$ 확인</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 3x^2 + 4$의 변곡점 좌표를 구하고, $f(0) + f(2)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">변곡점</div>
+          <div>$f''(x) = 6x - 6 = 0$ → $x = 1$, $f(1) = 1-3+4 = 2$. 변곡점 $(1, 2)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">점대칭</div>
+          <div>$0$과 $2$는 $x=1$ 대칭 ($h=1$). 점대칭: $f(0) + f(2) = 2q = 4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$f(0) = 4$, $f(2) = 8-12+4 = 0$. $4+0 = 4$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 변곡점 $(1,2)$, $f(0)+f(2) = 4$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">차함수 + 점대칭 결합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 차함수 만들기</div>
+    <div class="problem-body">
+      $f(x) = x^3$, $p(x) = 3x - 2$일 때 $\displaystyle\int_{-2}^{2} \bigl[p(x) - f(x)\bigr]\,dx$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수</div>
+          <div>$g(x) = p(x) - f(x) = -x^3 + 3x - 2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">변곡점</div>
+          <div>$g'(x) = -3x^2 + 3$, $g''(x) = -6x = 0$ → $x=0$. $g(0) = -2$. 변곡점 $(0, -2)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">중점 확인</div>
+          <div>$[-2, 2]$의 중점 = $0$ = 변곡점 $x$ ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">적분</div>
+          <div>$q \times (b-a) = (-2) \times 4 = \mathbf{-8}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $-8$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 변곡점 위치 결정</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 3x^2 + ax + b$의 변곡점이 $(1, 0)$일 때, 상수 $a, b$의 값을 구하고 $\displaystyle\int_{-1}^{3} f(x)\,dx$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$x$좌표 조건</div>
+          <div>$f''(x) = 6x - 6 = 0$ → $x=1$ (이미 조건 만족, $a$와 무관). ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$y$좌표 조건</div>
+          <div>$f(1) = 1 - 3 + a + b = a + b - 2 = 0$ → $a + b = 2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">정보 부족 → 추가 가정</div>
+          <div>$a, b$ 단일값이 결정되려면 한 조건 더 필요. 예: $a=0$이라 하면 $b=2$.<br>
+          <strong>적분만 보면 $a, b$ 값 무관:</strong> $[-1, 3]$의 중점 = $1$ = 변곡점, $q=0$ → 적분 = $0 \cdot 4 = \mathbf{0}$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 적분 계산은 변곡점 좌표만 알면 되므로 $a, b$ 값을 모두 구할 필요 없음. 이것이 점대칭 적분의 위력.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a+b=2$, $\int = 0$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 꺾인 함수 + 곡선</div>
+    <div class="problem-body">
+      변곡점이 $(0, 1)$인 삼차함수 $f(x)$가 있다. 직선 $p(x) = 2x + 3$일 때
+      $\displaystyle\int_{-2}^{2} \bigl[p(x) - f(x)\bigr]\,dx$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">분리 적분</div>
+          <div>
+            $\int_{-2}^{2} p(x)\,dx - \int_{-2}^{2} f(x)\,dx$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\int p$</div>
+          <div>$p(x) = 2x + 3$. $[-2, 2]$의 중점 $0$에서 $p(0)=3$. 직선은 모든 점에서 점대칭이므로 평균 $\times$ 길이 = $3 \cdot 4 = 12$<br>
+          (또는 $\int_{-2}^{2}(2x+3)dx = [x^2+3x]_{-2}^{2} = 10-(-2)=12$ ✔)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\int f$</div>
+          <div>$f$의 변곡점 $(0, 1)$, 구간 중점 $0$ ✔. 적분 = $1 \cdot 4 = 4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">차</div>
+          <div>$12 - 4 = \mathbf{8}$</div>
+        </div>
+        <div class="tip">
+          직선·곡선 모두 변곡점 평균 방식으로 즉시 처리. $f$의 식 자체를 몰라도 풀린다.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 8</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">변곡점 ≠ 구간 중점 처리</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 구간 비대칭 분할</div>
+    <div class="problem-body">
+      변곡점이 $(1, 3)$인 삼차함수 $f(x)$에 대해 $\displaystyle\int_{-2}^{4} f(x)\,dx$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">중점 확인</div>
+          <div>$[-2, 4]$의 중점 = $1$ = 변곡점 $x$ ✔ (운 좋게 정확히 매치)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">즉시</div>
+          <div>적분 = $3 \times 6 = \mathbf{18}$</div>
+        </div>
+        <div class="tip">
+          <strong>학습 포인트:</strong> 변곡점이 정확히 구간 중점일 때만 직격으로 통하는 것을 확인. 출제자는 일부러 매치되도록 좌표를 잡는다.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 18</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 변곡점 비매치 시 우회</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 6x^2 + 9x$의 변곡점을 구하고, $\displaystyle\int_0^4 f(x)\,dx$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">변곡점</div>
+          <div>$f''(x) = 6x - 12 = 0$ → $x = 2$. $f(2) = 8 - 24 + 18 = 2$. 변곡점 $(2, 2)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">중점 매치</div>
+          <div>$[0, 4]$의 중점 = $2$ ✔. 변곡점 $x$와 일치.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">즉시 계산</div>
+          <div>$q \times (b-a) = 2 \times 4 = \mathbf{8}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산 (직접 적분)</div>
+          <div>$\int_0^4 (x^3-6x^2+9x)dx = \left[\dfrac{x^4}{4} - 2x^3 + \dfrac{9x^2}{2}\right]_0^4 = 64 - 128 + 72 = 8$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 변곡점 $(2,2)$, 적분 = 8</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 6평 유형</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (영상 6평 유형 변형)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 다음을 만족시킨다.<br><br>
+      (가) $f(-1) = 2$, $f'(-1) = -3$<br>
+      (나) $f''(-1) = 0$<br><br>
+      $\displaystyle\int_{-3}^{1} f(x)\,dx$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">조건 (나)</div>
+          <div>$f''(-1) = 0$ → $x = -1$이 변곡점의 $x$좌표.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">조건 (가)</div>
+          <div>$f(-1) = 2$ → 변곡점 $y$값 $q = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">구간 중점 매치</div>
+          <div>$[-3, 1]$의 중점 = $\dfrac{-3+1}{2} = -1$ = 변곡점 $x$ ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">즉시 적분</div>
+          <div>$q \times (b-a) = 2 \times 4 = \mathbf{8}$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 조건 (가)의 $f'(-1) = -3$은 적분에 <strong>불필요</strong>한 미끼! 함수 식을 복원해서 적분하려는 풀이는 시간 낭비. 변곡점 좌표 두 정보만으로 끝.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 8</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (꺾은선 + 삼차)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$의 변곡점이 $(2, 4)$이다. 함수 $p(x) = |x - 2| + 4$일 때
+      $\displaystyle\int_0^4 \bigl[p(x) - f(x)\bigr]\,dx$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">분리</div>
+          <div>$\int_0^4 p\,dx - \int_0^4 f\,dx$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\int p$ — 절댓값 함수</div>
+          <div>
+            $p(x) = |x-2| + 4$. V자 모양, 꼭짓점 $(2, 4)$.<br>
+            $[0,4]$에서 도형은 밑변 4, 높이 (꼭짓점에서 변까지) 2인 사다리꼴 + 직사각형. 또는 직접 계산:<br>
+            $\int_0^2 (-(x-2)+4)dx + \int_2^4 ((x-2)+4)dx$<br>
+            $= \int_0^2 (6-x)dx + \int_2^4 (x+2)dx$<br>
+            $= [6x-\tfrac{x^2}{2}]_0^2 + [\tfrac{x^2}{2}+2x]_2^4$<br>
+            $= (12-2) + (16 - 6) = 10 + 10 = 20$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\int f$ — 점대칭 활용</div>
+          <div>$[0,4]$의 중점 = $2$ = 변곡점 $x$ ✔. $q = 4$. 적분 = $4 \times 4 = 16$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">차</div>
+          <div>$20 - 16 = \mathbf{4}$</div>
+        </div>
+        <div class="tip">
+          꺾은선($p$)은 직접 계산, 곡선($f$)은 점대칭 공식. 두 가지 도구를 결합.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 4</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (변곡점·근 동시 활용)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 $f(0) = 0$, $f(4) = 0$이고 변곡점의 $x$좌표가 $2$이다.
+      $\displaystyle\int_0^4 f(x)\,dx$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">점대칭 $\Rightarrow$ $f(2)$</div>
+          <div>
+            변곡점 $x=2$에 점대칭. $f(0)+f(4) = 2 \cdot f(2)$<br>
+            $0 + 0 = 2f(2)$ → $f(2) = 0$. 변곡점은 $(2, 0)$.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">중점 매치</div>
+          <div>$[0,4]$의 중점 = $2$ = 변곡점 $x$ ✔. $q=0$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">적분</div>
+          <div>$0 \times 4 = \mathbf{0}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">기하적 해석</div>
+          <div>
+            $f(x) = x(x-2)(x-4)$ (세 근이 $0, 2, 4$).<br>
+            $x=2$에 점대칭이라 $x=0, 4$ 사이의 양·음 넓이가 정확히 상쇄.
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 0</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>도구</th><th>핵심 식</th><th>활용 조건</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700">점대칭 평균</td>
+          <td>$f(p+h)+f(p-h)=2q$</td>
+          <td>모든 $h$ (변곡점 $(p,q)$인 삼차)</td>
+        </tr>
+        <tr style="background:#e0f2f1">
+          <td style="font-weight:700">점대칭 적분</td>
+          <td>$\int_{p-L}^{p+L} f\,dx = 2qL$</td>
+          <td>변곡점 = 구간 중점</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700">차함수 묶기</td>
+          <td>$\int(p-f) = \int p - \int f$</td>
+          <td>곡선·꺾은선 동시 등장 시</td>
+        </tr>
+        <tr style="background:#e0f2f1">
+          <td style="font-weight:700">변곡점 위치</td>
+          <td>$f''(x)=0$ 풀면 $x=-\tfrac{b}{3a}$</td>
+          <td>$f(x)=ax^3+bx^2+\cdots$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① 적분 구간의 <strong>중점</strong>이 무엇인지 즉시 계산.<br>
+    ② 삼차함수면 <strong>변곡점 $x$좌표</strong>를 즉시 ($-\tfrac{b}{3a}$).<br>
+    ③ 둘이 일치하면 → "$q \times $ 구간 길이"로 1초 내 답.<br>
+    ④ 꺾은선·직선과 곡선이 같이 있으면 <strong>차함수</strong>로 묶을지 보기.<br>
+    ⑤ 조건의 $f'(\cdots)$ 값은 적분에 종종 불필요한 미끼.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/C3o6VJbnHvU" target="_blank" rel="noopener" style="color:var(--primary)">올해 6평 문제도 이런 식으로 봐야 합니다.</a><br>
+    📅 자료 생성: 2026-05-15 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+</body>
+</html>
