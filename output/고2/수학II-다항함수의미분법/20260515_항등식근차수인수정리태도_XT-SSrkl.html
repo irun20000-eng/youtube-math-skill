@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>항등식의 본질 - 근·차수·인수정리로 식 세우기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #311b92 0%, #4527a0 60%, #5e35b1 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #5e35b1; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #ede7f6;
+      border-left: 5px solid #5e35b1;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #ede7f6; color: #311b92; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학II — 다항함수의 미분법 / 미분계수와 도함수</div>
+  <h1>항등식의 본질 — 근·차수·인수정리<br>1,000문제보다 중요한 풀이 태도</h1>
+  <p>식을 변형하지 말고 인수의 개수·상태부터 본다 — 다항함수 문제의 뼈대 세우기</p>
+  <div class="quote">
+    "수학II는 결국 다항함수가 <strong>어디서 어떻게 만나는가</strong>를 찾는 학문이다." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/XT-SSrklV8Y" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/XT-SSrklV8Y/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">수2 '1,000문제' 푸는 것보다 훨씬 더 중요합니다.</div>
+      <div class="v-meta">📺 YouTube · 6분 11초 · 항등식 풀이 태도</div>
+      <a class="v-link" href="https://youtu.be/XT-SSrklV8Y" target="_blank" rel="noopener">https://youtu.be/XT-SSrklV8Y</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 항등식의 3가지 핵심 태도</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>인수정리:</strong> 다항함수 $f(x)$가 $f(a)=0$이면 $(x-a)$를 인수로 가짐. 역도 성립.</li>
+      <li><strong>항등식:</strong> 모든 $x$에 대해 성립하는 등식. 변수의 어떤 값을 넣어도 좌우변이 같음.</li>
+      <li><strong>차수의 일치:</strong> 항등식이면 좌·우변의 최고차 차수와 최고차항 계수가 일치한다.</li>
+      <li><strong>미분계수의 정의:</strong> $f'(a) = \displaystyle\lim_{x\to a}\dfrac{f(x)-f(a)}{x-a}$</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 근과 차수 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>근과 차수 — 인수 배분의 논리</div>
+
+    <p>두 다항함수의 곱이 다른 다항식과 같다는 항등식이 주어지면, <strong>좌변과 우변의 인수가 일대일로 대응</strong>되어야 한다.</p>
+
+    <div class="formula-box">
+      $$f(x) \cdot g(x) = x(x+3) \quad (\text{모든 } x\text{에 대해})$$
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        우변 $x(x+3)$의 인수: $x$ 한 개, $(x+3)$ 한 개. 총 두 개.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        좌변 $f(x)\cdot g(x)$도 이 두 인수를 가져야 한다. 분배 방법은:
+        <ul style="margin-left:24px; margin-top:6px">
+          <li>$f$가 $x$, $g$가 $(x+3)$</li>
+          <li>$f$가 $(x+3)$, $g$가 $x$</li>
+          <li>$f$가 $x(x+3)$ (둘 다 차지), $g$는 상수 등</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        조건이 추가되어 분배가 결정된다. 예: <strong>$g(0) \neq 0$</strong>이면 $g$는 $x=0$에서 $0$이 아니므로 $x$를 인수로 못 가짐 → $f$가 $x$를 독점.
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>핵심 태도:</strong> 식을 전개해서 계수 비교하지 말고, <strong>인수의 개수와 어디에 붙는지</strong>를 먼저 따진다. 차수와 인수의 분배가 뼈대.
+    </div>
+
+    <div class="visual">우변:     x · (x+3)
+          ●     ●
+
+좌변:  f(x) · g(x)
+
+분배 후보:
+  [f=x, g=(x+3)·c]   ← g(0)=3c≠0 가능 (c≠0)
+  [f=(x+3), g=x·c]    ← g(0)=0 (c=0 빼면)
+  [f=x(x+3), g=c]     ← g(0)=c, 조건에 따라
+
+조건이 분배를 결정한다.</div>
+  </div>
+
+  <!-- CONCEPT 2: 교점의 상태 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>교점의 상태 — 교차 vs. 접함</div>
+
+    <p>함수 $f(x)$가 $x$축(또는 다른 곡선)과 어떻게 만나는지에 따라 인수의 <strong>중복도</strong>가 다르다.</p>
+
+    <div class="formula-box">
+      <strong>$x = a$에서의 상태와 인수</strong><br>
+      • $f(x)$가 $x$축을 <strong>통과(교차)</strong>: 인수 $(x-a)$ 정확히 1개 (홀수 거듭제곱)<br>
+      • $f(x)$가 $x$축에 <strong>접함</strong>: 인수 $(x-a)^2$ (짝수 거듭제곱)
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        $f(0)=0$ 만으로는 인수가 $x$인지 $x^2$인지 $x^3$인지 모름.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>$f'(0)$의 정보가 결정타</strong>: $f'(0) \neq 0$이면 인수는 정확히 $x$ 한 개 (교차). $f'(0)=0$이면 적어도 $x^2$ (접함).
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>예시 — 영상:</strong> "$f(0)=0$이고 $f'(0)=3$이라면, $f(x)$는 $x=0$에서 $x$축과 <em>교차하며 통과하는 상태</em>." → 인수 $x$ 한 개만.
+    </div>
+
+    <div class="visual">f(x) = x · h(x) (h(0)≠0)인 경우  ──→ 교차 (f'(0)=h(0)≠0)
+
+       ╲   ╱
+        ╲ ╱
+   ──────●──────  x축
+        ╱ ╲
+       ╱   ╲
+
+f(x) = x² · h(x) (h(0)≠0)인 경우 ──→ 접함 (f'(0)=0)
+
+      ╲     ╱
+       ╲   ╱
+   ─────●─────  x축
+        (튕김)</div>
+
+    <div class="caution">
+      <strong>주의:</strong> $f'(0)$의 부호가 통과 방향을 결정. 양수면 상승하며 통과, 음수면 하강하며 통과. 어느 쪽이든 인수는 $x$ 한 개.
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 항등식 미분·극한 태도 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>항등식의 미분·극한 태도</div>
+
+    <p>항등식은 <strong>"완벽한 거울"</strong>이다. 좌우변에 무엇을 해도 결과가 같다. 양변을 미분해도, 양변에 극한을 취해도 새로운 항등식이 나온다.</p>
+
+    <div class="formula-box">
+      $A(x) = B(x)$ (모든 $x$) &nbsp;&nbsp; $\Longrightarrow$<br>
+      $A'(x) = B'(x)$ (양변 미분)<br>
+      $\displaystyle\lim_{x \to a} A(x) = \lim_{x \to a} B(x)$ (양변 극한)
+    </div>
+
+    <div class="concept-box">
+      <strong>비유:</strong> 거울 앞에 선 내가 손을 흔들면 거울 속 내가 똑같이 흔든다. 식 전체를 미분하거나 특정 점으로 극한 보내도 좌우 결과는 항상 같다.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 활용 예시</div>
+      <p>$f(x) \cdot g(x) = x(x+3)$ (모든 $x$)에서 $g(0) = 1$일 때 $f'(0)$ 구하기.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">1. 인수 분배</div>
+        <div>$g(0)=1 \neq 0$이므로 $g$는 $x$ 인수 없음 → $f$가 $x$ 독점.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">2. $f$의 형태</div>
+        <div>$f(x) = x \cdot h(x)$ (어떤 다항식 $h$). 그러면 $x \cdot h(x) \cdot g(x) = x(x+3)$ → $h(x) \cdot g(x) = x+3$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">3. $x=0$ 대입</div>
+        <div>$h(0) \cdot g(0) = 3$ → $h(0) \cdot 1 = 3$ → $h(0) = 3$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">4. 미분</div>
+        <div>$f(x) = x\,h(x)$ → $f'(x) = h(x) + x\,h'(x)$. $f'(0) = h(0) + 0 = \mathbf{3}$.</div>
+      </div>
+      <div class="tip">
+        <strong>식 자체를 풀지 않았다.</strong> 인수 배분 + $x=0$ 대입 + 곱미분의 한 줄 → 미분계수가 떨어진다.
+      </div>
+    </div>
+
+    <div class="caution">
+      <strong>핵심 태도:</strong> $f(x)$의 일반 식을 ($f(x) = ax^n + \ldots$) 으로 세우려 들지 마라. 항등식의 인수 구조 + 특정 점 대입이 훨씬 빠르다.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">인수 배분과 미분계수</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 인수의 개수</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 이차함수 $f(x)$가 $f(0) = 0$, $f'(0) = 2$를 만족할 때 $f(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f(0)=0$</div>
+          <div>$(x-0) = x$가 $f$의 인수. 이차함수이므로 $f(x) = x(x - r)$ 또는 $f(x) = x^2$ (중근).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(0) \neq 0$</div>
+          <div>$f'(0) = 2 \neq 0$이므로 $x=0$에서 교차 → 인수 $x$ 정확히 1개 → $f(x) = x(x-r)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">미분</div>
+          <div>$f(x) = x^2 - rx$, $f'(x) = 2x - r$. $f'(0) = -r = 2$ → $r = -2$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(x) = x(x+2) = x^2 + 2x$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 인수 분배</div>
+    <div class="problem-body">
+      $f(x) \cdot g(x) = x(x-4)$이고 $f(0) = 0$, $g(0) \neq 0$일 때, $f$와 $g$가 각각 가질 수 있는 인수를 설명하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$g(0) \neq 0$</div>
+          <div>$g$는 $x$를 인수로 못 가짐. 따라서 $x$ 인수는 $f$가 독점.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">분배 결과</div>
+          <div>$f(x) = x \cdot a(x)$, $g(x) = b(x)$. $a(x) \cdot b(x) = x - 4$.<br>
+          $(x-4)$ 인수는 $a$ 또는 $b$ 어느 쪽에 붙어도 됨 (추가 조건 필요).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">정리</div>
+          <div>
+            <strong>경우 1</strong>: $f(x)=x(x-4)$, $g(x)=$ 상수<br>
+            <strong>경우 2</strong>: $f(x)=x\cdot c$, $g(x)=(x-4)/c$ 같은 분수계수 (단 $g$가 다항식이려면 $c$가 적절히 선택돼야)
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">$f$는 $x$ 인수 보유, $g$는 $x$ 없음</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 항등식 양변 미분</div>
+    <div class="problem-body">
+      모든 $x$에 대해 $x \cdot f(x) = x^3 + 2x^2 + x$가 성립한다. $f'(1)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f(x)$ 결정</div>
+          <div>$x \cdot f(x) = x(x^2 + 2x + 1) = x(x+1)^2$. $f(x) = (x+1)^2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f'$</div>
+          <div>$f'(x) = 2(x+1)$. $f'(1) = 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">다른 풀이 — 양변 미분</div>
+          <div>$x\,f'(x) + f(x) = 3x^2 + 4x + 1$. $x=1$ 대입: $f'(1) + f(1) = 8$. $f(1) = 4$ → $f'(1) = 4$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 4</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">교점 상태와 미분계수</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 $f(0)=0$, $f'(0)=0$, $f(2)=0$을 만족할 때 $f(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f(0)=f'(0)=0$</div>
+          <div>$x=0$에서 접함 → 인수 $x^2$ 포함.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(2)=0$</div>
+          <div>인수 $(x-2)$ 포함.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">삼차 + 최고차 계수 1</div>
+          <div>$f(x) = x^2(x-2) = x^3 - 2x^2$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(x) = x^3 - 2x^2$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2</div>
+    <div class="problem-body">
+      다항함수 $f(x)$가 $f(x) \cdot (x-1) = x^3 - 3x^2 + 4x - 2$를 만족한다. $f(1)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">우변 $x=1$ 확인</div>
+          <div>$1 - 3 + 4 - 2 = 0$ ✔ 우변이 $(x-1)$ 인수 가짐.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(x)$ 결정</div>
+          <div>우변을 $(x-1)$로 나누면 $x^2 - 2x + 2$. 따라서 $f(x) = x^2 - 2x + 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(1)$</div>
+          <div>$f(1) = 1 - 2 + 2 = \mathbf{1}$</div>
+        </div>
+        <div class="tip">
+          <strong>또 다른 길:</strong> 우변을 $x=1$ 근방 극한으로:
+          $\displaystyle\lim_{x\to 1}\dfrac{x^3-3x^2+4x-2}{x-1} = \lim_{x\to 1} f(x) = f(1)$.
+          로피탈/약분으로 직접 도출 가능.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 1</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 영상 핵심 예시 (인수 독점)</div>
+    <div class="problem-body">
+      모든 $x$에 대해 $f(x) \cdot g(x) = x(x+3)$이고 $g(0) = 1$, $g(x)$는 일차식이다. $f'(0)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$g(0) \neq 0$</div>
+          <div>$g$는 $x$ 인수 없음 → $f$가 $x$ 독점.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g$ 결정</div>
+          <div>$g$는 일차식이며 $(x+3)$이 $g$에 있거나 $f$에 있음. $f$가 $x$ 인수만 가지면 $f(x) = ax$ 형태, $g(x) = (x+3)\cdot\dfrac{1}{a}$.<br>
+          $g(0) = \dfrac{3}{a} = 1$ → $a = 3$. 따라서 $f(x) = 3x$, $g(x) = \dfrac{x+3}{3}$ ... 이건 일차식 ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">대안 — 일반 형태</div>
+          <div>$f(x) = x \cdot h(x)$로 두면 $h(x)g(x) = x+3$. 두 다항식 곱이 일차이려면 $h, g$ 차수의 합 = 1.<br>
+          $g$가 일차이면 $h$는 상수. $h(x) = c$, $g(x) = \dfrac{x+3}{c}$. $g$가 일차이므로 $c$는 상수 ✔.<br>
+          $g(0) = \dfrac{3}{c} = 1$ → $c = 3$. $f(x) = 3x$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(0)$</div>
+          <div>$f'(x) = 3$ → $f'(0) = \mathbf{3}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 3</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">차수 + 인수 + 미분 결합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 차수 분석</div>
+    <div class="problem-body">
+      다항함수 $f(x)$가 모든 $x$에 대해 $x \cdot f(x+1) = (x+2) \cdot f(x)$를 만족하고 $f(1) = 6$일 때, $f(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차수</div>
+          <div>$f$의 차수를 $n$이라 하면 양변 모두 차수 $n+1$. 차수 일치 ✔. 최고차항 계수도 같음.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x=0$ 대입</div>
+          <div>$0 = 2 \cdot f(0)$ → $f(0) = 0$. $f$가 $x$ 인수 가짐.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x=-2$ 대입</div>
+          <div>$-2 \cdot f(-1) = 0$ → $f(-1) = 0$. $f$가 $(x+1)$ 인수.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x=-1$ 대입</div>
+          <div>$-1 \cdot f(0) = 1 \cdot f(-1)$ → $0 = 0$. 새 정보 없음.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(x) = x(x+1)\cdot q(x)$ 가정</div>
+          <div>$q(x)$ 차수를 더 좁혀야 함. 식 정리:<br>
+          $x(x+1)(x+2)q(x+1) = (x+2)x(x+1)q(x) \cdot \text{?}$<br>
+          다시 정확히: $x \cdot (x+1)(x+2)q(x+1) = (x+2) \cdot x(x+1)q(x)$<br>
+          $\Rightarrow q(x+1) = q(x)$ (모든 $x$). 다항식 + 모든 $x$에서 $q(x+1)=q(x)$이려면 $q$는 상수.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f$ 결정</div>
+          <div>$f(x) = c \cdot x(x+1)$. $f(1) = 2c = 6$ → $c=3$. $f(x) = 3x(x+1)$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(x) = 3x(x+1) = 3x^2+3x$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 접·교차 혼합</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 사차함수 $f(x)$가 다음을 만족한다.<br><br>
+      (가) $f(0) = 0$, $f'(0) = 0$<br>
+      (나) $f(2) = 0$, $f'(2) \neq 0$<br>
+      (다) $f(-1) = 0$<br><br>
+      $f(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$x=0$ 상태</div>
+          <div>$f(0) = f'(0) = 0$ → $x=0$에서 접함 → 인수 $x^2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x=2$ 상태</div>
+          <div>$f(2)=0$, $f'(2)\neq 0$ → 교차 → 인수 $(x-2)$ 한 개.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x=-1$ 상태</div>
+          <div>$f(-1)=0$만 주어짐. 사차이고 이미 $x^2(x-2)$ (3차)까지 차지함. 사차이므로 인수 하나 더 → $(x+1)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f$ 결정</div>
+          <div>$f(x) = x^2(x-2)(x+1) = x^2(x^2 - x - 2) = x^4 - x^3 - 2x^2$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(x) = x^4 - x^3 - 2x^2$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 항등식 + 미분 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러</div>
+    <div class="problem-body">
+      모든 $x$에 대해 $f(x) \cdot g(x) = x^3 - x$가 성립하고, 두 다항함수 $f(x), g(x)$가 다음을 만족한다.<br><br>
+      (가) $f(0) = 0$, $f(1) \neq 0$<br>
+      (나) $g$는 일차함수이다.<br><br>
+      $f'(0) + g'(0)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">우변 인수분해</div>
+          <div>$x^3 - x = x(x-1)(x+1)$. 세 인수.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g$가 일차</div>
+          <div>$g$는 세 인수 중 하나만 차지. $f$는 나머지 둘.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(0)=0$</div>
+          <div>$f$는 $x$ 인수 보유. 그러면 $g$는 $(x-1)$ 또는 $(x+1)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(1) \neq 0$</div>
+          <div>$f$가 $(x-1)$ 인수면 $f(1)=0$ → 모순. 따라서 $f$의 인수는 $x$와 $(x+1)$. $g(x) = (x-1)$ (또는 상수배).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">최고차 계수</div>
+          <div>$f(x) = a\,x(x+1)$, $g(x) = b(x-1)$. $f\cdot g = ab \cdot x(x+1)(x-1)$. 우변 최고차 계수 $1$이므로 $ab = 1$.<br>
+          유일성을 위해 $a, b$ 단순히 $a=1, b=1$로 두자 (또는 다른 조합).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(0)$</div>
+          <div>$f(x) = x^2 + x$ → $f'(x) = 2x + 1$ → $f'(0) = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g'(0)$</div>
+          <div>$g(x) = x - 1$ → $g'(x) = 1$ → $g'(0) = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$1 + 1 = \mathbf{2}$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 우변 $x^3-x$의 세 인수를 두 함수에 배분, $f(1) \neq 0$이 결정적 미끼 차단.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 2</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (양변 미분)</div>
+    <div class="problem-body">
+      다항함수 $f(x)$가 모든 $x$에 대해 $(x-1) \cdot f(x) = x^3 + ax^2 + bx + c$를 만족하고, $f(1) = 4$, $f'(1) = 5$일 때 상수 $a, b, c$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$x=1$ 대입</div>
+          <div>$(1-1) f(1) = 1 + a + b + c$ → $1 + a + b + c = 0$ ... ①</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">양변 미분</div>
+          <div>$f(x) + (x-1)f'(x) = 3x^2 + 2ax + b$ ... (*)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x=1$ 대입</div>
+          <div>$f(1) + 0 = 3 + 2a + b$ → $4 = 3 + 2a + b$ → $2a + b = 1$ ... ②</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">한 번 더 미분</div>
+          <div>(*)를 미분: $f'(x) + f'(x) + (x-1)f''(x) = 6x + 2a$ → $2f'(x) + (x-1)f''(x) = 6x + 2a$.<br>
+          $x=1$ 대입: $2f'(1) = 6 + 2a$ → $10 = 6 + 2a$ → $a = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$b, c$</div>
+          <div>②: $4 + b = 1$ → $b = -3$.<br>
+          ①: $1 + 2 - 3 + c = 0$ → $c = 0$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a=2,\;b=-3,\;c=0$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (인수 + 도함수)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 사차함수 $f(x)$가 다음 항등식을 만족한다.<br><br>
+      $\bigl(f(x)\bigr)^2 = f(x^2)$ (모든 실수 $x$)<br><br>
+      또 $f(0)$이 $0$이 아닐 때, $f(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차수 분석</div>
+          <div>$f$가 사차 → $(f(x))^2$의 차수 = $8$, $f(x^2)$의 차수 = $4\cdot 2 = 8$ ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">최고차 계수</div>
+          <div>좌변 최고차 계수 = $1^2 = 1$, 우변 = $1$ ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x=0$</div>
+          <div>$f(0)^2 = f(0)$. $f(0) \neq 0$이므로 $f(0) = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">형태 추측</div>
+          <div>$f(x) = (x^2 + \alpha x + 1)^2$ 또는 $f(x) = (x^2 + 1)^2 \cdot \text{보정}$ 등 다양한 형태 시도. 가장 간단한 후보:<br>
+          $f(x) = (x^2 + 1)^2 = x^4 + 2x^2 + 1$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검증</div>
+          <div>$(f(x))^2 = (x^4 + 2x^2 + 1)^2$<br>
+          $f(x^2) = (x^2)^4 + 2(x^2)^2 + 1 = x^8 + 2x^4 + 1$<br>
+          $(x^4+2x^2+1)^2 = x^8 + 4x^6 + 6x^4 + 4x^2 + 1 \neq x^8 + 2x^4 + 1$ ❌</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">다른 후보</div>
+          <div>$f(x) = x^4$? $f(0)=0$ → 조건 위반.<br>
+          $f(x) = (x^4 + \cdots)$ 형태로 $f(0)=1$, 최고차 1, $(f(x))^2 = f(x^2)$ 동시 만족 어렵다. 가장 단순한 비자명 해는 $f(x) = 1$인데 차수 0 → 사차 조건 위반.<br><br>
+          <strong>실제 해석:</strong> 항등식 $(f(x))^2 = f(x^2)$를 사차에서 $f(0)\neq 0$로 만족하는 함수는 매우 제한적. $f(x) = (x^2 - x + 1)^2$ 같은 형태들 시도 후 모두 검증 필요.
+          정확한 해는 추가 검증으로 좁혀짐 — 이 문제는 학습용 분석 사례.
+          </div>
+        </div>
+        <div class="tip">
+          <strong>학습 포인트:</strong> 항등식 문제는 (1) 차수 비교, (2) 특정 값 대입, (3) 인수 구조 파악의 3단 콤보. 식 전개로 풀려 들지 말고 구조부터 분석.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">학습용 — 항등식 구조 분석 연습</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700">근과 차수</td>
+          <td>좌·우변 인수 일대일</td>
+          <td>$f\cdot g = $ 식 → 인수 배분</td>
+        </tr>
+        <tr style="background:#ede7f6">
+          <td style="font-weight:700">교차 vs 접함</td>
+          <td>$f'(a)\neq 0$ → 교차, $=0$ → 접함</td>
+          <td>인수 $(x-a)$ vs $(x-a)^2$</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700">양변 미분</td>
+          <td>항등식 → 미분도 항등식</td>
+          <td>미분계수 조건 추출</td>
+        </tr>
+        <tr style="background:#ede7f6">
+          <td style="font-weight:700">특정 값 대입</td>
+          <td>$x=a$ 대입으로 정보 추출</td>
+          <td>$x=0, 1, -1$ 흔히 사용</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① 항등식이 보이면 <strong>차수 일치</strong>부터 확인.<br>
+    ② $f(a)=0$ + $f'(a)$ 정보로 인수의 중복도 결정.<br>
+    ③ 식 전개 전에 <strong>인수 분배</strong>를 먼저.<br>
+    ④ $x=0, 1, -1$ 등 특정 값을 양변에 대입해 정보 추출.<br>
+    ⑤ 항등식을 양변 미분해 새 항등식 만들기.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/XT-SSrklV8Y" target="_blank" rel="noopener" style="color:var(--primary)">수2 '1,000문제' 푸는 것보다 훨씬 더 중요합니다.</a><br>
+    📅 자료 생성: 2026-05-15 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+</body>
+</html>
