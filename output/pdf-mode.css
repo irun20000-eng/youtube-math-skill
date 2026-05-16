@@ -1,10 +1,19 @@
 /* ========================================================================
- * pdf-mode.css — 학습자료 PDF 인쇄 모드 (2026-05-15)
- * 토글 시 인쇄 친화 레이아웃 + @page A4 + 문제↔해설 분리
+ * pdf-mode.css v2 — 학습자료 PDF 인쇄 모드 (2026-05-15)
+ *
+ * v2 개선:
+ *  - @page margin-box 로 페이지 번호 + running header (안정적 표시)
+ *  - 인쇄용 폰트 크기 11pt, 행간 1.55 로 조정
+ *  - 큰 .card 의 internal page-break 허용 (빈 공간 감소)
+ *  - .answer-cover 컴팩트화 (cover + 첫 답안 같은 페이지)
+ *  - widow/orphan 방지 (heading + 다음 요소 page-break-after: avoid)
+ *  - 흑백 인쇄 친화: border 굵기 증가, 색상 의존 감소
+ *  - .visual ASCII 박스 폰트 축소 + pre-wrap 으로 잘림 방지
+ *  - KaTeX 폰트 폴백 강화
  * ========================================================================
  */
 
-/* ===== 인쇄 모드 토글 버튼 (화면 상단 고정) ===== */
+/* ===== 인쇄 모드 토글 버튼 ===== */
 .pdf-toolbar {
   position: fixed;
   top: 16px;
@@ -32,128 +41,255 @@
 .pdf-toolbar button.exit { background: #c62828; }
 .pdf-toolbar button.exit:hover { background: #8e0000; }
 
-/* ===== 화면에서 인쇄 모드 미리보기 ===== */
-body.print-mode .pdf-toolbar { /* 토글바 자체는 인쇄 시 숨김 (@media print에서) */ }
-
-body.print-mode .hero,
-body.print-mode .video-card,
-body.print-mode .controls,
-body.print-mode .pdf-toolbar { /* hero·영상카드·필터 메타 요소 숨김 */ }
-
-/* 인쇄 모드 화면 미리보기 — 핵심 시각 변화 */
+/* ===== 인쇄 모드 화면 미리보기 ===== */
 body.print-mode {
   background: #fff !important;
 }
 
 body.print-mode .container {
   max-width: none;
-  padding: 12mm 15mm;
+  padding: 0 15mm;
 }
 
-/* 인쇄 모드: hero 영역 축소, 컴팩트 헤더로 */
+/* hero 컴팩트화 — 자료 제목만 남김 */
 body.print-mode .hero {
   background: #fff !important;
   color: #000 !important;
-  padding: 0 0 16px 0 !important;
+  padding: 0 0 12px 0 !important;
   text-align: left;
-  border-bottom: 2px solid #333;
-  margin-bottom: 24px;
+  border-bottom: 2px solid #000;
+  margin-bottom: 16px;
 }
 body.print-mode .hero .tag,
 body.print-mode .hero .quote,
 body.print-mode .hero .video-card { display: none !important; }
 body.print-mode .hero h1 {
-  font-size: 1.4rem !important;
+  font-size: 16pt !important;
   color: #000 !important;
   margin-bottom: 4px;
 }
 body.print-mode .hero p {
-  font-size: 13px !important;
+  font-size: 10pt !important;
   color: #555 !important;
   opacity: 1 !important;
   margin: 0;
 }
 
-/* 풀이 공간 — 문제 카드 사이 여유 */
+/* 인쇄 모드 화면에서도 본문 폰트 인쇄용으로 미리보기 */
+body.print-mode {
+  font-size: 11pt;
+  line-height: 1.55;
+}
+
+/* 문제 카드 — 풀이 공간 확보 + 단절 방지 */
 body.print-mode .problem-card {
   page-break-inside: avoid;
-  margin-bottom: 3cm; /* 학생이 손글씨 풀이 쓸 자리 */
-  border: 1px solid #999;
+  break-inside: avoid;
+  margin-bottom: 2.5cm; /* 손글씨 풀이 공간 */
+  border: 1.5pt solid #333;
+  border-radius: 6px;
   box-shadow: none;
+  padding: 12pt 14pt;
+}
+body.print-mode .problem-card .problem-num {
+  font-size: 12pt;
+  font-weight: 700;
+  margin-bottom: 6pt;
+}
+body.print-mode .problem-card .problem-body {
+  font-size: 11pt;
+  line-height: 1.6;
 }
 
-/* 인쇄 모드에서 해설(details)는 문제 카드에서 빠져 맨 뒤 섹션으로 이동 */
+/* 인쇄 모드에서 해설(details) 카드에서 숨김 (재배치된 답안만 표시) */
 body.print-mode .problem-card details { display: none; }
 
-/* 인쇄 모드에서 추가되는 placeholder */
+/* "정답은 뒷장 참고" placeholder */
 body.print-mode .problem-card .answer-ref {
-  font-size: 13px;
-  color: #999;
-  margin-top: 8px;
+  font-size: 9pt;
+  color: #888;
+  margin-top: 6pt;
   font-style: italic;
+  border-top: 1px dashed #ccc;
+  padding-top: 4pt;
 }
 
-/* 정답·해설 분리 섹션 */
-.answer-section {
-  display: none; /* 일반 보기에서는 숨김 */
-}
+/* ===== 정답·풀이 별도 섹션 ===== */
+.answer-section { display: none; }
 body.print-mode .answer-section {
   display: block;
-  page-break-before: always; /* 새 페이지에서 시작 */
-  margin-top: 32px;
+  page-break-before: always;
+  break-before: page;
+  margin-top: 0;
 }
+
+/* 정답 표지 — 컴팩트 (빈 공간 줄임) */
 body.print-mode .answer-section .answer-cover {
   text-align: center;
-  font-size: 1.6rem;
+  font-size: 18pt;
   font-weight: 800;
-  margin: 80px 0 40px;
-  letter-spacing: 0.1em;
-  color: #0d47a1;
+  margin: 8pt 0 12pt;
+  padding: 8pt 0;
+  letter-spacing: 0.08em;
+  color: #000;
+  border-top: 3pt double #000;
+  border-bottom: 3pt double #000;
 }
+
+/* 답안 블록 — 페이지 안에서 끊기지 않게 + 컴팩트 */
 body.print-mode .answer-section .answer-block {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 16px 20px;
-  margin-bottom: 20px;
+  border: 1pt solid #666;
+  border-radius: 4px;
+  padding: 10pt 12pt;
+  margin-bottom: 10pt;
   page-break-inside: avoid;
+  break-inside: avoid;
   background: #fafafa;
+  font-size: 10.5pt;
+  line-height: 1.55;
 }
 body.print-mode .answer-section .answer-block .a-title {
   font-weight: 700;
-  color: #0d47a1;
-  margin-bottom: 8px;
-  font-size: 15px;
+  color: #000;
+  margin-bottom: 6pt;
+  font-size: 11pt;
+  border-bottom: 1pt solid #999;
+  padding-bottom: 3pt;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+body.print-mode .answer-section .answer-block .solution {
+  background: transparent !important;
+  padding: 0 !important;
+  line-height: 1.55 !important;
+}
+body.print-mode .answer-section .answer-block .sol-step {
+  margin: 3pt 0;
+}
+body.print-mode .answer-section .answer-block .sol-step-label {
+  background: #555 !important;
+  font-size: 8.5pt !important;
+}
+body.print-mode .answer-section .answer-block .answer-tag {
+  background: #000 !important;
+  font-size: 9.5pt !important;
 }
 
-/* 카드·박스 페이지 친화 */
-body.print-mode .card,
+/* 큰 .card 는 internal break 허용 (빈 공간 감소) */
+body.print-mode .card {
+  page-break-inside: auto;
+  break-inside: auto;
+  box-shadow: none;
+  padding: 10pt 14pt;
+  border: 1pt solid #999;
+  border-radius: 4px;
+  margin-bottom: 10pt;
+}
+
+/* 작은 박스 — 단위로 묶기 */
 body.print-mode .example-card,
 body.print-mode .concept-box,
 body.print-mode .formula-box,
-body.print-mode .visual,
 body.print-mode .tip,
 body.print-mode .caution {
   page-break-inside: avoid;
+  break-inside: avoid;
   box-shadow: none;
+  font-size: 10.5pt;
+  padding: 8pt 12pt;
+  margin: 8pt 0;
 }
 
+/* 흑백 친화 — border 굵기 보강 */
+body.print-mode .concept-box { border-left-width: 4pt !important; }
+body.print-mode .caution     { border-left-width: 4pt !important; border-left-color: #000 !important; }
+body.print-mode .tip         { border-left-width: 4pt !important; border-left-color: #555 !important; }
+body.print-mode .example-card{ border-left-width: 4pt !important; border-left-color: #333 !important; }
+body.print-mode .formula-box { border-width: 1.5pt !important; border-color: #000 !important; }
+
+/* ASCII 도형 (.visual) — 폰트 축소 + 잘림 방지 */
 body.print-mode .visual {
-  background: #f5f5f5 !important;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  background: #f0f0f0 !important;
+  font-size: 9pt !important;
+  line-height: 1.4 !important;
+  padding: 8pt 12pt;
+  border: 1pt solid #aaa;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
-/* 인쇄 모드에서 details 안의 summary(버튼) 인쇄 X */
-body.print-mode summary { display: none; }
-body.print-mode details[open] > .solution { display: block; }
+/* 섹션 제목 + 다음 요소 widow 방지 */
+body.print-mode .section-title {
+  page-break-after: avoid;
+  break-after: avoid;
+  font-size: 13pt;
+  border-left-width: 5pt;
+  margin: 16pt 0 8pt;
+}
+body.print-mode .level-header {
+  page-break-after: avoid;
+  break-after: avoid;
+  margin: 16pt 0 8pt;
+}
+body.print-mode .concept-title {
+  page-break-after: avoid;
+  break-after: avoid;
+  font-size: 12pt;
+  margin-bottom: 6pt;
+}
+
+/* 표 인쇄 친화 */
+body.print-mode table {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  font-size: 10.5pt;
+}
+body.print-mode th, body.print-mode td {
+  padding: 6pt 8pt !important;
+  border: 1pt solid #666 !important;
+}
+
+/* hr — 더 진하게 */
+body.print-mode hr.divider {
+  border-top: 1pt solid #333 !important;
+  margin: 14pt 0 !important;
+}
+
+/* summary 버튼 인쇄 X (혹시 펼친 상태로 인쇄될 경우 대비) */
+body.print-mode summary { display: none !important; }
+
+/* KaTeX 폰트 폴백 — 인쇄 시 안전 */
+body.print-mode .katex {
+  font-family: "KaTeX_Main", "Cambria Math", "Times New Roman", serif !important;
+}
 
 /* ===== 실제 인쇄 시점 (@media print) ===== */
 @media print {
   @page {
     size: A4;
-    margin: 20mm 15mm;
+    margin: 20mm 15mm 22mm 15mm;
+
+    /* 페이지 하단 우측 페이지 번호 */
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 9pt;
+      color: #777;
+    }
+    /* 페이지 하단 좌측 자료명 (JS가 var 설정) */
+    @bottom-left {
+      content: "📚 학습자료 — youtube-math-skill";
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 8.5pt;
+      color: #999;
+    }
   }
 
-  /* 토글바 인쇄 X */
-  .pdf-toolbar { display: none !important; }
+  /* 토글바·배너 인쇄 X */
+  .pdf-toolbar, .print-mode-banner { display: none !important; }
 
   /* 인쇄 시 배경·그림자 제거 */
   body { background: #fff !important; }
@@ -161,27 +297,27 @@ body.print-mode details[open] > .solution { display: block; }
     box-shadow: none !important;
   }
 
-  /* 페이지 마지막에 페이지 번호 */
-  .container::after {
-    content: counter(page);
-    position: fixed;
-    bottom: 5mm;
-    right: 10mm;
-    font-size: 10pt;
-    color: #999;
-  }
-
-  /* 색상 인쇄용 — 일부 프린터는 배경 인쇄 안 함 */
+  /* 색상 인쇄용 — 배경 인쇄 강제 */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+
+  /* 자료 제목은 첫 페이지 한 번만 */
+  .hero { page-break-after: avoid; break-after: avoid; }
+
+  /* 본문 문단 widow/orphan */
+  p, li, .sol-step {
+    orphans: 2;
+    widows: 2;
+  }
+
+  /* 링크 색상 흑백 친화 */
+  a { color: #000 !important; text-decoration: underline; }
 }
 
 /* ===== 인쇄 모드 안내 배너 (화면용) ===== */
-.print-mode-banner {
-  display: none;
-}
+.print-mode-banner { display: none; }
 body.print-mode .print-mode-banner {
   display: block;
   position: sticky;
