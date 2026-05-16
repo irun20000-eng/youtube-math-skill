@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>합성함수의 본질 - 개형 추적·성질 전이·역추적</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #b71c1c 0%, #c62828 60%, #d32f2f 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #c62828; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #ffebee;
+      border-left: 5px solid #c62828;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #ffebee; color: #b71c1c; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학II — 합성함수의 활용</div>
+  <h1>합성함수의 본질<br>개형 추적 · 성질 전이 · 역추적</h1>
+  <p>스킬이 아니라 본질 — "속함수의 $y$값이 겉함수의 $x$값으로 흘러든다"</p>
+  <div class="quote">
+    "합성함수의 개형은 <strong>흐름을 추적</strong>해서 그린다 — 식이 아니라 그래프의 대응이 본질이다." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/qGmymKVvGUw" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/qGmymKVvGUw/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">대치동 어둠의 스킬(X), 합성함수의 본질(O)</div>
+      <div class="v-meta">📺 YouTube · 8분 24초 · 합성함수 본질</div>
+      <a class="v-link" href="https://youtu.be/qGmymKVvGUw" target="_blank" rel="noopener">https://youtu.be/qGmymKVvGUw</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 합성함수의 3가지 본질</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>합성함수의 정의:</strong> $h(x) = g(f(x))$ — 먼저 $f$를 적용한 뒤 그 결과에 $g$ 적용.</li>
+      <li><strong>치역·정의역의 연결:</strong> 속함수 $f$의 <em>치역</em>이 겉함수 $g$의 <em>정의역</em>이 된다.</li>
+      <li><strong>이차함수의 꼭짓점·증감:</strong> $y=x^2-x$의 꼭짓점은 $(\tfrac{1}{2},-\tfrac{1}{4})$, $x=\tfrac{1}{2}$ 좌측 감소·우측 증가.</li>
+      <li><strong>극값 판정:</strong> $f$의 극값 위치 = $f'$의 부호 바뀜.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 개형 추적 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>개형 추적 — 속함수의 $y$를 겉함수의 $x$로</div>
+
+    <p>$h(x) = g(f(x))$의 그래프는 두 단계로 그린다.</p>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        $x$가 어떤 구간을 움직일 때 <strong>$f(x)$가 어디서 어디까지</strong> 움직이는지 본다 (속함수의 치역).
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        그 결과를 <strong>$g$의 정의역</strong>에 대입한다고 생각하고, $g$ 그래프에서 해당 $x$ 구간의 $y$값을 읽어낸다.
+      </div>
+    </div>
+
+    <div class="formula-box">
+      "속함수의 $y$값 = 겉함수의 $x$값"<br>
+      → 두 그래프를 90° 돌려 붙이는 시각화
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 (개형 추적용)</div>
+      <p>$f(x) = \sin x$, $g(t) = t^2 - t$일 때 $h(x) = g(f(x))$의 $[0, \pi/2]$에서의 변화.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">단계 1</div>
+        <div>$x: 0 \to \pi/2$일 때 $\sin x: 0 \to 1$. 즉 $f$값이 $[0, 1]$을 단조증가로 훑음.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">단계 2</div>
+        <div>$g(t) = t^2 - t$의 $t \in [0,1]$ 구간 값: $g(0)=0$, $g(1/2)=-1/4$ (꼭짓점), $g(1)=0$. U자 모양.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">결과</div>
+        <div>$h(x): 0 \to -1/4 \to 0$ 로 변화. 즉 $h$는 $[0, \pi/2]$에서 한 번 내려갔다가 다시 올라옴.<br>
+        극소값 $-1/4$는 $\sin x = 1/2$일 때, 즉 $x = \pi/6$에서.</div>
+      </div>
+      <div class="tip">
+        <strong>핵심:</strong> $h$의 식을 전개하지 않고도 그래프 개형을 추적함. $f$가 어떤 함수든 동일 원리.
+      </div>
+    </div>
+
+    <div class="visual">개형 추적 시각화
+
+  속함수 f                겉함수 g
+  ──────                   ──────
+   ╱╲                       ╲    ╱
+  ╱  ╲ ← y범위 [0,1]         ╲  ╱
+ ╱    ╲                       ╲╱
+  x →                          t →
+
+  f의 y범위 [0,1] 을 →→→→→→ g의 x범위 [0,1]에 대입
+                                       ↓
+                                   합성함수 h의 그래프</div>
+  </div>
+
+  <!-- CONCEPT 2: 성질 전이 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>성질 전이 — 대칭성·주기성·극값의 유전</div>
+
+    <p>"속함수가 구분하지 못한 값은 합성함수도 구분하지 못한다." 이 한 줄이 모든 성질 전이의 원리.</p>
+
+    <div class="formula-box">
+      $f(x_1) = f(x_2) \Longrightarrow g(f(x_1)) = g(f(x_2))$
+    </div>
+
+    <div class="concept-box">
+      <strong>이로부터 따라오는 성질:</strong>
+      <ul style="margin-left:20px; margin-top:6px">
+        <li>$f$가 $x=a$에 대해 <strong>선대칭</strong>이면 $h(x)=g(f(x))$도 $x=a$ 선대칭.</li>
+        <li>$f$가 주기 $T$를 가지면 $h$도 주기 $T$.</li>
+        <li>$f$의 극값 위치는 $h$의 극값 위치이기도 함.</li>
+        <li>(역) $g$가 극값을 갖는 점을 $f$가 통과할 때도 $h$의 극값 발생.</li>
+      </ul>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>증명 스케치 (선대칭):</strong> $f(a+t) = f(a-t)$ (모든 $t$). 그러면
+        $h(a+t) = g(f(a+t)) = g(f(a-t)) = h(a-t)$ → $h$는 $x=a$ 선대칭.
+      </div>
+    </div>
+
+    <div class="caution">
+      <strong>주의 — 한 방향 전이:</strong> $f$의 성질은 $h$로 전이되지만 역은 항상 성립 ❌. $h$가 어떤 성질을 가져도 $f$가 같은 성질을 갖는 건 아님.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 예시 — 다항함수 대칭 전이</div>
+      <p>$f(x) = (x-2)^2$는 $x=2$ 선대칭. $g(t) = t^3$일 때 $h(x) = g(f(x)) = ((x-2)^2)^3 = (x-2)^6$.</p>
+      <p>$h$도 $x=2$ 선대칭임이 직접 확인됨 ✔</p>
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 역추적 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>역추적 — $g(f(x)) = h(x)$에서 $f$ 후보 찾기</div>
+
+    <p>결과 $h$와 겉함수 $g$를 알 때, <strong>속함수 $f$의 후보</strong>를 거꾸로 찾는 고난도 추론.</p>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        특정 $x$에서 $h(x) = k$라 하자.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        $g(t) = k$를 만족하는 $t$값(들)이 그 $x$에서 $f(x)$의 후보다.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        $g$가 일대일이면 $t$는 유일. 그렇지 않으면 여러 후보가 점으로 찍힌다 ("점묘화").
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>추가 조건</strong> (연속성, 단조성, 미분가능성 등)으로 후보를 좁혀 최종 $f$ 확정.
+      </div>
+    </div>
+
+    <div class="formula-box">
+      $h(x) = k$ 일 때 $f(x) \in g^{-1}(\{k\})$
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 역추적 예시 (다항함수)</div>
+      <p>$g(t) = t^2$, $h(x) = (x-1)^2(x-3)^2$. $f$를 구하시오.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">분석</div>
+        <div>$g(f(x)) = (f(x))^2 = (x-1)^2(x-3)^2 = ((x-1)(x-3))^2$</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">후보</div>
+        <div>$f(x) = \pm (x-1)(x-3)$. $f$가 연속·다항함수라면 두 가지 모두 가능.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">조건 추가</div>
+        <div>$f(0) = 3$이라 하면 $(0-1)(0-3)=3$이므로 $+$ 부호. $f(x) = (x-1)(x-3)$.</div>
+      </div>
+      <div class="tip">
+        <strong>핵심:</strong> $g$가 일대일이 아니면 ($t^2$은 $\pm t$ 두 후보) 추가 조건으로 부호·연속성 결정.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">합성·치역·성질 전이 기본</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 합성 직접 계산</div>
+    <div class="problem-body">
+      $f(x) = x^2$, $g(x) = 2x + 1$일 때 $g(f(2))$와 $f(g(2))$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$g(f(2))$</div>
+          <div>$f(2) = 4$ → $g(4) = 9$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(g(2))$</div>
+          <div>$g(2) = 5$ → $f(5) = 25$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">관찰</div>
+          <div>$g(f(2)) \neq f(g(2))$. 합성은 순서 중요.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $g(f(2))=9$, $f(g(2))=25$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 치역 추적</div>
+    <div class="problem-body">
+      $f(x) = x^2 - 4x$ ($x \in [0, 5]$)이고 $g(t) = t + 6$일 때, $h(x) = g(f(x))$의 치역을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f$의 치역</div>
+          <div>$f(x) = (x-2)^2 - 4$. $x \in [0,5]$일 때 $f(0)=0$, $f(2)=-4$ (최소), $f(5)=5$ (최대). 치역 $[-4, 5]$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g$ 적용</div>
+          <div>$g(t) = t + 6$은 단조증가. $t \in [-4, 5]$ → $g(t) \in [2, 11]$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $[2, 11]$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 대칭성 전이</div>
+    <div class="problem-body">
+      $f(x) = |x - 3|$이 $x=3$ 선대칭임을 이용하여, 임의의 함수 $g$에 대해 $h(x) = g(f(x))$도 $x=3$ 선대칭임을 설명하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f$의 대칭성</div>
+          <div>$f(3+t) = |t| = |-t| = f(3-t)$ ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$h$의 대칭성</div>
+          <div>$h(3+t) = g(f(3+t)) = g(f(3-t)) = h(3-t)$. 따라서 $h$도 $x=3$ 선대칭.</div>
+        </div>
+        <div class="tip">
+          $g$가 어떤 함수든 상관없이 성립. 속함수의 대칭성이 그대로 유전.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $h$도 $x=3$ 선대칭</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">개형 추적 + 극값</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 합성 후 최댓값</div>
+    <div class="problem-body">
+      $f(x) = x^2 - 2x$ ($x \in [-1, 3]$), $g(t) = -t^2 + 6t$. $h(x) = g(f(x))$의 최댓값과 최솟값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f$의 치역</div>
+          <div>$f(x)=(x-1)^2-1$. $x\in[-1,3]$: $f(-1)=3$, $f(1)=-1$ (최소), $f(3)=3$. 치역 $[-1, 3]$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g$의 분석</div>
+          <div>$g(t)=-(t-3)^2+9$. 꼭짓점 $(3, 9)$, 위로 볼록, $t=3$에서 최대.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$t \in [-1, 3]$ 적용</div>
+          <div>$g$는 $t \leq 3$에서 증가 → $t=-1$에서 $g(-1)=-7$ (최소), $t=3$에서 $g(3)=9$ (최대).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">결론</div>
+          <div>$h(x)$의 치역 $[-7, 9]$. <strong>최댓값 9, 최솟값 $-7$.</strong></div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 최댓값 9, 최솟값 $-7$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 극값 위치 연결</div>
+    <div class="problem-body">
+      삼차함수 $f(x) = x^3 - 3x$는 $x = -1$에서 극대, $x = 1$에서 극소이다. $g(t) = t + 2$일 때 $h(x) = g(f(x))$의 극값 위치를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">속함수 극값 위치</div>
+          <div>$f$의 극값 = $h$의 극값 (성질 전이). 따라서 $h$도 $x = \pm 1$에서 극값.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$h$ 값</div>
+          <div>$h(-1) = g(f(-1)) = g(2) = 4$ (극대 후보)<br>$h(1) = g(f(1)) = g(-2) = 0$ (극소 후보)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">대소 확인</div>
+          <div>$g$가 증가함수이므로 $f$의 극대 → $h$도 극대, $f$의 극소 → $h$도 극소. $h(-1)=4$ 극대, $h(1)=0$ 극소.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $x=-1$ 극대 4, $x=1$ 극소 0</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 겉함수 극값 위치</div>
+    <div class="problem-body">
+      $f(x) = x - 1$ (단조증가), $g(t) = t^2 - 4t$. $h(x) = g(f(x))$의 극값과 그 위치를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$g$의 극값 위치</div>
+          <div>$g'(t) = 2t-4 = 0$ → $t=2$. 위로볼록 ❌, 아래로볼록 ✔, $t=2$에서 극소 $-4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(x) = 2$ 위치</div>
+          <div>$f$가 $t=2$를 통과할 때 $h$도 극값. $f(x)=2$ → $x-1=2$ → $x=3$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">극값</div>
+          <div>$h(3) = g(2) = -4$. $f$가 단조증가라 $h$도 그 점에서 극소.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $x=3$에서 극소 $-4$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">역추적 + 조건 결합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 역추적 (이차 후보)</div>
+    <div class="problem-body">
+      다항함수 $f(x)$가 모든 실수 $x$에 대해 $(f(x))^2 = x^2(x-2)^2$를 만족한다. $f$가 최고차항 계수 $1$인 이차함수일 때 $f(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">우변 정리</div>
+          <div>$x^2(x-2)^2 = (x(x-2))^2 = (x^2 - 2x)^2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">후보</div>
+          <div>$f(x) = \pm(x^2 - 2x)$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">최고차 계수 1</div>
+          <div>$+(x^2-2x)$의 최고차 계수 1 ✔ → $f(x) = x^2 - 2x$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(x) = x^2 - 2x$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 합성 극값 개수</div>
+    <div class="problem-body">
+      $f(x) = x^2 - 4$, $g(t) = (t-3)^2$일 때 $h(x) = g(f(x))$의 극값을 모두 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">속함수 극값</div>
+          <div>$f$는 $x=0$에서 극소 $-4$. 이 점이 $h$의 극값.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">겉함수 극값 위치</div>
+          <div>$g$는 $t=3$에서 극소 $0$. $f(x) = 3$ 풀면 $x^2 = 7$ → $x = \pm\sqrt 7$. 이 두 점도 $h$의 극값.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$h$ 값 계산</div>
+          <div>
+            $h(0) = g(-4) = (-4-3)^2 = 49$<br>
+            $h(\pm\sqrt 7) = g(3) = 0$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">증감 분석</div>
+          <div>
+            $h(x) = (x^2 - 4 - 3)^2 = (x^2 - 7)^2$<br>
+            $h'(x) = 2(x^2-7)\cdot 2x = 4x(x^2-7)$ → 0이 되는 $x = 0, \pm\sqrt 7$<br>
+            부호 변화로 $x=\pm\sqrt 7$ 극소(값 0), $x=0$ 극대(값 49).
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">극대: $x=0$, $h=49$ &nbsp; 극소: $x=\pm\sqrt 7$, $h=0$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 본질 + 역추적 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (대칭성 + 합성)</div>
+    <div class="problem-body">
+      $f(x) = (x-2)^2$ ($x=2$에 대해 선대칭), $g(t)$는 어떤 다항함수이다. $h(x) = g(f(x))$가 $x=2$에서 극값 $5$를 갖고, $h(0) = h(4) = 21$일 때 $g$의 식을 구하시오. (단, $g$는 일차함수)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">대칭성 확인</div>
+          <div>$f$가 $x=2$ 선대칭 → $h$도 $x=2$ 선대칭. $h(0)=h(4)$ 자동 성립 ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f$ 값</div>
+          <div>$f(2) = 0$, $f(0) = f(4) = 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g$ 일차 가정</div>
+          <div>$g(t) = at + b$.<br>
+          $h(2) = g(0) = b = 5$<br>
+          $h(0) = g(4) = 4a + b = 4a + 5 = 21$ → $4a = 16$ → $a = 4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g$ 결정</div>
+          <div>$g(t) = 4t + 5$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검증</div>
+          <div>$h(x) = 4(x-2)^2 + 5$. $h(2)=5$ ✔ 극값, $h(0)=h(4)=21$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $g(t) = 4t + 5$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (역추적 + 단조성)</div>
+    <div class="problem-body">
+      연속함수 $f(x)$가 $(f(x))^2 = (x-1)^2(x-5)^2$을 모든 $x$에서 만족한다. $f$는 다항함수이며, $f(0) = -5$, $f(3) > 0$이다. $f(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">우변 정리</div>
+          <div>$(x-1)^2(x-5)^2 = ((x-1)(x-5))^2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">후보</div>
+          <div>$f(x) = \pm (x-1)(x-5)$ — 두 후보.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(0) = -5$</div>
+          <div>$+(0-1)(0-5) = 5$ vs $-5$. $-5$가 맞음 → $f(x) = -(x-1)(x-5)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(3)$ 검증</div>
+          <div>$f(3) = -(3-1)(3-5) = -(2)(-2) = 4 > 0$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(x) = -(x-1)(x-5) = -x^2 + 6x - 5$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (개형 + 극값 개수)</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 3x$, $g(t) = t^2$일 때 $h(x) = g(f(x))$의 극값의 개수를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">합성식</div>
+          <div>$h(x) = (x^3 - 3x)^2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">미분</div>
+          <div>$h'(x) = 2(x^3-3x)(3x^2-3) = 6(x^3-3x)(x^2-1) = 6x(x^2-3)(x-1)(x+1)$<br>
+          $= 6x(x-\sqrt 3)(x+\sqrt 3)(x-1)(x+1)$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$h'(x)=0$인 $x$</div>
+          <div>$x = 0, \pm 1, \pm\sqrt 3$ — 총 5개.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">극값 판정</div>
+          <div>$h(x) \geq 0$ (제곱). $f$의 근 $x = 0, \pm\sqrt 3$에서 $h=0$ → 극소.<br>
+          $f$의 극값 위치 $x = \pm 1$에서 $f = \mp 2$, $h = 4$ → 극대.<br>
+          총 5개의 극값.</div>
+        </div>
+        <div class="tip">
+          <strong>본질 적용:</strong> $f$의 근 (3개) → $h$의 극소 3개, $f$의 극값 위치 (2개) → $h$의 극대 2개. 합 5개.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 극값 5개 (극대 2개, 극소 3개)</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700">개형 추적</td>
+          <td>속함수 치역 → 겉함수 정의역</td>
+          <td>$h$의 모양·범위 파악</td>
+        </tr>
+        <tr style="background:#ffebee">
+          <td style="font-weight:700">성질 전이</td>
+          <td>대칭·주기는 그대로 유전</td>
+          <td>$h$의 대칭축·주기 즉시 결정</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700">극값 결합</td>
+          <td>$f$의 극값 + $g$의 극값 통과점</td>
+          <td>$h$의 극값 위치 전부 찾기</td>
+        </tr>
+        <tr style="background:#ffebee">
+          <td style="font-weight:700">역추적</td>
+          <td>$h, g$로 $f$ 후보 찍기</td>
+          <td>연속·단조 등 조건으로 좁히기</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① 합성함수 보면 <strong>식 전개 X</strong>, 개형 추적 O.<br>
+    ② 속함수 대칭축·주기 있으면 합성에 그대로 유전.<br>
+    ③ $h$의 극값 = $f$의 극값 위치 ∪ $f$가 $g$의 극값을 통과하는 위치.<br>
+    ④ $(f(x))^2 = (\text{식})^2$ 보면 부호 후보 ±, 조건으로 결정.<br>
+    ⑤ 속함수가 일대일 아닐 때 합성은 정보 손실 — 그 부분 주의.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/qGmymKVvGUw" target="_blank" rel="noopener" style="color:var(--primary)">대치동 어둠의 스킬(X), 합성함수의 본질(O)</a><br>
+    📅 자료 생성: 2026-05-15 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+</body>
+</html>
