@@ -106,7 +106,10 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
 3. **자료 생성**: `youtube-math-lesson` 본 스킬 호출 — 박PM 페르소나, 8단계 페르소나, 5단계 워크플로우
 4. **출력 경로**: `youtube-math-auto/scripts/output_path.py` 의 `build_output_path()` 로 정확한 경로 빌드
 5. **카탈로그 갱신**: `python youtube-math-auto/scripts/regen_index.py output/`
-6. **push**: 위 "자동 push" 단계
+6. **PDF 인쇄 모드 컴포넌트 패치**: `python youtube-math-auto/scripts/patch_pdf_mode.py output/`
+   - 새 자료 HTML 의 `<head>`/`</body>` 에 `pdf-mode.css`·`pdf-mode.js` 참조 자동 삽입 (idempotent)
+   - 학생이 자료 페이지에서 "🖨 PDF 인쇄 모드" 토글 → 해설을 뒷장으로 분리 → Ctrl/Cmd+P 로 PDF 저장 (노트앱·종이 인쇄용)
+7. **push**: 위 "자동 push" 단계
 
 ## 🎯 학습자 수준 가이드 (반드시 적용)
 
