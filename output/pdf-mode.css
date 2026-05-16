@@ -1,0 +1,200 @@
+/* ========================================================================
+ * pdf-mode.css — 학습자료 PDF 인쇄 모드 (2026-05-15)
+ * 토글 시 인쇄 친화 레이아웃 + @page A4 + 문제↔해설 분리
+ * ========================================================================
+ */
+
+/* ===== 인쇄 모드 토글 버튼 (화면 상단 고정) ===== */
+.pdf-toolbar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+}
+
+.pdf-toolbar button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.pdf-toolbar button:hover { background: #0d47a1; }
+.pdf-toolbar button.exit { background: #c62828; }
+.pdf-toolbar button.exit:hover { background: #8e0000; }
+
+/* ===== 화면에서 인쇄 모드 미리보기 ===== */
+body.print-mode .pdf-toolbar { /* 토글바 자체는 인쇄 시 숨김 (@media print에서) */ }
+
+body.print-mode .hero,
+body.print-mode .video-card,
+body.print-mode .controls,
+body.print-mode .pdf-toolbar { /* hero·영상카드·필터 메타 요소 숨김 */ }
+
+/* 인쇄 모드 화면 미리보기 — 핵심 시각 변화 */
+body.print-mode {
+  background: #fff !important;
+}
+
+body.print-mode .container {
+  max-width: none;
+  padding: 12mm 15mm;
+}
+
+/* 인쇄 모드: hero 영역 축소, 컴팩트 헤더로 */
+body.print-mode .hero {
+  background: #fff !important;
+  color: #000 !important;
+  padding: 0 0 16px 0 !important;
+  text-align: left;
+  border-bottom: 2px solid #333;
+  margin-bottom: 24px;
+}
+body.print-mode .hero .tag,
+body.print-mode .hero .quote,
+body.print-mode .hero .video-card { display: none !important; }
+body.print-mode .hero h1 {
+  font-size: 1.4rem !important;
+  color: #000 !important;
+  margin-bottom: 4px;
+}
+body.print-mode .hero p {
+  font-size: 13px !important;
+  color: #555 !important;
+  opacity: 1 !important;
+  margin: 0;
+}
+
+/* 풀이 공간 — 문제 카드 사이 여유 */
+body.print-mode .problem-card {
+  page-break-inside: avoid;
+  margin-bottom: 3cm; /* 학생이 손글씨 풀이 쓸 자리 */
+  border: 1px solid #999;
+  box-shadow: none;
+}
+
+/* 인쇄 모드에서 해설(details)는 문제 카드에서 빠져 맨 뒤 섹션으로 이동 */
+body.print-mode .problem-card details { display: none; }
+
+/* 인쇄 모드에서 추가되는 placeholder */
+body.print-mode .problem-card .answer-ref {
+  font-size: 13px;
+  color: #999;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* 정답·해설 분리 섹션 */
+.answer-section {
+  display: none; /* 일반 보기에서는 숨김 */
+}
+body.print-mode .answer-section {
+  display: block;
+  page-break-before: always; /* 새 페이지에서 시작 */
+  margin-top: 32px;
+}
+body.print-mode .answer-section .answer-cover {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 80px 0 40px;
+  letter-spacing: 0.1em;
+  color: #0d47a1;
+}
+body.print-mode .answer-section .answer-block {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  page-break-inside: avoid;
+  background: #fafafa;
+}
+body.print-mode .answer-section .answer-block .a-title {
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+/* 카드·박스 페이지 친화 */
+body.print-mode .card,
+body.print-mode .example-card,
+body.print-mode .concept-box,
+body.print-mode .formula-box,
+body.print-mode .visual,
+body.print-mode .tip,
+body.print-mode .caution {
+  page-break-inside: avoid;
+  box-shadow: none;
+}
+
+body.print-mode .visual {
+  background: #f5f5f5 !important;
+}
+
+/* 인쇄 모드에서 details 안의 summary(버튼) 인쇄 X */
+body.print-mode summary { display: none; }
+body.print-mode details[open] > .solution { display: block; }
+
+/* ===== 실제 인쇄 시점 (@media print) ===== */
+@media print {
+  @page {
+    size: A4;
+    margin: 20mm 15mm;
+  }
+
+  /* 토글바 인쇄 X */
+  .pdf-toolbar { display: none !important; }
+
+  /* 인쇄 시 배경·그림자 제거 */
+  body { background: #fff !important; }
+  .card, .problem-card, .answer-section .answer-block {
+    box-shadow: none !important;
+  }
+
+  /* 페이지 마지막에 페이지 번호 */
+  .container::after {
+    content: counter(page);
+    position: fixed;
+    bottom: 5mm;
+    right: 10mm;
+    font-size: 10pt;
+    color: #999;
+  }
+
+  /* 색상 인쇄용 — 일부 프린터는 배경 인쇄 안 함 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* ===== 인쇄 모드 안내 배너 (화면용) ===== */
+.print-mode-banner {
+  display: none;
+}
+body.print-mode .print-mode-banner {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: #fff3e0;
+  border-bottom: 2px solid #ff9800;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #e65100;
+  text-align: center;
+  font-weight: 600;
+}
+@media print {
+  .print-mode-banner { display: none !important; }
+}
