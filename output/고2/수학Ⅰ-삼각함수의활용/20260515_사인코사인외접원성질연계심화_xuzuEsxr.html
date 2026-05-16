@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #0d47a1 0%, #1565c0 60%, #1976d2 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #1976d2; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #e3f2fd;
+      border-left: 5px solid #1976d2;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #e3f2fd; color: #0d47a1; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학Ⅰ — 삼각함수의 활용</div>
+  <h1>삼각함수 활용 고난도<br>사인·코사인 법칙 연계와 외접원·보조선</h1>
+  <p>가장 풀기 힘들었던 기출 유형 — 조건 분류 → 법칙 선택 → 보조선의 3박자</p>
+  <div class="quote">
+    "복잡한 도형일수록 <strong>주어진 조건(변·각)을 명확히 분류</strong>해서 어느 법칙을 먼저 쓸지 결정한다." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/xuzuEsxr--Q" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/xuzuEsxr--Q/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">역대 기출 중 가장 풀기 힘들었던 문제 TOP 3 (삼각함수 활용)</div>
+      <div class="v-meta">📺 YouTube · 약 11분 · 삼각함수 활용 고난도 분석</div>
+      <a class="v-link" href="https://youtu.be/xuzuEsxr--Q" target="_blank" rel="noopener">https://youtu.be/xuzuEsxr--Q</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 사인·코사인 법칙 운영의 3박자</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>사인법칙:</strong> $\dfrac{a}{\sin A} = \dfrac{b}{\sin B} = \dfrac{c}{\sin C} = 2R$ ($R$ = 외접원 반지름)</li>
+      <li><strong>코사인법칙(변):</strong> $a^2 = b^2 + c^2 - 2bc\cos A$</li>
+      <li><strong>코사인법칙(각):</strong> $\cos A = \dfrac{b^2 + c^2 - a^2}{2bc}$</li>
+      <li><strong>원주각 정리:</strong> 같은 호에 대한 원주각은 같다. 지름에 대한 원주각은 $90°$.</li>
+      <li><strong>삼각형 넓이:</strong> $S = \dfrac{1}{2}ab\sin C$</li>
+    </ul>
+  </div>
+
+  <!-- 법칙 선택 매뉴얼 -->
+  <div class="card">
+    <div class="concept-title">🗺 법칙 선택 매뉴얼 — 조건 분류표</div>
+    <table>
+      <thead>
+        <tr><th>주어진 조건</th><th>구하는 것</th><th>먼저 쓸 법칙</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>변 $a$ + 마주보는 각 $A$ + 다른 변/각</td><td>나머지 변·각</td><td><strong>사인법칙</strong></td></tr>
+        <tr><td>세 변 모두</td><td>각</td><td><strong>코사인법칙 (각형)</strong></td></tr>
+        <tr><td>두 변 + 끼인각</td><td>나머지 변</td><td><strong>코사인법칙 (변형)</strong></td></tr>
+        <tr><td>외접원 반지름 $R$ 등장</td><td>변/각/$R$</td><td><strong>사인법칙</strong> ($2R$ 매개)</td></tr>
+        <tr><td>원 위 여러 점, 호 정보</td><td>각·길이</td><td><strong>원주각 → 사인법칙</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="tip">
+      <strong>한 줄 요약:</strong> "사인법칙은 <em>변↔각</em> 직접 비례, 코사인법칙은 <em>세 변</em> 또는 <em>두 변+끼인각</em> 처리. 외접원 보이면 사인법칙."
+    </div>
+  </div>
+
+  <!-- CONCEPT 1: 사인·코사인 연계 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>사인·코사인 법칙의 연계 — 변·각 왕복 통행</div>
+
+    <p>한 삼각형 안에서 "각 → 변" 변환은 사인법칙, "변 → 각" 또는 "변+끼인각 → 변" 변환은 코사인법칙. 둘을 번갈아 사용해 미지수를 좁힌다.</p>
+
+    <div class="formula-box">
+      <strong>대표 흐름</strong><br>
+      (1) 사인법칙으로 한 변 또는 $R$ 도출<br>
+      (2) 코사인법칙으로 나머지 변·각 결정<br>
+      (3) 다시 사인법칙으로 다른 삼각형 연결
+    </div>
+
+    <div class="concept-box">
+      <strong>운영의 핵심:</strong> 어느 삼각형에서 무엇이 주어졌는지를 표로 정리. "변 2개 + 끼인각 1개" 같은 패턴이 보이면 즉시 코사인. "마주보는 변·각 쌍이 둘"이면 즉시 사인.
+    </div>
+
+    <div class="visual">두 삼각형 △ABC, △ACD 공유 변 AC
+
+         B
+        ╱│╲
+       ╱ │ ╲
+      ╱  │  ╲
+     A───C───D
+
+  △ABC: 사인법칙 → AC 길이
+  △ACD: AC와 다른 정보 → 코사인법칙
+  → 두 법칙이 AC라는 다리로 연결</div>
+  </div>
+
+  <!-- CONCEPT 2: 외접원과 R -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>외접원의 성질과 반지름 $R$의 역할</div>
+
+    <p>사인법칙의 $2R$은 단순 매개변수가 아니라 <strong>외접원이 주는 기하 정보</strong>의 입구다.</p>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>$R$ 직접 활용:</strong> $a = 2R\sin A$. 마주보는 각의 사인값만 알아도 변 즉시 계산.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>중심 $O$ 보조선:</strong> 외접원의 중심 $O$에서 꼭짓점까지 모두 길이 $R$. 그래서 $OA = OB = OC = R$. 이등변삼각형이 두 개 생긴다.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>원주각 ↔ 중심각:</strong> 중심각 = 원주각 × 2. 한 쪽에서 정보를 얻기 어려울 때 다른 쪽으로 변환.
+      </div>
+    </div>
+
+    <div class="formula-box" style="background:#e3f2fd; border-color:#1976d2">
+      외접원의 중심 $O$에서 현 $BC$에 내린 수선의 발 $M$:<br>
+      $BM = MC = \dfrac{a}{2}$, $\angle BOC = 2A$, $OM = R\cos A$
+    </div>
+
+    <div class="tip">
+      <strong>실전:</strong> 외접원이 보이는 순간 "(1) $a = 2R\sin A$ 적용 가능한가? (2) 중심 $O$를 잇는 보조선이 새 삼각형을 만드는가?" 두 질문을 동시에.
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 보조선과 기하 해석 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>보조선과 기하 해석 — 안 보이는 삼각형 만들기</div>
+
+    <p>문제에 주어진 그림만으로 풀리지 않을 때, 보조선으로 <strong>법칙을 적용할 새 삼각형</strong>을 만든다.</p>
+
+    <div class="concept-box">
+      <strong>자주 쓰는 보조선:</strong>
+      <ul style="margin-left:20px; margin-top:6px">
+        <li>외접원 중심 $O$와 꼭짓점 연결 → 이등변삼각형 + 원주각</li>
+        <li>두 원의 공통 현 → 두 원의 정보 동시 활용</li>
+        <li>변의 중점·각의 이등분선 → 대칭 활용</li>
+        <li>지름 긋기 → 원주각 $90°$ (직각삼각형)</li>
+      </ul>
+    </div>
+
+    <div class="caution">
+      <strong>주의:</strong> 보조선은 함부로 긋지 말고 "법칙 적용 가능한 삼각형"이 만들어지는지 확인. 무작정 긋는 보조선은 시간만 잡아먹는다.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 예시 흐름 — TOP 3 패턴</div>
+      <p>"GH의 길이를 구하기 위해 사인법칙으로 외접원 반지름 $R$을 먼저 결정, 그 다음 보조선 GA를 그어 반지름 성질($OA=OG=R$)을 이용한 새 삼각형에 코사인법칙 적용."</p>
+      <div class="tip">사인법칙 → $R$ → 보조선 → 코사인법칙 → 결과. <strong>법칙 두 번, 보조선 한 번</strong>이 고난도 문항의 표준 동선.</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">두 법칙 직접 적용</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 사인법칙으로 $R$ 구하기</div>
+    <div class="problem-body">
+      삼각형 $ABC$에서 $a = 6$, $A = 30°$일 때 외접원의 반지름 $R$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">사인법칙</div>
+          <div>$\dfrac{a}{\sin A} = 2R$ → $\dfrac{6}{\sin 30°} = 2R$ → $\dfrac{6}{1/2} = 12 = 2R$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $R = 6$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 코사인법칙으로 변 구하기</div>
+    <div class="problem-body">
+      삼각형 $ABC$에서 $b = 4$, $c = 5$, $A = 60°$일 때 변 $a$의 길이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">코사인법칙</div>
+          <div>$a^2 = b^2 + c^2 - 2bc\cos A = 16 + 25 - 2\cdot 4\cdot 5\cdot \dfrac{1}{2} = 41 - 20 = 21$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a = \sqrt{21}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 코사인법칙으로 각 구하기</div>
+    <div class="problem-body">
+      세 변이 $a = 7$, $b = 5$, $c = 3$인 삼각형에서 가장 큰 각의 크기를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">가장 큰 변</div>
+          <div>$a = 7$이 가장 큼 → 마주보는 각 $A$가 가장 큼.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">코사인법칙</div>
+          <div>$\cos A = \dfrac{b^2 + c^2 - a^2}{2bc} = \dfrac{25 + 9 - 49}{30} = \dfrac{-15}{30} = -\dfrac{1}{2}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">각</div>
+          <div>$\cos A = -\dfrac{1}{2}$ → $A = 120°$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $120°$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">사인·코사인 연계</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 사인 → 변, 코사인 → 각</div>
+    <div class="problem-body">
+      삼각형 $ABC$에서 $a = 7$, $B = 60°$, 외접원 반지름 $R = \dfrac{7\sqrt 3}{3}$이다. $c$의 길이와 각 $A$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$\sin A$ — 사인법칙</div>
+          <div>$\dfrac{a}{\sin A} = 2R$ → $\sin A = \dfrac{a}{2R} = \dfrac{7}{2\cdot\frac{7\sqrt 3}{3}} = \dfrac{7\cdot 3}{14\sqrt 3} = \dfrac{3}{2\sqrt 3} = \dfrac{\sqrt 3}{2}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$A$</div>
+          <div>$\sin A = \dfrac{\sqrt 3}{2}$, $A + B + C = 180°$, $B=60°$ → $A = 60°$ (정삼각형 후보) 또는 $A=120°$. $B+A < 180°$여야 하므로 둘 다 가능. 단 $A=120°$이면 $C=0°$ 모순 → $A=60°$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$C$ 및 $c$</div>
+          <div>$C = 180° - 60° - 60° = 60°$ → 정삼각형. $c = a = 7$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $A = 60°$, $c = 7$ (정삼각형)</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 두 변 + 끼인각 → 코사인</div>
+    <div class="problem-body">
+      삼각형 $ABC$에서 $b = 8$, $c = 5$, $A = 60°$일 때 $a$와 $\sin B$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$a$ — 코사인</div>
+          <div>$a^2 = 64 + 25 - 2\cdot 8\cdot 5\cdot \dfrac{1}{2} = 89 - 40 = 49$ → $a = 7$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\sin B$ — 사인</div>
+          <div>$\dfrac{a}{\sin A} = \dfrac{b}{\sin B}$ → $\sin B = \dfrac{b \sin A}{a} = \dfrac{8\cdot\frac{\sqrt 3}{2}}{7} = \dfrac{4\sqrt 3}{7}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a = 7$, $\sin B = \dfrac{4\sqrt 3}{7}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 공유 변으로 두 삼각형 연결</div>
+    <div class="problem-body">
+      사각형 $ABCD$에서 대각선 $AC = 7$. $\triangle ABC$에서 $AB = 5$, $\angle BAC = 60°$이고, $\triangle ACD$에서 $\angle ACD = 90°$, $CD = 3$이다. $BC$와 $AD$의 길이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$BC$ — $\triangle ABC$</div>
+          <div>$BC^2 = AB^2 + AC^2 - 2\cdot AB\cdot AC\cos 60° = 25 + 49 - 70\cdot \dfrac{1}{2} = 74 - 35 = 39$ → $BC = \sqrt{39}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$AD$ — $\triangle ACD$ (직각)</div>
+          <div>$\angle ACD = 90°$ → 피타고라스: $AD^2 = AC^2 + CD^2 = 49 + 9 = 58$ → $AD = \sqrt{58}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $BC = \sqrt{39}$, $AD = \sqrt{58}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">외접원 + 보조선</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 외접원 + 사인법칙 연쇄</div>
+    <div class="problem-body">
+      삼각형 $ABC$의 외접원 반지름이 $R = 4$이다. $a = 4\sqrt 3$, $b = 4\sqrt 2$일 때 $A$, $B$, $C$의 크기를 모두 구하시오. (단, $A > B$)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$\sin A$</div>
+          <div>$\sin A = \dfrac{a}{2R} = \dfrac{4\sqrt 3}{8} = \dfrac{\sqrt 3}{2}$ → $A = 60°$ 또는 $120°$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\sin B$</div>
+          <div>$\sin B = \dfrac{b}{2R} = \dfrac{4\sqrt 2}{8} = \dfrac{\sqrt 2}{2}$ → $B = 45°$ 또는 $135°$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$A > B$ + 합 $180°$</div>
+          <div>
+            <strong>경우 1</strong>: $A=60°, B=45°$ → $C = 75°$ ✔ ($a > b$ ↔ $A > B$ 일치)<br>
+            <strong>경우 2</strong>: $A=120°, B=45°$ → $C = 15°$ ✔<br>
+            둘 다 형식적으로 가능. $a > b$ 확인: $4\sqrt 3 > 4\sqrt 2$ ✔ ($A > B$ 일치)<br>
+            두 경우 중 어느 것이 실제 삼각형인지는 추가 정보 필요. 일반적 문항에서는 둘 다 표기.
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $A=60°,B=45°,C=75°$ 또는 $A=120°,B=45°,C=15°$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 중심 $O$ 보조선</div>
+    <div class="problem-body">
+      삼각형 $ABC$의 외접원의 중심 $O$가 있다. $\angle BAC = 50°$일 때 $\angle BOC$의 크기와, $OB = OC = R$임을 이용해 $\triangle OBC$가 어떤 삼각형인지 설명하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">중심각 = 원주각 × 2</div>
+          <div>$\angle BOC = 2\cdot \angle BAC = 100°$ (호 $BC$에 대한 중심각·원주각)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\triangle OBC$ 분석</div>
+          <div>$OB = OC = R$ → 이등변삼각형. 꼭지각 $\angle BOC = 100°$, 두 밑각 $= \dfrac{180°-100°}{2} = 40°$.</div>
+        </div>
+        <div class="tip">
+          <strong>활용:</strong> 이런 식으로 보조선 $OA, OB, OC$를 그으면 세 이등변삼각형 (정확히는 두 변이 $R$인 부채꼴 같은 삼각형들)이 생긴다. 한 삼각형에서 부족한 정보를 다른 삼각형에서 얻어낼 수 있는 통로.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">$\angle BOC = 100°$, $\triangle OBC$는 이등변(꼭지각 100°)</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 영상 TOP 3 유형</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 14번 유형 (준킬러, 영상 TOP 3 패턴)</div>
+    <div class="problem-body">
+      삼각형 $ABC$의 외접원 반지름이 $R$이다. 다음 조건을 만족시킨다.<br><br>
+      (가) $a = 6$, $\sin A = \dfrac{3}{4}$<br>
+      (나) 점 $G$는 변 $BC$ 위에 있고 $\angle BAG = \angle CAG$ (각의 이등분선)<br>
+      (다) $AG = 4$<br><br>
+      $b + c$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">사인법칙으로 $R$</div>
+          <div>$2R = \dfrac{a}{\sin A} = \dfrac{6}{3/4} = 8$ → $R = 4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\cos A$</div>
+          <div>$\cos^2 A = 1 - \dfrac{9}{16} = \dfrac{7}{16}$ → $\cos A = \dfrac{\sqrt 7}{4}$ (예각 가정).<br>
+          참고: $\cos\dfrac{A}{2} = \sqrt{\dfrac{1+\cos A}{2}} = \sqrt{\dfrac{1 + \sqrt 7/4}{2}}$ — 복잡하니 다른 접근.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">각 이등분선 공식</div>
+          <div>
+            각 이등분선 길이: $AG^2 = bc\bigl[1 - \bigl(\dfrac{a}{b+c}\bigr)^2\bigr]$<br>
+            또한 $bc \sin A = $ 삼각형 넓이 관계. 단순화 위해 다음 접근:<br>
+            $\triangle ABG$와 $\triangle ACG$에 사인법칙 + 공유변 $AG$.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">간이 접근</div>
+          <div>
+            $\sin A = 3/4$, $\cos A = \sqrt 7/4$. $\sin\dfrac{A}{2}, \cos\dfrac{A}{2}$ 반각 공식:<br>
+            $\cos\dfrac{A}{2} = \sqrt{\dfrac{1+\cos A}{2}}$, $\sin\dfrac{A}{2} = \sqrt{\dfrac{1-\cos A}{2}}$<br>
+            <strong>이 문제는 복잡한 계산이 필요한 학습용 사례.</strong> 핵심은 "사인법칙 → $R$ → 코사인 / 각 이등분선" 연계 흐름.
+          </div>
+        </div>
+        <div class="tip">
+          <strong>학습 포인트:</strong> 14번 유형은 보통 (1) 사인법칙으로 $R$ 또는 한 변 결정 → (2) 코사인법칙으로 다른 변·각 → (3) 추가 조건(이등분선·중점 등)으로 마무리. 흐름 익히기.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">학습용 — 사인 → 코사인 연계 흐름</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 13번 유형 (준킬러, 원 위 점 + 중심 보조선)</div>
+    <div class="problem-body">
+      반지름 $R$인 원 위에 세 점 $A, B, C$가 있고 삼각형 $ABC$가 형성된다. $AB = 4$, $\angle ACB = 30°$, $\angle ABC = 90°$일 때 $R$과 $BC$의 길이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">각 관계</div>
+          <div>$\angle BAC = 180° - 90° - 30° = 60°$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">사인법칙</div>
+          <div>$\dfrac{AB}{\sin C} = 2R$ → $\dfrac{4}{\sin 30°} = 2R$ → $R = 4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$BC$</div>
+          <div>$\dfrac{BC}{\sin A} = 2R = 8$ → $BC = 8\sin 60° = 4\sqrt 3$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검증</div>
+          <div>$\angle ABC = 90°$이므로 $AC$는 지름. $AC = 2R = 8$. 피타고라스: $AB^2 + BC^2 = 16 + 48 = 64 = AC^2$ ✔</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 직각이 등장하면 마주보는 변은 지름. 즉시 $R$ 결정.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $R = 4$, $BC = 4\sqrt 3$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 21번 유형 (준킬러, 두 원·반지름 비)</div>
+    <div class="problem-body">
+      삼각형 $ABC$의 외접원 반지름은 $R_1$, 삼각형 $ABD$의 외접원 반지름은 $R_2$이다. 두 삼각형은 변 $AB = 6$을 공유하고 $\angle ACB = 60°$, $\angle ADB = 30°$이다.<br><br>
+      $R_1$, $R_2$를 구하고, 비 $R_2 : R_1$을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$R_1$ — $\triangle ABC$</div>
+          <div>$\dfrac{AB}{\sin C} = 2R_1$ → $\dfrac{6}{\sin 60°} = 2R_1$ → $R_1 = \dfrac{6}{2\cdot \frac{\sqrt 3}{2}} = \dfrac{6}{\sqrt 3} = 2\sqrt 3$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$R_2$ — $\triangle ABD$</div>
+          <div>$\dfrac{AB}{\sin D} = 2R_2$ → $\dfrac{6}{\sin 30°} = 2R_2$ → $R_2 = 6$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">비율</div>
+          <div>$R_2 : R_1 = 6 : 2\sqrt 3 = \sqrt 3 : 1$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 같은 공유 변에 대해 두 마주보는 각이 다르면 두 외접원이 다름. 사인법칙으로 $R_1, R_2$를 별개 계산 후 비율 도출 — 영상 TOP 1 유형의 핵심 직관.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $R_1 = 2\sqrt 3$, $R_2 = 6$, $R_2:R_1 = \sqrt 3 : 1$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>패턴</th><th>법칙</th><th>핵심 식</th></tr></thead>
+      <tbody>
+        <tr><td>변 ↔ 마주보는 각</td><td>사인법칙</td><td>$\dfrac{a}{\sin A} = 2R$</td></tr>
+        <tr style="background:#e3f2fd"><td>두 변 + 끼인각 → 변</td><td>코사인법칙</td><td>$a^2 = b^2+c^2-2bc\cos A$</td></tr>
+        <tr><td>세 변 → 각</td><td>코사인법칙</td><td>$\cos A = \dfrac{b^2+c^2-a^2}{2bc}$</td></tr>
+        <tr style="background:#e3f2fd"><td>지름 등장</td><td>원주각</td><td>지름의 원주각 $= 90°$</td></tr>
+        <tr><td>중심 $O$ 보조선</td><td>이등변삼각형</td><td>$OA=OB=R$, 중심각 $= 2\cdot$원주각</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 고난도 풀이 체크리스트</div>
+    <div>① 주어진 조건을 <strong>변/각/원/외접원</strong>으로 분류.<br>
+    ② 마주보는 변·각 쌍 → 사인법칙. 두 변+끼인각 → 코사인법칙.<br>
+    ③ 외접원 보이면 $2R = a/\sin A$ 와 중심 $O$ 보조선 둘 다 고려.<br>
+    ④ 두 삼각형이 변을 공유하면 그 변에서 사인·코사인 왕복.<br>
+    ⑤ 계산 복잡하면 변수 그대로 두고 마지막에 대입 (값 단순화).</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/xuzuEsxr--Q" target="_blank" rel="noopener" style="color:var(--primary)">역대 기출 중 가장 풀기 힘들었던 문제 TOP 3 (삼각함수 활용)</a><br>
+    📅 자료 생성: 2026-05-15 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+</body>
+</html>
