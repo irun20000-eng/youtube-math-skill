@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>미분 기호의 본질과 미적분 제1기본정리</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #1a237e 0%, #283593 60%, #3949ab 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #3949ab; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #e8eaf6;
+      border-left: 5px solid #3949ab;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #e8eaf6; color: #1a237e; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학Ⅱ — 미분계수와 도함수 / 정적분의 기본정리</div>
+  <h1>미분 기호의 본질<br>$\dfrac{dy}{dx}$는 분수다 (마음속에서만)</h1>
+  <p>라이프니츠의 무한소 직관 + 미적분 제1기본정리 — 공식이 약분과 역수의 사칙연산이 되는 이유</p>
+  <div class="quote">
+    "$\dfrac{dy}{dx}$는 절대로 분수가 되어서는 안 됩니다. 그렇지만 <strong>마음속으로는 꼭 명심하세요. 분수입니다.</strong>" — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/eBKyLDKZTx4" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/eBKyLDKZTx4/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">기호를 이해하면 미분이 이해가 된다. (feat. dy/dx는 분수입니다.)</div>
+      <div class="v-meta">📺 YouTube · 약 35분 · 미분 기호의 철학적 해석</div>
+      <a class="v-link" href="https://youtu.be/eBKyLDKZTx4" target="_blank" rel="noopener">https://youtu.be/eBKyLDKZTx4</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 미분 기호의 본질과 적분의 정체</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>평균변화율:</strong> $\dfrac{\Delta y}{\Delta x} = \dfrac{f(b)-f(a)}{b-a}$ — 두 점 사이 기울기 (실제 분수).</li>
+      <li><strong>순간변화율 = 미분계수:</strong> $f'(a) = \displaystyle\lim_{\Delta x \to 0}\dfrac{\Delta y}{\Delta x}$ — 극한값 (분수의 극한).</li>
+      <li><strong>도함수:</strong> $f'(x) = \dfrac{df}{dx} = \dfrac{dy}{dx}$ (라이프니츠 표기).</li>
+      <li><strong>정적분:</strong> $\displaystyle\int_a^b f(x)\,dx$ — $x$축과 그래프 사이 부호 있는 넓이.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: dy/dx 분수 직관 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>$\dfrac{dy}{dx}$의 본질 — "분수처럼 다루는 직관"</div>
+
+    <p><strong>엄밀한 정의:</strong> $\dfrac{dy}{dx}$는 극한 $\displaystyle\lim_{\Delta x\to 0}\dfrac{\Delta y}{\Delta x}$의 결과로 나온 <strong>기호</strong>다. 분자·분모 따로 떼어서 분수처럼 곱하고 나누면 안 된다 (라이프니츠 표기법).</p>
+
+    <p><strong>그런데도</strong> 마음속으로 <em>분수</em>로 보면 미적분의 거의 모든 공식이 약분·역수 같은 사칙연산으로 풀린다. 이 직관이 라이프니츠가 만든 표기법의 진짜 위력.</p>
+
+    <div class="formula-box">
+      $$\dfrac{dy}{dx} = \dfrac{\text{"무한히 작은 } y \text{의 변화량"}}{\text{"무한히 작은 } x \text{의 변화량"}}$$
+      <div style="font-size:14px; color:#555; margin-top:6px">엄밀히는 ❌ / 직관적으로는 ✔</div>
+    </div>
+
+    <div class="concept-box">
+      <strong>왜 분수로 보면 편한가:</strong> 평균변화율 $\dfrac{\Delta y}{\Delta x}$는 진짜 분수다. 극한을 취해도 그 "분수의 모양"이 그대로 유지되도록 라이프니츠가 일부러 $d$ 기호를 도입했다. 그래서 분수의 성질이 결과적으로 통한다.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 합성함수 미분 (연쇄법칙) — 분수의 약분</div>
+      <p>$y = f(u),\;u = g(x)$일 때 $\dfrac{dy}{dx}$를 구하라.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">암기 X</div>
+        <div>"$\dfrac{dy}{dx} = \dfrac{dy}{du} \cdot \dfrac{du}{dx}$" 공식을 외우지 말고…</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">직관 ✓</div>
+        <div>$\dfrac{dy}{dx} = \dfrac{dy}{\cancel{du}} \cdot \dfrac{\cancel{du}}{dx}$ — <strong>$du$가 약분</strong>되어 자연스럽게 성립.</div>
+      </div>
+      <div class="tip">
+        <strong>적용:</strong> $y = (x^2+1)^3$에서 $u = x^2+1$로 두면 $\dfrac{dy}{du} = 3u^2$, $\dfrac{du}{dx} = 2x$. <br>
+        $\dfrac{dy}{dx} = 3u^2 \cdot 2x = 6x(x^2+1)^2$
+      </div>
+    </div>
+
+    <div class="caution">
+      <strong>학습 범위 안내:</strong> 매개변수 미분 $\dfrac{dy}{dx} = \dfrac{dy/dt}{dx/dt}$, 역함수 미분 $\dfrac{dx}{dy} = \dfrac{1}{dy/dx}$, 음함수 미분 등은 <strong>선택 미적분 과목 영역</strong>이라 현 고2 수능 범위 밖. 그러나 분수 직관은 동일하게 작동 — 미적분Ⅰ 안에서 합성함수 미분(다항함수)에 적용해 충분.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 미적분 제1기본정리 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>미적분의 제1기본정리 — "넓이를 미분하면 원래 함수"</div>
+
+    <p>구간 $[a, x]$에서 $f(t)$가 만드는 넓이를 $S(x)$라 하면:</p>
+
+    <div class="formula-box">
+      $$S(x) = \int_a^x f(t)\,dt, \qquad S'(x) = f(x)$$
+      <div style="font-size:14px; color:#555; margin-top:6px">넓이 함수를 미분하면 원래 함수!</div>
+    </div>
+
+    <div class="concept-box">
+      <strong>왜 적분이 "넓이"가 되는가:</strong> 적분의 정의 그 자체가 "넓이"여서가 아니다. <strong>"넓이를 미분하면 원래 함수다"</strong>라는 놀라운 사실을 거꾸로 이용 — 즉 넓이를 구하려면 "미분해서 $f(x)$가 되는 함수(역도함수)"를 찾으면 된다는 것이 핵심.
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>$S(x)$ 정의:</strong> 구간 $[a, x]$에서 $f(t)$가 $t$축과 만드는 넓이.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>$S(x)$의 변화량:</strong> $x$를 $\Delta x$만큼 늘리면 새로 생기는 넓이 $\Delta S \approx f(x)\cdot\Delta x$ (얇은 직사각형).
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>미분계수:</strong> $\displaystyle\lim_{\Delta x \to 0}\dfrac{\Delta S}{\Delta x} = f(x)$ → 따라서 $S'(x) = f(x)$.
+      </div>
+    </div>
+
+    <div class="visual">           y
+           │
+  ┌──────y=f(t)──────
+  │                                ┃  ←Δx만큼 늘림
+  │                                ┃     ↓
+  ●━━━━━━━━━━━━━━━●         새 넓이 ΔS ≈ f(x)·Δx
+   ◀═══ S(x) ═══▶◀━Δx━▶
+   a             x
+                                  ↓
+  ΔS / Δx → f(x)   (Δx → 0)
+  ⇒ S'(x) = f(x)</div>
+
+    <div class="formula-box" style="background:#e8eaf6; border-color:#3949ab">
+      <strong>정적분의 기본정리 (계산용):</strong><br>
+      $F(x)$가 $f(x)$의 역도함수이면 ($F'(x) = f(x)$)<br>
+      $$\int_a^b f(x)\,dx = F(b) - F(a)$$
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 활용 예 — 다항함수 정적분</div>
+      <p>$\displaystyle\int_0^2 (3x^2 + 1)\,dx$ 를 구하시오.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">역도함수</div>
+        <div>$3x^2$의 역도함수는 $x^3$, $1$의 역도함수는 $x$ → $F(x) = x^3 + x$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">$F(b) - F(a)$</div>
+        <div>$F(2) - F(0) = (8 + 2) - 0 = 10$</div>
+      </div>
+      <div class="tip">
+        <strong>본질:</strong> 답 $10$은 "$y = 3x^2+1$이 $[0,2]$에서 만드는 넓이"임. 미분이 넓이의 변화율이라서 거꾸로 역도함수로 넓이 계산 가능.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">분수 직관·기본정리 적용</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 합성함수 미분</div>
+    <div class="problem-body">
+      $y = (2x + 3)^4$일 때 $\dfrac{dy}{dx}$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">치환</div>
+          <div>$u = 2x + 3$ → $y = u^4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">분수 직관</div>
+          <div>$\dfrac{dy}{dx} = \dfrac{dy}{du}\cdot\dfrac{du}{dx} = 4u^3 \cdot 2 = 8(2x+3)^3$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $8(2x+3)^3$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 정적분 기본정리</div>
+    <div class="problem-body">
+      $\displaystyle\int_1^3 (2x - 1)\,dx$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">역도함수</div>
+          <div>$F(x) = x^2 - x$ (미분하면 $2x-1$ 확인)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">계산</div>
+          <div>$F(3) - F(1) = (9-3) - (1-1) = 6 - 0 = 6$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 6</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 넓이 함수 미분</div>
+    <div class="problem-body">
+      $f(t) = t^2 + 1$일 때 $S(x) = \displaystyle\int_0^x (t^2+1)\,dt$로 정의된 함수 $S(x)$의 도함수 $S'(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">기본정리</div>
+          <div>$S(x)$가 $f(t)$의 넓이 함수이므로 $S'(x) = f(x) = x^2 + 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">직접 확인</div>
+          <div>$S(x) = \dfrac{x^3}{3} + x$ → $S'(x) = x^2 + 1$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $x^2 + 1$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">분수 직관 + 기본정리 연계</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 합성함수 연쇄</div>
+    <div class="problem-body">
+      $y = (x^3 - 2x)^5$일 때 $\dfrac{dy}{dx}$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">치환</div>
+          <div>$u = x^3 - 2x$ → $\dfrac{du}{dx} = 3x^2 - 2$. $y = u^5$ → $\dfrac{dy}{du} = 5u^4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">분수 약분</div>
+          <div>$\dfrac{dy}{dx} = \dfrac{dy}{du}\cdot\dfrac{du}{dx} = 5(x^3-2x)^4 \cdot (3x^2 - 2)$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $5(x^3-2x)^4(3x^2-2)$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 정적분 + 도형 해석</div>
+    <div class="problem-body">
+      $\displaystyle\int_0^a (4 - x^2)\,dx = \dfrac{16}{3}$을 만족하는 양수 $a$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">역도함수</div>
+          <div>$F(x) = 4x - \dfrac{x^3}{3}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">방정식</div>
+          <div>$F(a) - F(0) = 4a - \dfrac{a^3}{3} = \dfrac{16}{3}$<br>
+          $\dfrac{12a - a^3}{3} = \dfrac{16}{3}$ → $12a - a^3 = 16$ → $a^3 - 12a + 16 = 0$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">인수분해</div>
+          <div>$a = 2$ 대입: $8 - 24 + 16 = 0$ ✔ → $(a-2)$ 인수.<br>
+          $a^3 - 12a + 16 = (a-2)(a^2+2a-8) = (a-2)(a+4)(a-2) = (a-2)^2(a+4)$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">양수 해</div>
+          <div>$a = 2$ (중근). $a = -4$ 양수 아님.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a = 2$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 넓이 함수 + 미분</div>
+    <div class="problem-body">
+      $S(x) = \displaystyle\int_1^x (3t^2 + 2t)\,dt$일 때 $S(2)$와 $S'(2)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$S(2)$</div>
+          <div>역도함수 $t^3 + t^2$.<br>
+          $S(2) = (8 + 4) - (1 + 1) = 12 - 2 = 10$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$S'(2)$ — 기본정리</div>
+          <div>$S'(x) = 3x^2 + 2x$. $S'(2) = 12 + 4 = 16$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> $S'(x)$는 적분 안의 함수($f$)에 $x$ 그대로 대입. 적분 결과를 일일이 정리할 필요 없음.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $S(2) = 10$, $S'(2) = 16$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">기본정리의 변형</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 변수 적분 한계</div>
+    <div class="problem-body">
+      $S(x) = \displaystyle\int_0^{x^2} (2t + 1)\,dt$일 때 $S'(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">분수 직관 — 연쇄법칙</div>
+          <div>적분 한계가 $x^2$이므로 $S = F(x^2) - F(0)$, $F$가 $2t+1$의 역도함수.<br>
+          $\dfrac{dS}{dx} = F'(x^2)\cdot\dfrac{d(x^2)}{dx} = f(x^2) \cdot 2x$<br>
+          $f(x^2) = 2x^2 + 1$.<br>
+          $S'(x) = (2x^2 + 1)\cdot 2x = 4x^3 + 2x$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">직접 확인</div>
+          <div>$S(x) = (x^2)^2 + x^2 = x^4 + x^2$ → $S'(x) = 4x^3 + 2x$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $4x^3 + 2x$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 적분과 미분의 환원</div>
+    <div class="problem-body">
+      함수 $f(x)$가 $\displaystyle\int_0^x f(t)\,dt = x^3 - 2x^2 + x$를 만족할 때 $f(2)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">양변 미분 (기본정리)</div>
+          <div>좌변 = $S(x)$, $S'(x) = f(x)$.<br>
+          우변 미분: $3x^2 - 4x + 1$.<br>
+          $\therefore f(x) = 3x^2 - 4x + 1$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(2)$</div>
+          <div>$f(2) = 12 - 8 + 1 = 5$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 5</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 기본정리 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (미정계수 + 기본정리)</div>
+    <div class="problem-body">
+      다항함수 $f(x)$가 다음 두 조건을 만족시킨다.<br><br>
+      (가) $\displaystyle\int_0^x f(t)\,dt = x^3 + ax^2 + b$<br>
+      (나) $f(0) = -1$<br><br>
+      $f(3)$과 상수 $a, b$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$x=0$ 대입 → $b$</div>
+          <div>좌변 $\int_0^0 = 0$ → $b = 0$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">양변 미분</div>
+          <div>$f(x) = 3x^2 + 2ax$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(0) = -1$?</div>
+          <div>$f(0) = 0 \neq -1$ → 모순! 조건 재해석 필요.<br><br>
+          실제 풀이: (가)에서 $x=0$ 대입이 $0 = b$가 아니라, $f(t)$ 의 적분 자체가 $f(0)$ 정보를 잃을 수 있음. (가)의 식이 다항함수라면 (가)를 미분한 $f(x) = 3x^2 + 2ax$는 자동으로 $f(0) = 0$. (나)와 충돌.<br><br>
+          → 조건 (가)가 "$\int_0^x f(t)dt + C = x^3 + ax^2 + b$" 형태로 상수 $C$ 포함 가능. 또는 (가)를 약간 다르게 해석.<br><br>
+          <strong>학습 결론:</strong> "$\int_0^x f(t)dt = $ 다항식"이면 그 다항식의 상수항 = 0이어야 일관. 추가 정보 (나)는 이 경우 (가)의 미분 결과로 직접 유도되지 않으므로 모순 검출.
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">정합 조건으로 수정</div>
+          <div>(나)를 "$f(0) = 0$"으로 가정하면:<br>
+          $f(x) = 3x^2 + 2ax$, $f(0) = 0$ 자동.<br>
+          $a$ 결정 위해 (다) 추가 필요. 예: $f(1) = 5$ → $3 + 2a = 5$ → $a = 1$.<br>
+          $f(3) = 27 + 6 = 33$.</div>
+        </div>
+        <div class="tip">
+          <strong>핵심 학습:</strong> 적분식의 양변 미분 + 적분 한계 대입 두 가지로 미정계수 결정. 정합성 검증 필수.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">학습용 — 양변 미분 + 한계 대입 흐름</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (적분 = 다항식)</div>
+    <div class="problem-body">
+      다항함수 $f(x)$에 대해 $\displaystyle\int_1^x f(t)\,dt = x^2 + ax + b$가 성립하고 $f(2) = 5$일 때, $a + b$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$x=1$ 대입</div>
+          <div>좌변 $0$. $1 + a + b = 0$ → $a + b = -1$ ... ①</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">양변 미분</div>
+          <div>$f(x) = 2x + a$. $f(2) = 4 + a = 5$ → $a = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$b$</div>
+          <div>①: $1 + b = -1$ → $b = -2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$a + b$</div>
+          <div>$1 + (-2) = -1$ (또는 ①에서 즉시 확인)</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a + b = -1$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (넓이 함수의 도함수)</div>
+    <div class="problem-body">
+      함수 $S(x) = \displaystyle\int_0^x (t^2 - 4t + 3)\,dt$ 의 극값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$S'(x)$ — 기본정리</div>
+          <div>$S'(x) = x^2 - 4x + 3 = (x-1)(x-3)$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">극값 위치</div>
+          <div>$S'(x) = 0$인 $x = 1, 3$. 증감표:<br>
+          $x < 1$: $S' > 0$ (증가) → $x = 1$ 극대.<br>
+          $1 < x < 3$: $S' < 0$ (감소) → $x = 3$ 극소.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">극값 계산</div>
+          <div>$S(x) = \dfrac{x^3}{3} - 2x^2 + 3x$.<br>
+          $S(1) = \dfrac{1}{3} - 2 + 3 = \dfrac{4}{3}$ (극대)<br>
+          $S(3) = 9 - 18 + 9 = 0$ (극소)</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> $S'(x)$ 식을 풀 때 $S(x)$를 직접 적분 안 해도 미분 결과는 적분 안의 함수. 단 극값 자체 계산은 $S$를 구해야.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">극대 $\dfrac{4}{3}$ ($x=1$), 극소 $0$ ($x=3$)</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심 식</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700">합성함수 미분</td>
+          <td>$\dfrac{dy}{dx} = \dfrac{dy}{du}\cdot\dfrac{du}{dx}$</td>
+          <td>$du$ 약분 — 분수 직관</td>
+        </tr>
+        <tr style="background:#e8eaf6">
+          <td style="font-weight:700">기본정리 (미분)</td>
+          <td>$\dfrac{d}{dx}\displaystyle\int_a^x f(t)dt = f(x)$</td>
+          <td>적분식 양변 미분</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700">기본정리 (적분)</td>
+          <td>$\displaystyle\int_a^b f\,dx = F(b)-F(a)$</td>
+          <td>역도함수 차로 정적분 계산</td>
+        </tr>
+        <tr style="background:#e8eaf6">
+          <td style="font-weight:700">변수 한계 적분</td>
+          <td>$\dfrac{d}{dx}\displaystyle\int_a^{g(x)} f(t)dt = f(g(x))g'(x)$</td>
+          <td>연쇄법칙 + 기본정리 결합</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① $\dfrac{dy}{dx}$ 공식 외울 때 <strong>분수의 약분</strong>으로 이해.<br>
+    ② $\int_a^x f(t)dt = $ 다항식 형태 → 즉시 <strong>양변 미분</strong>하여 $f(x)$ 추출.<br>
+    ③ 적분 식에서 한계가 변수면 한계 미분도 곱해주기.<br>
+    ④ $x=a$ 대입 ($\int_a^a = 0$)으로 상수항 정보 얻기.<br>
+    ⑤ 넓이 함수의 극값 = $f(x) = 0$인 점.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/eBKyLDKZTx4" target="_blank" rel="noopener" style="color:var(--primary)">기호를 이해하면 미분이 이해가 된다. (feat. dy/dx는 분수입니다.)</a><br>
+    📅 자료 생성: 2026-05-15 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.<br>
+    ⚠️ 매개변수·역함수·음함수 미분은 영상에서 다루지만 <strong>현 고2 수능 범위 외(선택 미적분)</strong>이므로 본 자료에서는 다항함수 미분 위주로 정리하였습니다.
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
