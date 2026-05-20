@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>삼각함수의 주기 비율과 반의 반주기 대칭성</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #00695c 0%, #00796b 60%, #00897b 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #00897b; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #e0f2f1;
+      border-left: 5px solid #00897b;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #e0f2f1; color: #004d40; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2 · 수학Ⅰ — 삼각함수의 그래프</div>
+  <h1>삼각함수의 주기 비율과<br>반의 반주기 대칭성</h1>
+  <p>공식 암기가 아닌 본질 — "$2\pi$ 한 바퀴" 직관 + 8등분 비율 + $\dfrac{T}{4}$ 대칭축</p>
+  <div class="quote">
+    "삼각함수의 값을 <strong>주기 내의 비율</strong>로 구한다는 것은 단순한 테크닉이 아니라 본질로 구하는 것이다." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/gahk4DSOh8I" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/gahk4DSOh8I/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">개념의 위엄 - 삼각함수의 비율관계 ㅣ 수학 차영진T [대성마이맥]</div>
+      <div class="v-meta">📺 YouTube · 9분 10초 · 대성마이맥 차영진T</div>
+      <a class="v-link" href="https://youtu.be/gahk4DSOh8I" target="_blank" rel="noopener">https://youtu.be/gahk4DSOh8I</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 주기 비율 + $\dfrac{T}{4}$ 대칭</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>특수각 삼각비:</strong> $\sin 0=0$, $\sin\dfrac{\pi}{6}=\dfrac{1}{2}$, $\sin\dfrac{\pi}{4}=\dfrac{\sqrt 2}{2}$, $\sin\dfrac{\pi}{3}=\dfrac{\sqrt 3}{2}$, $\sin\dfrac{\pi}{2}=1$.</li>
+      <li><strong>호도법:</strong> $360° = 2\pi$ (라디안). 한 바퀴.</li>
+      <li><strong>$y = \sin x$의 주기:</strong> $T = 2\pi$ (각이 한 바퀴 돌면 원위치).</li>
+      <li><strong>그래프 평행·대칭이동:</strong> $y = f(x+a)$, $y = -f(x)$, $y = f(-x)$.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 주기와 비율 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>주기 — "안의 식이 $2\pi$가 되도록 $x$ 변화량"</div>
+
+    <p>$y = \sin(ax)$나 $y = \sin(ax+b)$ 같은 함수의 주기 $T$를 구할 때, 공식 외우지 말고 본질로:</p>
+
+    <div class="formula-box">
+      <strong>주기 정의:</strong> "안의 식($ax$)이 $0$에서 $2\pi$까지 변할 때 $x$의 변화량"<br>
+      $ax_{\text{끝}} - ax_{\text{시작}} = 2\pi$ → $T = \dfrac{2\pi}{a}$
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 예 — $y = \sin(2x)$의 주기</div>
+      <div class="sol-step">
+        <div class="sol-step-label">질문</div>
+        <div>"$2x$가 $0$에서 $2\pi$까지 가려면 $x$는 얼마나 가야 할까?"</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">계산</div>
+        <div>$2x = 2\pi$ → $x = \pi$. 즉 $x$가 $\pi$만큼 가는 동안 $2x$는 한 바퀴 = $2\pi$. <strong>$T = \pi$</strong>.</div>
+      </div>
+      <div class="tip">강사 인용: "여기에 뭘 넣으면 $2\pi$하고 물어보는 거야." — 공식 $T = \dfrac{2\pi}{a}$를 도출 과정 자체로 이해.</div>
+    </div>
+
+    <div class="caution">
+      <strong>주의:</strong> $\tan$의 주기는 $\pi$ ($2\pi$가 아님). $y=\tan(ax)$의 주기는 $\dfrac{\pi}{a}$.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 8등분 비율 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>주기 내 비율 분할 — 8등분 직관</div>
+
+    <p>$\sin x$의 한 주기 $[0, 2\pi]$를 <strong>8등분</strong>하면 특수각이 정확히 분할점에 떨어진다.</p>
+
+    <div class="visual">y=sin x 의 한 주기 8등분
+
+x  :  0   π/4   π/2   3π/4   π   5π/4   3π/2   7π/4   2π
+       │    │    │     │    │    │     │      │    │
+sin x: 0  √2/2   1   √2/2   0  -√2/2  -1   -√2/2   0
+       ●────●────●────●────●────●─────●─────●────●
+       시작                중간                  끝
+              ↑                    ↑
+           최댓값(π/2)         최솟값(3π/2)</div>
+
+    <div class="concept-box">
+      <strong>분할 활용:</strong> 임의의 $y = \sin(ax + b)$도 주기 $T = 2\pi/a$를 구한 후, $T$를 8등분하여 분할점에 0 → 최대 → 0 → 최소 → 0 패턴을 그대로 적용. 식 전개 없이 그래프 즉시 스케치.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 예 — $y = \sin(2x + \pi/3)$의 한 주기 그리기</div>
+      <div class="sol-step">
+        <div class="sol-step-label">주기</div>
+        <div>$T = \pi$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">시작점</div>
+        <div>안의 식 = 0 → $2x + \pi/3 = 0$ → $x = -\pi/6$. 이 점이 그래프의 "0에서 시작"점.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">8등분</div>
+        <div>$x = -\pi/6$부터 $T = \pi$ 길이를 8등분 → $\pi/8$ 간격.<br>
+        분할점: $-\pi/6, \;-\pi/6+\pi/8, \dots$<br>
+        함숫값 패턴: 0 → √2/2 → 1 → √2/2 → 0 → -√2/2 → -1 → -√2/2 → 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 반의 반주기 대칭 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>반의 반주기 ($\dfrac{T}{4}$) 대칭 — 사분원 직관</div>
+
+    <p>$\sin x$ 그래프의 가장 강력한 성질은 <strong>$x = T/4$ 위치(최대점)에 대한 좌우 선대칭</strong>. 마찬가지로 $x = 3T/4$ 위치(최소점)에 대해서도 선대칭.</p>
+
+    <div class="formula-box">
+      <strong>1/4 주기 대칭축:</strong><br>
+      $y = \sin(ax)$의 그래프는 $x = \dfrac{T}{4} = \dfrac{\pi}{2a}$에 선대칭<br>
+      (최대점이 대칭축)
+    </div>
+
+    <div class="visual">y=sin x — 사분원(피자 조각) 비유
+
+              y=1 ●                    (대칭축 x=π/2)
+                 ╱:╲
+                ╱ : ╲
+               ╱  :  ╲
+              ╱   :   ╲
+   ──────────●───┼───●──────────  x축
+              0  π/2  π
+                  ↑
+           좌(0~π/2)와 우(π/2~π)가 거울처럼 대칭
+
+→ 사분원 두 개를 붙인 모양. 좌측이 올라가는 모양과 우측이 내려가는
+   모양이 정확히 서로 거울 이미지.</div>
+
+    <div class="concept-box">
+      <strong>활용:</strong> $y = \sin(ax) = k$ ($0 < k < 1$)의 한 주기 내 두 실근을 $\alpha, \beta$라 하면 $\alpha + \beta = 2\cdot\dfrac{T}{4} = \dfrac{T}{2}$. 즉 <strong>두 실근의 합은 주기의 절반</strong>.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 핵심 예시 — 1/4 주기 대칭으로 실근의 합</div>
+      <p>방정식 $\sin x = \dfrac{1}{2}$ 의 $[0, \pi]$ 구간 두 실근의 합을 구하라.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">실근 위치</div>
+        <div>$\sin x = 1/2$ → $x = \pi/6$ 또는 $x = 5\pi/6$ (특수각).</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">대칭 검증</div>
+        <div>두 실근의 중점 = $\dfrac{\pi/6 + 5\pi/6}{2} = \dfrac{\pi}{2}$ — 정확히 $\sin x$의 최대점 위치 ✔</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">합</div>
+        <div>$\dfrac{\pi}{6} + \dfrac{5\pi}{6} = \pi$. 일반: $\alpha + \beta = 2 \cdot \dfrac{T}{4} = \dfrac{T}{2}$ (여기서 $T=2\pi$ → 합 $=\pi$ ✔)</div>
+      </div>
+      <div class="tip">
+        강사 인용: "반의 반주기에 대하여 대칭성 그대로 나타나지." 두 실근 합 = 대칭축 × 2 = $T/2$.
+      </div>
+    </div>
+
+    <div class="caution">
+      <strong>$\cos$의 경우:</strong> $y = \cos x$의 대칭축은 $x = 0, \pi, 2\pi, \dots$ ($\sin$보다 $\pi/2$ 만큼 앞). 동일한 1/4 주기 대칭 원리는 그대로 통함.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">주기 계산·비율 분할</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 주기 계산</div>
+    <div class="problem-body">
+      다음 함수의 주기를 구하시오.<br>
+      (1) $y = \sin(3x)$ &nbsp;&nbsp; (2) $y = \cos\bigl(\dfrac{x}{2}\bigr)$ &nbsp;&nbsp; (3) $y = \tan(4x)$
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">(1)</div>
+          <div>$3x$가 $2\pi$ 가려면 $x$는 $\dfrac{2\pi}{3}$. $T = \dfrac{2\pi}{3}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(2)</div>
+          <div>$\dfrac{x}{2}$가 $2\pi$ 가려면 $x$는 $4\pi$. $T = 4\pi$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(3)</div>
+          <div>$\tan$의 주기는 $\pi$. $4x$가 $\pi$ 가려면 $x$는 $\dfrac{\pi}{4}$. $T = \dfrac{\pi}{4}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: (1) $\frac{2\pi}{3}$, (2) $4\pi$, (3) $\frac{\pi}{4}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 8등분으로 그래프 읽기</div>
+    <div class="problem-body">
+      $y = \sin(2x)$의 한 주기 $[0, \pi]$ 안에서 최댓값을 갖는 $x$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">주기</div>
+          <div>$T = \pi$. 8등분 간격 $= \dfrac{\pi}{8}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">최댓값 위치</div>
+          <div>$\sin$의 최댓값은 $T/4$ 위치 = $\dfrac{\pi}{4}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$\sin(2\cdot\pi/4) = \sin(\pi/2) = 1$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $x = \dfrac{\pi}{4}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 대칭축 활용</div>
+    <div class="problem-body">
+      $\sin x = \dfrac{\sqrt 3}{2}$의 $[0, \pi]$ 구간 두 실근의 합을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">대칭 원리</div>
+          <div>두 실근은 $x = \pi/2$ (최대점) 좌우 대칭. 합 = $2 \cdot \pi/2 = \pi$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$\sin x = \sqrt 3/2$ → $x = \pi/3$ 또는 $2\pi/3$. 합 = $\pi$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\pi$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">위상 + 주기 + 대칭</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 위상 포함 그래프</div>
+    <div class="problem-body">
+      $y = \sin\bigl(2x - \dfrac{\pi}{3}\bigr)$의 주기와, $[0, \pi]$ 안에서 최댓값을 갖는 $x$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">주기</div>
+          <div>$2x$가 $2\pi$ 가는 동안 $x$는 $\pi$. $T = \pi$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">시작점</div>
+          <div>$2x - \pi/3 = 0$ → $x = \pi/6$ (그래프 "0에서 시작" 점).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">최댓값 위치</div>
+          <div>$T/4 = \pi/4$ 만큼 뒤. $x = \pi/6 + \pi/4 = \dfrac{2\pi + 3\pi}{12} = \dfrac{5\pi}{12}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$\sin(2\cdot 5\pi/12 - \pi/3) = \sin(5\pi/6 - \pi/3) = \sin(\pi/2) = 1$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $T=\pi$, 최대 $x = \dfrac{5\pi}{12}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 두 실근의 합</div>
+    <div class="problem-body">
+      $\sin(2x) = \dfrac{1}{2}$의 $[0, \dfrac{\pi}{2}]$ 구간 두 실근의 합을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">주기</div>
+          <div>$y = \sin(2x)$의 주기 $T = \pi$. 최대점은 $x = T/4 = \pi/4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$[0, \pi/2]$가 한 주기</div>
+          <div>$[0, \pi/2]$는 한 주기의 절반 (= $T/2$). 이 구간 안에서 $\sin(2x) = 1/2$인 두 실근은 $x = \pi/4$ 대칭.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>두 실근 합 = $2 \cdot \pi/4 = \dfrac{\pi}{2}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$2x = \pi/6$ → $x = \pi/12$, $2x = 5\pi/6$ → $x = 5\pi/12$. 합 = $6\pi/12 = \pi/2$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{\pi}{2}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 그래프 적용 (cos)</div>
+    <div class="problem-body">
+      $y = \cos(\pi x)$의 한 주기 안에서 $y$가 양수인 구간의 길이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">주기</div>
+          <div>$\pi x = 2\pi$ → $x = 2$. $T = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\cos$ 부호</div>
+          <div>$\cos x$가 양수인 구간: 한 주기 $[0, 2\pi]$ 중 $[0, \pi/2] \cup [3\pi/2, 2\pi]$. 길이 = $\pi$ (전체의 절반).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$y=\cos(\pi x)$ 적용</div>
+          <div>주기 $T=2$의 절반 = $\mathbf{1}$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 1</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">실근의 합·대칭 융합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 여러 실근의 합</div>
+    <div class="problem-body">
+      방정식 $\sin x = \dfrac{1}{3}$의 $[0, 2\pi]$ 구간 모든 실근의 합을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$\sin x$ 부호</div>
+          <div>$\sin x > 0$인 구간은 $[0, \pi]$. $\sin x = 1/3 > 0$이므로 실근은 모두 $[0, \pi]$ 안.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">대칭축</div>
+          <div>$[0, \pi]$에서 $\sin x$의 최대점 $x = \pi/2$가 대칭축. 두 실근 합 = $2 \cdot \pi/2 = \pi$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\pi$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — $\cos$ 그래프 실근 합</div>
+    <div class="problem-body">
+      $\cos(2x) = \dfrac{1}{2}$의 $[0, \pi]$ 구간 모든 실근의 합을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">주기</div>
+          <div>$y = \cos(2x)$의 주기 $T = \pi$. $[0, \pi]$는 정확히 한 주기.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\cos$ 대칭축</div>
+          <div>한 주기 안에서 $\cos$ 그래프는 $x = 0$(최대), $x = T/2 = \pi/2$ (최소), $x = T = \pi$ (최대) 대칭.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">실근 위치</div>
+          <div>$\cos(2x) = 1/2$ → $2x = \pi/3$ 또는 $-\pi/3 + 2\pi k$. <br>
+          $[0, 2\pi]$의 $2x$ 범위에서 $2x = \pi/3, 5\pi/3$.<br>
+          → $x = \pi/6, 5\pi/6$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$\pi/6 + 5\pi/6 = \pi$. (대칭축 $x=\pi/2$에 대해 좌우 대칭 ✔)</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\pi$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 대칭·주기 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (여러 주기 실근)</div>
+    <div class="problem-body">
+      방정식 $\sin(2x) = \dfrac{\sqrt 3}{2}$의 $[0, 2\pi]$ 구간 모든 실근의 합을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">주기</div>
+          <div>$y = \sin(2x)$의 주기 $T = \pi$. $[0, 2\pi]$는 두 주기.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">첫 주기 $[0, \pi]$</div>
+          <div>최대점 $x = \pi/4$. 두 실근의 합 = $2 \cdot \pi/4 = \pi/2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">둘째 주기 $[\pi, 2\pi]$</div>
+          <div>최대점 $x = \pi + \pi/4 = 5\pi/4$. 두 실근의 합 = $2 \cdot 5\pi/4 = 5\pi/2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">전체 합</div>
+          <div>$\pi/2 + 5\pi/2 = 6\pi/2 = \mathbf{3\pi}$</div>
+        </div>
+        <div class="tip">
+          <strong>일반화:</strong> 주기 $T$인 함수의 $n$개 주기에서 같은 $y$값의 실근들 합 = $n$개의 대칭축 합 × 2 = "각 주기의 1/4 위치들의 합" × 2.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $3\pi$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (조건과 대칭)</div>
+    <div class="problem-body">
+      방정식 $\sin\bigl(\dfrac{x}{2}\bigr) = k$ ($0 < k < 1$)의 $[0, 4\pi]$ 구간 실근이 두 개일 때, 두 실근의 합을 $k$의 식으로 나타내시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">주기</div>
+          <div>$x/2 = 2\pi$ → $x = 4\pi$. $T = 4\pi$. $[0, 4\pi]$는 정확히 한 주기.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">최대점</div>
+          <div>$T/4 = \pi$ 위치. 두 실근의 대칭축이 $x = \pi$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$\alpha + \beta = 2 \cdot \pi = 2\pi$. <strong>$k$값에 무관</strong>하게 상수.</div>
+        </div>
+        <div class="tip">
+          $k$ 값에 따라 두 실근의 <em>위치</em>는 변하지만 <em>합</em>은 대칭축 × 2로 고정. 이것이 대칭성의 위력.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $2\pi$ ($k$ 무관)</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (sin·cos 혼합)</div>
+    <div class="problem-body">
+      함수 $f(x) = \sin x + \cos x$가 $[0, 2\pi]$에서 최댓값을 갖는 $x$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">정리</div>
+          <div>
+            $\sin x + \cos x = \sqrt 2 \sin\bigl(x + \dfrac{\pi}{4}\bigr)$ (합성).<br>
+            (참고: 이 합성 공식은 영상 범위 외이지만 결과만 활용)
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">최댓값 위치</div>
+          <div>$\sqrt 2$이고, $\sin(x + \pi/4) = 1$일 때. $x + \pi/4 = \pi/2$ → $x = \pi/4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$f(\pi/4) = \sin(\pi/4) + \cos(\pi/4) = \dfrac{\sqrt 2}{2} + \dfrac{\sqrt 2}{2} = \sqrt 2$ ✔</div>
+        </div>
+        <div class="tip">
+          <strong>주기·대칭 직관:</strong> $f(x) = \sin x + \cos x$의 그래프는 $\sin$ 그래프를 $-\pi/4$ 만큼 평행이동한 모양. 최대점 위치도 $\pi/2 \to \pi/4$로 이동.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $x = \dfrac{\pi}{4}$ (최댓값 $\sqrt 2$)</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심 식</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700">주기</td>
+          <td>$T = \dfrac{2\pi}{a}$ ($\sin, \cos$), $\dfrac{\pi}{a}$ ($\tan$)</td>
+          <td>"안의 식이 $2\pi$일 때 $x$ 변화량"</td>
+        </tr>
+        <tr style="background:#e0f2f1">
+          <td style="font-weight:700">8등분 분할</td>
+          <td>$T/8$ 간격으로 특수값</td>
+          <td>그래프 즉시 스케치</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700">1/4 주기 대칭</td>
+          <td>$x = T/4$ (최대점) 좌우 선대칭</td>
+          <td>두 실근 합 = $T/2$</td>
+        </tr>
+        <tr style="background:#e0f2f1">
+          <td style="font-weight:700">여러 주기 실근 합</td>
+          <td>각 주기 합 더하기</td>
+          <td>$n$ 주기 = $n$개 대칭축 × 2</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① 주기 보이면 즉시 "안의 식이 $2\pi$가 되는 $x$" 계산.<br>
+    ② 함숫값이 $\pm 1$이 아니면 한 주기 안에 실근 <strong>2개</strong>가 생긴다 (대칭쌍).<br>
+    ③ 두 실근의 합 = 가까운 <strong>최대·최소점 × 2</strong> (대칭축의 두 배).<br>
+    ④ 여러 주기에 실근 있으면 각 주기마다 분리해서 합 계산 후 합.<br>
+    ⑤ $\cos$의 대칭축은 $\sin$의 대칭축에서 $\pi/2$ 만큼 어긋남.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/gahk4DSOh8I" target="_blank" rel="noopener" style="color:var(--primary)">개념의 위엄 - 삼각함수의 비율관계 ㅣ 수학 차영진T [대성마이맥]</a><br>
+    📅 자료 생성: 2026-05-20 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
