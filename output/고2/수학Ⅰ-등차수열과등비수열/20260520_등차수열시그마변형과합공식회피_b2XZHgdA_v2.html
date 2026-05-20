@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #0d47a1 0%, #1565c0 60%, #1976d2 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .v2-badge {
+      display: inline-block;
+      background: #e53935;
+      color: #fff;
+      padding: 2px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: 8px;
+      letter-spacing: 0.05em;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 160px; aspect-ratio: 9/16;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .video-card .related {
+      display: block;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--sub);
+    }
+    .video-card .related a { color: var(--primary); }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 60%; margin: 0 auto; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #1976d2; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #e3f2fd;
+      border-left: 5px solid #1976d2;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #e3f2fd; color: #0d47a1; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학Ⅰ — 등차수열과 등차수열의 합</div>
+  <h1>등차수열 실전 풀이<span class="v2-badge">v2</span><br>시그마 변형 · 합 공식 회피 · 첫째병 탈피</h1>
+  <p>같은 영상 1차 자료 (항의 차·등차중항·기준항 이동)의 보강판 — Σ 패턴과 합 공식 우회 전략 집중</p>
+  <div class="quote">
+    "$\Sigma$ 연산이 나올 때 무작정 전개하지 말고, <strong>항끼리 빼서 공차를 발견</strong>해야 한다." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtube.com/shorts/b2XZHgdA0SM" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/b2XZHgdA0SM/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">1등급이 등차수열 문제 푸는 법 (수능 수학은 이동준)</div>
+      <div class="v-meta">📺 YouTube Shorts · 2분 42초 · 수능 수학은 이동준</div>
+      <a class="v-link" href="https://youtube.com/shorts/b2XZHgdA0SM" target="_blank" rel="noopener">https://youtube.com/shorts/b2XZHgdA0SM</a>
+      <a class="related" href="../수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html">📖 1차 자료(v1) — 항의 차·등차중항·기준항 이동 보기 →</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- v2 차별화 안내 -->
+  <div class="card" style="background:#fff8e1; border-color:#ffa000">
+    <div style="font-weight:700; color:#e65100; margin-bottom:8px">🔥 v2 차별화 포인트</div>
+    <p>v1(<a href="../수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html">2026-05-10</a>) 는 3가지 사고법(항의 차 / 등차중항 / 기준항 이동) 입문을 다뤘다면, <strong>v2 는 시그마 변형 패턴 + 합 공식 회피 전략</strong>에 집중. 수능 21번 유형 같은 합 변형 문제를 시그마 분리·이동으로 해결한다.</p>
+  </div>
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 시그마 변형 3가지 무기</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>등차수열 일반항:</strong> $a_n = a_1 + (n-1)d$</li>
+      <li><strong>항의 차 ★ (v1 복습):</strong> $a_n - a_m = (n-m)d$</li>
+      <li><strong>등차중항 ★ (v1 복습):</strong> 합 = 중앙값 × 개수</li>
+      <li><strong>$\Sigma$ 기본:</strong> $\displaystyle\sum_{k=1}^{n} a_k = a_1 + a_2 + \cdots + a_n$</li>
+      <li><strong>$\Sigma$ 선형성:</strong> $\sum(a_k + b_k) = \sum a_k + \sum b_k$, $\sum c\cdot a_k = c\sum a_k$</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 시그마 분리 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>$\Sigma$ 분리 — 합의 차를 항으로 환원</div>
+
+    <p>$\sum_{k=m+1}^{n} a_k$ 같은 부분 합은 <strong>두 누적합의 차</strong>로 분해한다.</p>
+
+    <div class="formula-box">
+      $$\sum_{k=m+1}^{n} a_k = \sum_{k=1}^{n} a_k - \sum_{k=1}^{m} a_k = S_n - S_m$$
+    </div>
+
+    <div class="concept-box">
+      <strong>활용:</strong> $S_n - S_m$ 차이가 주어지면 그것이 곧 <strong>$a_{m+1} + \cdots + a_n$ 의 부분합</strong>. 그 다음 (v1의) 등차중항으로 즉시 처리.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 시그마 분리 → 등차중항 흐름</div>
+      <p>$\displaystyle\sum_{k=4}^{10} a_k$ 를 등차중항으로 변환하라.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">항 개수</div>
+        <div>$10 - 4 + 1 = 7$ 개.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">중앙항</div>
+        <div>$a_4, a_5, \ldots, a_{10}$ 중앙 = $a_7$ (4번째).</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">결과</div>
+        <div>$\sum_{k=4}^{10} a_k = 7 \cdot a_7$</div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>한 줄 공식:</strong> $\sum_{k=p}^{q} a_k = (q-p+1) \cdot a_{\text{중앙}}$ — 단 등차수열에서만.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 시그마 인덱스 이동 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>$\Sigma$ 인덱스 이동 — 항 번호 일치시키기</div>
+
+    <p>$\sum a_k$와 $\sum a_{k+c}$를 비교할 때, <strong>인덱스를 평행이동</strong>해서 같은 형태로 만든다.</p>
+
+    <div class="formula-box">
+      $$\sum_{k=1}^{n} a_{k+c} = \sum_{j=c+1}^{n+c} a_j$$
+      <div style="font-size:14px; color:#555; margin-top:6px">($j = k+c$ 치환)</div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>$\sum a_{k+1} - \sum a_k$ 패턴:</strong><br>
+        $\displaystyle\sum_{k=1}^{n}(a_{k+1} - a_k)$ = 항의 차이의 합 = $(a_2 - a_1) + (a_3 - a_2) + \cdots + (a_{n+1} - a_n) = a_{n+1} - a_1$ (망원합)
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>망원합 (Telescoping):</strong> 등차수열에서 인접 항 차이는 모두 공차 $d$. 따라서 $\sum_{k=1}^{n}(a_{k+1} - a_k) = nd$.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 시그마 차이 패턴</div>
+      <p>등차수열 $\{a_n\}$의 공차 $d=3$일 때 $\displaystyle\sum_{k=1}^{20}(a_{k+2} - a_k)$를 구하라.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">항 차이</div>
+        <div>$a_{k+2} - a_k = 2d = 6$ (항 번호 차 2).</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">시그마</div>
+        <div>$\sum_{k=1}^{20} 6 = 20 \cdot 6 = 120$</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 합 공식 회피 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>합 공식 회피 — 등차중항 우선, $S_n$ 공식은 최후</div>
+
+    <p>학교에서 배우는 합 공식 $S_n = \dfrac{n(a_1+a_n)}{2}$는 강력하지만 <strong>$a_1$을 알아야 한다</strong>는 약점이 있다. v1의 "기준항 이동"과 결합하면 합 공식 없이 처리 가능.</p>
+
+    <div class="formula-box">
+      $$S_n = \dfrac{n(a_1 + a_n)}{2} = n \cdot \dfrac{a_1 + a_n}{2}$$
+      <div style="font-size:14px; color:#555; margin-top:6px">= 항 개수 × (양 끝 항의 평균) = 항 개수 × 중앙값</div>
+    </div>
+
+    <div class="concept-box">
+      <strong>핵심 통찰:</strong> $\dfrac{a_1 + a_n}{2}$ 자체가 <strong>등차중항</strong>($a_{(n+1)/2}$, 홀수개 항 시)이다. 따라서 $S_n$ 공식 = (등차중항으로 합) 공식. 두 공식 = 한 공식.
+    </div>
+
+    <table style="margin-top:14px">
+      <thead><tr><th>상황</th><th>공식</th><th>필요한 정보</th></tr></thead>
+      <tbody>
+        <tr><td>$a_1, a_n$ 둘 다 앎</td><td>$S_n = \dfrac{n(a_1+a_n)}{2}$</td><td>$a_1, a_n$</td></tr>
+        <tr style="background:#e3f2fd"><td>중앙값 앎</td><td>$S_n = n \cdot a_{\text{중앙}}$</td><td>중앙항 ★</td></tr>
+        <tr><td>$a_1, d$ 앎</td><td>$S_n = \dfrac{n(2a_1+(n-1)d)}{2}$</td><td>$a_1, d$</td></tr>
+        <tr style="background:#e3f2fd"><td>임의 항 $a_m, d$ 앎</td><td>$S_n = n \cdot \bigl(a_m + (\tfrac{n+1}{2}-m)d\bigr)$</td><td>$a_m, d$ ★</td></tr>
+      </tbody>
+    </table>
+
+    <div class="tip">
+      <strong>회피 전략:</strong> $a_1$를 모를 때는 알려진 임의 항 + 공차로 중앙값을 우회 계산. 첫째병 탈피!
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">시그마 분리·인덱스 이동</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — $\Sigma$ 분리</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$의 $S_n = \sum_{k=1}^{n} a_k$가 $S_{10} = 100$, $S_5 = 30$일 때, $\sum_{k=6}^{10} a_k$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">분리</div>
+          <div>$\sum_{k=6}^{10} a_k = S_{10} - S_5 = 100 - 30 = 70$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 70</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 망원합</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$의 공차가 $d=4$일 때, $\displaystyle\sum_{k=1}^{15}(a_{k+1} - a_k)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">항 차이</div>
+          <div>$a_{k+1} - a_k = d = 4$ (모두 동일).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$15 \cdot 4 = 60$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 60</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 합 공식 우회</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$에서 $a_{10} = 15$이고 공차 $d=2$일 때, $a_1 + a_2 + \cdots + a_{19}$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">중앙항</div>
+          <div>$1$부터 $19$까지 19개 항. 중앙 = $a_{10} = 15$ (이미 알고 있음!).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$S = 19 \cdot 15 = 285$. <strong>$a_1$ 안 구함</strong>.</div>
+        </div>
+        <div class="tip">
+          v1의 첫째병 탈피 + v2의 합 공식 회피가 결합한 깔끔한 풀이.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 285</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">시그마 + 등차중항 결합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — $\Sigma$ 차이로 $d$ 결정</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$의 $S_{20} - S_{10} = 150$일 때, $a_{15} + a_{16}$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">분리</div>
+          <div>$S_{20} - S_{10} = \sum_{k=11}^{20} a_k$ (10개 항).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">짝수 개</div>
+          <div>10개 항의 중앙 두 항 = $a_{15}, a_{16}$. 합 = $10 \cdot \dfrac{a_{15}+a_{16}}{2} = 5(a_{15}+a_{16}) = 150$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">결과</div>
+          <div>$a_{15} + a_{16} = 30$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 30</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 인덱스 이동</div>
+    <div class="problem-body">
+      공차 $d = 5$인 등차수열 $\{a_n\}$에서 $\displaystyle\sum_{k=1}^{10}(a_{k+3} - a_{k+1})$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">항 차이</div>
+          <div>$a_{k+3} - a_{k+1} = 2d = 10$ (항 번호 차 2).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$\sum_{k=1}^{10} 10 = 100$</div>
+        </div>
+        <div class="tip">
+          $a_{k+3}$ 안의 $a$ 자체 식은 신경 X. 항 번호 차이만 보면 즉시 $2d$.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 100</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 합 공식 회피 종합</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$에서 $a_7 = 10$, $a_{13} = 22$일 때 $\displaystyle\sum_{k=4}^{16} a_k$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$d$</div>
+          <div>$(a_{13} - a_7) = 6d = 12$ → $d = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\Sigma$ 항 개수</div>
+          <div>$16 - 4 + 1 = 13$개.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">중앙항</div>
+          <div>$a_4, a_5, \ldots, a_{16}$ 중앙 = $a_{10}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$a_{10}$ — 기준항 이동</div>
+          <div>$a_7$ 기준: $a_{10} = a_7 + 3d = 10 + 6 = 16$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$13 \cdot 16 = 208$</div>
+        </div>
+        <div class="tip">
+          $a_1$ 한 번도 안 등장. v1(항의 차 + 기준항 이동) × v2(중앙항으로 합) 콤보.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 208</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">시그마 변형 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — $\Sigma$ 분리 + $d$ 추출</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$의 합 $S_n$이 $S_{12} = 84$, $S_8 = 36$일 때, 공차 $d$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$\Sigma$ 분리</div>
+          <div>$S_{12} - S_8 = \sum_{k=9}^{12} a_k = 4$개 항 = 84 - 36 = 48.<br>
+          중앙 두 항 평균 × 4: $4 \cdot \dfrac{a_{10}+a_{11}}{2} = 48$ → $a_{10} + a_{11} = 24$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$S_8$ 활용</div>
+          <div>$S_8 = 8 \cdot \dfrac{a_4 + a_5}{2} = 4(a_4 + a_5) = 36$ → $a_4 + a_5 = 9$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">차이로 $d$</div>
+          <div>$(a_{10} - a_4) + (a_{11} - a_5) = 6d + 6d = 12d$<br>
+          $24 - 9 = 15 = 12d$ → $d = \dfrac{15}{12} = \dfrac{5}{4}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $d = \dfrac{5}{4}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 인덱스 평행이동</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$의 공차 $d=3$이고 $a_1 = 4$일 때, $\displaystyle\sum_{k=1}^{10} a_{2k}$ (즉 $a_2, a_4, \ldots, a_{20}$의 합)을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$b_k = a_{2k}$ 정의</div>
+          <div>$\{b_k\}$도 등차수열. 공차 $= a_{2k+2} - a_{2k} = 2d = 6$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">첫째항·끝항</div>
+          <div>$b_1 = a_2 = 4 + 3 = 7$. $b_{10} = a_{20} = 4 + 19\cdot 3 = 61$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">중앙값</div>
+          <div>10개 항 짝수. 중앙 두 항 평균 $= \dfrac{b_5 + b_6}{2}$.<br>
+          $b_5 = a_{10} = 4 + 27 = 31$, $b_6 = a_{12} = 4 + 33 = 37$.<br>
+          평균 = $34$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$10 \cdot 34 = 340$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 340</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 21번 유형</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 21번 유형 (시그마 변형 + 등차중항)</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$이 다음 조건을 만족시킨다.<br><br>
+      (가) $\displaystyle\sum_{k=1}^{9} a_k = 36$<br>
+      (나) $\displaystyle\sum_{k=10}^{18} a_k = 117$<br><br>
+      $a_5 + a_{14}$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">(가) — 9개 항</div>
+          <div>중앙항 $a_5$. $9 a_5 = 36$ → $a_5 = 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(나) — 9개 항</div>
+          <div>$a_{10}, \ldots, a_{18}$의 중앙 = $a_{14}$. $9 a_{14} = 117$ → $a_{14} = 13$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$a_5 + a_{14} = 4 + 13 = \mathbf{17}$</div>
+        </div>
+        <div class="tip">
+          <strong>$d$ 추출도 가능:</strong> $a_{14} - a_5 = 9d = 13 - 4 = 9$ → $d = 1$. 그러나 답은 $d$ 안 써도 즉시.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 17</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (망원합 응용)</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$에서 $a_1 = 2$, 공차 $d = 4$일 때 $\displaystyle\sum_{k=1}^{n}\dfrac{1}{a_k\cdot a_{k+1}}$를 $n$의 식으로 나타내시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">부분분수 분해</div>
+          <div>$\dfrac{1}{a_k a_{k+1}} = \dfrac{1}{d}\bigl(\dfrac{1}{a_k} - \dfrac{1}{a_{k+1}}\bigr)$ (등차수열의 망원 패턴)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$\dfrac{1}{d}\bigl(\dfrac{1}{a_k} - \dfrac{1}{a_{k+1}}\bigr) = \dfrac{a_{k+1} - a_k}{d \cdot a_k a_{k+1}} = \dfrac{d}{d \cdot a_k a_{k+1}} = \dfrac{1}{a_k a_{k+1}}$ ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">망원합</div>
+          <div>$\dfrac{1}{4}\displaystyle\sum_{k=1}^{n}\bigl(\dfrac{1}{a_k} - \dfrac{1}{a_{k+1}}\bigr) = \dfrac{1}{4}\bigl(\dfrac{1}{a_1} - \dfrac{1}{a_{n+1}}\bigr)$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">대입</div>
+          <div>$a_1 = 2$, $a_{n+1} = 2 + 4n$.<br>
+          $= \dfrac{1}{4}\bigl(\dfrac{1}{2} - \dfrac{1}{2+4n}\bigr) = \dfrac{1}{4}\cdot\dfrac{4n}{2(2+4n)} = \dfrac{n}{2(2+4n)} = \dfrac{n}{4(1+2n)}$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 등차수열의 항 곱의 역수 합은 항상 망원합으로 풀린다. 공차 $d$가 분모에 등장.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{n}{4(2n+1)}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (조건 → 미지수)</div>
+    <div class="problem-body">
+      등차수열 $\{a_n\}$이 다음 조건을 만족시킨다.<br><br>
+      (가) $a_3 + a_{17} = 24$<br>
+      (나) $\displaystyle\sum_{k=5}^{15} a_k = 132$<br><br>
+      공차 $d$와 $a_1$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">(가) → $a_{10}$</div>
+          <div>$a_3 + a_{17} = 2 a_{10}$ (등차중항). $a_{10} = 12$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(나) → $a_{10}$ 재확인</div>
+          <div>$a_5 \sim a_{15}$의 11개 항 중앙 = $a_{10}$. $11 a_{10} = 132$ → $a_{10} = 12$ ✔ (일관).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$d$ 결정 — 정보 부족?</div>
+          <div>두 조건 모두 $a_{10}$만 결정. $d$는 단일 결정 안 됨 → 추가 조건 필요.<br>
+          <strong>실전 풀이:</strong> 문제가 $d$ 유일성 보장한다면 추가 조건이 있어야. 학습용으로 "$d$ 미결정" 결론.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$a_1$ — $d$ 가정 시</div>
+          <div>$d=1$ 가정 시 $a_1 = a_{10} - 9d = 12 - 9 = 3$.<br>
+          $d=2$ 가정 시 $a_1 = 12 - 18 = -6$.</div>
+        </div>
+        <div class="tip">
+          <strong>학습 포인트:</strong> 두 조건이 같은 정보(중앙항 $a_{10}$)를 가리키면 새 정보 없음. 시그마 변형 시 <strong>중복 정보 검출</strong>이 1등급의 안목.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">학습용 — $a_{10}=12$ 확정, $d$ 추가 조건 필요</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 v1·v2 통합 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>유형</th><th>핵심</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">v1-1 항의 차</td><td>$a_n - a_m$</td><td>$(n-m)d$로 즉시</td></tr>
+        <tr style="background:#e3f2fd"><td style="font-weight:700">v1-2 등차중항</td><td>연속한 합</td><td>중앙값 × 개수</td></tr>
+        <tr><td style="font-weight:700">v1-3 기준항 이동</td><td>$a_k$ 계산</td><td>$a_1$ 안 거치고 즉시</td></tr>
+        <tr style="background:#e3f2fd"><td style="font-weight:700">v2-1 $\Sigma$ 분리</td><td>$S_n - S_m$</td><td>부분합 → 항 합</td></tr>
+        <tr><td style="font-weight:700">v2-2 인덱스 이동</td><td>$a_{k+c}$ 시그마</td><td>$j=k+c$ 치환</td></tr>
+        <tr style="background:#e3f2fd"><td style="font-weight:700">v2-3 망원합</td><td>$\sum(a_{k+1}-a_k)$</td><td>$d$ × 개수</td></tr>
+        <tr><td style="font-weight:700">v2-4 합 공식 회피</td><td>$S_n$ 계산</td><td>중앙값 × $n$ 우선</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 21번 유형 체크리스트</div>
+    <div>① $\Sigma$ 보이면 즉시 항 개수·중앙항 표기.<br>
+    ② $S_a - S_b$ 분리해 부분합으로 변환.<br>
+    ③ 항 차이 시그마 → 망원합 후보.<br>
+    ④ 두 시그마 조건이 같은 중앙항만 가리키면 정보 중복 → 추가 식 필요.<br>
+    ⑤ $a_1$ 강박 ❌. 알려진 임의 항 기준으로 중앙항 도출.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtube.com/shorts/b2XZHgdA0SM" target="_blank" rel="noopener" style="color:var(--primary)">1등급이 등차수열 문제 푸는 법 (수능 수학은 이동준)</a><br>
+    📖 <strong>1차 자료 (v1)</strong>: <a href="../수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html">2026-05-10 - 항의차·등차중항·기준항 이동</a><br>
+    📅 자료 생성: 2026-05-20 (v2) · 본 자료는 영상 자막 + v1 보강 의도로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
