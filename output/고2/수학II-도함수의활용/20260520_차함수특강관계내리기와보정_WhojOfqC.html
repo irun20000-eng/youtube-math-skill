@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>차함수 특강 - 관계·내리기·보정의 3박자</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #bf360c 0%, #d84315 60%, #e64a19 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .video-card .related { display: block; margin-top: 8px; font-size: 12px; color: var(--sub); }
+    .video-card .related a { color: var(--primary); }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #d84315; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #fbe9e7;
+      border-left: 5px solid #d84315;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #fbe9e7; color: #bf360c; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학Ⅱ — 도함수의 활용</div>
+  <h1>차함수 특강<br>관계 · 내리기 · 보정의 3박자</h1>
+  <p>시대인재 이동준의 시그니처 — "회전이 아닌 <strong>내리기</strong>" 한 줄로 모든 문제가 바뀐다</p>
+  <div class="quote">
+    "다항함수는 근본적으로 뭘 함의하고 있냐? <strong>관계</strong>예요. 관계를 다루는 함수." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/WhojOfqCAFo" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/WhojOfqCAFo/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">시대인재 이동준의 시그니처 '차함수' 특강</div>
+      <div class="v-meta">📺 YouTube · 13분 55초 · 시대인재 이동준</div>
+      <a class="v-link" href="https://youtu.be/WhojOfqCAFo" target="_blank" rel="noopener">https://youtu.be/WhojOfqCAFo</a>
+      <a class="related" href="../수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">📖 관련: 삼차함수 점대칭 적분 (C3o6VJbn) — 차함수 관점 입문 →</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 차함수의 3가지 본질</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>인수정리:</strong> $f(\alpha) = 0$ ↔ $f(x)$가 $(x - \alpha)$를 인수로 가짐.</li>
+      <li><strong>접선의 의미:</strong> $f(x)$와 직선 $g(x)$가 $x = \alpha$에서 접한다 ↔ $f(x) - g(x) = (x-\alpha)^2 \cdot h(x)$ (이중근).</li>
+      <li><strong>두 곡선의 교점:</strong> $f(x) = g(x)$의 근들이 곧 두 그래프 교점의 $x$좌표.</li>
+      <li><strong>미분의 선형성:</strong> $(f - g)' = f' - g'$.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 관계로서의 차함수 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>관계로서의 차함수 — 미지수 연립 ❌</div>
+
+    <p>다항함수 두 개가 등장하면 보통 미지수를 잔뜩 두고 연립방정식을 풀려고 한다. <strong>1등급의 풀이는 다르다.</strong> 두 함수의 <em>관계</em>(만남 / 접함)로 식을 단번에 세운다.</p>
+
+    <div class="formula-box">
+      <strong>접점·교점 패턴:</strong><br>
+      $f$와 $g$가 $x = \alpha$에서 접하고 $x = \beta$에서 만난다면<br>
+      $$f(x) - g(x) = a(x - \alpha)^2 (x - \beta)$$<br>
+      두 함수의 차이가 곧 인수분해된 다항식.
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>왜 이렇게 쓰는가:</strong> 두 함수의 그래프가 만나면 차함수 그래프가 $x$축과 만난다. 접하면 이중근, 교차하면 단근. 모든 정보가 인수에 담긴다.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>최고차항 결정:</strong> $f$의 최고차항이 결정하면 $f-g$의 최고차항도 자동 결정 ($g$가 더 낮은 차수 + 같은 차수면 차감).
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>핵심 태도:</strong> "$f$를 직접 알아야 한다"는 강박 ❌. <strong>$f - g$ 차함수를 단번에 인수분해 형태로 적기.</strong> 그 다음 필요한 정보(함숫값·미분계수)는 차함수에서 빠르게 추출.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 핵심 인용</div>
+      <p>"다항함수 좀 한다는 친구들 치고 차함수 잘 쓰는 애들 없어요... 근데 우리는 <strong>능동적으로</strong> 쓸 거야. 누가 시켜서 쓰는 게 아니라 당연히 써야 해."</p>
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 내리기와 보정 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>내리기와 보정 — 회전이 아니다</div>
+
+    <p>차함수 = $f - g$. 흔히 "기울어진 직선 $g$를 빼서 그래프를 회전시킨다"고 착각하지만 ❌. <strong>회전이 아니라 수직 이동</strong>이다.</p>
+
+    <div class="formula-box">
+      모든 $x$에서 차함수 값 = $f(x) - g(x)$<br>
+      → 원함수 $f$를 매 $x$ 위치마다 $g(x)$만큼 <strong>수직으로 내림</strong>
+    </div>
+
+    <div class="visual">차함수의 의미: 회전 ❌, 내리기 ✔
+
+원함수 f                       직선 g
+
+    ╱╲╱                            ╱
+   ╱   ╲                          ╱
+  ╱     ╲                        ╱
+─●───────●─                ────●────  x축
+α        β                     ?
+
+  ↓ 차함수 (f-g)
+
+원함수 f와 직선 g 사이의 "갭"을 그래프로
+
+  ╱╲    (g 위로 솟은 부분)
+ ╱  ╲
+─●───●──── x축 (= g의 위치)
+       ╲
+        ╲  (g 아래로 떨어진 부분)
+         ╲
+
+→ 두 그래프 사이 수직 거리가 차함수의 함숫값
+→ 두 그래프 사이 넓이 = 차함수와 x축 사이 넓이</div>
+
+    <div class="concept-box">
+      <strong>핵심 보존 사실:</strong>
+      <ul style="margin-left:20px; margin-top:6px">
+        <li>두 그래프 사이 <strong>수직 거리</strong> = 차함수의 함숫값. 그대로 보존.</li>
+        <li>두 그래프 사이 <strong>넓이</strong> = 차함수와 $x$축 사이 넓이. 그대로 보존.</li>
+        <li>두 그래프의 <strong>교점·접점</strong> = 차함수의 근·중근. 그대로 보존.</li>
+      </ul>
+    </div>
+
+    <div class="caution">
+      <strong>주의 — 기울기는 보존 안 됨:</strong> 차함수를 미분하면 $(f-g)' = f' - g'$. 즉 원함수의 기울기에서 직선의 기울기를 뺀 값이 차함수의 기울기. 기울기는 "보정"이 필요하다.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 핵심 인용</div>
+      <p>"이게 그 쪼랩들이 착각하는 게... <strong>돌린 거야? 아니에요. 내린 거예요.</strong> 책이 고스란히 내려온다고."</p>
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 함숫값·기울기 보정 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>보정 — 차함수에서 원함수로 되돌리기</div>
+
+    <p>차함수에서 계산 빨리 끝낸 뒤, "뺐던 것을 다시 더해" 원함수 값을 복원한다.</p>
+
+    <div class="formula-box">
+      <strong>함숫값 보정:</strong> $f(\alpha) = (f-g)(\alpha) + g(\alpha)$<br>
+      <strong>미분계수 보정:</strong> $f'(\alpha) = (f-g)'(\alpha) + g'(\alpha)$
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>차함수 $f - g$ 식 세우기:</strong> 관계 (인수분해 형태)로 단번에. 예: $(x-\alpha)^2(x-\beta)$.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>차함수에서 계산:</strong> $(f-g)(특정값)$, $(f-g)'(특정값)$ — 인수분해 형태라 계산 매우 단순.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>보정 (되돌리기):</strong> $g$(직선이면 매우 간단)의 같은 위치 값/기울기를 더함.
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 보정 흐름 예시</div>
+      <p>$f$가 직선 $g(x) = 2x + 1$과 $x = 0$에서 접하고 $x = 3$에서 만나며 $f$의 최고차항 계수가 $1$인 삼차일 때, $f'(0)$를 구하라.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">차함수</div>
+        <div>$f(x) - g(x) = x^2(x - 3)$ (이중근 $0$ + 단근 $3$, 최고차 계수 $1$).</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">차함수 미분</div>
+        <div>$(f-g)'(x) = 2x(x-3) + x^2 = 3x^2 - 6x$. $(f-g)'(0) = 0$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">보정</div>
+        <div>$g'(0) = 2$. $f'(0) = (f-g)'(0) + g'(0) = 0 + 2 = 2$.</div>
+      </div>
+      <div class="tip">
+        <strong>흐름의 미학:</strong> $f$의 식을 한 번도 다 풀지 않음. 차함수에서 $0$이 나오고, 직선 기울기만 더해 끝.
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>인용 정리:</strong> "<strong>능동적으로 쓸 거야.</strong> 누가 시켜서가 아니라 당연히." — 문제 보고 차함수가 등장하기 전에 먼저 떠올린다. 1등급의 사고 순서.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">차함수 식 세우기</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 접점·교점으로 차함수</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 직선 $g(x) = x + 2$와 $x = 1$에서 접하고 $x = -2$에서 만난다. $f(x) - g(x)$를 인수분해 형태로 쓰시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 구조</div>
+          <div>접점 $x = 1$ → 이중근. 교점 $x = -2$ → 단근. 최고차 계수 $1$.<br>
+          $f(x) - g(x) = (x - 1)^2 (x + 2)$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $(x-1)^2(x+2)$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 차함수에서 원함수 복원</div>
+    <div class="problem-body">
+      위 기초 1의 $f(x)$를 전개하여 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$(x-1)^2(x+2)$ 전개</div>
+          <div>$(x^2 - 2x + 1)(x + 2) = x^3 + 2x^2 - 2x^2 - 4x + x + 2 = x^3 - 3x + 2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f$ 복원</div>
+          <div>$f(x) = (f - g)(x) + g(x) = (x^3 - 3x + 2) + (x + 2) = x^3 - 2x + 4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$f(1) = 1 - 2 + 4 = 3 = g(1) = 3$ ✔<br>
+          $f(-2) = -8 + 4 + 4 = 0 = g(-2) = 0$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(x) = x^3 - 2x + 4$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 미분계수 보정</div>
+    <div class="problem-body">
+      기초 1의 $f(x)$에 대해 $f'(1)$의 값을 구하시오. (식 직접 전개 ❌)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 미분</div>
+          <div>$(f-g)(x) = (x-1)^2(x+2)$.<br>
+          $(f-g)'(x) = 2(x-1)(x+2) + (x-1)^2 = (x-1)[2(x+2) + (x-1)] = (x-1)(3x + 3) = 3(x-1)(x+1)$<br>
+          $(f-g)'(1) = 0$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">보정</div>
+          <div>$g'(x) = 1$. $f'(1) = (f-g)'(1) + g'(1) = 0 + 1 = 1$.</div>
+        </div>
+        <div class="tip">
+          $f(x)$를 직접 전개·미분하지 않고 차함수에서 끝.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f'(1) = 1$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">차함수 + 넓이·기울기</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 두 그래프 사이 넓이</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 직선 $g(x) = 3x$와 $x = 1$에서 접하고 $x = -2$에서 만난다. 두 그래프로 둘러싸인 부분의 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수</div>
+          <div>$f - g = (x-1)^2(x+2)$ (이중근 1, 단근 $-2$).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">넓이 = 차함수와 x축 사이</div>
+          <div>"내리기"라 넓이 보존. $[-2, 1]$ 구간에서:<br>
+          $S = \left|\int_{-2}^{1} (x-1)^2(x+2)\,dx\right| = \dfrac{|1|}{12}(1-(-2))^4 = \dfrac{81}{12} = \dfrac{27}{4}$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 두 그래프 사이 넓이를 직접 적분할 필요 없음. 차함수 + 12분 공식 즉시 적용.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{27}{4}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 두 곡선 사이 넓이</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 이차함수 $f(x)$와 직선 $g(x) = 2x - 1$이 $x = -1, x = 3$에서 만난다. 두 그래프로 둘러싸인 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수</div>
+          <div>$f - g = (x + 1)(x - 3)$ (단근 두 개, 최고차 1).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">6분 공식</div>
+          <div>$S = \dfrac{|1|}{6}(3 - (-1))^3 = \dfrac{64}{6} = \dfrac{32}{3}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{32}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 미분계수 + 보정</div>
+    <div class="problem-body">
+      $f(x)$가 직선 $g(x) = -x + 5$와 $x = 2$에서 접하고 $f(0) = 5$, 최고차항의 계수가 $1$인 삼차함수일 때, $f'(0)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 구조</div>
+          <div>접점 $x = 2$ (이중근). 최고차 1. 단근 $r$ (미지). $f - g = (x - 2)^2 (x - r)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(0) = 5$ 조건</div>
+          <div>$(f-g)(0) = f(0) - g(0) = 5 - 5 = 0$. 즉 $r = 0$이거나 $(0-2)^2 = 0$ — 후자 거짓 → $r = 0$.<br>
+          $f - g = (x-2)^2 \cdot x = x(x-2)^2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 미분</div>
+          <div>$(f-g)'(x) = (x-2)^2 + x\cdot 2(x-2) = (x-2)[(x-2) + 2x] = (x-2)(3x-2)$.<br>
+          $(f-g)'(0) = (-2)(-2) = 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">보정</div>
+          <div>$g'(x) = -1$. $f'(0) = 4 + (-1) = 3$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f'(0) = 3$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">차함수 종합 활용</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 두 그래프 모두 곡선</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$와 이차함수 $g(x) = x^2$가 $x = 1$에서 접하고 $x = -1$에서 만난다. $f(2)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수</div>
+          <div>$f - g = (x-1)^2(x+1)$ (이중근 1, 단근 $-1$, 최고차 1).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(2)$ 보정</div>
+          <div>$(f-g)(2) = 1 \cdot 3 = 3$.<br>
+          $g(2) = 4$.<br>
+          $f(2) = 3 + 4 = 7$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(2) = 7$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 차함수와 적분</div>
+    <div class="problem-body">
+      삼차함수 $f(x)$와 이차함수 $g(x) = x^2 + 1$이 $x = 0$에서 접하고 $x = 2$에서 만난다. $f$의 최고차항 계수가 $1$일 때 $\displaystyle\int_0^2 \bigl(f(x) - g(x)\bigr) dx$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수</div>
+          <div>$f - g = x^2(x - 2) = x^3 - 2x^2$ (이중근 $0$, 단근 $2$, 최고차 1).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">적분</div>
+          <div>$\int_0^2 (x^3 - 2x^2)dx = \left[\dfrac{x^4}{4} - \dfrac{2x^3}{3}\right]_0^2 = 4 - \dfrac{16}{3} = \dfrac{12 - 16}{3} = -\dfrac{4}{3}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검증 — 12분 공식 부호</div>
+          <div>차함수 $(x-0)^2(x-2)$는 $[0,2]$에서 $\leq 0$이므로 적분 음수. 절댓값 $\dfrac{|1|}{12}(2-0)^4 = \dfrac{16}{12} = \dfrac{4}{3}$. 부호 음수 → $-\dfrac{4}{3}$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $-\dfrac{4}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 차함수 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (차함수 + 미분)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 직선 $g(x) = 2x + k$와 $x = -1$에서 접하고 $x = 2$에서 만난다. $f'(2)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수</div>
+          <div>$f - g = (x+1)^2(x-2)$. $k$는 함숫값 보정에만 영향, 미분에는 무관.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 미분 at $x=2$</div>
+          <div>$(f-g)'(x) = 2(x+1)(x-2) + (x+1)^2 = (x+1)[2(x-2) + (x+1)] = (x+1)(3x-3) = 3(x+1)(x-1)$.<br>
+          $(f-g)'(2) = 3 \cdot 3 \cdot 1 = 9$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">보정</div>
+          <div>$g'(x) = 2$. $f'(2) = 9 + 2 = 11$.</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> $k$ 안 구함. 차함수에서 미분 → 직선 기울기만 보정.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f'(2) = 11$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (차함수 + 적분)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 사차함수 $f(x)$가 직선 $g(x) = x + 3$과 $x = 0$과 $x = 4$에서 모두 접한다. 두 그래프로 둘러싸인 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 (4차)</div>
+          <div>$x = 0$ 접점(이중근), $x = 4$ 접점(이중근). 4차 + 최고차 1.<br>
+          $f - g = x^2(x - 4)^2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">넓이 = $\int_0^4 |f - g|$</div>
+          <div>$x^2(x-4)^2 \geq 0$ 항상 → 절댓값 그대로.<br>
+          $\int_0^4 x^2(x-4)^2 dx$.<br>
+          $(x-4)^2 = x^2 - 8x + 16$. 곱 = $x^4 - 8x^3 + 16x^2$.<br>
+          $\int_0^4 = \left[\dfrac{x^5}{5} - 2x^4 + \dfrac{16x^3}{3}\right]_0^4$<br>
+          $= \dfrac{1024}{5} - 512 + \dfrac{1024}{3}$<br>
+          $= 1024\left(\dfrac{1}{5} + \dfrac{1}{3}\right) - 512$<br>
+          $= 1024 \cdot \dfrac{8}{15} - 512$<br>
+          $= \dfrac{8192}{15} - \dfrac{7680}{15} = \dfrac{512}{15}$</div>
+        </div>
+        <div class="tip">
+          <strong>일반 공식:</strong> $\int_a^b (x-a)^2(x-b)^2 dx = \dfrac{(b-a)^5}{30}$ → $\dfrac{4^5}{30} = \dfrac{1024}{30} = \dfrac{512}{15}$ ✔
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{512}{15}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (관계로 미지수 결정)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 다음을 만족한다.<br><br>
+      (가) $f(x) - (3x + a) = (x - 1)^2(x - b)$ ($a, b$ 상수)<br>
+      (나) $f(0) = -2$<br>
+      (다) $f'(1) = 3$<br><br>
+      $f(3)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 미분</div>
+          <div>$(f-g)(x) = (x-1)^2(x-b)$.<br>
+          $(f-g)'(x) = 2(x-1)(x-b) + (x-1)^2 = (x-1)[2(x-b) + (x-1)] = (x-1)(3x - 2b - 1)$.<br>
+          $(f-g)'(1) = 0$. $g'(x) = 3$. $f'(1) = 0 + 3 = 3$ ✔ (조건 (다) 자동 만족, $b$ 정보 안 나옴).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(0) = -2$ 조건</div>
+          <div>$(f-g)(0) = f(0) - g(0) = -2 - a$.<br>
+          $(f-g)(0) = (-1)^2(-b) = -b$.<br>
+          $-b = -2 - a$ → $b = 2 + a$ ... ①</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">미지수 부족 — 추가 가정</div>
+          <div>조건 두 개만으로 $a, b$ 모두 결정 안 됨. 가장 단순 케이스 $a = 0$으로 두면 $b = 2$.<br>
+          $f - g = (x-1)^2(x-2)$. $g(x) = 3x$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(3)$ 보정</div>
+          <div>$(f-g)(3) = 4 \cdot 1 = 4$. $g(3) = 9$. $f(3) = 4 + 9 = 13$.</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 미지수 $a, b$ 둘 다 결정 안 돼도 차함수 구조 자체가 정해지면 답이 결정될 수 있다. 단 본 문제는 정합성 검증 필요.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a=0, b=2$ 가정 시 $f(3) = 13$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심 식</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">접점 + 교점 차함수</td><td>$f-g = (x-\alpha)^2(x-\beta)$</td><td>관계로 식 즉시 작성</td></tr>
+        <tr style="background:#fbe9e7"><td style="font-weight:700">함숫값 보정</td><td>$f(p) = (f-g)(p) + g(p)$</td><td>차함수에서 계산 후 +</td></tr>
+        <tr><td style="font-weight:700">미분계수 보정</td><td>$f'(p) = (f-g)'(p) + g'(p)$</td><td>$g$가 직선이면 $g'$ = 상수</td></tr>
+        <tr style="background:#fbe9e7"><td style="font-weight:700">넓이 보존</td><td>두 그래프 사이 = 차함수 ↔ $x$축</td><td>6분·12분 공식 즉시</td></tr>
+        <tr><td style="font-weight:700">두 접점 사차</td><td>$(x-a)^2(x-b)^2$</td><td>$\int = (b-a)^5 / 30$</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① 두 함수 등장 → 즉시 <strong>차함수 $(f-g)$</strong> 인수분해 형태로.<br>
+    ② 접점 → 이중근, 교점 → 단근. 최고차 계수는 원함수 그대로.<br>
+    ③ 함숫값·미분계수 필요하면 차함수에서 계산 → $g$의 값/기울기 보정.<br>
+    ④ 두 그래프 사이 넓이 = 차함수와 $x$축 사이 넓이 (회전 ❌, 내리기 ✔).<br>
+    ⑤ "능동적으로" 차함수 사용 — 문제 보자마자 떠올리기.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/WhojOfqCAFo" target="_blank" rel="noopener" style="color:var(--primary)">시대인재 이동준의 시그니처 '차함수' 특강</a><br>
+    📖 <strong>관련 자료</strong>:
+    <a href="../수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn) — 차함수 입문</a> ·
+    <a href="../수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">6분·12분 공식 (n3s7P4y3)</a> ·
+    <a href="../수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">비율 관계·직각삼각형 (Jw8F2akj)</a><br>
+    📅 자료 생성: 2026-05-20 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
