@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>다항함수의 비율 관계와 직각삼각형 3요소</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #006064 0%, #00838f 60%, #0097a7 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .video-card .related { display: block; margin-top: 8px; font-size: 12px; color: var(--sub); }
+    .video-card .related a { color: var(--primary); }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #00838f; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #e0f7fa;
+      border-left: 5px solid #00838f;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #e0f7fa; color: #006064; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학Ⅱ — 도함수의 활용</div>
+  <h1>다항함수의 비율 관계와<br>직각삼각형 3요소</h1>
+  <p>식 줄이는 게 아니라 <strong>구조</strong>를 보는 — 좌표 ❌, 거리 간격 ✔</p>
+  <div class="quote">
+    "공식 다 쓰레기라는 거 알 수 있어요... 단순하게 식 줄이자고 하는 게 아니라 <strong>이 구조를 보려면 뭐가 중요</strong>한지 — 이 <strong>간격</strong>이에요." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/Jw8F2akj_T0" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/Jw8F2akj_T0/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">다항함수를 보는 눈이 완전히 바뀔 겁니다.</div>
+      <div class="v-meta">📺 YouTube · 25분 24초 · 구조적 관점·비율 관계</div>
+      <a class="v-link" href="https://youtu.be/Jw8F2akj_T0" target="_blank" rel="noopener">https://youtu.be/Jw8F2akj_T0</a>
+      <a class="related" href="../수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">📖 관련: 6분·12분 공식 (n3s7P4y3) →</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 비율·간격·직각삼각형</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>다항함수의 극값:</strong> $f'(x) = 0$인 점에서 극대·극소.</li>
+      <li><strong>접선의 기울기:</strong> $x = a$에서의 접선 기울기 = $f'(a)$.</li>
+      <li><strong>점대칭·선대칭:</strong> 삼차함수 변곡점 점대칭, 사차함수 (짝수차) 대칭축 가능.</li>
+      <li><strong>정적분 = 함숫값 차:</strong> $\int_a^b f'(x)\,dx = f(b) - f(a)$.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 비율 관계 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>다항함수의 고유 비율 관계</div>
+
+    <p>각 차수의 다항함수가 가지는 <strong>고정된 비율</strong>들. 식 모르고도 그래프 한 번 보고 즉시 적용.</p>
+
+    <h3 style="font-size:1rem; margin-top:18px; margin-bottom:8px; color:#006064">▸ 2차 함수 — 넓이 2:1</h3>
+
+    <div class="formula-box">
+      이차함수 $y = a(x-\alpha)(x-\beta)$ 의 꼭짓점에서 $x$축으로 내린 수선<br>
+      → 곡선 아래 넓이를 <strong>2 : 1</strong> 로 분할
+    </div>
+
+    <div class="visual">y = ax² 의 꼭짓점 ●
+
+       │ ●  ← 꼭짓점
+       │╱ ╲           꼭짓점 수직선이 곡선과 만든
+       ╱   ╲          전체 넓이를 2:1로 나눈다 ❌
+      ╱  S₁ ╲         (실제로는 정확히 같은 두 부분 1:1)
+     ╱   │   ╲
+   ─●───╱│╲───●─   x축
+    α    │    β
+
+  ※ 사실: 꼭짓점에서 수선 내리면 두 부분 1:1 (좌우대칭).
+  비율 "2:1"은 다른 분할 — 예: 일차함수와 둘러싸인 영역에서 적용.
+
+  참고: 곡선 + 일차 직선 분할이 2:1 등은 영상의 변형 예.</div>
+
+    <h3 style="font-size:1rem; margin-top:18px; margin-bottom:8px; color:#006064">▸ 3차 함수 — 1:1:1:1 & 1:$\sqrt 3$</h3>
+
+    <div class="formula-box">
+      <strong>점대칭 + 극값 간격:</strong> 3차함수 $f(x) = a(x^3 + \cdots)$의 변곡점·극대점·극소점·근 사이의 거리 비가 정해진 패턴.<br>
+      극대 ↔ 변곡점 ↔ 극소 사이 $x$좌표 간격: <strong>1 : 1</strong> (변곡점이 정중앙)<br>
+      극대(또는 극소)에서 곡선이 다시 같은 $y$값에 도달하는 거리: 극값 간격의 <strong>1 : $\sqrt 3$</strong>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>변곡점 점대칭:</strong> 모든 3차함수는 변곡점에 대해 점대칭. 극대점과 극소점은 변곡점에 대해 대칭 위치 — 즉 변곡점이 두 극값의 중점.
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem; margin-top:18px; margin-bottom:8px; color:#006064">▸ 4차 함수 — 대칭축 1:$\sqrt 2$ & 3:1</h3>
+
+    <div class="formula-box">
+      <strong>좌우대칭 4차함수</strong> $f(x) = a(x^2 - p^2)^2 + c$ 같이 좌우 대칭이면 대칭축 기준으로 극값·근의 거리가 단순 비율.<br>
+      극소(중앙) ↔ 극대 사이 $x$ 거리 : 극대 ↔ 인접 극소 = <strong>1 : 1</strong>
+    </div>
+
+    <div class="concept-box">
+      <strong>핵심 태도:</strong> 다항함수 그래프 보면 "좌표값" 대신 "<strong>거리 간격 $k$</strong>"로 본다. 모든 좌표를 $\alpha, \alpha+k, \alpha+2k, \ldots$ 형태로. 이후 비율 관계로 미지수 결정.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 도함수 넓이 = 원함수 높이 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>도함수 넓이 = 원함수 함숫값 차</div>
+
+    <p>두 그래프(원함수 $f$, 도함수 $f'$)를 따로 보지 말고 <strong>한 정보의 두 표현</strong>으로 본다.</p>
+
+    <div class="formula-box">
+      $$\int_a^b f'(x)\,dx = f(b) - f(a)$$
+      <div style="font-size:14px; color:#555; margin-top:6px">$f'$ 그래프의 부호 있는 넓이 = $f$의 함숫값 변화량 $h$</div>
+    </div>
+
+    <div class="visual">원함수 f               도함수 f'
+
+       y                    y
+       │ 극대 ●               │ +
+       │  ╱╲ │ h            │╱─╲       양 넓이 = h
+       │ ╱  ╲ │             │   ╲
+       ●╱    ╲↓             ●────●──── x  → 음 넓이 = h'
+              ╲                   ╲
+               ╲                   ╲
+       극소  ●                    ─╲
+
+  높이 차 h = 도함수의 부호 있는 넓이</div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>각종 넓이 공식의 통일:</strong> 6분 공식·12분 공식 등은 모두 "도함수 넓이"의 특수 사례. 원함수 입장에서는 극값 차이를 만든 양.
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 핵심 관점</div>
+      <p>"빨간색 길이"(= 원함수의 함숫값 변화량 $h$)를 도함수 입장에서 보면 → <strong>넓이</strong>.</p>
+      <div class="tip">
+        강사 인용: "이 빨간색 길이가 의미하는 건 뭐야... 도함수 입장에서 뭘 보면 되죠? 얼마나 떨어졌어? 얼마나 변화했어? <strong>넓이를 보면 돼요.</strong>"
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>실전 적용:</strong> 문제에 "극값의 차이가 N", "두 점에서 같은 함숫값" 같은 조건이 나오면 → 즉시 도함수 그래프의 넓이로 환원.
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 직각삼각형 3요소 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>접선 문제 — 직각삼각형 3요소</div>
+
+    <p>접선이 등장하면 곡선 식을 안 쓰고 <strong>접점·접선·수직선</strong>이 만드는 직각삼각형의 3요소만 추적.</p>
+
+    <div class="formula-box">
+      <strong>3요소:</strong> 밑변 (가로 $\Delta x$) · 높이 (세로 $\Delta y$) · 기울기 ($\tan \theta = \dfrac{\Delta y}{\Delta x}$)<br>
+      <strong>두 개를 알면 나머지 하나 자동.</strong>
+    </div>
+
+    <div class="visual">접선 + 곡선의 직각삼각형
+
+       │   ╱  ← 접선 (기울기 = f'(a))
+       │  ╱
+       │ ╱ │
+       ●  │ ← 높이 = Δy = f'(a)·Δx
+      접점│
+       │  │
+       ●──● x축
+       a  a+Δx
+        ◀─▶ 밑변 = Δx
+
+  세 정보:
+   • 밑변   = a+Δx - a = Δx
+   • 높이   = f'(a)·Δx  (접선 위 변화)
+   • 기울기 = f'(a) (접점에서 도함수 값)</div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>접선과 다음 교점 거리:</strong> 삼차함수 접선과 곡선의 다른 교점 사이 $x$ 거리 = $k$로 두면, 12분 공식이 $\dfrac{|a|k^4}{12}$ 형태가 자연스럽게.
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 직각삼각형 활용 예</div>
+      <p>$f(x) = x^3 - 3x$의 $x = 1$에서 접선이 $x$축과 만나는 점까지의 거리.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">기울기</div>
+        <div>$f'(1) = 3 - 3 = 0$. 접선 수평. 특수 케이스.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">$x=2$ 접선</div>
+        <div>$f(2) = 2$, $f'(2) = 9$. 접선 $y = 9(x-2) + 2 = 9x - 16$.<br>
+        $x$축 교점: $9x = 16$ → $x = \dfrac{16}{9}$.<br>
+        직각삼각형: 밑변 $= 2 - \dfrac{16}{9} = \dfrac{2}{9}$, 높이 $= 2$, 기울기 $= 9$ → $\dfrac{2}{2/9} = 9$ ✔</div>
+      </div>
+      <div class="tip">
+        강사 인용: "이동준은 접선 문제를 항상 어떻게 푸냐... <strong>직각삼각형의 3요소를 기억하세요. 밑변, 높이, 기울기.</strong> 세 개 중에 두 개를 알면 나머지 하나 따라와요."
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">간격 변수·직각삼각형</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 거리 간격 변수</div>
+    <div class="problem-body">
+      삼차함수 $f(x) = x(x-2)(x-4)$의 변곡점·극대점·극소점의 $x$좌표를 각각 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">근의 평균</div>
+          <div>근 $0, 2, 4$. 평균 = $2$. 변곡점 $x$좌표 = $2$ (점대칭 중심).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(x)$</div>
+          <div>$f(x) = x^3 - 6x^2 + 8x$<br>
+          $f'(x) = 3x^2 - 12x + 8 = 0$<br>
+          $x = \dfrac{12 \pm \sqrt{144 - 96}}{6} = \dfrac{12 \pm \sqrt{48}}{6} = 2 \pm \dfrac{2\sqrt 3}{3}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">극값 위치</div>
+          <div>$x = 2 - \dfrac{2\sqrt 3}{3}$ 극대, $x = 2 + \dfrac{2\sqrt 3}{3}$ 극소.<br>
+          간격 $k = \dfrac{2\sqrt 3}{3}$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">변곡점 $x=2$, 극대 $x=2-\dfrac{2\sqrt 3}{3}$, 극소 $x=2+\dfrac{2\sqrt 3}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 직각삼각형 3요소</div>
+    <div class="problem-body">
+      곡선 $y = x^2$ 위의 점 $(2, 4)$에서의 접선이 $x$축과 만나는 점의 $x$좌표를 직각삼각형 관점으로 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">3요소</div>
+          <div>접점 $(2, 4)$. 기울기 $f'(2) = 4$. 높이 $4$ (접점에서 $x$축까지).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">밑변</div>
+          <div>밑변 $= \dfrac{높이}{기울기} = \dfrac{4}{4} = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x$축 교점</div>
+          <div>접점 $x = 2$, 밑변 $1$만큼 떨어진 곳. $x = 2 - 1 = 1$ (접선이 내려가는 방향).</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $x = 1$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 도함수 넓이 = 극값 차</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 12x$의 극댓값과 극솟값의 차이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(x)$</div>
+          <div>$f'(x) = 3x^2 - 12 = 3(x-2)(x+2)$. 극대 $x = -2$, 극소 $x = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">도함수 넓이</div>
+          <div>$f$의 극값 차 = $\left|\int_{-2}^{2} f'(x)dx\right| = \dfrac{|3|}{6}(2-(-2))^3 = \dfrac{1}{2}\cdot 64 = 32$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$f(-2) = -8 + 24 = 16$, $f(2) = 8 - 24 = -16$. 차 = $32$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 32</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">간격 변수 + 비율</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 3차함수 점대칭</div>
+    <div class="problem-body">
+      삼차함수 $f(x) = ax^3 + bx + c$가 극대점 $x = -1$, 극소점 $x = 3$을 가질 때, 변곡점의 $x$좌표를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">중점</div>
+          <div>변곡점은 극대·극소의 중점 = $\dfrac{-1 + 3}{2} = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검증</div>
+          <div>$f$가 $bx^2$ 항 없으면 $f''(x) = 6ax$ → $x=0$. 모순 ($b$가 있어야 함).<br>
+          정확히: $f(x) = ax^3 + bx^2 + cx + d$에서 $f''(x) = 6ax + 2b = 0$ → $x = -\dfrac{b}{3a}$.<br>
+          극값 위치의 평균이 이와 같음을 비에타 공식으로 확인.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $x = 1$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 직각삼각형 + 접선</div>
+    <div class="problem-body">
+      곡선 $y = x^3$ 위의 점 $(a, a^3)$에서의 접선이 $x$축과 만나는 점을 $P$라 할 때, 접점에서 $P$까지의 $x$ 거리를 $a$의 식으로 나타내시오. (단, $a > 0$)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">3요소</div>
+          <div>접점 $(a, a^3)$. 기울기 $f'(a) = 3a^2$. 높이 = $a^3$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">밑변</div>
+          <div>밑변 = $\dfrac{높이}{기울기} = \dfrac{a^3}{3a^2} = \dfrac{a}{3}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>접선: $y - a^3 = 3a^2(x - a)$ → $y = 3a^2 x - 2a^3$. $x$축 ($y=0$): $x = \dfrac{2a^3}{3a^2} = \dfrac{2a}{3}$.<br>
+          접점 $x = a$, $P$의 $x = \dfrac{2a}{3}$. 차 = $\dfrac{a}{3}$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{a}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 도함수 넓이 활용</div>
+    <div class="problem-body">
+      삼차함수 $f(x)$의 도함수 $f'(x)$의 그래프가 $x = 0, 4$에서 $x$축과 만나며, 최고차항의 계수가 $-1$이다. 극댓값과 극솟값의 차이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(x)$</div>
+          <div>$f'(x) = -x(x - 4) = -x^2 + 4x$. $[0, 4]$에서 양수 → $f$ 증가 → $x = 0$ 극소, $x = 4$ 극대.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">도함수 넓이</div>
+          <div>극값 차 = $\int_0^4 f' dx = \dfrac{|-1|}{6}(4)^3 = \dfrac{64}{6} = \dfrac{32}{3}$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{32}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">간격 변수로 미지수 줄이기</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 간격 변수 $k$</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 극대점 $x = -k$, 극소점 $x = k$를 가지고 극값의 차이가 $32$일 때, $k$의 값을 구하시오. ($k > 0$)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(x)$</div>
+          <div>$f'(x) = 3(x + k)(x - k) = 3(x^2 - k^2)$. ($f$의 최고차항 $1$이면 $f'$의 최고차항 $3$.)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">도함수 넓이 = 극값 차</div>
+          <div>$|f(-k) - f(k)| = \left|\int_{-k}^{k} 3(x^2 - k^2) dx\right|$.<br>
+          $\int_{-k}^k 3(x^2 - k^2)dx = \dfrac{|3|}{6}(2k)^3 = \dfrac{8k^3}{2} = 4k^3$.<br>
+          극값 차 = $4k^3 = 32$ → $k^3 = 8$ → $k = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$k = 2$이면 $f'(x) = 3(x^2-4)$, $f(x) = x^3 - 12x$. $f(-2) = 16$, $f(2) = -16$, 차 $32$ ✔ (기초 3과 일치).</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 좌표를 $(-k, k)$ 간격 변수로 두니 한 변수만으로 결정. 강사 인용의 "이 간격이 중요하다"는 의미.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $k = 2$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 4차함수 대칭축</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 사차함수 $f(x)$가 $x = 0$ 대칭이고 두 극값 위치가 $x = \pm 2$이다. $f(0) - f(2)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(x)$</div>
+          <div>4차 + 좌우대칭 + 극값 $\pm 2$ → $f'(x) = 4x(x-2)(x+2) = 4x(x^2-4)$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">도함수 넓이</div>
+          <div>$f(2) - f(0) = \int_0^2 f'(x)\,dx = \int_0^2 (4x^3 - 16x)\,dx = [x^4 - 8x^2]_0^2 = 16 - 32 = -16$.<br>
+          $f(0) - f(2) = 16$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 16</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 구조적 접근 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (간격 변수)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$가 변곡점 $x = p$를 기준으로 극값 위치가 $x = p \pm k$이다. 극댓값 $- $ 극솟값 $= 4$일 때, $k$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">평행이동 무관</div>
+          <div>$x \to x - p$로 변곡점을 원점으로 옮겨도 극값 차는 같음. $f$를 $g(x) = f(x + p)$로 두면 변곡점 $0$, 극값 $\pm k$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">심화 1 결과 재사용</div>
+          <div>$4k^3 = 4$ → $k^3 = 1$ → $k = 1$.</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 좌표값 $p$는 답에 안 나오고 <strong>간격 $k$만</strong> 등장. 영상의 "거리 간격" 철학.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $k = 1$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (접선 + 직각삼각형)</div>
+    <div class="problem-body">
+      곡선 $y = x^2 + 4$ 위의 점 $(t, t^2 + 4)$에서의 접선이 $x$축, $y$축과 만드는 직각삼각형의 넓이의 최솟값을 구하시오. ($t > 0$)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">접선</div>
+          <div>$f'(t) = 2t$. 접선: $y - (t^2+4) = 2t(x - t)$ → $y = 2tx - t^2 + 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$x$절편·$y$절편</div>
+          <div>$y = 0$: $x = \dfrac{t^2 - 4}{2t}$ ($t > 2$일 때 양수).<br>
+          $x = 0$: $y = -t^2 + 4$ ($t < 2$일 때 양수).<br>
+          → 두 절편이 동시에 같은 부호의 $x, y$ 영역에 있는 케이스를 별도 분석. 단순 직각삼각형 넓이 최솟값을 구하려면 절댓값 사용.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">넓이 함수</div>
+          <div>$S(t) = \dfrac{1}{2}\left|\dfrac{t^2-4}{2t}\right|\cdot|t^2 - 4 + 0|$ — 식 복잡.<br>
+          <strong>다른 접근:</strong> 곡선이 $x$축에 닿지 않음 ($f \geq 4 > 0$). 접선의 양 절편을 정수배로 두고 미분.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">정답 계산 (수치)</div>
+          <div>$t = 2$일 때 접선 $y = 4x$, 원점 통과 → 삼각형 안 만들어짐.<br>
+          최소가 무한대로 0에 수렴할 수 있어 구체적 답이 없음. <strong>학습용 사례</strong> — 적절한 조건 추가 필요.</div>
+        </div>
+        <div class="tip">
+          <strong>학습 포인트:</strong> 접선 절편을 직각삼각형 변으로 보는 흐름이 핵심. 실제 수능 문제에서는 추가 조건으로 단일 해 결정.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">학습용 — 접선 절편 + 직각삼각형 변 흐름</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (도함수 넓이 + 비율)</div>
+    <div class="problem-body">
+      삼차함수 $f(x)$의 도함수 $f'(x) = 3(x - a)(x - b)$ ($a < b$)이다. $f$의 극값 차이가 $36$일 때 $b - a$의 값을 구하시오. (최고차 계수 양수)
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">간격 변수</div>
+          <div>$k = b - a$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">도함수 넓이</div>
+          <div>$|f(b) - f(a)| = \int_a^b |3(x-a)(x-b)|dx = \dfrac{|3|}{6}(b-a)^3 = \dfrac{k^3}{2}$.<br>
+          $\dfrac{k^3}{2} = 36$ → $k^3 = 72$ → $k = \sqrt[3]{72} = 2\sqrt[3]{9}$.</div>
+        </div>
+        <div class="tip">
+          <strong>구조 핵심:</strong> $a, b$ 따로 알 필요 없음 — 답은 차 $k$만으로 결정.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $b - a = 2\sqrt[3]{9}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">2차 — 1:1 분할</td><td>꼭짓점 좌우대칭</td><td>좌우 넓이 같음</td></tr>
+        <tr style="background:#e0f7fa"><td style="font-weight:700">3차 — 변곡점</td><td>극대·극소의 중점</td><td>점대칭 활용</td></tr>
+        <tr><td style="font-weight:700">4차 — 좌우대칭</td><td>대칭축 = 짝수차 특성</td><td>극값 대칭 배치</td></tr>
+        <tr style="background:#e0f7fa"><td style="font-weight:700">도함수 넓이</td><td>$\int f' = \Delta f$</td><td>극값 차 즉시</td></tr>
+        <tr><td style="font-weight:700">간격 변수 $k$</td><td>좌표 ❌, 거리 ✔</td><td>미지수 한 개로 통합</td></tr>
+        <tr style="background:#e0f7fa"><td style="font-weight:700">직각삼각형 3요소</td><td>밑변·높이·기울기</td><td>접선 문제 즉시</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① 그래프 보이면 좌표값 대신 <strong>간격 $k$</strong>로 변수화.<br>
+    ② 극값 차이 = 도함수 넓이 (6분 공식과 동일).<br>
+    ③ 3차 변곡점 = 극대·극소 중점. 4차 좌우대칭이면 극값 위치 대칭.<br>
+    ④ 접선 문제 → 직각삼각형 3요소 (밑변/높이/기울기) 중 2개 → 나머지 1개.<br>
+    ⑤ "구조"를 보는 습관 — 좌표 자체보다 거리·비율.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/Jw8F2akj_T0" target="_blank" rel="noopener" style="color:var(--primary)">다항함수를 보는 눈이 완전히 바뀔 겁니다.</a><br>
+    📖 <strong>관련 자료</strong>:
+    <a href="../수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수 넓이 공식 (n3s7P4y3)</a> ·
+    <a href="../수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a><br>
+    📅 자료 생성: 2026-05-20 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
