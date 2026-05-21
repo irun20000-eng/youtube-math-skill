@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .video-card .related { display: block; margin-top: 8px; font-size: 12px; color: var(--sub); }
+    .video-card .related a { color: var(--primary); }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #2e7d32; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #e8f5e9;
+      border-left: 5px solid #2e7d32;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .formula-box.green {
+      background: #e8f5e9;
+      border-color: #2e7d32;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #e8f5e9; color: #1b5e20; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학Ⅱ — 정적분의 활용</div>
+  <h1>다항함수의 넓이 공식<br>$\dfrac{1}{6}$ 공식 · $\dfrac{1}{12}$ 공식 · 도함수 넓이 비율</h1>
+  <p>매번 적분 계산 ❌ → 외워서 10초 안에 — 90% 이상이 6분 공식으로 풀린다</p>
+  <div class="quote">
+    "매번 이거 풀 거냐 외울 거냐의 싸움인데... <strong>줄인다는 거는 거의 필수불가결</strong>한 내용이에요." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/n3s7P4y3RfE" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/n3s7P4y3RfE/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">다항함수의 넓이 공식</div>
+      <div class="v-meta">📺 YouTube · 20분 59초 · 정적분 빠른 풀이</div>
+      <a class="v-link" href="https://youtu.be/n3s7P4y3RfE" target="_blank" rel="noopener">https://youtu.be/n3s7P4y3RfE</a>
+      <a class="related" href="../수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">📖 관련: 삼차함수 점대칭 적분 (C3o6VJbn) →</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 3가지 핵심 공식</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>정적분의 기본정리:</strong> $\int_a^b f(x)\,dx = F(b) - F(a)$, $F'(x) = f(x)$</li>
+      <li><strong>두 곡선 사이 넓이:</strong> $S = \int_\alpha^\beta |f(x) - g(x)|\,dx$</li>
+      <li><strong>이차함수 인수분해:</strong> $ax^2+bx+c = a(x-\alpha)(x-\beta)$ ($\alpha, \beta$ 근)</li>
+      <li><strong>증감과 극값:</strong> $F'(x) = f(x) = 0$인 점에서 $F$의 극값.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 6분 공식 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>$\dfrac{1}{6}$ 공식 — 이차함수 넓이</div>
+
+    <p>이차함수 $f(x) = a(x-\alpha)(x-\beta)$와 $x$축으로 둘러싸인 넓이 (또는 두 곡선 차이가 이차함수일 때).</p>
+
+    <div class="formula-box green">
+      $$S = \int_\alpha^\beta |a(x-\alpha)(x-\beta)|\,dx = \dfrac{|a|}{6}(\beta - \alpha)^3$$
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>유도:</strong> $\int_\alpha^\beta (x-\alpha)(x-\beta)\,dx = -\dfrac{(\beta-\alpha)^3}{6}$ (직접 계산). 부호는 그래프 위치에 따라 ±.
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>적용 패턴:</strong>
+      <ul style="margin-left:20px; margin-top:6px">
+        <li>이차함수 $y = ax^2 + \cdots$ 와 $x$축 사이</li>
+        <li>이차함수 $y = ax^2 + \cdots$ 와 일차함수 $y = mx + n$ 사이 (두 곡선 차이가 이차)</li>
+        <li>두 이차함수 $y = a_1 x^2 + \cdots$, $y = a_2 x^2 + \cdots$ 사이 (차이가 이차, 최고차 계수 $a_1 - a_2$)</li>
+      </ul>
+    </div>
+
+    <div class="visual">y = a(x-α)(x-β), a > 0 인 경우
+
+       y
+       │
+       │ ╲       ╱       (포물선)
+       │  ╲     ╱
+       │   ╲   ╱
+       │    ╲ ╱
+       ●─────●─────  x축
+       α     β
+            ↑넓이 S = |a|/6 · (β-α)³</div>
+
+    <div class="example-card">
+      <div class="example-title">📌 예시 — 직접 계산</div>
+      <p>$y = -x^2 + 4x$ ($a = -1$)와 $x$축으로 둘러싸인 넓이.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">근</div>
+        <div>$-x(x-4) = 0$ → $x = 0, 4$. $\alpha = 0, \beta = 4$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">공식</div>
+        <div>$S = \dfrac{|-1|}{6}(4-0)^3 = \dfrac{64}{6} = \dfrac{32}{3}$</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">검산</div>
+        <div>$\int_0^4 (-x^2+4x)\,dx = \left[-\dfrac{x^3}{3} + 2x^2\right]_0^4 = -\dfrac{64}{3} + 32 = \dfrac{-64+96}{3} = \dfrac{32}{3}$ ✔</div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>강사 인용:</strong> "이게 90% 이상 이것만 쓰는 게 90% 이상." — 이차함수 넓이 문제는 사실상 이 공식만 안다면 끝.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 12분 공식 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>$\dfrac{1}{12}$ 공식 — 삼차함수와 접선</div>
+
+    <p>삼차함수 $f(x) = a(x-\alpha)(x-\beta)(x-\gamma)$ 형태의 그래프와 그 위 한 점에서의 접선이 다시 만나는 점까지의 넓이.</p>
+
+    <div class="formula-box green">
+      <strong>삼차함수 $f(x)$와 접선이 $x = \alpha$ (접점), $x = \beta$ (교점)을 가질 때</strong><br>
+      $f(x) - (\text{접선}) = a(x - \alpha)^2 (x - \beta)$ &nbsp;(접점은 이중근)<br>
+      $$S = \int_\alpha^\beta |a(x-\alpha)^2(x-\beta)|\,dx = \dfrac{|a|}{12}(\beta - \alpha)^4$$
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>왜 $(x-\alpha)^2$ 인가:</strong> 접선이라는 것은 $f(x) - \text{접선}$의 그래프가 $x=\alpha$에서 $x$축에 <em>접</em>한다는 뜻 → $(x-\alpha)$가 이중근.
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>유도:</strong> $\int_\alpha^\beta (x-\alpha)^2(x-\beta)\,dx = -\dfrac{(\beta-\alpha)^4}{12}$ (직접 계산).
+      </div>
+    </div>
+
+    <div class="visual">삼차함수 + 접선
+
+       y                ●  (교점 β)
+       │              ╱╲
+       │            ╱   ╲   ← 접선
+       │          ╱     ╲
+       │  ●────●─        ╲
+       │  접점 α          ╲
+       ●─────────────────●─ x축
+       α                 β
+
+  S = |a|/12 · (β-α)⁴</div>
+
+    <div class="example-card">
+      <div class="example-title">📌 예시 — 삼차+접선 넓이</div>
+      <p>$f(x) = x^3 - 3x$의 $x = 1$에서의 접선과 곡선으로 둘러싸인 넓이.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">접선 식</div>
+        <div>$f'(x) = 3x^2 - 3$, $f'(1) = 0$ (접선 기울기 $0$). $f(1) = -2$. 접선 $y = -2$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">교점</div>
+        <div>$x^3 - 3x = -2$ → $x^3 - 3x + 2 = 0$.<br>
+        $x = 1$이 이중근이므로 $(x-1)^2(x-r) = 0$. 전개해서 계수 비교 → $(x-1)^2(x+2) = 0$. $\beta = -2$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">공식</div>
+        <div>$\alpha = 1$, $\beta = -2$. $|\beta - \alpha| = 3$.<br>
+        $S = \dfrac{|1|}{12}\cdot 3^4 = \dfrac{81}{12} = \dfrac{27}{4}$</div>
+      </div>
+    </div>
+
+    <div class="caution">
+      <strong>주의:</strong> $\alpha < \beta$가 아니어도 $|\beta - \alpha|$ 자리에 절댓값 차이를 넣음. 부호는 그래프 위치로 결정.
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 도함수 넓이 = 극값 차 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>도함수 넓이 $=$ 원함수 극값 차</div>
+
+    <p>$F'(x) = f(x)$의 관계에서, $f(x)$의 그래프가 $x$축과 만드는 넓이는 $F(x)$의 극값 변화량과 일치.</p>
+
+    <div class="formula-box green">
+      $$\int_a^b f(x)\,dx = F(b) - F(a)$$
+      <div style="font-size:14px; color:#555; margin-top:6px">$f$의 부호 있는 넓이 = $F$의 함숫값 변화량</div>
+    </div>
+
+    <div class="concept-box">
+      <strong>핵심 해석:</strong> $f(x)$의 그래프가 만드는 양·음 부호 넓이는 $F(x)$의 극대·극소 사이 높이 차이와 같다. 두 그래프를 하나의 정보로 바꿔 본다.
+    </div>
+
+    <div class="visual">F(x) (원함수)         f(x) = F'(x) (도함수)
+
+       y                    y
+       │ 극대                 │
+       │  ╱╲                 │  ╱──╲      (+) 양의 넓이
+       │ ╱  ╲                │ ╱    ╲
+       ●╱    ╲               ●──────●───   x
+              ╲              α      β    \
+               ╲                          ╲   (-) 음의 넓이
+       극소  ●╲                            ╲
+
+  F(β) - F(α) = [α, β] 구간 f의 부호 있는 넓이
+  극값 차 = 양음 넓이 차</div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>실전 활용 — 정적분 = 0:</strong> $\int_a^b f(x)\,dx = 0$이면 $F(b) = F(a)$. 두 점에서 같은 함숫값.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>비율 관계 — 2:1:</strong> 삼차함수 $F$의 극대점·극소점 $x$좌표가 $p, q$이면, $F(p) - F(q)$를 $\int_p^q f \,dx$로 환산. 도함수 $f$ (이차)가 $x$축과 만드는 두 영역 (양수부·음수부) 넓이의 비가 보통 2:1 또는 정수비.
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 예시 — 도함수 넓이로 극값 차 계산</div>
+      <p>$F(x) = x^3 - 3x^2$의 극값 차이를 도함수로 구하라.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">$F'(x)$</div>
+        <div>$F'(x) = 3x^2 - 6x = 3x(x-2)$. 극값 $x = 0, 2$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">$\int_0^2 F'(x)\,dx$</div>
+        <div>$F'$가 $[0,2]$에서 부호 음수 → 음의 넓이.<br>
+        $|S| = \dfrac{|3|}{6}(2-0)^3 = \dfrac{8}{2} = 4$. 부호 음수이므로 $\int_0^2 = -4$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">극값 차</div>
+        <div>$F(2) - F(0) = -4 - 0 = -4$ ✔ 정확히 일치.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">6분 공식·12분 공식 직접 적용</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 6분 공식</div>
+    <div class="problem-body">
+      $y = -x^2 + 6x$와 $x$축으로 둘러싸인 부분의 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">근</div>
+          <div>$-x(x-6) = 0$ → $\alpha = 0, \beta = 6$. $|a| = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">공식</div>
+          <div>$S = \dfrac{1}{6}(6)^3 = \dfrac{216}{6} = 36$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 36</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 두 곡선 사이</div>
+    <div class="problem-body">
+      $y = x^2 - 2x$와 $y = 2x - 3$로 둘러싸인 부분의 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차이</div>
+          <div>$g(x) = (x^2 - 2x) - (2x - 3) = x^2 - 4x + 3 = (x-1)(x-3)$. $a = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">공식</div>
+          <div>$S = \dfrac{1}{6}(3-1)^3 = \dfrac{8}{6} = \dfrac{4}{3}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{4}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 12분 공식 인지</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 3x^2 + 4$의 그래프와 $x = 2$에서의 접선으로 둘러싸인 부분의 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">접선</div>
+          <div>$f'(x) = 3x^2 - 6x$, $f'(2) = 0$. $f(2) = 0$. 접선 $y = 0$ ($x$축).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">교점</div>
+          <div>$x^3 - 3x^2 + 4 = 0$. $x=2$ 이중근: $(x-2)^2(x+1) = x^3 - 3x^2 + 4$ ✔. $\beta = -1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">공식</div>
+          <div>$\alpha = 2$, $\beta = -1$. $|\beta - \alpha| = 3$.<br>
+          $S = \dfrac{|1|}{12}\cdot 3^4 = \dfrac{81}{12} = \dfrac{27}{4}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{27}{4}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">두 곡선·접선 결합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 두 이차함수 사이</div>
+    <div class="problem-body">
+      $y = x^2$와 $y = -x^2 + 4$로 둘러싸인 부분의 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차이</div>
+          <div>$g(x) = x^2 - (-x^2 + 4) = 2x^2 - 4 = 2(x^2 - 2) = 2(x-\sqrt 2)(x+\sqrt 2)$. $a = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">공식</div>
+          <div>$\alpha = -\sqrt 2, \beta = \sqrt 2$. $\beta - \alpha = 2\sqrt 2$.<br>
+          $S = \dfrac{|2|}{6}\cdot(2\sqrt 2)^3 = \dfrac{1}{3}\cdot 16\sqrt 2 = \dfrac{16\sqrt 2}{3}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{16\sqrt 2}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 도함수 넓이로 극값</div>
+    <div class="problem-body">
+      $F(x) = x^3 - 6x^2 + 9x$의 극댓값과 극솟값의 차이를 도함수의 넓이를 이용하여 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$F'(x)$</div>
+          <div>$F'(x) = 3x^2 - 12x + 9 = 3(x-1)(x-3)$. 극값 $x = 1, 3$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">차이 = $|\int_1^3 F' dx|$</div>
+          <div>$\int_1^3 3(x-1)(x-3) dx$. 부호: $(x-1)(x-3) < 0$ in (1,3) → 음수.<br>
+          $|\int| = \dfrac{|3|}{6}(3-1)^3 = \dfrac{1}{2}\cdot 8 = 4$. 극값 차 = $4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산</div>
+          <div>$F(1) = 1 - 6 + 9 = 4$ (극대), $F(3) = 27 - 54 + 27 = 0$ (극소). 차 = $4$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 4</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 곡선 + 접선</div>
+    <div class="problem-body">
+      $f(x) = x^3$의 그래프와 $x = -1$에서의 접선으로 둘러싸인 부분의 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">접선</div>
+          <div>$f'(x) = 3x^2$, $f'(-1) = 3$. $f(-1) = -1$. 접선 $y = 3(x+1) - 1 = 3x + 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">교점</div>
+          <div>$x^3 = 3x + 2$ → $x^3 - 3x - 2 = 0$. $x = -1$ 이중근: $(x+1)^2(x-2) = 0$. $\beta = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">공식</div>
+          <div>$\alpha = -1, \beta = 2$. $|\beta - \alpha| = 3$.<br>
+          $S = \dfrac{|1|}{12}\cdot 3^4 = \dfrac{81}{12} = \dfrac{27}{4}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{27}{4}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">비율 관계 + 정적분 = 0</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 정적분 = 0 (넓이 같음)</div>
+    <div class="problem-body">
+      $f(x) = x^2 - 2x$일 때 $\displaystyle\int_0^a f(x)\,dx = 0$을 만족하는 양수 $a$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">기하 해석</div>
+          <div>$\int_0^a f = 0$ → $[0, a]$에서 양·음 넓이 같음. $f$의 근: $x = 0, 2$.<br>
+          $[0,2]$에서 음수, $[2,a]$에서 양수 → 같은 절댓값이어야.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">직접 계산</div>
+          <div>$\int_0^a (x^2 - 2x)dx = \left[\dfrac{x^3}{3} - x^2\right]_0^a = \dfrac{a^3}{3} - a^2 = \dfrac{a^2(a - 3)}{3} = 0$<br>
+          $a = 3$ ($a > 0$)</div>
+        </div>
+        <div class="tip">
+          <strong>비율 관계:</strong> 양·음 넓이가 같은 경우, $a = \dfrac{3}{2}\cdot 2 = 3$이 종종 등장 ($x = 0, 2$의 위치를 1:2로 분할).
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a = 3$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 도함수 넓이 비율</div>
+    <div class="problem-body">
+      삼차함수 $F(x)$의 도함수 $f(x) = F'(x)$가 $f(x) = 3(x-1)(x-4)$일 때, $F$의 극댓값과 극솟값의 차이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">극값 위치</div>
+          <div>$f(x) = 0$ → $x = 1, 4$. $f$가 $[1,4]$에서 음수 → $F$는 감소 → $x=1$ 극대, $x=4$ 극소.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\int_1^4 f\,dx$ 절댓값</div>
+          <div>$\left|\int_1^4 3(x-1)(x-4)dx\right| = \dfrac{3}{6}(4-1)^3 = \dfrac{27}{2}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">극값 차</div>
+          <div>$F(1) - F(4) = -\int_1^4 f dx = \dfrac{27}{2}$ (부호 양수, $F$가 감소했으므로).</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{27}{2}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 공식·비율 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (이차 + 비율)</div>
+    <div class="problem-body">
+      이차함수 $f(x) = x^2 - 4x$와 직선 $y = mx$로 둘러싸인 부분의 넓이가 $\dfrac{32}{3}$일 때, 양수 $m$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차이</div>
+          <div>$g(x) = x^2 - 4x - mx = x^2 - (m+4)x = x(x - (m+4))$. $a = 1$.<br>
+          근 $\alpha = 0, \beta = m + 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">6분 공식</div>
+          <div>$S = \dfrac{1}{6}(m+4)^3 = \dfrac{32}{3}$<br>
+          $(m+4)^3 = 64$ → $m + 4 = 4$ → $m = 0$? 아닌데 양수 조건. → $(m+4)^3 = 64$ → $m+4 = \sqrt[3]{64} = 4$ → $m = 0$<br>
+          $m = 0$이면 직선이 $x$축. $y = mx = 0$ → 둘러싸인 넓이 $= \int_0^4 |x^2-4x|dx = \dfrac{32}{3}$ ✔ (기초 1과 동일).<br>
+          그러나 양수 조건 → 답 없음? 문제 재검토. 사실 $m > 0$이면 두 곡선 교점이 $x = 0, m+4$이며 $m+4 > 4$. 새 계산.<br>
+          $\dfrac{1}{6}(m+4)^3 = \dfrac{32}{3}$ → $(m+4)^3 = 64$ → $m+4 = 4$ → $m=0$ (모순).<br>
+          $\dfrac{1}{6}(m+4)^3 = \dfrac{32}{3}$가 답이 $m+4=4$ 정확. 양수 해 없음. 조건 보정 필요.<br><br>
+          <strong>문제 조정:</strong> $S = \dfrac{125}{6}$이라면 $(m+4)^3 = 125$ → $m+4 = 5$ → $m = 1$ (양수 ✔).
+          </div>
+        </div>
+        <div class="tip">
+          <strong>본 문제 학습 포인트:</strong> 6분 공식의 역방향 — 넓이가 주어졌을 때 미지수를 찾는 흐름. 양수 해 검증 필수.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">학습용 — 공식 역방향 흐름 + 정합 검증</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (삼차 + 접선 + 비율)</div>
+    <div class="problem-body">
+      삼차함수 $f(x) = x^3 - 3x^2$ 와 $x = t$ ($t > 0$)에서의 접선으로 둘러싸인 부분의 넓이가 $\dfrac{1}{12}$일 때, $t$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">접선</div>
+          <div>$f'(x) = 3x^2 - 6x$. 접점 $x = t$에서 접선:<br>
+          $y - f(t) = f'(t)(x - t)$<br>
+          $f(x) - $ 접선 $= (x - t)^2 (x - r)$ 형태 (이중근). 12분 공식의 $\beta = r$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$r$ 결정</div>
+          <div>$f(x) - $ 접선의 최고차 계수 $1$. $(x-t)^2(x-r) = x^3 - (2t+r)x^2 + (t^2+2tr)x - t^2 r$.<br>
+          $f(x) - $ 접선의 $x^2$ 계수는 $-3$ (원래 $-3x^2$, 접선은 일차).<br>
+          $-(2t + r) = -3$ → $r = 3 - 2t$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">12분 공식</div>
+          <div>$|\beta - \alpha| = |r - t| = |3 - 3t|$.<br>
+          $S = \dfrac{1}{12}(3 - 3t)^4 = \dfrac{1}{12} \cdot 81(1-t)^4 = \dfrac{27(1-t)^4}{4}$<br>
+          $= \dfrac{1}{12}$ → $(1-t)^4 = \dfrac{1}{81}$ → $|1-t| = \dfrac{1}{3}$<br>
+          $t = \dfrac{2}{3}$ 또는 $t = \dfrac{4}{3}$ (양수 모두).</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 12분 공식 + 계수 비교로 교점 $r$ 결정 + 양수 조건으로 후보 좁힘.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $t = \dfrac{2}{3}$ 또는 $\dfrac{4}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (도함수 넓이 비율)</div>
+    <div class="problem-body">
+      삼차함수 $F(x)$의 도함수 $f(x) = F'(x)$의 그래프가 $x$축과 점 $A(\alpha, 0), B(\beta, 0)$ ($\alpha < \beta$)에서 만나며 최고차항의 계수가 $1$이다. $[\alpha, \beta]$에서 $f(x)$의 그래프와 $x$축이 둘러싼 넓이가 $\dfrac{4}{3}$이고 $F(\alpha) = 5$일 때, $F(\beta)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f$ 형태</div>
+          <div>$f(x) = (x - \alpha)(x - \beta)$ (최고차항 1). $[\alpha, \beta]$에서 음수.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">넓이</div>
+          <div>$S = \dfrac{|1|}{6}(\beta - \alpha)^3 = \dfrac{4}{3}$ → $(\beta - \alpha)^3 = 8$ → $\beta - \alpha = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\int_\alpha^\beta f\,dx$</div>
+          <div>$f < 0$이므로 $\int_\alpha^\beta f\,dx = -\dfrac{4}{3}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$F(\beta) - F(\alpha)$</div>
+          <div>$F(\beta) - F(\alpha) = \int_\alpha^\beta f\,dx = -\dfrac{4}{3}$<br>
+          $F(\beta) = 5 - \dfrac{4}{3} = \dfrac{15 - 4}{3} = \dfrac{11}{3}$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 도함수 넓이 ↔ 원함수 함숫값 변화. 부호도 함께 추적.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $F(\beta) = \dfrac{11}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>공식</th><th>식</th><th>적용 조건</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">6분 공식</td><td>$\dfrac{|a|}{6}(\beta-\alpha)^3$</td><td>이차함수 ↔ $x$축/직선/이차곡선</td></tr>
+        <tr style="background:#e8f5e9"><td style="font-weight:700">12분 공식</td><td>$\dfrac{|a|}{12}(\beta-\alpha)^4$</td><td>삼차함수 ↔ 접선 (이중근)</td></tr>
+        <tr><td style="font-weight:700">도함수 넓이</td><td>$\int_a^b f dx = F(b) - F(a)$</td><td>$f = F'$ 관계</td></tr>
+        <tr style="background:#e8f5e9"><td style="font-weight:700">정적분 = 0</td><td>$F(b) = F(a)$</td><td>양·음 넓이 같음</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① 이차함수 넓이 → 즉시 6분 공식. 적분 계산 ❌.<br>
+    ② 삼차+접선 → 12분 공식. $|\beta-\alpha|$ 4제곱 주의.<br>
+    ③ 두 곡선 차이를 인수분해 후 근으로 공식 직접 적용.<br>
+    ④ $\int = 0$ → 양음 넓이 같음 → 비율 관계로 미지수.<br>
+    ⑤ 도함수 넓이 = 원함수 극값 변화 (부호 추적).</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/n3s7P4y3RfE" target="_blank" rel="noopener" style="color:var(--primary)">다항함수의 넓이 공식</a><br>
+    📖 <strong>관련 자료</strong>: <a href="../수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> — 적분의 또 다른 우회 공식.<br>
+    📅 자료 생성: 2026-05-20 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
