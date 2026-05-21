@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>원주각·접현각·내접사각형·등현사각형 10초컷 풀이</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 60%, #7b1fa2 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .video-card .related { display: block; margin-top: 8px; font-size: 12px; color: var(--sub); }
+    .video-card .related a { color: var(--primary); }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #6a1b9a; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #f3e5f5;
+      border-left: 5px solid #6a1b9a;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #f3e5f5; color: #4a148c; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학Ⅰ — 삼각함수의 활용</div>
+  <h1>10초컷 원 도형 4대 도구<br>원주각 · 접현각 · 내접사각형 · 등현사각형</h1>
+  <p>"문제 보고 10초 안에 풀이 결정" — 원 도형이 등장하면 이 네 가지를 먼저</p>
+  <div class="quote">
+    "이 내접사각형이 나왔을 때 <strong>대각의 합이 $\pi$가 된다</strong>는 거 기억을 꼭 해야 돼요." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/SBihdCW078k" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/SBihdCW078k/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">알아두면 문제 풀이 10초컷 가능합니다. (ft. 수능 수학)</div>
+      <div class="v-meta">📺 YouTube · 16분 50초 · 원 도형 4대 도구</div>
+      <a class="v-link" href="https://youtu.be/SBihdCW078k" target="_blank" rel="noopener">https://youtu.be/SBihdCW078k</a>
+      <a class="related" href="../수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html">📖 사인·코사인+외접원 자료(xuzuEsxr) 함께 학습 →</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 원 도형 4대 도구</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>원주각:</strong> 원 위의 한 점에서 호 $BC$를 바라본 각.</li>
+      <li><strong>중심각:</strong> 원의 중심 $O$에서 호 $BC$를 바라본 각.</li>
+      <li><strong>코사인법칙:</strong> $a^2 = b^2 + c^2 - 2bc\cos A$</li>
+      <li><strong>사인법칙:</strong> $\dfrac{a}{\sin A} = 2R$</li>
+      <li><strong>닮음:</strong> AA 닮음 — 두 각이 같으면 닮음. 대응변 비율 일정.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 원주각·중심각·접현각 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>원주각·중심각·접현각 — 같은 호에서 같은 각</div>
+
+    <div class="formula-box">
+      <strong>① 원주각 정리:</strong> 같은 호 $BC$에 대한 원주각은 모두 같다.<br>
+      <strong>② 중심각 = 원주각 × 2:</strong> 같은 호에 대한 중심각은 원주각의 두 배.<br>
+      <strong>③ 접현각 정리:</strong> 접선과 현이 이루는 각 = 그 현의 반대쪽 원주각.
+    </div>
+
+    <div class="visual">원주각 — 같은 호 같은 각
+
+       ●A      ●A'   ← 같은 호 BC 바라봄
+        ╲     ╱       ∠BAC = ∠BA'C ✔
+         ╲   ╱
+          ●B─────●C  (호 BC)
+
+중심각 = 원주각 × 2
+
+         A●      ← 원주각 ∠BAC = α
+         ╱╲
+        ╱  ╲
+       ╱    ╲
+      ╱   ●O ← 중심
+     ╱  ╱  ╲╲    중심각 ∠BOC = 2α
+    B●━━━━━━●C
+
+접현각 — 접선과 현
+
+       T (접점에서 접선)
+      ╱─→
+     ╱     ●A
+    ╱       ╲
+   ●T───────●B   ← 현 TB
+   접선과 현 TB 이루는 각 = ∠TAB (반대쪽 원주각)</div>
+
+    <div class="concept-box">
+      <strong>실전 활용:</strong> 문제에 원이 보이고 같은 호 옆에 두 각이 표시되면, 즉시 "두 각 같다"고 인식. 접선이 보이면 접현각으로 현 반대쪽 각과 연결.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 내접사각형 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>원에 내접하는 사각형 — 대각의 합 = $\pi$</div>
+
+    <div class="formula-box">
+      $ABCD$가 원에 내접 → $\angle A + \angle C = \angle B + \angle D = \pi$ ($180°$)
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>왜 그런가:</strong> $\angle A$는 호 $BCD$의 원주각, $\angle C$는 호 $BAD$의 원주각. 두 호 합 = 원 한 바퀴 $2\pi$. 따라서 원주각 합 = $\pi$.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>코사인 활용:</strong> $\angle A + \angle C = \pi$ → $\cos C = -\cos A$. 두 삼각형에 코사인법칙을 양변 더하거나 빼면 미지수 한 번에 결정.
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>실전 신호:</strong> "원에 내접하는 사각형" 보이면 즉시 $\cos C = -\cos A$ 메모. 코사인법칙 두 번 + 연립.
+    </div>
+
+    <div class="visual">원에 내접하는 사각형 ABCD
+
+         A
+       ╱╲╲
+      ╱  ╲ ╲
+     ╱    ╲ ╲
+    B──────●D
+     ╲    ╱ ╱
+      ╲  ╱ ╱
+       ╲╱╱
+        C
+
+  ∠A + ∠C = π
+  ∠B + ∠D = π
+
+→ cos C = -cos A
+→ cos D = -cos B</div>
+  </div>
+
+  <!-- CONCEPT 3: 등현사각형 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>등현사각형 — 이웃한 두 변 같을 때</div>
+
+    <p>내접사각형에서 <strong>이웃한 두 변이 같은 경우</strong> ($AB = AD$ 등) — 영상에서 "등현 공식"이라 불리는 패턴.</p>
+
+    <div class="formula-box">
+      $ABCD$ 내접 + $AB = AD = m$, $BC = p$, $CD = q$일 때<br>
+      대각선 $BD$를 $\triangle ABD$와 $\triangle CBD$ 양쪽에 코사인법칙:<br>
+      $BD^2 = 2m^2 - 2m^2\cos A$ (← 이등변삼각형 $ABD$)<br>
+      $BD^2 = p^2 + q^2 - 2pq\cos C$ (← $\triangle CBD$)
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>대각 관계 적용:</strong> $\cos C = -\cos A$. 위 두 식을 연립.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        $2m^2 - 2m^2\cos A = p^2 + q^2 + 2pq\cos A$<br>
+        $\cos A$에 대한 일차방정식 → 한 번에 결정.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        $\cos A$ 알면 $BD$, $\sin A$, 외접원 반지름 $R = \dfrac{BD}{2\sin A}$ 등 줄줄이 결정.
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 등현 공식 한 줄 정리</div>
+      <p>$AB = AD = m$, $BC = p$, $CD = q$인 내접사각형에서</p>
+      <div class="formula-box" style="background:#f3e5f5; border-color:#6a1b9a">
+        $$\cos A = \dfrac{2m^2 - p^2 - q^2}{2(m^2 + pq)}$$
+      </div>
+      <div class="tip">
+        도출: 두 코사인식을 $\cos A$에 대해 정리하면 위 공식. 매번 도출 가능하지만 패턴을 알면 10초컷.
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 4: 나비 닮음 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">4</span>나비 닮음 — 두 대각선이 만든 두 삼각형</div>
+
+    <p>내접사각형 $ABCD$의 두 대각선 $AC$, $BD$의 교점을 $P$라 할 때, $\triangle APB$와 $\triangle DPC$는 닮음 (나비 모양).</p>
+
+    <div class="formula-box">
+      $\triangle APB \sim \triangle DPC$ (AA 닮음)<br>
+      $\angle PAB = \angle PDC$ (호 $BC$의 원주각)<br>
+      $\angle PBA = \angle PCD$ (호 $AD$의 원주각)
+    </div>
+
+    <div class="formula-box" style="background:#f3e5f5; border-color:#6a1b9a">
+      <strong>비례식:</strong> $\dfrac{PA}{PD} = \dfrac{PB}{PC} = \dfrac{AB}{DC}$
+    </div>
+
+    <div class="visual">나비 닮음 (Butterfly)
+
+         A●        ●B
+          ╲      ╱
+           ╲    ╱
+            ╲  ╱
+             ●P   ← 대각선 교점
+            ╱  ╲
+           ╱    ╲
+          ╱      ╲
+        C●        ●D
+
+  △APB ∼ △DPC (마주보는 두 삼각형)
+  ⇒ PA · PC = PB · PD (방멱 정리)</div>
+
+    <div class="concept-box">
+      <strong>방멱 정리 (Power of Point):</strong> $PA \cdot PC = PB \cdot PD$. 한 점에서 원에 그은 두 현의 분할 비율로 확장.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">4대 도구 직접 적용</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 원주각</div>
+    <div class="problem-body">
+      원 위의 네 점 $A, B, C, D$에 대해 $\angle BAC = 40°$일 때, 같은 호 $BC$에 대한 원주각 $\angle BDC$의 크기를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">원주각</div>
+          <div>같은 호 → 같은 원주각. $\angle BDC = 40°$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $40°$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 중심각</div>
+    <div class="problem-body">
+      원의 중심 $O$와 원 위의 두 점 $B, C$에 대해 호 $BC$의 중심각이 $120°$일 때, 호 $BC$에 대한 원주각의 크기를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">관계</div>
+          <div>중심각 = 원주각 × 2 → 원주각 = $\dfrac{120°}{2} = 60°$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $60°$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 내접사각형 대각합</div>
+    <div class="problem-body">
+      원에 내접하는 사각형 $ABCD$에서 $\angle A = 75°$일 때 $\angle C$의 크기와 $\cos A + \cos C$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">대각합</div>
+          <div>$\angle A + \angle C = 180°$ → $\angle C = 105°$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\cos$ 관계</div>
+          <div>$\cos C = \cos(180° - 75°) = -\cos 75°$ → $\cos A + \cos C = 0$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\angle C = 105°$, $\cos A + \cos C = 0$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">내접사각형 + 코사인 연립</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 내접사각형 대각선</div>
+    <div class="problem-body">
+      원에 내접하는 사각형 $ABCD$에서 $AB = 4$, $BC = 3$, $CD = 2$, $DA = 5$일 때 대각선 $AC$의 길이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$\triangle ABC$</div>
+          <div>$AC^2 = 16 + 9 - 2\cdot 4\cdot 3\cos B = 25 - 24\cos B$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\triangle ACD$</div>
+          <div>$AC^2 = 4 + 25 - 2\cdot 2\cdot 5\cos D = 29 - 20\cos D$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">대각합</div>
+          <div>$B + D = \pi$ → $\cos D = -\cos B$. 두 식 연립:<br>
+          $25 - 24\cos B = 29 + 20\cos B$ → $-44\cos B = 4$ → $\cos B = -\dfrac{1}{11}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$AC$</div>
+          <div>$AC^2 = 25 - 24\cdot(-1/11) = 25 + 24/11 = \dfrac{275 + 24}{11} = \dfrac{299}{11}$<br>
+          $AC = \sqrt{299/11} = \dfrac{\sqrt{3289}}{11}$</div>
+        </div>
+        <div class="tip">
+          <strong>핵심:</strong> 대각합 $\pi$로 $\cos D = -\cos B$ 만들면 두 식 연립 한 번에 $\cos B$ 결정.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $AC = \dfrac{\sqrt{3289}}{11}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 접현각</div>
+    <div class="problem-body">
+      원 위의 두 점 $A, B$에서 접선과 현 $AB$가 만나는 각이 $\angle TAB = 35°$일 때, 호 $AB$의 반대쪽 점 $C$에서 $\angle ACB$의 크기를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">접현각</div>
+          <div>접선과 현이 이루는 각 = 현의 반대쪽 원주각. $\angle ACB = \angle TAB = 35°$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $35°$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 나비 닮음</div>
+    <div class="problem-body">
+      원에 내접하는 사각형 $ABCD$의 대각선 $AC, BD$의 교점을 $P$라 하자. $PA = 2$, $PC = 6$, $PB = 3$일 때 $PD$의 길이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">방멱 정리</div>
+          <div>$PA \cdot PC = PB \cdot PD$ → $2 \cdot 6 = 3 \cdot PD$ → $PD = 4$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 4</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">등현사각형 공식</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — 등현사각형 cosA</div>
+    <div class="problem-body">
+      원에 내접하는 사각형 $ABCD$에서 $AB = AD = 5$, $BC = 3$, $CD = 7$일 때 $\cos A$와 대각선 $BD$의 길이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">등현 공식</div>
+          <div>$m = 5$, $p = 3$, $q = 7$.<br>
+          $\cos A = \dfrac{2m^2 - p^2 - q^2}{2(m^2 + pq)} = \dfrac{50 - 9 - 49}{2(25 + 21)} = \dfrac{-8}{92} = -\dfrac{2}{23}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$BD^2$ — $\triangle ABD$</div>
+          <div>$BD^2 = 2m^2(1 - \cos A) = 2\cdot 25\cdot(1 + 2/23) = 50\cdot\dfrac{25}{23} = \dfrac{1250}{23}$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">검산 — $\triangle BCD$</div>
+          <div>$BD^2 = 9 + 49 - 2\cdot 3\cdot 7\cos C = 58 - 42\cos C$<br>
+          $\cos C = -\cos A = 2/23$ → $BD^2 = 58 - 42\cdot 2/23 = 58 - 84/23 = (1334-84)/23 = 1250/23$ ✔</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$BD$</div>
+          <div>$BD = \sqrt{1250/23} = \dfrac{25\sqrt 2}{\sqrt{23}} = \dfrac{25\sqrt{46}}{23}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\cos A = -\dfrac{2}{23}$, $BD = \dfrac{25\sqrt{46}}{23}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 외접원 반지름</div>
+    <div class="problem-body">
+      위 심화 1의 등현사각형에서 외접원의 반지름 $R$을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$\sin A$</div>
+          <div>$\cos A = -2/23$. $\sin^2 A = 1 - 4/529 = 525/529$ → $\sin A = \dfrac{\sqrt{525}}{23} = \dfrac{5\sqrt{21}}{23}$ ($A$는 둔각이지만 $\sin > 0$).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">사인법칙</div>
+          <div>$\triangle ABD$에 사인법칙: $\dfrac{BD}{\sin A} = 2R$<br>
+          $2R = \dfrac{25\sqrt{46}/23}{5\sqrt{21}/23} = \dfrac{25\sqrt{46}}{5\sqrt{21}} = \dfrac{5\sqrt{46}}{\sqrt{21}} = \dfrac{5\sqrt{966}}{21}$<br>
+          $R = \dfrac{5\sqrt{966}}{42}$</div>
+        </div>
+        <div class="tip">
+          <strong>흐름:</strong> 등현공식으로 $\cos A$ → $\sin A$ → 사인법칙으로 $R$. 모든 변·각이 줄줄이 결정.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $R = \dfrac{5\sqrt{966}}{42}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 4대 도구 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (내접사각형 코사인)</div>
+    <div class="problem-body">
+      원에 내접하는 사각형 $ABCD$에서 $AB = 2$, $BC = 2$, $CD = 3$, $DA = 5$일 때 $\cos B$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$\triangle ABD$ (BD 대각선)</div>
+          <div>잠깐 — 대각선 $AC$로 가는 게 더 단순. $AB=BC=2$ 이웃변 같으니 $\triangle ABC$는 이등변.<br>
+          $AC^2 = 4 + 4 - 2\cdot 2\cdot 2\cos B = 8(1 - \cos B)$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\triangle ACD$</div>
+          <div>$AC^2 = 9 + 25 - 2\cdot 3\cdot 5\cos D = 34 - 30\cos D$<br>
+          $\cos D = -\cos B$이므로 $AC^2 = 34 + 30\cos B$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">연립</div>
+          <div>$8 - 8\cos B = 34 + 30\cos B$ → $-38\cos B = 26$ → $\cos B = -\dfrac{13}{19}$</div>
+        </div>
+        <div class="tip">
+          <strong>10초컷 흐름:</strong> 대각선 → 두 코사인식 → $\cos D = -\cos B$ → 연립.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\cos B = -\dfrac{13}{19}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (등현사각형 + 사인법칙)</div>
+    <div class="problem-body">
+      원에 내접하는 사각형 $ABCD$가 $AB = AD = 4$, $BC = 2$, $CD = 6$이다. 외접원의 반지름 $R$을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">등현 공식</div>
+          <div>$m=4, p=2, q=6$. $\cos A = \dfrac{32 - 4 - 36}{2(16 + 12)} = \dfrac{-8}{56} = -\dfrac{1}{7}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$BD^2$</div>
+          <div>$BD^2 = 2\cdot 16\cdot(1 + 1/7) = 32\cdot 8/7 = 256/7$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$\sin A$</div>
+          <div>$\sin^2 A = 1 - 1/49 = 48/49$ → $\sin A = \dfrac{\sqrt{48}}{7} = \dfrac{4\sqrt 3}{7}$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">사인법칙</div>
+          <div>$2R = \dfrac{BD}{\sin A} = \dfrac{\sqrt{256/7}}{4\sqrt 3/7} = \dfrac{16/\sqrt 7}{4\sqrt 3/7} = \dfrac{16 \cdot 7}{4\sqrt 3 \cdot \sqrt 7} = \dfrac{28}{\sqrt{21}} = \dfrac{28\sqrt{21}}{21} = \dfrac{4\sqrt{21}}{3}$<br>
+          $R = \dfrac{2\sqrt{21}}{3}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $R = \dfrac{2\sqrt{21}}{3}$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (방멱 + 사인법칙)</div>
+    <div class="problem-body">
+      원 위의 네 점 $A, B, C, D$에서 두 현 $AC, BD$의 교점을 $P$라 한다. $AP = 3$, $PC = 8$, $BP = 4$일 때 $PD$와, $\angle APB = 60°$일 때 $AB^2 + CD^2$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">방멱 정리</div>
+          <div>$AP\cdot PC = BP\cdot PD$ → $3\cdot 8 = 4\cdot PD$ → $PD = 6$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$AB^2$ — $\triangle APB$ ($\angle APB = 60°$)</div>
+          <div>$AB^2 = 9 + 16 - 2\cdot 3\cdot 4 \cos 60° = 25 - 12 = 13$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$CD^2$ — $\triangle CPD$ ($\angle CPD = 60°$, 대각)</div>
+          <div>$\angle CPD = \angle APB = 60°$ (맞꼭지각).<br>
+          $CD^2 = 64 + 36 - 2\cdot 8\cdot 6\cos 60° = 100 - 48 = 52$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$AB^2 + CD^2 = 13 + 52 = \mathbf{65}$.</div>
+        </div>
+        <div class="tip">
+          <strong>키:</strong> 방멱으로 $PD$ → 두 마주보는 삼각형 코사인법칙 → 합. 대각의 맞꼭지각이 같음을 활용.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $PD = 6$, $AB^2 + CD^2 = 65$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">① 원주각</td><td>같은 호 → 같은 각</td><td>각 추적</td></tr>
+        <tr style="background:#f3e5f5"><td style="font-weight:700">② 중심각</td><td>$=$ 원주각 × 2</td><td>중심 $O$ 활용</td></tr>
+        <tr><td style="font-weight:700">③ 접현각</td><td>접선·현 각 $=$ 반대쪽 원주각</td><td>접선 있으면</td></tr>
+        <tr style="background:#f3e5f5"><td style="font-weight:700">④ 내접사각형</td><td>대각합 $= \pi$, $\cos C = -\cos A$</td><td>코사인법칙 연립</td></tr>
+        <tr><td style="font-weight:700">⑤ 등현사각형</td><td>$\cos A = \dfrac{2m^2-p^2-q^2}{2(m^2+pq)}$</td><td>이웃변 같을 때</td></tr>
+        <tr style="background:#f3e5f5"><td style="font-weight:700">⑥ 나비 닮음·방멱</td><td>$PA\cdot PC = PB\cdot PD$</td><td>두 현 교점</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 10초컷 체크리스트</div>
+    <div>① 원 + 사각형 보이면 즉시 "대각합 $= \pi$" 메모.<br>
+    ② 같은 호 옆 두 각 → 즉시 같다.<br>
+    ③ 이웃 두 변 같음 → 등현 공식 후보.<br>
+    ④ 대각선 교점 등장 → 방멱 정리 ($PA\cdot PC = PB\cdot PD$).<br>
+    ⑤ 외접원 $R$ 묻으면 → 사인법칙 ($a = 2R\sin A$) 즉시.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/SBihdCW078k" target="_blank" rel="noopener" style="color:var(--primary)">알아두면 문제 풀이 10초컷 가능합니다. (ft. 수능 수학)</a><br>
+    📖 <strong>관련 자료</strong>:
+    <a href="../수학Ⅰ-삼각함수의활용/20260506_사인법칙비례식과외접원변환_sbmMPmSY.html">사인법칙 비례식·외접원 (sbmMPmSY)</a> ·
+    <a href="../수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html">사인·코사인+외접원 심화 (xuzuEsxr)</a><br>
+    📅 자료 생성: 2026-05-20 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
