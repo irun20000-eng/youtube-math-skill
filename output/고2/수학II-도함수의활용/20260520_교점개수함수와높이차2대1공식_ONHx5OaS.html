@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>교점 개수 함수와 3차함수 높이차 2대1 공식</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #0d47a1;
+      --accent: #e53935;
+      --green: #2e7d32;
+      --orange: #e65100;
+      --purple: #6a1b9a;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #212121;
+      --sub: #616161;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #263238 0%, #37474f 60%, #455a64 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+    .hero h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .quote {
+      background: rgba(255,255,255,0.13);
+      border-left: 3px solid #ffd54f;
+      padding: 10px 16px;
+      font-size: 14px;
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: left;
+      border-radius: 0 8px 8px 0;
+    }
+    .video-card {
+      max-width: 720px;
+      margin: 28px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; gap: 16px; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .video-card a.thumb {
+      flex-shrink: 0; position: relative; display: block;
+      width: 200px; aspect-ratio: 16/9;
+      border-radius: 8px; overflow: hidden; background: #000;
+    }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(229, 57, 53, 0.92);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .video-card .related { display: block; margin-top: 8px; font-size: 12px; color: var(--sub); }
+    .video-card .related a { color: var(--primary); }
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; align-items: stretch; }
+      .video-card a.thumb { width: 100%; }
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title {
+      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .concept-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--primary-dark); margin-bottom: 12px;
+    }
+    .concept-num {
+      background: #455a64; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .concept-box {
+      background: #eceff1;
+      border-left: 5px solid #455a64;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 14px 0;
+    }
+    .formula-box {
+      background: #fff8e1;
+      border: 2px solid #ffa000;
+      border-radius: 10px;
+      padding: 16px 22px; margin: 14px 0;
+      text-align: center;
+    }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .caution {
+      background: #fff3e0; border-left: 4px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip {
+      background: #e1f5fe; border-left: 4px solid #0288d1;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px; margin: 12px 0;
+      font-size: 14px;
+    }
+    .visual {
+      background: #fafafa; border: 1px dashed #999;
+      border-radius: 8px;
+      padding: 16px 20px; margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
+    }
+    .example-card {
+      background: #f9fbe7; border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px; margin: 16px 0;
+    }
+    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic    { background: #43a047; }
+    .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; }
+    .badge-csat     { background: #c62828; }
+    .problem-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 18px;
+    }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      padding: 6px 18px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; user-select: none;
+    }
+    summary:hover { background: var(--primary-dark); }
+    .solution {
+      margin-top: 14px;
+      background: #f5f5f5; border-radius: 10px;
+      padding: 18px 22px; line-height: 2;
+    }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label {
+      flex-shrink: 0;
+      background: var(--primary-dark); color: #fff;
+      font-size: 12px; font-weight: 700;
+      padding: 1px 8px; border-radius: 4px;
+      margin-top: 5px; white-space: nowrap;
+    }
+    .answer-tag {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border-radius: 6px; padding: 2px 12px;
+      font-weight: 700; font-size: 14px;
+      margin-top: 8px;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
+    th { background: #eceff1; color: #263238; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) {
+      .card, .problem-card { padding: 16px 16px; }
+      .hero { padding: 36px 16px 30px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">고2·고3 · 수학Ⅱ — 도함수의 활용 / 극한과 연속</div>
+  <h1>교점 개수 함수와<br>3차함수 높이차·2:1 공식</h1>
+  <p>"내리지 말고 세워라" — 교점 개수 $g(t)$의 불연속을 한눈에</p>
+  <div class="quote">
+    "만나는 교점의 개수는 언제 달라집니까? 당연히 <strong>극점에서 달라지지.</strong>" — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/ONHx5OaSStk" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/ONHx5OaSStk/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">서울대 통계학과의 미친 문제 풀이법</div>
+      <div class="v-meta">📺 YouTube · 7분 7초 · 교점 개수 함수·높이차 공식</div>
+      <a class="v-link" href="https://youtu.be/ONHx5OaSStk" target="_blank" rel="noopener">https://youtu.be/ONHx5OaSStk</a>
+      <a class="related" href="../수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">📖 관련: 다항함수 비율 관계 (Jw8F2akj) →</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 교점 개수·높이차·2:1</div>
+
+  <!-- 선수 학습 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>방정식 실근 = 교점:</strong> $f(x) = t$의 실근 개수 = $y = f(x)$와 $y = t$ (수평선)의 교점 개수.</li>
+      <li><strong>좌극한·우극한:</strong> $\lim_{t\to c^-} g(t)$, $\lim_{t\to c^+} g(t)$. 둘과 $g(c)$가 모두 같아야 연속.</li>
+      <li><strong>극대·극소:</strong> $f'(x) = 0$이고 부호 바뀌는 점.</li>
+      <li><strong>3차함수 극값:</strong> 극대·극소 두 개 (또는 없음).</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1: 교점 개수 함수 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>교점 개수로 정의된 함수 $g(t)$</div>
+
+    <p>$y = f(x)$의 그래프와 수평선 $y = t$가 만나는 <strong>교점의 개수</strong>를 $g(t)$로 정의. 이 $g(t)$는 $f$의 극값을 경계로 <strong>불연속</strong>이 발생한다.</p>
+
+    <div class="formula-box">
+      $$g(t) = (\text{방정식 } f(x) = t \text{의 서로 다른 실근의 개수})$$
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>"세워서 보기":</strong> $f$를 옆으로 내리지 말고, 수평선 $y = t$를 $t$축 방향으로 위아래 이동시킨다고 생각. $t$가 극값을 통과하는 순간 교점 개수가 점프.
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>극값에서 불연속:</strong> 수평선이 극댓값·극솟값과 정확히 같아지면 그 순간 "접하는" 교점이 생겨 개수가 달라짐.
+      </div>
+    </div>
+
+    <div class="visual">3차함수 f와 수평선 y=t 의 교점 개수 g(t)
+
+  y                       g(t)
+  │   극대 M               │
+  │   ╱╲                  3├──●
+  │  ╱  ╲     y=t (이동)    │  ┊
+  │─╱────╲───  ───────      2├  ●━━●  (불연속 점프)
+  │╱      ╲                 │  ┊  ┊
+  ●        ╲   극소 m       1├──●  ●──
+            ╲╱              └──┴──┴──── t
+                                m   M
+
+  t < m: 교점 1개
+  t = m: 교점 2개 (접점 발생) ← 불연속
+  m < t < M: 교점 3개
+  t = M: 교점 2개 ← 불연속
+  t > M: 교점 1개</div>
+
+    <div class="concept-box">
+      <strong>핵심:</strong> $g(t)$의 불연속점 = $f$의 극댓값 $M$, 극솟값 $m$. 거꾸로 $g(t)$의 불연속 정보를 보고 $f$의 극값을 역추적할 수 있다.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 영상 핵심 인용</div>
+      <p>"얘를 옆으로 내리는 게 아니라 <strong>얘를 세워.</strong> 그냥 약간 생각만 약간 바꾸면 되거든." — 수평선을 $t$축에 세워 시각화.</p>
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 높이차 공식 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>3차함수 극점 높이차 공식</div>
+
+    <p>3차함수의 극댓값과 극솟값의 차이(높이 차)를 적분 없이 즉시 구하는 공식.</p>
+
+    <div class="formula-box" style="background:#eceff1; border-color:#455a64">
+      최고차항 계수 $a$, 두 극점의 $x$좌표 차이 $l$ 일 때<br>
+      $$(\text{극댓값}) - (\text{극솟값}) = \dfrac{|a|}{2}\,l^3$$
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">⚙</div>
+      <div class="step-body">
+        <strong>유도:</strong> $f'(x) = 3a(x - p)(x - q)$, $q - p = l$. 높이차 $= \left|\int_p^q f'(x)\,dx\right| = |3a|\cdot\dfrac{l^3}{6} = \dfrac{|a|l^3}{2}$.
+      </div>
+    </div>
+
+    <div class="concept-box">
+      <strong>도함수 넓이와 연결:</strong> 극값 차 = 도함수 $f'$가 두 극점 사이에서 $x$축과 이루는 넓이. (6분 공식의 $f'$ 버전.)
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 높이차 공식 예시</div>
+      <p>$f(x) = x^3 - 3x$ (최고차 $a = 1$). 극점 $x = \pm 1$ → $l = 2$.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">공식</div>
+        <div>높이차 $= \dfrac{|1|}{2}\cdot 2^3 = \dfrac{8}{2} = 4$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">검산</div>
+        <div>$f(-1) = -1 + 3 = 2$ (극대), $f(1) = 1 - 3 = -2$ (극소). 차 = $4$ ✔</div>
+      </div>
+    </div>
+
+    <div class="tip">
+      강사 인용: "3차 함수에서 그 유용한 공식 중 하나가 높이 차이 공식이야... <strong>2분의 절댓값 $a$에다가 $l$의 3승.</strong>"
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 2:1 비율 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>3차함수 2:1 비율 관계</div>
+
+    <p>3차함수의 극점을 지나는 수평선이 그래프와 다시 만나는 교점까지의 거리 비.</p>
+
+    <div class="formula-box" style="background:#eceff1; border-color:#455a64">
+      극점(극대 또는 극소)을 지나는 수평선이 곡선과 다시 만나는 점까지의 $x$ 거리<br>
+      = 두 극점 사이 거리($l$)의 <strong>2배</strong> 만큼 반대편.<br>
+      → 접점 ↔ 다른 극점 ↔ 교점의 $x$ 거리 비 = <strong>$2 : 1$</strong>... 정확히는 $1 : 2$ 패턴
+    </div>
+
+    <div class="visual">3차함수 극대점 지나는 수평선
+
+  y
+  │  극대 ●━━━━━━━━━━━━● ← 교점 (다시 만남)
+  │     ╱            ╱
+  │    ╱      ╲    ╱
+  │   ╱        ╲  ╱
+  │  ╱      극소 ●╱
+  │ ╱
+  ●
+   ◀── l ──▶◀──── 2l ────▶
+   극대   극소        교점
+
+  극대에서 극소까지 거리 = l
+  극소를 지나 교점까지 거리 = 2l
+  → 비율 1 : 2 (또는 관점에 따라 2:1)</div>
+
+    <div class="concept-box">
+      <strong>왜 2:1인가:</strong> 3차함수는 변곡점 점대칭. 극대점을 지나는 수평선이 곡선과 만나는 다른 점은, 변곡점 대칭성과 인수분해 구조로 항상 극점 간격의 2배 위치에 놓인다.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📌 2:1 비율 예시</div>
+      <p>$f(x) = x^3 - 3x$. 극대점 $(-1, 2)$를 지나는 수평선 $y = 2$가 곡선과 다시 만나는 점을 구하라.</p>
+      <div class="sol-step">
+        <div class="sol-step-label">방정식</div>
+        <div>$x^3 - 3x = 2$ → $x^3 - 3x - 2 = 0$ → $(x+1)^2(x-2) = 0$.</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">근</div>
+        <div>$x = -1$ (이중근, 극대점 접함), $x = 2$ (다른 교점).</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">비율</div>
+        <div>극대 $x=-1$, 극소 $x=1$ (거리 $l = 2$). 교점 $x = 2$는 극대에서 거리 $3 = 1.5 l$... 극소($x=1$)에서 교점($x=2$)까지 $1$, 극대($-1$)에서 극소($1$)까지 $2$ → 비 $2:1$ ✔</div>
+      </div>
+    </div>
+
+    <div class="caution">
+      <strong>주의:</strong> "2:1"의 기준점이 문제마다 다를 수 있음. 극대↔극소 거리와 극점↔교점 거리의 비를 정확히 따질 것. 핵심은 항상 정수비로 떨어진다는 점.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">높이차 공식·교점 개수</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 1 — 높이차 공식</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 12x$의 극댓값과 극솟값의 차이를 높이차 공식으로 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">극점</div>
+          <div>$f'(x) = 3x^2 - 12 = 3(x-2)(x+2)$. 극점 $x = \pm 2$ → $l = 4$. $a = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">공식</div>
+          <div>높이차 $= \dfrac{|1|}{2}\cdot 4^3 = \dfrac{64}{2} = 32$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 32</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 2 — 교점 개수</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 3x$에 대해 방정식 $f(x) = t$가 서로 다른 세 실근을 가질 $t$의 범위를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">극값</div>
+          <div>극대 $f(-1) = 2$, 극소 $f(1) = -2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">세 실근 조건</div>
+          <div>수평선 $y = t$가 극솟값과 극댓값 사이에 있을 때 교점 3개.<br>
+          $-2 < t < 2$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $-2 < t < 2$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기초 3 — 2:1 비율</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 3x$의 극솟값을 지나는 수평선이 곡선과 다시 만나는 점의 $x$좌표를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">극솟값</div>
+          <div>극소 $(1, -2)$. 수평선 $y = -2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">방정식</div>
+          <div>$x^3 - 3x = -2$ → $x^3 - 3x + 2 = 0$ → $(x-1)^2(x+2) = 0$.<br>
+          $x = 1$ (이중근), $x = -2$ (다른 교점).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">2:1 확인</div>
+          <div>극소 $x=1$, 극대 $x=-1$ (거리 2), 교점 $x=-2$는 극대에서 거리 1. 비 $2:1$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $x = -2$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">높이차·교점 결합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 1 — 높이차로 미지수</div>
+    <div class="problem-body">
+      최고차항의 계수가 $2$인 삼차함수 $f(x)$의 두 극점의 $x$좌표 차이가 $3$일 때, 극댓값과 극솟값의 차이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">공식</div>
+          <div>$a = 2$, $l = 3$. 높이차 $= \dfrac{|2|}{2}\cdot 3^3 = 1 \cdot 27 = 27$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 27</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 2 — 교점 개수 함수 불연속</div>
+    <div class="problem-body">
+      $f(x) = x^3 - 3x^2$에 대해 $g(t)$를 방정식 $f(x) = t$의 서로 다른 실근의 개수라 하자. $g(t)$가 불연속인 $t$의 값을 모두 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">극값</div>
+          <div>$f'(x) = 3x^2 - 6x = 3x(x-2)$. 극대 $f(0) = 0$, 극소 $f(2) = 8 - 12 = -4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">불연속점</div>
+          <div>$g(t)$는 극값에서 불연속. $t = 0$ (극대), $t = -4$ (극소).</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $t = 0,\; t = -4$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">기본 3 — 높이차 + 교점</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$의 극댓값이 $5$, 극솟값이 $1$이다. 두 극점의 $x$좌표 차이 $l$을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">높이차</div>
+          <div>극댓값 $-$ 극솟값 $= 5 - 1 = 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">공식 역산</div>
+          <div>$\dfrac{|1|}{2}l^3 = 4$ → $l^3 = 8$ → $l = 2$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $l = 2$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">교점 개수 함수 역추적</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 1 — $g(t)$로 극값 역추적</div>
+    <div class="problem-body">
+      삼차함수 $f(x)$ (최고차 계수 1)에 대해 $g(t)$ = ($f(x) = t$의 실근 개수)가 $t = 6$과 $t = 2$에서만 불연속이다. 두 극점의 $x$좌표 차이 $l$을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">불연속 = 극값</div>
+          <div>$g(t)$ 불연속점 = $f$의 극댓값 $6$, 극솟값 $2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">높이차</div>
+          <div>$6 - 2 = 4 = \dfrac{|1|}{2}l^3$ → $l^3 = 8$ → $l = 2$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $l = 2$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">심화 2 — 좌극한·우극한 합</div>
+    <div class="problem-body">
+      삼차함수 $f(x) = x^3 - 3x$에 대해 $g(t)$ = ($f(x) = t$의 실근 개수)라 하자.
+      $\displaystyle\lim_{t \to 2^-} g(t) + \lim_{t \to 2^+} g(t) + g(2)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$t = 2$ = 극댓값</div>
+          <div>극대 $f(-1) = 2$. $t = 2$ 근처 분석.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">좌극한 ($t \to 2^-$)</div>
+          <div>$t$가 $2$보다 약간 작음 ($-2 < t < 2$) → 교점 3개. $\lim_{t\to 2^-} g(t) = 3$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">우극한 ($t \to 2^+$)</div>
+          <div>$t > 2$ → 교점 1개. $\lim_{t\to 2^+} g(t) = 1$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g(2)$</div>
+          <div>$t = 2$ 정확히 = 극댓값 → 접점 1 + 다른 교점 1 = 2개. $g(2) = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">합</div>
+          <div>$3 + 1 + 2 = 6$.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 6</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 종합</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 1 — 준킬러 (높이차 + 2:1)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$의 극대점이 $(0, 4)$이고, 극대점을 지나는 수평선이 곡선과 다시 만나는 점의 $x$좌표가 $3$이다. 극솟값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">2:1 비율</div>
+          <div>극대 $x = 0$, 교점 $x = 3$. 2:1 비율로 극소 $x$좌표 결정.<br>
+          극대 → 극소 거리 $l$, 극소 → 교점 거리... 패턴: 교점은 극대에서 $\frac{3}{2}l$ 위치.<br>
+          $f(x) - 4 = (x - 0)^2(x - 3) = x^2(x-3)$ (극대 접점 이중근 + 교점 단근).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$f(x)$</div>
+          <div>$f(x) = x^2(x-3) + 4 = x^3 - 3x^2 + 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">극점</div>
+          <div>$f'(x) = 3x^2 - 6x = 3x(x-2)$. 극대 $x=0$ ✔, 극소 $x = 2$. $l = 2$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">극솟값</div>
+          <div>$f(2) = 8 - 12 + 4 = 0$.<br>
+          검산 (높이차): $4 - 0 = 4 = \dfrac{1}{2}\cdot 2^3$ ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 극솟값 0</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 2 — 준킬러 (교점 개수 함수 + 미정)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$에 대해 $g(t)$ = ($f(x) = t$의 실근 개수)가 다음을 만족한다.<br><br>
+      (가) $g(t)$는 $t = k$와 $t = k - 4$에서 불연속<br>
+      (나) $g(0) = 2$<br><br>
+      상수 $k$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">불연속 = 극값</div>
+          <div>극댓값 $k$, 극솟값 $k - 4$ (차이 $4$). 높이차 공식: $\dfrac{1}{2}l^3 = 4$ → $l = 2$ (참고용).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">$g(0) = 2$</div>
+          <div>$g(t) = 2$가 되는 $t$ = 극값 그 자체 (접점 발생). 즉 $t = 0$이 극댓값 또는 극솟값.<br>
+          $0 = k$ 또는 $0 = k - 4$.<br>
+          → $k = 0$ 또는 $k = 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">정합 검증</div>
+          <div>$k = 0$: 극댓값 $0$, 극솟값 $-4$. $g(0) = 2$ ✔ (극대에서 접).<br>
+          $k = 4$: 극댓값 $4$, 극솟값 $0$. $g(0) = 2$ ✔ (극소에서 접).<br>
+          두 경우 모두 가능. 추가 조건 없으면 둘 다 답.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $k = 0$ 또는 $k = 4$</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-num">수능 대비 3 — 준킬러 (높이차 + 넓이)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$의 두 극점의 $x$좌표가 $1, 3$이다. 도함수 $f'(x)$의 그래프와 $x$축으로 둘러싸인 부분의 넓이를 구하고, 그것이 극값 차이와 같음을 확인하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">$f'(x)$</div>
+          <div>극점 $1, 3$ → $f'(x) = 3(x-1)(x-3)$ (최고차 $3$, $f$가 최고차 $1$이므로).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">넓이 (6분 공식)</div>
+          <div>$\left|\int_1^3 3(x-1)(x-3)dx\right| = \dfrac{|3|}{6}(3-1)^3 = \dfrac{1}{2}\cdot 8 = 4$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">높이차 공식 검증</div>
+          <div>$l = 3 - 1 = 2$, $a = 1$. 높이차 $= \dfrac{1}{2}\cdot 2^3 = 4$ ✔ — 도함수 넓이와 일치.</div>
+        </div>
+        <div class="tip">
+          <strong>핵심 통합:</strong> "도함수 넓이 = 극값 차 = $\frac{|a|}{2}l^3$" 세 표현이 모두 같음.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 넓이 = 극값 차 = 4</span></div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">교점 개수 $g(t)$</td><td>극값에서 불연속</td><td>수평선 "세워서" 시각화</td></tr>
+        <tr style="background:#eceff1"><td style="font-weight:700">높이차 공식</td><td>$\dfrac{|a|}{2}l^3$</td><td>극값 차 즉시</td></tr>
+        <tr><td style="font-weight:700">2:1 비율</td><td>극점 ↔ 교점 정수비</td><td>접점 이중근 활용</td></tr>
+        <tr style="background:#eceff1"><td style="font-weight:700">통합 관계</td><td>도함수 넓이 = 극값 차 = $\frac{\|a\|}{2}l^3$</td><td>세 표현 동일</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① "실근 개수" 함수 보이면 → 극값에서 불연속 즉시 표기.<br>
+    ② 좌극한·우극한·함숫값 따로 계산 (극값에서 접점 발생).<br>
+    ③ 극값 차 묻으면 → 높이차 공식 $\frac{|a|}{2}l^3$.<br>
+    ④ 극점 지나는 수평선 교점 → 2:1 비율 + 이중근.<br>
+    ⑤ 높이차 = 도함수 넓이 = $\frac{|a|}{2}l^3$ 세 표현 자유 전환.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/ONHx5OaSStk" target="_blank" rel="noopener" style="color:var(--primary)">서울대 통계학과의 미친 문제 풀이법</a><br>
+    📖 <strong>관련 자료</strong>:
+    <a href="../수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">비율 관계·직각삼각형 (Jw8F2akj)</a> ·
+    <a href="../수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">6분·12분 공식 (n3s7P4y3)</a> ·
+    <a href="../../고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html">3차함수 극값 2:1 분할 (00ByGXdH)</a><br>
+    📅 자료 생성: 2026-05-20 · 본 자료는 영상 자막을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
