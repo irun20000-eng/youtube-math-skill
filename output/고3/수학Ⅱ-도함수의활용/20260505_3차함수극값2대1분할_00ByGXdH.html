@@ -163,30 +163,44 @@
       .review-box { page-break-before: always; }
       a { color: black; text-decoration: none; }
     }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
   </style>
   <link rel="stylesheet" href="../../pdf-mode.css">
 </head>
 <body>
-<nav id="gallery-back" style="max-width:900px;margin:0 auto;padding:14px 20px 0;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" style="display:inline-block;padding:7px 16px;border-radius:8px;background:#2196f3;color:#fff;text-decoration:none;font-size:0.92em;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.15);">🏠 갤러리로 돌아가기</a></nav>
-
-
-  <header>
-    <h1>3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이</h1>
-    <p class="meta-row">📺 영상: <a href="https://www.youtube.com/watch?v=00ByGXdH-mI" target="_blank">https://www.youtube.com/watch?v=00ByGXdH-mI</a> ([정병훈T] 요리조리 수학, 1분)</p>
-    <p class="meta-row">🎯 학습 목표: 3차함수 $a(x-\alpha)^2(x-\beta)$ 의 극값 위치를 미분 없이 즉시 찾고, 다양한 최적화 문제에 적용</p>
-    <p class="meta-row">📚 단원: [고3-수학Ⅱ-도함수의 활용] (12수학Ⅱ02-02) · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
-    <p class="meta-row">⏱️ 예상 소요시간: 50분 (개념 30분 + 문항 20분)</p>
-  </header>
-
-  <div class="controls">
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
     <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
-    <span style="flex:1"></span>
+    <span class="spacer"></span>
     <button onclick="filterLevel('all', this)" class="active">전체</button>
     <button onclick="filterLevel('basic', this)">기초</button>
     <button onclick="filterLevel('standard', this)">기본</button>
     <button onclick="filterLevel('advanced', this)">심화</button>
     <button onclick="filterLevel('exam-style', this)">수능 대비</button>
   </div>
+
+
+  <div class="hero"><div class="tag">[고3-수학Ⅱ-도함수의 활용]</div><h1>3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이</h1><p class="sub">🎯 3차함수 $a(x-\alpha)^2(x-\beta)$ 의 극값 위치를 미분 없이 즉시 찾고, 다양한 최적화 문제에 적용</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=00ByGXdH-mI" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/00ByGXdH-mI/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상</div><div class="v-meta">📺 [정병훈T] 요리조리 수학, 1분</div><a class="v-link" href="https://www.youtube.com/watch?v=00ByGXdH-mI" target="_blank" rel="noopener">https://www.youtube.com/watch?v=00ByGXdH-mI</a></div></div></div>
+
+  
 
   <main>
 
