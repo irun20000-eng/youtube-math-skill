@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3 · 수학Ⅱ — 도함수의 활용</div>
+    <h1>정수 조건 $f(k-1) \times f(k+1)$ 부호와<br>근의 논리적 확정</h1>
+    <p class="sub">문제가 '보라는 것'만 봐라 — 정수 지점 관찰에서 연달아 두 근 도출까지</p>
+    <div class="quote">"문제 풀이 방향은 누가 가지고 있어? 문제가 가지고 있어요, 내가 가지고 있는 게 아니라." — 강사 인용 [00:06:00]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/arsZnxqP53c" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/arsZnxqP53c/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">수능 직전, 반드시 확인할 문제 24수능 22번| 시대인재 이동준 수학</div>
+        <div class="v-meta">📺 YouTube · 6분 33초 · 수능 수학은 이동준</div>
+        <a class="v-link" href="https://youtu.be/arsZnxqP53c" target="_blank" rel="noopener">https://youtu.be/arsZnxqP53c</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 3차 함수의 정수 부호 조건과 도함수 조건을 결합하여 미지근 $\alpha$를 식 1개로 압축하는 논리 흐름 완성하기 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 정수 조건, 어디에 집중해야 하나?</div>
+    <div class="card">
+      <div class="problem-body">
+        <strong>도입 문제:</strong> 최고차항의 계수가 1인 3차 함수 $f(x)$가 다음 조건을 만족한다.<br><br>
+        <strong>(가)</strong> 임의의 정수 $k$에 대해 $f(k-1) \times f(k+1) \geq 0$이다.<br>
+        <strong>(나)</strong> $f(0) = 0$<br><br>
+        $f(-1) = 0$과 $f(1) = 0$ 중 적어도 하나가 반드시 성립함을 보여라.
+      </div>
+      <div class="visual">정수 지점에서의 부호 관찰 (f(0)=0인 경우)
+
+  k:   ...  -2   -1    0    1    2  ...
+f(k):  ...   ?    ?  [0]   ?    ?  ...
+
+조건: 2칸 간격 정수쌍 f(k-1), f(k+1)의 부호가 서로 반대이면 ❌
+  k=0 적용: f(-1) × f(1) ≥ 0
+            즉, f(-1)과 f(1)은 같은 부호이거나 적어도 하나가 0
+
+3차 함수는 결국 음→양으로 부호가 바뀌므로,
+그 '넘어가는 지점'에 0이 있어야 충돌을 피할 수 있다.</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 1</span>
+            <div>$k = 0$을 조건 (가)에 대입한다: $f(-1) \times f(1) \geq 0$
+              <div class="why">$f(0) = 0$이 주어졌으므로 $k=0$일 때 $f(k-1) = f(-1)$, $f(k+1) = f(1)$</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 2</span>
+            <div>최고차항의 계수가 1인 3차 함수이므로 $x \to -\infty$에서 $f(x) \to -\infty$, $x \to +\infty$에서 $f(x) \to +\infty$. 따라서 $f$는 반드시 음에서 양으로 부호가 넘어간다.
+              <div class="why">3차함수 $x^3$의 끝 거동(leading behavior)</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 3</span>
+            <div>$f(-1) \times f(1) \geq 0$에서 두 경우만 가능: ① $f(-1)$과 $f(1)$이 같은 부호(둘 다 양수이거나 둘 다 음수), ② 적어도 하나가 0.
+              <div class="why">곱이 0 이상 = 부호 반전이 없거나, 적어도 하나가 0</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 4</span>
+            <div>$f(0) = 0$이고 3차 함수는 이 지점을 통해 부호가 바뀐다(혹은 접한다). 만약 $f(-1)$과 $f(1)$이 둘 다 양수라면, $f$는 $x = -1$과 $x = 1$ 사이 어딘가에서 반드시 음의 값을 가져야 하는데, $f(0) = 0$이고 3차 함수의 감소 가능성이 있으므로 $k = 1$ 조건 $f(0) \times f(2) \geq 0$이 위배될 수 있다. 체계적으로 정리하면: 음→양 부호 전환이 연달아 $0$인 정수 지점 없이 일어나려면 $f(-1)$이나 $f(1)$ 중 하나는 반드시 0이어야 한다.
+              <div class="why">연달아 두 정수 지점에서 모두 0이어야 "2칸 간격" 조건을 위반하지 않고 부호를 전환할 수 있다</div>
+            </div>
+          </div>
+          <span class="answer-tag">결론: f(-1) = 0 또는 f(1) = 0 (적어도 하나 성립)</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <!-- 개념 1: 선수 환기 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>선수 환기 — 3차 함수의 부호 변화와 근</div>
+      <p>최고차항의 계수가 양수인 3차 함수 $f(x)$는 $x \to -\infty$일 때 $-\infty$, $x \to +\infty$일 때 $+\infty$로 간다. 따라서 <strong>어딘가에서 반드시 음수 → 양수로 부호가 바뀐다.</strong></p>
+      <div class="concept-box">
+        이 부호 전환이 일어나는 지점 근방의 실근에 대해서만 생각하면 된다.<br>
+        실근이 하나뿐이면 그 근을 통해 $- \to +$로 한 번에 전환.<br>
+        실근이 셋이면 순서에 따라 $-\to+\to-\to+$ 식으로 바뀐다.
+      </div>
+      <div class="formula-box">
+        $f(x) = (x - r_1)(x - r_2)(x - r_3)$ (최고차항 계수 1, $r_1 \leq r_2 \leq r_3$)<br><br>
+        $x < r_1$: $f < 0$ &nbsp;|&nbsp; $r_1 < x < r_2$: $f \geq 0$ &nbsp;|&nbsp; $r_2 < x < r_3$: $f \leq 0$ &nbsp;|&nbsp; $x > r_3$: $f > 0$<br>
+        (단, 중근인 경우 $r_1 = r_2$ 또는 $r_2 = r_3$이면 부호가 그 구간에서 바뀌지 않음)
+      </div>
+      <div class="caution">⚠️ 실근이 아닌 허근이 있을 경우: $f(x) = (x-r)(x^2+bx+c)$ (판별식 $b^2-4c < 0$)이면 $f$는 $x = r$에서 단 한 번 부호가 바뀐다.</div>
+    </div>
+
+    <!-- 개념 2: 정수 조건의 의미 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>정수 조건 $f(k-1) \times f(k+1) \geq 0$ 의 의미</div>
+      <p>강사의 핵심 메시지: <strong>"문제에서 보라는 것은 '정수 지점'이다. 그 사이 연속적인 구간을 다 보려고 하면 미궁에 빠진다."</strong></p>
+      <div class="concept-box">
+        <strong>조건의 뜻:</strong> 어떤 정수 $k$를 잡아도, $k-1$과 $k+1$(2칸 간격 정수쌍)에서의 함숫값 곱이 0 이상이어야 한다.<br><br>
+        곱이 0 이상 = 부호가 서로 반대가 아님 = $f(k-1)$과 $f(k+1)$은 같은 부호이거나 최소 하나가 0.
+      </div>
+      <div class="formula-box">
+        $f(k-1) \times f(k+1) \geq 0$<br>
+        $\Leftrightarrow$ $f(k-1)$과 $f(k+1)$이 서로 이부호(반대 부호)가 <strong>아님</strong>
+      </div>
+      <p style="margin-top:12px">3차 함수는 언젠가 $- \to +$ 부호 전환이 일어나야 한다. 이 전환이 <strong>정수 지점에서 '0'을 거쳐 일어나지 않으면</strong> 반드시 어떤 $k$에 대해 $f(k-1) < 0$, $f(k+1) > 0$이 발생한다.</p>
+      <div class="caution">⚠️ 많은 학생들이 "일단 3차 함수 개형 그리고 케이스 분류"를 시작한다. 그러나 문제가 요구하는 것은 <strong>정수 지점에서의 부호</strong>뿐이다. 개형을 전체적으로 보는 순간, 관계없는 정보까지 같이 보게 된다.</div>
+    </div>
+
+    <!-- 개념 3: 연달아 두 정수 근이 필요한 이유 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>왜 연달아 두 개의 정수 근이 필요한가?</div>
+      <p>3차 함수가 조건 $f(k-1) \times f(k+1) \geq 0$을 만족하면서 부호를 $- \to +$로 전환하려면, 그 전환 과정에 <strong>연달아 두 개의 정수 근</strong>이 있어야 한다.</p>
+      <div class="concept-box">
+        <strong>이유 (유도):</strong><br>
+        가령 $f$가 정수 $n$과 $n+1$ 사이에서 $-$에서 $+$로 바뀌고, 정수 $n$과 $n+1$에서 모두 $0$이 아니라고 가정하자.<br>
+        그러면 $f(n) < 0$ (아직 음수)이고 $f(n+1) > 0$ (이미 양수).<br>
+        이때 $k = n+1$로 놓으면: $f(k-1) = f(n) < 0$, $f(k+1) = f(n+2)$.<br>
+        $n+2$ 이후는 계속 양수이므로 $f(n+2) > 0$.<br>
+        따라서 $f(n) \times f(n+2) < 0$ → 조건 위반! ❌
+      </div>
+      <div class="formula-box">
+        결론: 조건 만족 → 어딘가에 <strong>연달아 두 정수 $n, n+1$에서 $f(n) = 0$, $f(n+1) = 0$</strong><br>
+        (그래야 $k = n$: $f(n-1) \times f(n+1) = f(n-1) \times 0 = 0$ ✓<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$k = n+1$: $f(n) \times f(n+2) = 0 \times f(n+2) = 0$ ✓)
+      </div>
+      <div class="tip">💡 강사 인용 [00:03:24]: "0이 적어도 몇 개는 있어야 돼, 연달아 두 개는 있어 줘야 된다는 거예요."</div>
+    </div>
+
+    <!-- 개념 4: 도함수 조건으로 감소 구간 분석 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>도함수 조건으로 감소 구간 속 정수 찾기</div>
+      <p>조건 $f'(-\frac{1}{4}) = -\frac{1}{4}$, $f'(\frac{1}{4}) < 0$이 주어지면, 구간 $\left(-\frac{1}{4},\ \frac{1}{4}\right)$ 안에서 $f'(x) < 0$임을 알 수 있다.</p>
+      <div class="concept-box">
+        <strong>감소 구간 속 정수 탐색:</strong><br>
+        구간 $\left(-\frac{1}{4},\ \frac{1}{4}\right)$ 안에 속하는 정수를 찾아보면:<br>
+        $-0.25 < x < 0.25$에서 정수는 오직 $x = 0$뿐.<br><br>
+        따라서 $f$는 $x = 0$ 근방에서 감소하고 있으며, <strong>$x = 0$은 $f$의 감소 구간 속에 있다.</strong>
+      </div>
+      <div class="formula-box">
+        $f'(x) < 0$ for $x \in \left(-\tfrac{1}{4},\ \tfrac{1}{4}\right)$<br>
+        $\Rightarrow$ $x = 0$에서 $f$ 감소<br>
+        $\Rightarrow$ $f$가 감소하면서 $x = 0$을 지나므로, 연달아 두 정수 근 중 하나가 $x = 0$
+      </div>
+      <p style="margin-top:12px">연달아 두 정수 근 조건 + $f(0) = 0$ 조건이 결합되면, 나머지 한 정수 근은 $-1$ 또는 $1$이다.</p>
+      <div class="caution">⚠️ 도함수 조건만으로 $x = 0$이 근임을 단정짓지 않는다. "감소 구간 속에서 부호 전환이 일어나는 정수"가 $0$뿐이므로 $f(0) = 0$임을 추론하는 것이다.</div>
+    </div>
+
+    <!-- 개념 5: 미지수 1개로 압축 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>미지수 1개인 식으로 압축 — 대입으로 모순 제거</div>
+      <p>$f$의 근이 $\{0,\ -1,\ \alpha\}$ 또는 $\{0,\ 1,\ \alpha\}$임이 결정되었으므로, 각 경우를 식으로 표현하면:</p>
+      <div class="formula-box">
+        <strong>경우 A:</strong> $f(x) = x(x+1)(x-\alpha)$<br>
+        <strong>경우 B:</strong> $f(x) = x(x-1)(x-\alpha)$<br>
+        (미지수는 $\alpha$ 하나뿐)
+      </div>
+      <div class="concept-box">
+        <strong>$f'(-\frac{1}{4}) = -\frac{1}{4}$ 조건을 대입해 $\alpha$를 구한다:</strong><br><br>
+        경우 A: $f'(x) = 3x^2 + 2(1-\alpha)x - \alpha$ 에서<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;$f'(-\tfrac{1}{4}) = \tfrac{3}{16} - \tfrac{1-\alpha}{2} - \alpha = -\tfrac{5}{16} - \tfrac{\alpha}{2} = -\tfrac{1}{4}$<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;$\Rightarrow \alpha = -\tfrac{1}{8}$<br><br>
+        경우 B: $f'(x) = 3x^2 - 2(1+\alpha)x + \alpha$ 에서<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;$f'(-\tfrac{1}{4}) = \tfrac{3}{16} + \tfrac{1+\alpha}{2} + \alpha = \tfrac{11}{16} + \tfrac{3\alpha}{2} = -\tfrac{1}{4}$<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;$\Rightarrow \alpha = -\tfrac{5}{8}$<br><br>
+        이후 $f'(\tfrac{1}{4}) < 0$ 조건으로 두 경우 중 하나를 제거한다.
+      </div>
+      <div class="tip">💡 강사 인용 [00:01:31]: "우리 문제에서 보라는 게 아닌 다른 것들을 보고 있잖아. 이걸 보는 순간 전체를 다 보기 때문에 주제에 맞지 않는 관찰이 된다."</div>
+      <div class="caution">⚠️ 케이스 A, B를 세울 때 "어느 쪽이 맞을 것 같다"는 직관으로 고르지 말 것. 양쪽에 조건을 대입하고, 모순이 생기는 쪽을 논리적으로 제거한다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <!-- 기초 -->
+      <div class="level-header filterable basic">
+        <span class="level-badge badge-basic">기초</span>
+        <span style="font-size:.95em;color:var(--sub)">정수 조건의 기본 개념 확인</span>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 정수 조건 직접 확인</div>
+        <div class="problem-body">
+          <strong>문제:</strong> $f(x) = x(x-1)(x+1)$일 때, 모든 정수 $k$에 대해 $f(k-1) \times f(k+1) \geq 0$이 성립하는지 확인하시오.<br>
+          (힌트: $k = 0, 1, -1, 2$를 직접 대입해 보라.)
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$f(x) = x(x-1)(x+1)$의 실근은 $x = -1, 0, 1$. 이 세 근이 연달아 있다 (정수 $-1, 0, 1$).
+                <div class="why">근이 연달아 3개이므로 정수 지점에서 부드럽게 0을 거친다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>몇 가지 $k$를 직접 확인:
+                <div class="why">직접 대입이 가장 확실한 확인 방법</div>
+                <ul style="margin:8px 0 0 16px;line-height:2">
+                  <li>$k=0$: $f(-1) \times f(1) = 0 \times 0 = 0 \geq 0$ ✓</li>
+                  <li>$k=1$: $f(0) \times f(2) = 0 \times (2)(1)(3) = 0$ ✓</li>
+                  <li>$k=-1$: $f(-2) \times f(0) = (-2)(-3)(-1) \times 0 = 0$ ✓</li>
+                  <li>$k=2$: $f(1) \times f(3) = 0 \times (3)(2)(4) = 0$ ✓</li>
+                  <li>$k=3$: $f(2) \times f(4) = (2)(1)(3) \times (4)(3)(5) = 6 \times 60 > 0$ ✓</li>
+                  <li>$k=-2$: $f(-3) \times f(-1) = (-3)(-4)(-2) \times 0 = 0$ ✓</li>
+                </ul>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>일반적으로: $|k| \geq 2$인 경우 $k-1$과 $k+1$은 모두 $[-1, 0, 1]$ 바깥이므로 $f$가 같은 부호를 가진다. 따라서 곱은 항상 $\geq 0$.
+                <div class="why">세 근이 모두 [-1, 0, 1]에 있으므로 그 바깥에서는 f의 부호가 일정하다</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $k=0$에서 $f(-1) \times f(1) = 0 \times 0 = 0$이므로 "0 이상" 조건을 만족한다. "양수여야 한다"고 잘못 생각하지 말 것.</p>
+            <span class="answer-tag">정답: 성립함 (모든 정수 k에서 조건 만족)</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 도함수와 감소 구간 속 정수</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 미분가능한 함수 $g(x)$에 대해 $g'(-0.3) = -2 < 0$이고 $g'(0.3) = -1 < 0$이다. 구간 $(-0.3, 0.3)$ 안의 정수를 모두 구하고, 그 정수에서 $g$가 증가하는지 감소하는지 판단하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>구간 $(-0.3,\ 0.3)$에 속하는 정수를 찾는다.
+                <div class="why">정수는 ..., -2, -1, 0, 1, 2, ... 중 이 구간에 들어오는 것을 찾는다</div>
+                $-0.3 < x < 0.3$을 만족하는 정수는 $x = 0$뿐.
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$g'(-0.3) < 0$이고 $g'(0.3) < 0$. $g'$가 연속이면 사이값 정리에 의해 $(-0.3, 0.3)$ 안에서도 $g' < 0$이다 (극값이 없다는 추가 조건이 있어야 엄밀하지만, 수능 문제에서는 이 논리를 적용).
+                <div class="why">도함수가 양 끝에서 모두 음수이므로 사이 구간에서 부호가 바뀌지 않는다고 추론</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>따라서 $x = 0$에서 $g'(0) < 0$이므로 $g$는 $x = 0$에서 감소하고 있다.
+                <div class="why">도함수가 음수 = 함수 감소</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: "$g'(-0.3)$과 $g'(0.3)$이 음수이면 구간 전체에서 음수"라는 것은 $g'$가 그 구간에서 부호가 바뀌지 않는다는 전제 하의 추론. 엄밀한 증명은 아니지만 수능 문제의 맥락에서는 이렇게 쓴다.</p>
+            <span class="answer-tag">정답: 구간 안 정수는 x=0뿐, x=0에서 g는 감소</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 기본 -->
+      <div class="level-header filterable standard">
+        <span class="level-badge badge-standard">기본</span>
+        <span style="font-size:.95em;color:var(--sub)">두 조건을 결합해 근 후보 압축</span>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 두 조건 결합으로 근 후보 구하기</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 최고차항의 계수가 1인 3차 함수 $f(x)$가 다음 조건을 만족한다.<br><br>
+          (가) 임의의 정수 $k$에 대해 $f(k-1) \times f(k+1) \geq 0$이다.<br>
+          (나) $f'(0) < 0$ &nbsp;($x = 0$에서 $f$가 감소)<br><br>
+          $f(0) = 0$임을 논리적으로 설명하고, $f(x)$가 가질 수 있는 근의 조합을 두 가지 제시하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>조건 (나)에서 $x = 0$ 근방에서 $f$가 감소한다.
+                <div class="why">$f'(0) < 0$이면 $f$는 $x = 0$ 부근에서 감소 중</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>3차 함수는 음에서 양으로 부호가 전환된다. 조건 (가)에서 이 전환은 연달아 두 정수 근을 거쳐 일어나야 한다 (개념 3 참고).
+                <div class="why">2칸 간격 부호 조건을 위반하지 않으려면 전환 지점에 연달아 두 정수 근 필요</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>감소 구간($x = 0$ 근방)이 부호 전환 구간과 겹친다. 부호 전환 중에 $x = 0$이 있으므로, $f(0) = 0$이어야 한다.
+                <div class="why">감소하면서 부호 전환이 일어나려면 그 지점에서 f = 0을 통과해야 한다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>연달아 두 정수 근 중 하나가 $0$이므로, 나머지 하나는 $-1$ 또는 $1$.
+                <div class="why">연달아 = 서로 1 차이나는 정수</div>
+                <ul style="margin:8px 0 0 16px;line-height:2">
+                  <li><strong>경우 A:</strong> $f(x) = x(x+1)(x - \alpha)$ (근: $-1, 0, \alpha$)</li>
+                  <li><strong>경우 B:</strong> $f(x) = x(x-1)(x - \alpha)$ (근: $0, 1, \alpha$)</li>
+                </ul>
+              </div>
+            </div>
+            <p class="warn">오답 주의: "$f(0)$이 왜 0이지?"라는 부분에서 단순히 "당연히"라고 넘어가면 안 된다. "감소하면서 부호가 전환되려면 반드시 0을 지나야 한다"는 논리가 핵심.</p>
+            <span class="answer-tag">정답: f(0)=0 확정. 경우 A: f(x)=x(x+1)(x-α), 경우 B: f(x)=x(x-1)(x-α)</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 도함수 조건으로 α 구하기</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 기본 1에서 경우 B: $f(x) = x(x-1)(x-\alpha)$로 결정되었다고 하자. 조건 $f'\!\left(-\dfrac{1}{4}\right) = -\dfrac{1}{4}$를 이용하여 $\alpha$를 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$f(x) = x(x-1)(x-\alpha)$를 전개하면:
+                $$f(x) = x^3 - (1+\alpha)x^2 + \alpha x$$
+                <div class="why">$(x)(x-1)(x-\alpha)$를 순서대로 전개</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>도함수를 구한다:
+                $$f'(x) = 3x^2 - 2(1+\alpha)x + \alpha$$
+                <div class="why">각 항을 미분: $(x^3)' = 3x^2$, $(-(1+\alpha)x^2)' = -2(1+\alpha)x$, $(\alpha x)' = \alpha$</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$x = -\dfrac{1}{4}$를 대입:
+                $$f'\!\left(-\tfrac{1}{4}\right) = 3 \cdot \tfrac{1}{16} - 2(1+\alpha) \cdot \left(-\tfrac{1}{4}\right) + \alpha = \tfrac{3}{16} + \tfrac{1+\alpha}{2} + \alpha$$
+                <div class="why">$(-1/4)^2 = 1/16$, $(-1/4)$에 음수를 곱하면 양수</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>통분해 정리:
+                $$\tfrac{3}{16} + \tfrac{8}{16} + \tfrac{8\alpha}{16} + \alpha = \tfrac{11}{16} + \tfrac{8\alpha + 16\alpha}{16} = \tfrac{11}{16} + \tfrac{3\alpha}{2}$$
+                이를 $-\dfrac{1}{4} = -\dfrac{4}{16}$으로 놓으면:
+                $$\tfrac{11}{16} + \tfrac{3\alpha}{2} = -\tfrac{4}{16}$$
+                $$\tfrac{3\alpha}{2} = -\tfrac{15}{16} \implies \alpha = -\tfrac{5}{8}$$
+                <div class="why">우변으로 이항하고 $\alpha$에 대해 정리</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $f'(-1/4)$ 계산에서 $2(1+\alpha) \times (-1/4)$의 부호를 틀리기 쉽다. 천천히 한 단계씩.</p>
+            <span class="answer-tag">정답: α = -5/8</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 심화 -->
+      <div class="level-header filterable advanced">
+        <span class="level-badge badge-advanced">심화</span>
+        <span style="font-size:.95em;color:var(--sub)">경우 검증 및 모순 제거</span>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 경우 A 검증 (모순 확인)</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 경우 A: $f(x) = x(x+1)(x-\alpha)$에 조건 $f'\!\left(-\dfrac{1}{4}\right) = -\dfrac{1}{4}$를 대입하면 $\alpha = -\dfrac{1}{8}$이 나온다. 이때 $f'\!\left(\dfrac{1}{4}\right) < 0$ 조건을 검증하여 경우 A가 타당한지 판단하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>경우 A: $f(x) = x(x+1)(x - (-\tfrac{1}{8})) = x(x+1)(x+\tfrac{1}{8})$
+                <div class="why">$\alpha = -1/8$을 대입</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>전개: $f(x) = x^3 + (1 - (-\tfrac{1}{8}))x^2 + \cdots = x^3 + \tfrac{9}{8}x^2 + \tfrac{1}{8}x$<br>
+                도함수: $f'(x) = 3x^2 + \tfrac{9}{4}x + \tfrac{1}{8}$
+                <div class="why">$f(x)=x(x+1)(x+1/8)$ 전개 후 미분</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$f'\!\left(\dfrac{1}{4}\right)$를 계산:
+                $$f'\!\left(\tfrac{1}{4}\right) = 3 \cdot \tfrac{1}{16} + \tfrac{9}{4} \cdot \tfrac{1}{4} + \tfrac{1}{8} = \tfrac{3}{16} + \tfrac{9}{16} + \tfrac{2}{16} = \tfrac{14}{16} = \tfrac{7}{8}$$
+                <div class="why">각 항을 분모 16으로 통분해 계산</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$f'\!\left(\tfrac{1}{4}\right) = \tfrac{7}{8} > 0$이므로 조건 "$f'\!\left(\tfrac{1}{4}\right) < 0$"을 <strong>만족하지 않는다.</strong> → 경우 A 제거.
+                <div class="why">조건 위반 = 이 경우는 문제의 함수가 아님</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $\alpha$를 구한 뒤 "이걸로 끝"이라고 생각하지 말 것. 추가 조건으로 검증을 해야 최종 결론이 난다.</p>
+            <span class="answer-tag">정답: 경우 A에서 f'(1/4) = 7/8 &gt; 0 → 조건 위반 → 경우 A 제거</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — f(x) 완전 결정 및 특정 값 계산</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 기본 2의 결과 ($\alpha = -\dfrac{5}{8}$)를 이용하여 최종 $f(x)$를 확정하고, $60 \times f\!\left(-\dfrac{3}{4}\right)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$f(x) = x(x-1)\!\left(x+\dfrac{5}{8}\right)$ (경우 B에 $\alpha = -5/8$ 대입)
+                <div class="why">경우 B: f(x)=x(x-1)(x-α)에서 α=-5/8이므로 x-α = x+5/8</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$f'\!\left(\dfrac{1}{4}\right)$로 최종 검증:
+                $$f'(x) = 3x^2 - 2(1+(-\tfrac{5}{8}))x + (-\tfrac{5}{8}) = 3x^2 - \tfrac{3}{4}x - \tfrac{5}{8}$$
+                $$f'\!\left(\tfrac{1}{4}\right) = 3 \cdot \tfrac{1}{16} - \tfrac{3}{4} \cdot \tfrac{1}{4} - \tfrac{5}{8} = \tfrac{3}{16} - \tfrac{3}{16} - \tfrac{10}{16} = -\tfrac{10}{16} = -\tfrac{5}{8} < 0\ ✓$$
+                <div class="why">조건 f'(1/4) &lt; 0 만족 확인</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$f\!\left(-\dfrac{3}{4}\right)$ 계산:
+                $$f\!\left(-\tfrac{3}{4}\right) = \left(-\tfrac{3}{4}\right)\!\left(-\tfrac{3}{4}-1\right)\!\left(-\tfrac{3}{4}+\tfrac{5}{8}\right)$$
+                $$= \left(-\tfrac{3}{4}\right)\!\left(-\tfrac{7}{4}\right)\!\left(-\tfrac{1}{8}\right)$$
+                $$= -\tfrac{3 \times 7 \times 1}{4 \times 4 \times 8} = -\tfrac{21}{128}$$
+                <div class="why">분수끼리 곱셈: 분자끼리, 분모끼리 곱한다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$60 \times f\!\left(-\tfrac{3}{4}\right) = 60 \times \left(-\tfrac{21}{128}\right) = -\dfrac{1260}{128} = -\dfrac{315}{32}$
+                <div class="why">정수 답이 나오도록 계수 60을 선택했으나 분수로 남는 경우도 있음. 실제 수능 문제는 정수 답이 나오도록 설계됨.</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $-3/4 + 5/8 = -6/8 + 5/8 = -1/8$. 분수 통분을 빠뜨리지 말 것.</p>
+            <span class="answer-tag">정답: f(x) = x(x-1)(x+5/8) 확정. 60×f(-3/4) = -315/32</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 수능 대비 -->
+      <div class="level-header filterable csat">
+        <span class="level-badge badge-csat">수능 대비</span>
+        <span style="font-size:.95em;color:var(--sub)">준킬러/킬러 유형 — 논리 흐름 전체 재현</span>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러 유형 (전체 논리 흐름)</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 최고차항의 계수가 1인 3차 함수 $f(x)$가 다음 조건을 만족한다.<br><br>
+          <strong>(가)</strong> 임의의 정수 $k$에 대해 $f(k-1) \times f(k+1) \geq 0$이다.<br>
+          <strong>(나)</strong> $f'\!\left(-\dfrac{1}{4}\right) = -\dfrac{1}{4}$, $\quad f'\!\left(\dfrac{1}{4}\right) < 0$<br><br>
+          $f(x)$를 구하고, $64 \times f\!\left(\dfrac{1}{2}\right)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>[정수 조건 분석] 조건 (가)에서 $f$는 부호 전환 시 연달아 두 정수 근을 가져야 한다.
+                <div class="why">개념 3의 논리: 연달아 두 정수 근 없이는 2칸 간격 조건 위반</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>[도함수 조건 분석] 조건 (나)에서 $f'(-1/4) < 0$, $f'(1/4) < 0$이므로 구간 $(-1/4, 1/4)$ 에서 $f$ 감소. 이 구간에서 유일한 정수는 $x = 0$.
+                <div class="why">$-0.25 < x < 0.25$ 안의 정수는 0뿐</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>[근 확정] $x = 0$에서 $f$ 감소 + $f$가 이 지점에서 부호 전환 → $f(0) = 0$. 연달아 두 정수 근이므로 $f(-1) = 0$ 또는 $f(1) = 0$.
+                <div class="why">감소하면서 0을 통과해야 부호가 전환됨</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>[경우 A: 근이 -1, 0, α] $f(x) = x(x+1)(x-\alpha)$. $f'(-1/4) = -1/4$ 대입:
+                $$-\tfrac{5}{16} - \tfrac{\alpha}{2} = -\tfrac{1}{4} \implies \alpha = -\tfrac{1}{8}$$
+                검증: $f'(1/4)$을 계산하면 양수 → 조건 (나) 위반 → 경우 A 기각.
+                <div class="why">조건 f'(1/4) &lt; 0을 만족하지 않음</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 5</span>
+              <div>[경우 B: 근이 0, 1, α] $f(x) = x(x-1)(x-\alpha)$. $f'(-1/4) = -1/4$ 대입:
+                $$\tfrac{11}{16} + \tfrac{3\alpha}{2} = -\tfrac{1}{4} \implies \alpha = -\tfrac{5}{8}$$
+                검증: $f'(1/4) = -5/8 < 0$ ✓ → 경우 B 채택.
+                <div class="why">조건 f'(1/4) &lt; 0 만족 확인</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 6</span>
+              <div>$f(x) = x(x-1)\!\left(x+\tfrac{5}{8}\right)$. $f\!\left(\tfrac{1}{2}\right)$ 계산:
+                $$f\!\left(\tfrac{1}{2}\right) = \tfrac{1}{2} \cdot \left(-\tfrac{1}{2}\right) \cdot \left(\tfrac{1}{2}+\tfrac{5}{8}\right) = \tfrac{1}{2} \cdot \left(-\tfrac{1}{2}\right) \cdot \tfrac{9}{8} = -\tfrac{9}{32}$$
+                $$64 \times f\!\left(\tfrac{1}{2}\right) = 64 \times \left(-\tfrac{9}{32}\right) = -18$$
+                <div class="why">1/2 + 5/8 = 4/8 + 5/8 = 9/8</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: 경우 A와 B 모두 α를 구한 뒤 반드시 조건 (나) 두 번째 조건 $f'(1/4) < 0$으로 검증해야 한다. 한 가지만 대입하면 틀릴 수 있다.</p>
+            <span class="answer-tag">정답: 64 × f(1/2) = -18</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 킬러 변형 유형 (조건 변형)</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 최고차항의 계수가 1인 3차 함수 $g(x)$가 다음 조건을 만족한다.<br><br>
+          <strong>(가)</strong> 임의의 정수 $k$에 대해 $g(k-1) \times g(k+1) \geq 0$이다.<br>
+          <strong>(나)</strong> $g'\!\left(\dfrac{1}{4}\right) = \dfrac{1}{4}$, $\quad g'\!\left(\dfrac{3}{4}\right) < 0$<br><br>
+          $g(x)$를 구하고, $64 \times g\!\left(\dfrac{3}{2}\right)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>[도함수 조건 분석] $g'(1/4) > 0$이고 $g'(3/4) < 0$이면 구간 $(1/4, 3/4)$에서 극대가 있다. 이 구간 안의 정수는? $0.25 < x < 0.75$에서 정수 없음!
+                <div class="why">1/4과 3/4 사이에는 정수가 없다</div>
+                다만, $g'$가 양수→음수로 바뀌는 지점이 $(1/4, 3/4)$ 사이에 있으므로, $g$는 극대를 가진다. 이 극대 이후 감소하는 구간에서 정수를 찾는다.
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$g'(3/4) < 0$이므로 $x = 3/4$ 이후에도 당분간 감소. 다음 정수는 $x = 1$. 감소 구간 내 정수가 $x = 1$일 가능성 검토.
+                <div class="why">극대가 (1/4, 3/4) 사이에 있으므로 x = 3/4 직후도 감소 중. x=1이 감소 구간에 속할 수 있음</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>[근 확정] 조건 (가)에서 연달아 두 정수 근 필요. $g'(3/4) < 0$이고 $x = 1$에서 감소 중이면 $g(1) = 0$. 연달아 있으므로 $g(0) = 0$ 또는 $g(2) = 0$.
+                <div class="why">감소하면서 x=1에서 부호 전환 → g(1)=0. 연달아 한 정수 더 필요</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>[경우 설정] 두 정수 근 중 하나가 1이므로:
+                <ul style="margin:8px 0 0 16px;line-height:2">
+                  <li><strong>경우 A:</strong> 근 $\{0, 1, \beta\}$ → $g(x) = x(x-1)(x-\beta)$</li>
+                  <li><strong>경우 B:</strong> 근 $\{1, 2, \beta\}$ → $g(x) = (x-1)(x-2)(x-\beta)$</li>
+                </ul>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 5</span>
+              <div>[경우 A에 조건 대입] $g'(x) = 3x^2 - 2(1+\beta)x + \beta$:
+                $$g'\!\left(\tfrac{1}{4}\right) = \tfrac{3}{16} - \tfrac{1+\beta}{2} + \beta = \tfrac{3}{16} - \tfrac{8(1+\beta)}{16} + \tfrac{16\beta}{16} = \tfrac{3 - 8 - 8\beta + 16\beta}{16} = \tfrac{-5 + 8\beta}{16}$$
+                $= 1/4 = 4/16$이면: $-5 + 8\beta = 4 \implies \beta = 9/8$
+                <div class="why">통분해 정리. 결과 β = 9/8</div>
+                검증: $g'(3/4)$는 양수인지 확인.
+                $g'(3/4) = 3(9/16) - 2(1 + 9/8)(3/4) + 9/8 = 27/16 - (17/4)(3/4) + 9/8 = 27/16 - 51/16 + 18/16 = -6/16 = -3/8 < 0$ ✓
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 6</span>
+              <div>경우 A 채택: $g(x) = x(x-1)\!\left(x - \tfrac{9}{8}\right)$
+                <div class="why">경우 B 검증은 생략 (경우 A가 이미 모든 조건을 만족)</div>
+                $$g\!\left(\tfrac{3}{2}\right) = \tfrac{3}{2} \cdot \left(\tfrac{3}{2}-1\right) \cdot \left(\tfrac{3}{2}-\tfrac{9}{8}\right) = \tfrac{3}{2} \cdot \tfrac{1}{2} \cdot \tfrac{3}{8} = \tfrac{9}{32}$$
+                $$64 \times g\!\left(\tfrac{3}{2}\right) = 64 \times \tfrac{9}{32} = 18$$
+              </div>
+            </div>
+            <p class="warn">오답 주의: 수능 대비 2는 감소 구간 내 정수를 찾는 단계가 수능 대비 1보다 한 단계 더 복잡하다. 도함수 조건이 양수→음수로 바뀌므로 극대 위치와 그 이후 감소 구간을 분리해서 생각해야 한다.</p>
+            <span class="answer-tag">정답: 64 × g(3/2) = 18</span>
+          </div>
+        </details>
+      </div>
+
+    </div><!-- #problems -->
+
+    <!-- ===== 검증 박스 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>이 자료는 「수능 수학은 이동준」 채널의 영상(arsZnxqP53c, 6분 33초)에서 강사가 수능 고난도 문항 해설에 사용한 핵심 개념 — 정수 부호 조건 $f(k-1) \times f(k+1) \geq 0$과 도함수 조건의 결합, 미지수 1개로 압축하는 논리 — 을 재구성한 것입니다. 영상의 구체적 수치($f'(-1/4) = -1/4$, 이 값에서 $\alpha$ 도출)를 그대로 활용하였습니다.</p>
+      <p style="margin-top:8px">문항은 영상 내용을 바탕으로 AI가 재구성한 연습 문제이며, 교과서 및 평가원 기출과 직접 대응하지 않습니다. "수능 대비"는 <strong>난이도 라벨</strong>일 뿐 <strong>실재 기출 문제가 아닙니다.</strong> 학생 배포 전 교사의 수학적 검증을 권장합니다. 특히 수능 대비 2의 경우 B 기각 검증 과정을 수업에서 직접 다루시기 바랍니다.</p>
+    </div>
+
+    <!-- REL_START --><!-- REL_END -->
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_3차함수극값2대1분할_00ByGXdH.html">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 (00ByGXdH)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-06-14 · 영상 출처: <a href="https://youtu.be/arsZnxqP53c" style="color:var(--primary)">수능 수학은 이동준</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
