@@ -74,19 +74,23 @@ def main() -> int:
             href = os.path.relpath(b["f"], os.path.dirname(a["f"])).replace("\\", "/")
             rel_links.append(f'<a href="{href}">{b["title"]} ({b["vid8"]})</a>')
 
-        html = re.sub(r'\n?<div class="related-box" id="related-box".*?</div>\n?', "",
-                      a["html"], flags=re.DOTALL)
+        html = a["html"]
+        # 기존 관련 콘텐츠 정리 (3종): ① 마커 블록 ② 정상 박스(🔗 앵커) ③ 과거 버그가 남긴 고아 링크 잔재
+        html = re.sub(r"\n?<!--REL_START-->.*?<!--REL_END-->\n?", "", html, flags=re.DOTALL)
+        html = re.sub(r'\n?<div class="related-box" id="related-box"[\s\S]*?🔗 관련 자료</div>[\s\S]*?</div>\n?', "", html)
+        html = re.sub(r'\n?(?:\s*<a href="\.\./[^"]+\.html">[^<]*\([A-Za-z0-9_-]{6,}\)</a>(?:\s*·\s*)?)+\s*</div>\n?', "", html)
+
         if rel_links:
-            box = ('\n<div class="related-box" id="related-box" '
+            box = ('\n<!--REL_START--><div class="related-box" id="related-box" '
                    'style="max-width:880px;margin:26px auto 0;padding:14px 20px;'
                    'background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;'
                    "font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;\">"
                    '<div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div>'
-                   + " · ".join(rel_links) + "</div>\n")
+                   + " · ".join(rel_links) + "</div><!--REL_END-->\n")
             if re.search(r"<footer", html, re.I):
-                html = re.sub(r"(<footer)", box + r"\1", html, count=1, flags=re.I)
+                html = re.sub(r"(<footer)", lambda m: box + m.group(1), html, count=1, flags=re.I)
             else:
-                html = re.sub(r"(</body>)", box + r"\1", html, count=1, flags=re.I)
+                html = re.sub(r"(</body>)", lambda m: box + m.group(1), html, count=1, flags=re.I)
             injected += 1
         if html != a["html"]:
             open(a["f"], "w", encoding="utf-8").write(html)
