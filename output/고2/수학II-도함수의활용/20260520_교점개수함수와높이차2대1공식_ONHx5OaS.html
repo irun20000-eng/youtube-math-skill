@@ -15,227 +15,104 @@
     });"></script>
   <style>
     :root {
-      --primary: #1a73e8;
-      --primary-dark: #0d47a1;
-      --accent: #e53935;
-      --green: #2e7d32;
-      --orange: #e65100;
-      --purple: #6a1b9a;
-      --bg: #f8f9fa;
-      --card: #ffffff;
-      --border: #e0e0e0;
-      --text: #212121;
-      --sub: #616161;
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.75;
-      font-size: 16px;
-    }
-    .hero {
-      background: linear-gradient(135deg, #263238 0%, #37474f 60%, #455a64 100%);
-      color: #fff;
-      padding: 48px 24px 40px;
-      text-align: center;
-    }
-    .hero .tag {
-      display: inline-block;
-      background: rgba(255,255,255,0.18);
-      border-radius: 20px;
-      padding: 4px 16px;
-      font-size: 13px;
-      margin-bottom: 14px;
-      letter-spacing: 0.04em;
-    }
-    .hero h1 {
-      font-size: clamp(1.4rem, 4vw, 2rem);
-      font-weight: 800;
-      line-height: 1.35;
-      margin-bottom: 10px;
-    }
-    .hero p {
-      font-size: 15px;
-      opacity: 0.92;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    .quote {
-      background: rgba(255,255,255,0.13);
-      border-left: 3px solid #ffd54f;
-      padding: 10px 16px;
-      font-size: 14px;
-      max-width: 620px;
-      margin: 16px auto 0;
-      text-align: left;
-      border-radius: 0 8px 8px 0;
-    }
-    .video-card {
-      max-width: 720px;
-      margin: 28px auto 0;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      display: flex; gap: 16px; align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      text-align: left;
-    }
-    .video-card a.thumb {
-      flex-shrink: 0; position: relative; display: block;
-      width: 200px; aspect-ratio: 16/9;
-      border-radius: 8px; overflow: hidden; background: #000;
-    }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; } /* pdf-mode.js 인쇄버튼을 툴바 아래로 (겹침 방지) */
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
     .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .video-card .play-icon {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 48px; height: 48px;
-      background: rgba(229, 57, 53, 0.92);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
     .video-card .info { flex: 1; min-width: 0; color: var(--text); }
     .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
     .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
     .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
-    .video-card .related { display: block; margin-top: 8px; font-size: 12px; color: var(--sub); }
-    .video-card .related a { color: var(--primary); }
-    @media (max-width: 600px) {
-      .video-card { flex-direction: column; align-items: stretch; }
-      .video-card a.thumb { width: 100%; }
-    }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
     .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
-    .section-title {
-      font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
-      margin: 40px 0 16px;
-      padding-left: 12px;
-      border-left: 4px solid var(--primary);
-    }
-    .card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-      padding: 24px 28px; margin-bottom: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .concept-title {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 1.08rem; font-weight: 700;
-      color: var(--primary-dark); margin-bottom: 12px;
-    }
-    .concept-num {
-      background: #455a64; color: #fff;
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 14px;
-    }
-    .concept-box {
-      background: #eceff1;
-      border-left: 5px solid #455a64;
-      border-radius: 0 10px 10px 0;
-      padding: 16px 20px; margin: 14px 0;
-    }
-    .formula-box {
-      background: #fff8e1;
-      border: 2px solid #ffa000;
-      border-radius: 10px;
-      padding: 16px 22px; margin: 14px 0;
-      text-align: center;
-    }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
     .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
-    .step-num {
-      flex-shrink: 0; width: 26px; height: 26px;
-      background: var(--primary); color: #fff;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700;
-      margin-top: 2px;
-    }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
     .step-body { flex: 1; }
-    .caution {
-      background: #fff3e0; border-left: 4px solid var(--orange);
-      border-radius: 0 8px 8px 0;
-      padding: 12px 18px; margin: 12px 0;
-      font-size: 14px;
-    }
-    .tip {
-      background: #e1f5fe; border-left: 4px solid #0288d1;
-      border-radius: 0 8px 8px 0;
-      padding: 12px 18px; margin: 12px 0;
-      font-size: 14px;
-    }
-    .visual {
-      background: #fafafa; border: 1px dashed #999;
-      border-radius: 8px;
-      padding: 16px 20px; margin: 14px 0;
-      font-family: 'Courier New', monospace;
-      font-size: 14px; line-height: 1.6;
-      white-space: pre; overflow-x: auto;
-    }
-    .example-card {
-      background: #f9fbe7; border-left: 4px solid var(--green);
-      border-radius: 0 10px 10px 0;
-      padding: 18px 22px; margin: 16px 0;
-    }
-    .example-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
     .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
     .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
-    .badge-basic    { background: #43a047; }
-    .badge-standard { background: #1e88e5; }
-    .badge-advanced { background: #8e24aa; }
-    .badge-csat     { background: #c62828; }
-    .problem-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-      padding: 22px 26px; margin-bottom: 18px;
-    }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
     .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
     .problem-body { margin-bottom: 14px; line-height: 1.9; }
     details { margin-top: 10px; }
-    summary {
-      cursor: pointer;
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--primary); color: #fff;
-      padding: 6px 18px; border-radius: 20px;
-      font-size: 14px; font-weight: 600; user-select: none;
-    }
-    summary:hover { background: var(--primary-dark); }
-    .solution {
-      margin-top: 14px;
-      background: #f5f5f5; border-radius: 10px;
-      padding: 18px 22px; line-height: 2;
-    }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
     .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
-    .sol-step-label {
-      flex-shrink: 0;
-      background: var(--primary-dark); color: #fff;
-      font-size: 12px; font-weight: 700;
-      padding: 1px 8px; border-radius: 4px;
-      margin-top: 5px; white-space: nowrap;
-    }
-    .answer-tag {
-      display: inline-block;
-      background: var(--accent); color: #fff;
-      border-radius: 6px; padding: 2px 12px;
-      font-weight: 700; font-size: 14px;
-      margin-top: 8px;
-    }
-    table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
-    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; vertical-align: top; }
-    th { background: #eceff1; color: #263238; }
-    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
-    @media (max-width: 600px) {
-      .card, .problem-card { padding: 16px 16px; }
-      .hero { padding: 36px 16px 30px; }
-    }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <style>
+  hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+  table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  .step{margin:10px 0;}
   </style>
   <link rel="stylesheet" href="../../pdf-mode.css">
 </head>
 <body>
-<nav id="gallery-back" style="max-width:900px;margin:0 auto;padding:14px 20px 0;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" style="display:inline-block;padding:7px 16px;border-radius:8px;background:#2196f3;color:#fff;text-decoration:none;font-size:0.92em;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.15);">🏠 갤러리로 돌아가기</a></nav>
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
 
 
 <div class="hero">
@@ -425,12 +302,12 @@
   <hr class="divider" />
 
   <!-- ===== 기초 문항 ===== -->
-  <div class="level-header">
+  <div class="level-header filterable basic">
     <span class="level-badge badge-basic">기초</span>
     <span style="font-weight:600; color:#2e7d32">높이차 공식·교점 개수</span>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable basic">
     <div class="problem-num">기초 1 — 높이차 공식</div>
     <div class="problem-body">
       $f(x) = x^3 - 12x$의 극댓값과 극솟값의 차이를 높이차 공식으로 구하시오.
@@ -451,7 +328,7 @@
     </details>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable basic">
     <div class="problem-num">기초 2 — 교점 개수</div>
     <div class="problem-body">
       $f(x) = x^3 - 3x$에 대해 방정식 $f(x) = t$가 서로 다른 세 실근을 가질 $t$의 범위를 구하시오.
@@ -473,7 +350,7 @@
     </details>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable basic">
     <div class="problem-num">기초 3 — 2:1 비율</div>
     <div class="problem-body">
       $f(x) = x^3 - 3x$의 극솟값을 지나는 수평선이 곡선과 다시 만나는 점의 $x$좌표를 구하시오.
@@ -500,12 +377,12 @@
   </div>
 
   <!-- ===== 기본 문항 ===== -->
-  <div class="level-header">
+  <div class="level-header filterable standard">
     <span class="level-badge badge-standard">기본</span>
     <span style="font-weight:600; color:#1565c0">높이차·교점 결합</span>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable standard">
     <div class="problem-num">기본 1 — 높이차로 미지수</div>
     <div class="problem-body">
       최고차항의 계수가 $2$인 삼차함수 $f(x)$의 두 극점의 $x$좌표 차이가 $3$일 때, 극댓값과 극솟값의 차이를 구하시오.
@@ -522,7 +399,7 @@
     </details>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable standard">
     <div class="problem-num">기본 2 — 교점 개수 함수 불연속</div>
     <div class="problem-body">
       $f(x) = x^3 - 3x^2$에 대해 $g(t)$를 방정식 $f(x) = t$의 서로 다른 실근의 개수라 하자. $g(t)$가 불연속인 $t$의 값을 모두 구하시오.
@@ -543,7 +420,7 @@
     </details>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable standard">
     <div class="problem-num">기본 3 — 높이차 + 교점</div>
     <div class="problem-body">
       최고차항의 계수가 $1$인 삼차함수 $f(x)$의 극댓값이 $5$, 극솟값이 $1$이다. 두 극점의 $x$좌표 차이 $l$을 구하시오.
@@ -565,12 +442,12 @@
   </div>
 
   <!-- ===== 심화 문항 ===== -->
-  <div class="level-header">
+  <div class="level-header filterable advanced">
     <span class="level-badge badge-advanced">심화</span>
     <span style="font-weight:600; color:#6a1b9a">교점 개수 함수 역추적</span>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable advanced">
     <div class="problem-num">심화 1 — $g(t)$로 극값 역추적</div>
     <div class="problem-body">
       삼차함수 $f(x)$ (최고차 계수 1)에 대해 $g(t)$ = ($f(x) = t$의 실근 개수)가 $t = 6$과 $t = 2$에서만 불연속이다. 두 극점의 $x$좌표 차이 $l$을 구하시오.
@@ -591,7 +468,7 @@
     </details>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable advanced">
     <div class="problem-num">심화 2 — 좌극한·우극한 합</div>
     <div class="problem-body">
       삼차함수 $f(x) = x^3 - 3x$에 대해 $g(t)$ = ($f(x) = t$의 실근 개수)라 하자.
@@ -626,12 +503,12 @@
   </div>
 
   <!-- ===== 수능 대비 ===== -->
-  <div class="level-header">
+  <div class="level-header filterable csat">
     <span class="level-badge badge-csat">수능 대비</span>
     <span style="font-weight:600; color:#b71c1c">준킬러 — 종합</span>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable csat">
     <div class="problem-num">수능 대비 1 — 준킬러 (높이차 + 2:1)</div>
     <div class="problem-body">
       최고차항의 계수가 $1$인 삼차함수 $f(x)$의 극대점이 $(0, 4)$이고, 극대점을 지나는 수평선이 곡선과 다시 만나는 점의 $x$좌표가 $3$이다. 극솟값을 구하시오.
@@ -663,7 +540,7 @@
     </details>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable csat">
     <div class="problem-num">수능 대비 2 — 준킬러 (교점 개수 함수 + 미정)</div>
     <div class="problem-body">
       최고차항의 계수가 $1$인 삼차함수 $f(x)$에 대해 $g(t)$ = ($f(x) = t$의 실근 개수)가 다음을 만족한다.<br><br>
@@ -695,7 +572,7 @@
     </details>
   </div>
 
-  <div class="problem-card">
+  <div class="problem-card filterable csat">
     <div class="problem-num">수능 대비 3 — 준킬러 (높이차 + 넓이)</div>
     <div class="problem-body">
       최고차항의 계수가 $1$인 삼차함수 $f(x)$의 두 극점의 $x$좌표가 $1, 3$이다. 도함수 $f'(x)$의 그래프와 $x$축으로 둘러싸인 부분의 넓이를 구하고, 그것이 극값 차이와 같음을 확인하시오.
@@ -762,5 +639,18 @@
   <script defer src="../../pdf-mode.js"></script>
 <a href="20260520_차함수특강관계내리기와보정_WhojOfqC.html">차함수 특강 (WhojOfqC)</a> · <a href="20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a> ·
 <!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260520_차함수특강관계내리기와보정_WhojOfqC.html">차함수 특강 (WhojOfqC)</a> · <a href="20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a> · <a href="../../고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 (00ByGXdH)</a></div><!--REL_END-->
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+  <script>
+    function toggleDark(){document.body.classList.toggle('dark');}
+    function filterLevel(level,btn){
+      document.querySelectorAll('.toolbar .flt').forEach(b=>b.classList.remove('active'));
+      if(btn)btn.classList.add('active');
+      document.querySelectorAll('.filterable').forEach(el=>{el.style.display=(level==='all'||el.classList.contains(level))?'':'none';});
+      if(level!=='all'){const f=document.querySelector('.level-header');if(f)f.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+    window.addEventListener('scroll',()=>{const b=document.getElementById('scrollTopBtn');if(b)b.style.display=window.scrollY>400?'block':'none';});
+    document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;if(e.key==='d'||e.key==='D')toggleDark();});
+  </script>
 </body>
 </html>
