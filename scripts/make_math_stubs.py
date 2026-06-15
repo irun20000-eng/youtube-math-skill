@@ -25,10 +25,10 @@ for _s in (sys.stdout, sys.stderr):
 
 REPO = Path(__file__).resolve().parent.parent
 OUTPUT = REPO / "output"
-VAULT_STUB = Path(
-    r"G:\내 드라이브\00_Obsidian_Second Brain\Insight Miner"
-    r"\000-수집\020-Youtube-Obsi\수학영상노트"
-)
+# 볼트 폴더의 숫자 접두사가 바뀌어도(020→010 등) 안 깨지게 glob 으로 해석
+_VAULT_BASE = Path(r"G:\내 드라이브\00_Obsidian_Second Brain\Insight Miner\000-수집")
+_vmatch = sorted(_VAULT_BASE.glob("*-Youtube-Obsi/수학영상노트"))
+VAULT_STUB = _vmatch[0] if _vmatch else _VAULT_BASE / "010-Youtube-Obsi" / "수학영상노트"
 PAGES_BASE = "https://irun20000-eng.github.io/youtube-math-skill/"
 
 YT_RE = re.compile(r"https?://(?:www\.)?(?:youtube\.com|youtu\.be)[^\"'<> )]+")
