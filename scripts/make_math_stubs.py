@@ -151,7 +151,9 @@ def main() -> int:
     ap.add_argument("--force", action="store_true", help="기존 스텁 덮어쓰기")
     args = ap.parse_args()
 
-    htmls = sorted(p for p in OUTPUT.rglob("*.html") if p.name != "index.html")
+    # _개념 자료는 영상 스텁(수학영상노트)이 아니라 수학개념노트로 별도 처리 → 여기선 제외
+    htmls = sorted(p for p in OUTPUT.rglob("*.html")
+                   if p.name != "index.html" and not p.stem.endswith("_개념"))
     print(f"[OK] 갤러리 HTML {len(htmls)}개", file=sys.stderr)
     made = skipped = 0
     for h in htmls:

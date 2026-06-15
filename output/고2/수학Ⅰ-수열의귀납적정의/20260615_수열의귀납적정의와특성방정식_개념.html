@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>수열의 귀납적 정의 · 특성방정식 · 점화식 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 55%, #8e24aa 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .92; max-width: 660px; margin: 0 auto; }
+    .src-badge { display: inline-block; margin: 18px auto 0; padding: 8px 18px; border-radius: 24px; background: rgba(255,255,255,.16); font-size: 14px; font-weight: 700; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .92; text-align: left; }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink:0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn { display: none !important; } body { background: #fff; color: #000; } .hero { background: #6a1b9a !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅰ — 수열의 귀납적 정의</div>
+    <h1>수열의 귀납적 정의 · 특성방정식 · 점화식</h1>
+    <p class="sub">점화식에서 일반항을 끌어내는 핵심 도구 — <strong>특성방정식(고정점)</strong>으로 등비 변환.</p>
+    <div class="src-badge">📘 개념 학습자료 (영상 없음 · 자연어 요청 생성)</div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 귀납적으로 정의된 수열을 읽고, $a_{n+1}=pa_n+q$ 형과 이웃 3항 점화식 $a_{n+2}=pa_{n+1}+qa_n$ 을 <strong>특성방정식</strong>으로 일반항화한다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 점화식에서 일반항 끌어내기</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> $a_1=1$, $a_{n+1}=2a_n+3$ 으로 정의된 수열의 일반항 $a_n$ 을 구하시오.</div>
+      <details open>
+        <summary>풀이 보기 (특성방정식)</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>점화식과 같은 꼴의 방정식 <strong>$x=2x+3$</strong> (특성방정식)을 푼다 → $x=-3$. 이 값을 $\alpha$ 라 한다. <div class="why">$\alpha$ 는 "더 이상 변하지 않는 값(고정점)". 여기서 빼면 등비 구조가 보인다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>양변에서 $\alpha=-3$ 을 빼는 효과로 변형: $a_{n+1}+3 = 2(a_n+3)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$b_n=a_n+3$ 으로 놓으면 $b_{n+1}=2b_n$ → 공비 $2$ 인 등비수열. $b_1=a_1+3=4$ 이므로 $b_n=4\cdot 2^{\,n-1}=2^{\,n+1}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$a_n=b_n-3=2^{\,n+1}-3$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">검산</span><div>$a_1=2^2-3=1$, $a_2=2^3-3=5$($=2\cdot1+3$ ✓), $a_3=2^4-3=13$($=2\cdot5+3$ ✓).</div></div>
+          <span class="answer-tag">정답: $a_n=2^{\,n+1}-3$</span>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>귀납적 정의란?</div>
+      <p>수열을 "$n$번째 항 공식"이 아니라 <strong>첫째항 + 다음 항 만드는 규칙</strong>으로 정의하는 것.</p>
+      <div class="formula-box">$a_1$ (시작값) 과 $a_{n+1}=f(a_n)$ (다음 항 규칙) 으로 결정</div>
+      <p>예: $a_1=2,\ a_{n+1}=a_n+3$ → $2,5,8,11,\dots$ (한 항씩 직접 만들 수 있다).</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>두 가지 기본형 — 바로 알아보기</div>
+      <div class="step-row"><span class="step-num">+</span><div class="step-body"><strong>등차형</strong> $a_{n+1}=a_n+d$ → 공차 $d$ 인 등차수열. $a_n=a_1+(n-1)d$.</div></div>
+      <div class="step-row"><span class="step-num">×</span><div class="step-body"><strong>등비형</strong> $a_{n+1}=r\,a_n$ → 공비 $r$ 인 등비수열. $a_n=a_1 r^{\,n-1}$.</div></div>
+      <div class="caution">$a_{n+1}=pa_n+q$ 처럼 <strong>곱하고 더하기</strong>가 섞이면 위 두 공식을 바로 못 쓴다 → 다음 ③ 특성방정식.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>핵심 — $a_{n+1}=pa_n+q$ 의 특성방정식 (유도)</div>
+      <p>$p\ne 1$ 일 때. 핵심은 <strong>"안 변하는 값 $\alpha$ 를 찾아 빼면 등비가 된다"</strong>.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">고정점: $\alpha=p\alpha+q$ 를 풀면 $\alpha=\dfrac{q}{1-p}$. (이게 특성방정식 $x=px+q$ 의 해)</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">원식에서 이 식을 빼면: $a_{n+1}-\alpha = p(a_n-\alpha)$.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">$b_n=a_n-\alpha$ 는 공비 $p$ 인 등비수열 → $a_n-\alpha=(a_1-\alpha)p^{\,n-1}$.</div></div>
+      <div class="formula-box">$a_n=\alpha+(a_1-\alpha)\,p^{\,n-1},\qquad \alpha=\dfrac{q}{1-p}$</div>
+      <div class="tip">요령: 점화식의 $a_{n+1},a_n$ 을 똑같은 문자 $x$ 로 바꿔 $x=px+q$ 를 푼 값이 $\alpha$. 그 뒤 "원래값 $-\,\alpha$" 로 등비 변환.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>이웃 3항 점화식 $a_{n+2}=pa_{n+1}+qa_n$</div>
+      <p>특성방정식이 <strong>2차식</strong>이 된다: $t^2=pt+q$. 두 근 $\alpha,\beta$ ($\alpha\ne\beta$) 일 때:</p>
+      <div class="formula-box">$a_n=A\,\alpha^{\,n}+B\,\beta^{\,n}$ &nbsp;($A,B$ 는 $a_1,a_2$ 로 결정)</div>
+      <p class="why" style="border-left-color:var(--purple)">두 기본 등비해 $\alpha^n,\beta^n$ 의 합으로 모든 해가 만들어진다. 피보나치류가 이 꼴.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>분수형 점화식 — 역수 치환</div>
+      <p>$a_{n+1}=\dfrac{a_n}{a_n+1}$ 처럼 분수면 <strong>역수 $b_n=\dfrac{1}{a_n}$</strong> 로 치환하면 등차/등비가 보인다.</p>
+      <p>$\dfrac{1}{a_{n+1}}=\dfrac{a_n+1}{a_n}=1+\dfrac{1}{a_n}$ → $b_{n+1}=b_n+1$ (등차!).</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">6</span>자주 하는 실수</div>
+      <div class="caution">① <strong>$p=1$(등차형)에 특성방정식 적용 ❌</strong> — $\alpha=\frac{q}{1-p}$ 가 분모 0. 등차형은 그냥 공차로. ② $\alpha$ 부호 빼기 실수. ③ 이웃 3항형에서 $A,B$ 를 $a_1,a_2$ 두 식으로 정확히 연립.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 등비형 알아보기</div>
+        <div class="problem-body"><strong>문제:</strong> $a_1=2$, $a_{n+1}=3a_n$ 일 때 일반항과 $a_3$ 을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>등비형(공비 3) → $a_n=2\cdot 3^{\,n-1}$. $a_3=2\cdot 9=18$.</p>
+          <span class="answer-tag">정답: $a_n=2\cdot 3^{\,n-1}$, $\ a_3=18$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 등차형 알아보기</div>
+        <div class="problem-body"><strong>문제:</strong> $a_1=1$, $a_{n+1}=a_n+4$ 일 때 일반항과 $a_5$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>등차형(공차 4) → $a_n=1+(n-1)\cdot 4=4n-3$. $a_5=17$.</p>
+          <span class="answer-tag">정답: $a_n=4n-3$, $\ a_5=17$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 특성방정식 ($\alpha$ 가 정수)</div>
+        <div class="problem-body"><strong>문제:</strong> $a_1=3$, $a_{n+1}=2a_n-1$ 의 일반항을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>특성방정식 $x=2x-1 \Rightarrow x=1=\alpha$. → $a_{n+1}-1=2(a_n-1)$.</p>
+          <p>$b_n=a_n-1$, $b_1=2$, $b_n=2\cdot 2^{\,n-1}=2^{\,n}$ → $a_n=2^{\,n}+1$.</p>
+          <p class="why">검산: $a_1=3,\ a_4=2^4+1=17$.</p>
+          <span class="answer-tag">정답: $a_n=2^{\,n}+1$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 특성방정식 (공비 $<1$)</div>
+        <div class="problem-body"><strong>문제:</strong> $a_1=2$, $a_{n+1}=\tfrac12 a_n+3$ 의 일반항과 $a_3$ 을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>특성방정식 $x=\tfrac12 x+3 \Rightarrow \tfrac12 x=3 \Rightarrow x=6=\alpha$. → $a_{n+1}-6=\tfrac12(a_n-6)$.</p>
+          <p>$b_1=a_1-6=-4$, $b_n=-4\left(\tfrac12\right)^{\,n-1}$ → $a_n=6-4\left(\tfrac12\right)^{\,n-1}$.</p>
+          <p class="why">$a_2=\tfrac12\cdot2+3=4$, $a_3=\tfrac12\cdot4+3=5$. 공식: $6-4\cdot\tfrac14=5$ ✓.</p>
+          <span class="answer-tag">정답: $a_n=6-4\left(\tfrac12\right)^{\,n-1}$, $\ a_3=5$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 이웃 3항 점화식 (2차 특성방정식)</div>
+        <div class="problem-body"><strong>문제:</strong> $a_1=1,\ a_2=4$, $a_{n+2}=5a_{n+1}-6a_n$ 의 일반항을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1:</strong> 특성방정식 $t^2=5t-6 \Rightarrow t^2-5t+6=0 \Rightarrow (t-2)(t-3)=0$ → $\alpha=2,\beta=3$.</p>
+          <p><strong>STEP 2:</strong> $a_n=A\cdot 2^{\,n}+B\cdot 3^{\,n}$. $a_1,a_2$ 대입: $2A+3B=1,\ 4A+9B=4$.</p>
+          <p><strong>STEP 3:</strong> 연립 → $B=\tfrac23,\ A=-\tfrac12$. 즉 $a_n=-\tfrac12\cdot 2^{\,n}+\tfrac23\cdot 3^{\,n}=2\cdot 3^{\,n-1}-2^{\,n-1}$.</p>
+          <p class="why">검산: $a_1=2-1=1$, $a_2=6-2=4$, $a_3=5\cdot4-6\cdot1=14$; 공식 $2\cdot9-4=14$ ✓.</p>
+          <span class="answer-tag">정답: $a_n=2\cdot 3^{\,n-1}-2^{\,n-1}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 분수형 (역수 치환)</div>
+        <div class="problem-body"><strong>문제:</strong> $a_1=1$, $a_{n+1}=\dfrac{a_n}{a_n+1}$ 의 일반항을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1:</strong> 역수 $b_n=\dfrac1{a_n}$ 로 치환. $\dfrac1{a_{n+1}}=\dfrac{a_n+1}{a_n}=1+\dfrac1{a_n}$ → $b_{n+1}=b_n+1$ (공차 1 등차).</p>
+          <p><strong>STEP 2:</strong> $b_1=\dfrac1{a_1}=1$ → $b_n=n$ → $a_n=\dfrac1n$.</p>
+          <p class="why">검산: $a_2=\dfrac1{1+1}=\tfrac12$, $a_3=\dfrac{1/2}{1/2+1}=\tfrac13$ ✓.</p>
+          <span class="answer-tag">정답: $a_n=\dfrac1n$</span>
+          <p class="warn">오답 주의: 분수형을 특성방정식으로 풀려 하면 안 됨 — <strong>역수 치환</strong>이 도구.</p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 단답형 (특성방정식 적용)</div>
+        <div class="problem-body"><strong>문제:</strong> $a_1=3$, $a_{n+1}=3a_n-4$ 일 때 $a_5$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>특성방정식 $x=3x-4 \Rightarrow x=2=\alpha$. $a_n-2=(a_1-2)3^{\,n-1}=3^{\,n-1}$ → $a_n=3^{\,n-1}+2$.</p>
+          <p>$a_5=3^4+2=81+2=83$.</p>
+          <span class="answer-tag">정답: $83$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 단답형 (이웃 3항)</div>
+        <div class="problem-body"><strong>문제:</strong> $a_1=1,\ a_2=1$, $a_{n+2}=a_{n+1}+2a_n$ 일 때 $a_5$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>특성방정식 $t^2=t+2 \Rightarrow (t-2)(t+1)=0$ → $\alpha=2,\beta=-1$. $a_n=A\cdot2^{\,n}+B(-1)^{\,n}$.</p>
+          <p>$a_1,a_2$ 대입: $2A-B=1,\ 4A+B=1$ → $A=\tfrac13,\ B=-\tfrac13$. $a_n=\dfrac{2^{\,n}-(-1)^{\,n}}{3}$.</p>
+          <p class="why">직접 계산도 빠름: $a_3=1+2\cdot1=3,\ a_4=3+2\cdot1=5,\ a_5=5+2\cdot3=11$. 공식: $\dfrac{32-(-1)}{3}=11$ ✓.</p>
+          <span class="answer-tag">정답: $11$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>모든 예제·문항의 일반항을 <strong>점화식에 직접 대입해 검산</strong>했습니다(도입·기본·심화·수능 각 풀이의 "검산" 줄 참조). 특성방정식($x=px+q$, 이웃 3항은 $t^2=pt+q$)과 역수 치환의 적용 조건·한계를 개념 ③~⑥에 명시했습니다.</p>
+      <p style="margin-top:8px">참고: <strong>특성방정식 기법은 교육과정 외 심화 도구</strong>(고정점→등비 변환의 빠른 길)이며, 시험에서는 "$a_n-\alpha$ 로 두면 등비"라는 변형으로 동일하게 통합니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  <footer>
+    생성일 2026-06-15 · <strong>개념 학습자료</strong>(영상 없음, 자연어 요청 생성) · 수학Ⅰ 수열의 귀납적 정의<br>
+    AI가 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
