@@ -74,7 +74,15 @@ def gather(output_dir: Path) -> list[dict]:
         if html.name == "index.html":
             continue
         rel = html.relative_to(output_dir)
+        is_concept = html.stem.endswith("_개념")
         parsed = parse_output_path(rel)
+        if not parsed and is_concept and len(rel.parts) >= 3:
+            # 개념 자료(_개념): 영상 ID 대신 명시 접미사 → 폴백 파싱
+            m = re.match(r"(\d{8})_(.+)_개념$", html.stem)
+            if m:
+                parsed = {"grade": rel.parts[0], "unit": rel.parts[1],
+                          "date": m.group(1), "topic": m.group(2),
+                          "video_id_short": html.stem}
         if not parsed:
             continue
         meta = extract_meta(html)
@@ -85,6 +93,7 @@ def gather(output_dir: Path) -> list[dict]:
             **meta,
             "video_id_full": full_vid,
             "rel_path": rel.as_posix(),
+            "source": "concept" if is_concept else "video",
         })
     return rows
 
@@ -93,6 +102,8 @@ def detect_duplicates(rows: list[dict]) -> dict[str, list[dict]]:
     """같은 video_id_short(8자)를 가진 자료가 2개 이상 있으면 보고."""
     by_vid: dict[str, list[dict]] = {}
     for r in rows:
+        if r.get("source") == "concept":   # 개념 자료는 영상 중복 판정 제외
+            continue
         by_vid.setdefault(r["video_id_short"], []).append(r)
     return {k: v for k, v in by_vid.items() if len(v) > 1}
 
@@ -274,6 +285,15 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
   </div>
 
   <div class="controls">
+    <div class="group" id="sourceFilter">
+      <span class="label">출처</span>
+      <button data-source="all" class="active">전체</button>
+      <button data-source="video">🎬 영상</button>
+      <button data-source="concept">📘 개념</button>
+    </div>
+  </div>
+
+  <div class="controls">
     <div class="group" id="unitFilter">
       <span class="label">단원</span>
       <button data-unit="all" class="active">전체</button>
@@ -291,7 +311,7 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
 const ITEMS = __ITEMS_JSON__;
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
-let state = { grade: 'all', unit: 'all', q: '' };
+let state = { grade: 'all', unit: 'all', source: 'all', q: '' };
 
 function rebuildUnitFilter() {
   const units = new Set();
@@ -324,6 +344,7 @@ function apply() {
     const ok =
       (state.grade === 'all' || card.dataset.grade === state.grade) &&
       (state.unit === 'all' || card.dataset.unit === state.unit) &&
+      (state.source === 'all' || card.dataset.source === state.source) &&
       (!q || card.dataset.search.includes(q));
     card.classList.toggle('hidden', !ok);
     if (ok) visible++;
@@ -337,6 +358,13 @@ document.addEventListener('DOMContentLoaded', () => {
       state.grade = b.dataset.grade;
       setActive(b.parentElement, b);
       rebuildUnitFilter();
+      apply();
+    };
+  });
+  $$('[data-source]').forEach(b => {
+    b.onclick = () => {
+      state.source = b.dataset.source;
+      setActive(b.parentElement, b);
       apply();
     };
   });
@@ -390,15 +418,19 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
             title, r["topic"], channel, r["unit"], r["grade"]
         ])).lower()
 
-        thumb_html = (
-            f'<img src="{_esc(thumb)}" loading="lazy" alt="{_esc(title)}">'
-            if thumb else '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999">썸네일 없음</div>'
-        )
+        is_concept = r.get("source") == "concept"
+        if thumb:
+            thumb_html = f'<img src="{_esc(thumb)}" loading="lazy" alt="{_esc(title)}">'
+        elif is_concept:
+            thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>'
+        else:
+            thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999">썸네일 없음</div>'
+        src_badge = '📘 개념' if is_concept else '🎬 영상'
         original_link = (
             f'<a href="{_esc(url)}" target="_blank" rel="noopener">▶ 원본</a>'
             if url else ''
         )
-        cards.append(f'''<article class="card" data-grade="{_esc(r["grade"])}" data-unit="{_esc(r["unit"])}" data-search="{_esc(search_text)}">
+        cards.append(f'''<article class="card" data-grade="{_esc(r["grade"])}" data-unit="{_esc(r["unit"])}" data-source="{_esc(r.get("source","video"))}" data-search="{_esc(search_text + " " + src_badge)}">
   <a href="{_esc(rel_path)}" class="thumb-wrap">
     {thumb_html}
     <span class="badge">{_esc(r["grade"])}</span>
@@ -409,6 +441,7 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
     {f'<div class="channel">📺 {_esc(channel)}</div>' if channel else ''}
     <div class="tags">
       <span class="tag grade">{_esc(r["grade"])}</span>
+      <span class="tag">{src_badge}</span>
       <span class="tag">{_esc(r["unit"])}</span>
     </div>
   </div>
