@@ -44,3 +44,9 @@ secrets/
 # wrapper 스킬 ZIP은 유지 (배포용)
 # 본 스킬은 anthropic 기본 제공이므로 레포에 올리지 않음 (저작권)
 youtube-math-lesson.skill
+
+# Linux/sandbox 환경에서 Windows 경로(G:\...)가 폴더명으로 잘못 해석되어
+# 생기는 임시 폴더 차단. make_math_stubs.py 의 옵시디언 볼트 경로(G:\내 드라이브\...)
+# 는 Windows 전용이라 Linux 컨테이너에서 실행하면 그 문자열 자체가 폴더로 잡힘.
+# 실제 옵시디언 동기화는 사용자 PC 의 일일 루틴(09:00)이 처리.
+G:\내 드라이브/
