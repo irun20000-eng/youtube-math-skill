@@ -97,35 +97,83 @@ mcp__github__merge_pull_request (merge_method=rebase)
 
 push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신 — https://irun20000-eng.github.io/youtube-math-skill/"
 
-## 🎬 영상 → 학습자료 워크플로우
+## 🗂️ 옵시디언 = Google Drive (로컬 G:\ 아님, 2026-06-16 명문화)
 
-사용자가 YouTube URL을 던지면 `youtube-math-auto` 스킬을 트리거하거나 다음 흐름을 따라 직접 처리:
+옵시디언 볼트는 사용자 PC 의 로컬 `G:\` 가 아니라 **Google Drive** 에 동기화돼 있다.
+세션/클라우드 컨테이너는 `G:\` 에 접근 불가 → 옵시디언 스텁 `.md` 는 **Drive MCP `create_file` 로 직접 작성**한다.
+
+| 용도 | Drive folder ID |
+|------|----------------|
+| INBOX (Gemini Gem 기초자료 `.md` 수신) | `1K1KndlwA4iY2VVasAcW8aDPu6AfyL2Bv` |
+| Vault root (010-Youtube-Obsi)* | `11kYZv_E3Go4_jhSIaNSqrVw1TjlJ8J7d` |
+| **수학영상노트** (영상 자료 스텁) | `1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k` |
+| **수학개념노트** (자연어 개념 자료 스텁) | `1FwBBxoaoKBMpd8dqZxGzyvxI3pUoBWSX` |
+| 일반 YouTube (일반지식 노트) | `1j8jRPbq9WmBHYilcX4v8R4qv_hObM664` |
+| INBOX `_done` (처리 완료 마커) | `1bkWZTT-OhPHuAlCagXnwgUgLpRqiWFL2` |
+| INBOX `_queue` | `1aZb2Xuy_xFaPLdkgBxeca3YxYZ5-pM_5` |
+
+> *볼트 root 폴더 이름은 `020-Youtube-Obsi` → `010-Youtube-Obsi` 처럼 바뀔 수 있음.
+> Drive **ID 기반 호출**이라 이름 변경에 무관. ID 만 신뢰할 것 (이름 검색 ❌).
+
+### 옵시디언 스텁 작성 절차 (Drive MCP)
+
+1. 위 표의 `parent_id` 아래에서 `search_files` 로 `{YYYY}` → `{MM}` 폴더 확인. 없으면 `create_file (mimeType=application/vnd.google-apps.folder)` 로 생성.
+2. `create_file (contentMimeType="text/markdown", disableConversionToGoogleType=true, parentId={MM 폴더 ID})` 로 `.md` 작성.
+3. **★ 작성 후 검증**: 응답에서 받은 `id` 로 `get_file_metadata(id)` → `title`·`parentId` 가 의도와 일치하는지 1회 확인. silent failure(어딘가 잘못 들어감) 의 마지막 안전망.
+4. 사용자 보고에 Drive 파일 링크 `https://drive.google.com/file/d/{id}/view` 를 항상 포함.
+
+### `make_math_stubs.py` 위치 (혼동 방지)
+
+- **PC(Windows) 갤러리→옵시디언 백필 전용** 도구. 정기 워크플로우 아님.
+- 세션·클라우드(=비 Windows) 환경에선 호출 금지 — 어차피 `os.name != "nt"` 자동 dry-run 으로 떨어지지만, 처음부터 부르지 말 것.
+- 일상 옵시디언 스텁 작성은 위 **Drive MCP 직접 호출**.
+
+## 🎬 영상 → 학습자료 워크플로우 (트랙 A — INBOX 루틴은 별도)
+
+정기 처리(매일 09:00 KST INBOX 루틴)는 **클라우드 에이전트**가 자동 수행. 이 절차는 **사용자가 세션에서 직접 처리**할 때.
 
 1. **메타데이터 확인**: `youtube-math-auto/scripts/output_path.py` 의 `find_existing()` 으로 중복 체크
 2. **자막 추출**: `python youtube-math-auto/scripts/fetch_subtitle.py "URL" --out subs/` (yt-dlp 사용, 사용자 IP라 차단 회피)
 3. **자료 생성**: `youtube-math-lesson` 본 스킬 호출 — 박PM 페르소나, 8단계 페르소나, 5단계 워크플로우
 4. **출력 경로**: `youtube-math-auto/scripts/output_path.py` 의 `build_output_path()` 로 정확한 경로 빌드
-5. **후처리 체인 (★ 단일 명령)**: `python scripts/post_process.py output/`
-   - 5단계를 순서대로 일괄 실행 + 끝에 ✅/❌ 요약표 출력 (모두 idempotent)
-   - ① 갤러리 복귀 버튼 ② 관련 자료 카드 **③ 옵시디언 스텁** ④ index 재생성 ⑤ PDF 인쇄 모드
-   - **개별 호출 금지 권장** — ③(옵시디언 스텁)을 빠뜨려 동기화가 silent 하게 누락된 사고(2026-06-16) 때문. 반드시 이 통합 명령으로.
-   - 비Windows(샌드박스)에선 ③이 자동 dry-run → "생성 예정 경로"만 리포트 (실제 .md 는 사용자 PC 09:00 루틴이 생성).
-6. **push**: 위 "자동 push" 단계
+5. **갤러리 후처리** (idempotent, 4단계 — `make_math_stubs.py` 는 제외):
+   - `python scripts/add_back_button.py`           ① 갤러리 복귀 버튼
+   - `python scripts/add_related.py`               ② 관련 자료 카드
+   - `python youtube-math-auto/scripts/regen_index.py output/`   ③ 갤러리 index 재생성
+   - `python youtube-math-auto/scripts/patch_pdf_mode.py output/` ④ PDF 인쇄 모드
+6. **push**: 위 "자동 push" 단계 (작업 브랜치 → MCP PR → rebase 머지 → deploy-pages)
+7. **★ 옵시디언 스텁 — Drive MCP `create_file` 로 직접 작성** (위 "옵시디언 = Drive" 섹션 절차 사용):
+   - 부모: 수학영상노트 ID `1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k` 아래 `{YYYY}/{MM}`
+   - frontmatter `type: youtube-math-stub`, `source: backfill`, `tags: [math]`
+   - 작성 후 `get_file_metadata(id)` 검증 필수
+8. **결과 보고 (3개 링크 + 상태)**: 갤러리 URL · Drive 파일 링크 · PR 머지 해시
 
-## 🆕 자연어 개념 요청 워크플로우 (영상 없이 — 2026-06-16 명문화)
+## 🆕 자연어 개념 요청 워크플로우 (트랙 B — 영상 없이, 2026-06-16 명문화)
 
-사용자가 URL 없이 자연어로 개념 학습자료를 요청하면 (예: "등차수열 합과 이차함수 관련성"):
+사용자가 URL 없이 자연어로 개념 학습자료를 요청하면 (예: "등차수열 합과 이차함수 관련성").
+**INBOX 루틴(트랙 A) 안 거침** — 사용자가 명시: 자연어 요청은 INBOX에 떨어뜨리지 않으니 09:00 루틴이 못 봄. 따라서 같은 세션에서 즉시 완결한다.
 
 1. **학년/단원 매핑 확인** — 애매하면 사용자에게 질문. 자의적 판단 ❌.
 2. **출력 경로**: `output/{학년}/{단원}/{YYYYMMDD}_{핵심주제}_개념.html`
-   - 파일명 **반드시 `_개념` 으로 끝낼 것** → 갤러리 `data-source="concept"`, 옵시디언 `수학개념노트/` 라우팅의 트리거.
+   - 파일명 **반드시 `_개념` 으로 끝낼 것** → 갤러리 `data-source="concept"`, 옵시디언 `수학개념노트/` 라우팅 트리거.
 3. **베이스**: `templates/lesson-hybrid-skeleton.html` + hero 에 `src-badge` + 보라 그라데이션. 기존 `_개념.html` 자료를 참조 복제 권장.
 4. **문항**: 기초 2 / 기본 2 / 심화 2 / 수능대비 2, `filterable {level}` 클래스 필수.
-5. **후처리 체인 (★ 필수)**: `python scripts/post_process.py output/`
-6. **push**: 작업 브랜치 commit + push → MCP PR rebase 머지.
-7. **결과 보고**: 갤러리 URL + **옵시디언 예상 경로**(`수학개념노트/{YYYY}/{MM}/..._개념.md`) + "다음 09:00 루틴 시 생성" 명시.
+5. **갤러리 후처리** (idempotent, 4단계 — `make_math_stubs.py` 는 제외):
+   - `python scripts/add_back_button.py`
+   - `python scripts/add_related.py`
+   - `python youtube-math-auto/scripts/regen_index.py output/`
+   - `python youtube-math-auto/scripts/patch_pdf_mode.py output/`
+6. **push**: 작업 브랜치 commit + push → MCP PR rebase 머지 → deploy-pages.
+7. **★ 옵시디언 스텁 — Drive MCP `create_file` 로 직접 작성** (위 "옵시디언 = Drive" 섹션 절차 사용):
+   - 부모: 수학개념노트 ID `1FwBBxoaoKBMpd8dqZxGzyvxI3pUoBWSX` 아래 `{YYYY}/{MM}`
+   - frontmatter `type: math-concept-stub`, `source: concept-request`, `tags: [math, concept]`
+   - 작성 후 `get_file_metadata(id)` 검증 필수
+8. **결과 보고 (3개 링크 + 상태)**:
+   - 갤러리 URL (예: `https://irun20000-eng.github.io/youtube-math-skill/{경로}.html`)
+   - Drive 파일 링크 (`https://drive.google.com/file/d/{id}/view`)
+   - PR 머지 해시
 
-> 상세 진단·보강안은 `docs/WORKFLOW-REVIEW.md` 참조.
+> 트랙 A·B 비교, 검증 체크리스트, 약점 진단은 `docs/WORKFLOW-REVIEW.md` 참조.
 
 ## 🎯 학습자 수준 가이드 (반드시 적용)
 
