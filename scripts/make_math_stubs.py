@@ -29,6 +29,9 @@ OUTPUT = REPO / "output"
 _VAULT_BASE = Path(r"G:\내 드라이브\00_Obsidian_Second Brain\Insight Miner\000-수집")
 _vmatch = sorted(_VAULT_BASE.glob("*-Youtube-Obsi/수학영상노트"))
 VAULT_STUB = _vmatch[0] if _vmatch else _VAULT_BASE / "010-Youtube-Obsi" / "수학영상노트"
+# 개념 학습자료(_개념.html)는 형제 폴더 수학개념노트/ 로 별도 스텁 생성
+_cmatch = sorted(_VAULT_BASE.glob("*-Youtube-Obsi/수학개념노트"))
+VAULT_CONCEPT = _cmatch[0] if _cmatch else (VAULT_STUB.parent / "수학개념노트")
 PAGES_BASE = "https://irun20000-eng.github.io/youtube-math-skill/"
 
 YT_RE = re.compile(r"https?://(?:www\.)?(?:youtube\.com|youtu\.be)[^\"'<> )]+")
@@ -95,6 +98,7 @@ def build_stub(html_path: Path) -> tuple[Path, str]:
     m = re.match(r"(\d{4})(\d{2})(\d{2})", slug)
     yyyy, mm, dd = (m.group(1), m.group(2), m.group(3)) if m else ("0000", "00", "00")
     created = f"{yyyy}-{mm}-{dd}" if m else ""
+    is_concept = slug.endswith("_개념")
 
     html = html_path.read_text(encoding="utf-8", errors="replace")
     title = extract_title(html) or slug
@@ -111,7 +115,39 @@ def build_stub(html_path: Path) -> tuple[Path, str]:
     related = ", ".join(f'"[[{c}]]"' for c in concepts)
     concept_line = " · ".join(f"[[{c}]]" for c in concepts) if concepts else "(보강 필요)"
 
-    body = f"""---
+    if is_concept:
+        # 개념 학습자료 — 영상 없음, 자연어 요청 생성
+        body = f"""---
+type: math-concept-stub
+title: {yq(title)}
+created: {created}
+grade: {yq(grade)}
+unit: {yq(unit)}
+difficulty: ""
+topics: [{yq(unit)}]
+tags: [math, concept]
+related: [{related}]
+html_url: {html_url}
+oneliner: {yq(title)}
+source: concept-request
+---
+
+## 💎 한 줄 요지
+{title}
+
+## 💡 핵심 개념
+- {concept_line}
+
+## 🔗 학습자료
+[개념 학습자료 열기]({html_url})
+
+> 자연어 요청으로 생성된 **개념 학습자료 스텁** (영상 없음).
+> 본체(개념 유도·수준별 문항·풀이)는 HTML 학습자료에 있다.
+> 한 줄 요지·개념은 제목 기반 초안이므로 필요 시 보강.
+"""
+        dest = VAULT_CONCEPT / yyyy / mm / f"{slug}.md"
+    else:
+        body = f"""---
 type: youtube-math-stub
 title: {yq(title)}
 created: {created}
@@ -142,7 +178,7 @@ source: backfill
 > 갤러리 백필로 자동 생성한 **스텁(index)** — 본체(수식·수준별 문항·풀이)는 HTML 학습자료에 있다.
 > 한 줄 요지·개념은 제목 기반 초안이므로 필요 시 보강.
 """
-    dest = VAULT_STUB / yyyy / mm / f"{slug}.md"
+        dest = VAULT_STUB / yyyy / mm / f"{slug}.md"
     return dest, body
 
 
@@ -151,21 +187,25 @@ def main() -> int:
     ap.add_argument("--force", action="store_true", help="기존 스텁 덮어쓰기")
     args = ap.parse_args()
 
-    # _개념 자료는 영상 스텁(수학영상노트)이 아니라 수학개념노트로 별도 처리 → 여기선 제외
-    htmls = sorted(p for p in OUTPUT.rglob("*.html")
-                   if p.name != "index.html" and not p.stem.endswith("_개념"))
+    # _개념 자료는 수학개념노트/, 그 외(영상)는 수학영상노트/ 로 분기 (build_stub 내부)
+    htmls = sorted(p for p in OUTPUT.rglob("*.html") if p.name != "index.html")
     print(f"[OK] 갤러리 HTML {len(htmls)}개", file=sys.stderr)
     made = skipped = 0
     for h in htmls:
         dest, body = build_stub(h)
+        base = VAULT_CONCEPT if h.stem.endswith("_개념") else VAULT_STUB
+        try:
+            rel_disp = dest.relative_to(base)
+        except ValueError:
+            rel_disp = dest
         if dest.exists() and not args.force:
             skipped += 1
-            print(f"  - skip(존재): {dest.relative_to(VAULT_STUB)}", file=sys.stderr)
+            print(f"  - skip(존재): {rel_disp}", file=sys.stderr)
             continue
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(body, encoding="utf-8")
         made += 1
-        print(f"  + 생성: {dest.relative_to(VAULT_STUB)}", file=sys.stderr)
+        print(f"  + 생성: {rel_disp}", file=sys.stderr)
     print(f"[OK] 생성 {made} / 건너뜀 {skipped} / 총 {len(htmls)}", file=sys.stderr)
     return 0
 
