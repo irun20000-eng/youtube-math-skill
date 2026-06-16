@@ -105,11 +105,27 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
 2. **자막 추출**: `python youtube-math-auto/scripts/fetch_subtitle.py "URL" --out subs/` (yt-dlp 사용, 사용자 IP라 차단 회피)
 3. **자료 생성**: `youtube-math-lesson` 본 스킬 호출 — 박PM 페르소나, 8단계 페르소나, 5단계 워크플로우
 4. **출력 경로**: `youtube-math-auto/scripts/output_path.py` 의 `build_output_path()` 로 정확한 경로 빌드
-5. **카탈로그 갱신**: `python youtube-math-auto/scripts/regen_index.py output/`
-6. **PDF 인쇄 모드 컴포넌트 패치**: `python youtube-math-auto/scripts/patch_pdf_mode.py output/`
-   - 새 자료 HTML 의 `<head>`/`</body>` 에 `pdf-mode.css`·`pdf-mode.js` 참조 자동 삽입 (idempotent)
-   - 학생이 자료 페이지에서 "🖨 PDF 인쇄 모드" 토글 → 해설을 뒷장으로 분리 → Ctrl/Cmd+P 로 PDF 저장 (노트앱·종이 인쇄용)
-7. **push**: 위 "자동 push" 단계
+5. **후처리 체인 (★ 단일 명령)**: `python scripts/post_process.py output/`
+   - 5단계를 순서대로 일괄 실행 + 끝에 ✅/❌ 요약표 출력 (모두 idempotent)
+   - ① 갤러리 복귀 버튼 ② 관련 자료 카드 **③ 옵시디언 스텁** ④ index 재생성 ⑤ PDF 인쇄 모드
+   - **개별 호출 금지 권장** — ③(옵시디언 스텁)을 빠뜨려 동기화가 silent 하게 누락된 사고(2026-06-16) 때문. 반드시 이 통합 명령으로.
+   - 비Windows(샌드박스)에선 ③이 자동 dry-run → "생성 예정 경로"만 리포트 (실제 .md 는 사용자 PC 09:00 루틴이 생성).
+6. **push**: 위 "자동 push" 단계
+
+## 🆕 자연어 개념 요청 워크플로우 (영상 없이 — 2026-06-16 명문화)
+
+사용자가 URL 없이 자연어로 개념 학습자료를 요청하면 (예: "등차수열 합과 이차함수 관련성"):
+
+1. **학년/단원 매핑 확인** — 애매하면 사용자에게 질문. 자의적 판단 ❌.
+2. **출력 경로**: `output/{학년}/{단원}/{YYYYMMDD}_{핵심주제}_개념.html`
+   - 파일명 **반드시 `_개념` 으로 끝낼 것** → 갤러리 `data-source="concept"`, 옵시디언 `수학개념노트/` 라우팅의 트리거.
+3. **베이스**: `templates/lesson-hybrid-skeleton.html` + hero 에 `src-badge` + 보라 그라데이션. 기존 `_개념.html` 자료를 참조 복제 권장.
+4. **문항**: 기초 2 / 기본 2 / 심화 2 / 수능대비 2, `filterable {level}` 클래스 필수.
+5. **후처리 체인 (★ 필수)**: `python scripts/post_process.py output/`
+6. **push**: 작업 브랜치 commit + push → MCP PR rebase 머지.
+7. **결과 보고**: 갤러리 URL + **옵시디언 예상 경로**(`수학개념노트/{YYYY}/{MM}/..._개념.md`) + "다음 09:00 루틴 시 생성" 명시.
+
+> 상세 진단·보강안은 `docs/WORKFLOW-REVIEW.md` 참조.
 
 ## 🎯 학습자 수준 가이드 (반드시 적용)
 

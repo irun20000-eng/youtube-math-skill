@@ -185,11 +185,25 @@ source: backfill
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="기존 스텁 덮어쓰기")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="실제 파일을 쓰지 않고 생성 예정 경로만 출력 "
+                         "(샌드박스에서 볼트가 없을 때 G:\\ 폴더 오염 방지)")
     args = ap.parse_args()
+
+    # 옵시디언 볼트는 Windows 전용 경로(G:\...)다. Windows 가 아니면(=샌드박스/CI)
+    # 그 경로는 의미 없는 문자열이므로 자동 dry-run 으로 떨어뜨려 G:\ 폴더 오염을 막는다.
+    # (이전엔 _VAULT_BASE.exists() 로 감지했으나, 샌드박스에 남은 가짜 폴더가
+    #  exists()=True 를 반환해 실모드로 새던 사고가 있었음 — 2026-06-16.)
+    import os
+    dry = args.dry_run or os.name != "nt"
+    if dry and not args.dry_run:
+        print(f"[!] 非Windows 환경 → dry-run 자동 적용 "
+              f"(실제 스텁 생성은 사용자 PC(Windows) 일일 09:00 루틴이 수행)",
+              file=sys.stderr)
 
     # _개념 자료는 수학개념노트/, 그 외(영상)는 수학영상노트/ 로 분기 (build_stub 내부)
     htmls = sorted(p for p in OUTPUT.rglob("*.html") if p.name != "index.html")
-    print(f"[OK] 갤러리 HTML {len(htmls)}개", file=sys.stderr)
+    print(f"[OK] 갤러리 HTML {len(htmls)}개{' (DRY-RUN)' if dry else ''}", file=sys.stderr)
     made = skipped = 0
     for h in htmls:
         dest, body = build_stub(h)
@@ -198,6 +212,15 @@ def main() -> int:
             rel_disp = dest.relative_to(base)
         except ValueError:
             rel_disp = dest
+        kind = "개념" if h.stem.endswith("_개념") else "영상"
+        if dry:
+            mark = "예정" if not dest.exists() else "존재(skip)"
+            print(f"  ~ {kind} {mark}: {base.name}/{rel_disp}", file=sys.stderr)
+            if not dest.exists():
+                made += 1
+            else:
+                skipped += 1
+            continue
         if dest.exists() and not args.force:
             skipped += 1
             print(f"  - skip(존재): {rel_disp}", file=sys.stderr)
@@ -206,7 +229,8 @@ def main() -> int:
         dest.write_text(body, encoding="utf-8")
         made += 1
         print(f"  + 생성: {rel_disp}", file=sys.stderr)
-    print(f"[OK] 생성 {made} / 건너뜀 {skipped} / 총 {len(htmls)}", file=sys.stderr)
+    verb = "예정" if dry else "생성"
+    print(f"[OK] {verb} {made} / 건너뜀 {skipped} / 총 {len(htmls)}", file=sys.stderr)
     return 0
 
 
