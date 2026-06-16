@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>등차수열의 합과 이차함수 관련성과 함정 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 55%, #8e24aa 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .92; max-width: 660px; margin: 0 auto; }
+    .src-badge { display: inline-block; margin: 18px auto 0; padding: 8px 18px; border-radius: 24px; background: rgba(255,255,255,.16); font-size: 14px; font-weight: 700; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .92; text-align: left; }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink:0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn { display: none !important; } body { background: #fff; color: #000; } .hero { background: #6a1b9a !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅰ — 등차수열과 등비수열</div>
+    <h1>등차수열의 합 $S_n$ 과 이차함수 — 관련성과 함정</h1>
+    <p class="sub">$S_n = An^2 + Bn$ 이라는 <strong>$n$의 이차함수</strong> 관점으로 $S_n$ 최대·최소, 대칭축, 두 합이 같은 경우를 빠르게. <strong>그러나 함정도 안다.</strong></p>
+    <div class="src-badge">📘 개념 학습자료 (영상 없음 · 자연어 요청 생성)</div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① $S_n$ 이 왜 $n$ 의 이차함수인지 유도. ② 이차함수 도구(대칭축·꼭짓점·근)로 쉽게 풀리는 패턴 3가지. ③ 그러나 <strong>$n$ 은 자연수</strong>·<strong>상수항 $0$</strong>·<strong>$d=0$</strong> 같은 함정 4가지를 정확히 안다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 이차함수처럼 보이는 등차수열의 합</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 등차수열 $\{a_n\}$ 의 합 $S_n$ 에 대해 $S_5 = S_{12}$ 가 성립한다. $S_{17}$ 의 값을 구하시오.</div>
+      <details open>
+        <summary>풀이 보기 (이차함수 대칭축으로 5초)</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>등차수열의 합은 $S_n = \dfrac{d}{2}n^2 + \left(a_1 - \dfrac{d}{2}\right)n$ — <strong>$n$ 에 대한 이차함수</strong> 모양($An^2+Bn$ 형, 상수항 $0$).<div class="why">$n=0$ 일 때 $S_0 = 0$(아무 것도 안 더함). 즉 $n$ 의 이차함수로 보면 그래프가 항상 <strong>원점을 지난다</strong>.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$S_n$ 그래프는 두 점 $(5, S_5)$ 와 $(12, S_5)$ 에서 같은 $y$값. 이차함수에서 같은 $y$값 두 점 → <strong>대칭축이 두 점의 중점</strong>: $x = \dfrac{5+12}{2} = \dfrac{17}{2}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>이차함수가 원점 $(0,0)$ 을 지난다 → 또 다른 근은 대칭축에서 반대쪽으로 같은 거리: $x = 17$. 즉 $S_{17} = 0$.<div class="why">두 근의 평균이 대칭축. 한 근이 $0$ 이고 대칭축이 $\tfrac{17}{2}$ → 다른 근은 $17$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">검산</span><div>일반화: $S_p = S_q$ ($p\ne q$) → $S_{p+q} = 0$.<br>여기서 $p+q = 5+12 = 17$, $S_{17} = 0$ ✓.</div></div>
+          <span class="answer-tag">정답: $S_{17}=0$</span>
+        </div>
+      </details>
+      <div class="tip">이 한 줄 — <strong>$S_p = S_q$ 이면 $S_{p+q} = 0$</strong> — 이 본 자료의 핵심이다. 이차함수의 대칭축이 모든 비밀.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>$S_n$ 은 왜 $n$의 이차함수인가? (유도)</div>
+      <p>등차수열 $\{a_n\}$ 의 첫째항 $a_1$, 공차 $d$. 첫 $n$ 항의 합:</p>
+      <div class="formula-box">$S_n = \dfrac{n\bigl(2a_1+(n-1)d\bigr)}{2} = \dfrac{d}{2}n^2 + \left(a_1-\dfrac{d}{2}\right)n$</div>
+      <div class="step-row"><span class="step-num">A</span><div class="step-body"><strong>$n^2$ 계수</strong> $= \dfrac{d}{2}$. 공차 $d$ 의 절반.</div></div>
+      <div class="step-row"><span class="step-num">B</span><div class="step-body"><strong>$n$ 계수</strong> $= a_1 - \dfrac{d}{2}$. 첫째항에서 공차 절반 뺀 값.</div></div>
+      <div class="step-row"><span class="step-num">C</span><div class="step-body"><strong>상수항</strong> $= 0$ (반드시!). $S_0 = 0$ 이라는 자연스러운 사실.</div></div>
+      <div class="formula-box" style="background:var(--box-blue); border-color:var(--primary)">⭐ $S_n = An^2 + Bn$ (상수항 $0$). 거꾸로 $S_n = An^2 + Bn$ 이면 그 수열은 등차수열, 공차 $d = 2A$.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>이차함수 도구 — 쉬운 경우 3가지</div>
+      <p>$S_n = An^2 + Bn$ 의 그래프(연속한 포물선)를 그려보면, 자연수 $n$ 의 값만 점으로 찍힌 형태가 된다. <strong>대칭축·꼭짓점·근</strong>이 그대로 무기.</p>
+      <div class="step-row"><span class="step-num">①</span><div class="step-body"><strong>두 합이 같을 때 — 대칭축</strong>: $S_p = S_q$ ($p \ne q$) 이면 그 두 점은 대칭축에 대해 대칭 → 축의 위치 $n = \dfrac{p+q}{2}$.<div class="why">한 근이 $0$ 이므로 다른 근은 $p+q$ → <strong>$S_{p+q} = 0$</strong>.</div></div></div>
+      <div class="step-row"><span class="step-num">②</span><div class="step-body"><strong>$S_n$ 의 최대·최소</strong>: 그래프의 꼭짓점 위치 $n^* = -\dfrac{B}{2A} = \dfrac{2a_1 - d}{2d}$ 근처에서 발생. (그러나 $n$ 은 자연수 → ⑤ 함정 주의)</div></div>
+      <div class="step-row"><span class="step-num">③</span><div class="step-body"><strong>두 합이 0일 때</strong>: $S_p = 0$ ($p \ne 0$) → $An^2 + Bn = An(n-p) = 0$. 즉 다른 근은 $p$ 자기 자신만 알려준 셈.</div></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>꼭짓점 = 부호 바뀌는 항 — 항의 부호로도 알 수 있다</div>
+      <p>$S_n$ 이 최대가 되는 $n$ = <strong>$a_n &gt; 0$ 인 마지막 $n$</strong>. (감소 등차수열에서 양수 항만 더할 때까지가 최대.)</p>
+      <div class="formula-box">$a_n &gt; 0,\ a_{n+1} \le 0$ 인 $n$ 에서 $S_n$ 최대 &nbsp;(단, $d &lt; 0$)</div>
+      <p>마찬가지로 증가 수열($d &gt; 0$)에서 처음에 음수였다가 양수로 바뀌면 그 직전이 $S_n$ 최소.</p>
+      <div class="tip"><strong>이차함수 꼭짓점 ↔ 항의 부호</strong>: 두 방법이 같은 결과. 어느 쪽으로 풀어도 OK. 단 꼭짓점은 실수이고 항은 자연수라는 차이를 다음 ⑤에서 본다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>역방향 — $S_n$ 식이 주어졌을 때 $a_n, d$ 끌어내기</div>
+      <p>$S_n = An^2 + Bn$ 의 모양으로 주어지면 다음이 즉시:</p>
+      <div class="step-row"><span class="step-num">d</span><div class="step-body">공차 $d = 2A$ (꼭 검산).</div></div>
+      <div class="step-row"><span class="step-num">$a_1$</span><div class="step-body">첫째항 $a_1 = S_1 = A + B$.</div></div>
+      <div class="step-row"><span class="step-num">$a_n$</span><div class="step-body">$n \ge 2$ 에서 $a_n = S_n - S_{n-1} = 2An - A + B$. ($n=1$ 도 식에 대입해 보고 일치하는지 검산)</div></div>
+      <div class="caution">⚠️ 만약 $S_n = An^2 + Bn + C$ ($C \ne 0$) 형이면 — <strong>이 수열은 등차수열이 아니다.</strong> (또는 $n \ge 2$ 부터만 등차이고 $a_1$ 이 따로). $C$ 의 존재가 등차수열 가정의 위반 신호.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>⚠️ 함정 — 이차함수처럼 풀면 망하는 4가지</div>
+      <p>도구의 한계. 시험에서 정확히 이 지점들을 노린다.</p>
+      <div class="step-row"><span class="step-num">①</span><div class="step-body"><strong>$n$ 은 자연수만 가능</strong>. 꼭짓점 $n^* = -\dfrac{B}{2A}$ 가 <strong>실수</strong>로 나와도 $S_n$ 의 실제 최대·최소는 그 양옆 <strong>가장 가까운 자연수</strong>($\lfloor n^* \rfloor$ 또는 $\lceil n^* \rceil$) 중 큰 쪽에서.<div class="why">예: $n^* = 5.7$ → $S_5$ 와 $S_6$ 모두 계산해 비교.</div></div></div>
+      <div class="step-row"><span class="step-num">②</span><div class="step-body"><strong>상수항이 0이라는 사실을 잊지 말 것</strong>. 문제가 "$S_n$ 은 $n$ 의 이차식"이라고 줘도 <strong>상수항이 있을 수 있는지(= 등차수열이 아닐 수 있는지)</strong> 먼저 점검.<div class="why">$S_n = n^2 + 2n + 1$ 같이 상수항이 있으면 등차수열이 아니다 → $S_p = S_q \Rightarrow S_{p+q}=0$ 같은 공식 ❌.</div></div></div>
+      <div class="step-row"><span class="step-num">③</span><div class="step-body"><strong>공차 $d = 0$ 인 케이스</strong>: 모든 항이 같은 상수수열. $S_n = a_1 n$ 으로 <strong>일차</strong>. 이차함수 도구(대칭축·꼭짓점) ❌.<div class="why">$d=0$ 이면 $S_p = S_q$ 가 성립하려면 $a_1=0$ 뿐. 그러면 모든 $S_n=0$ → 자명한 경우만.</div></div></div>
+      <div class="step-row"><span class="step-num">④</span><div class="step-body"><strong>$S_p = S_q \Rightarrow S_{p+q} = 0$ 의 조건 = $p \ne q$</strong>. 같은 두 점은 대칭축이 결정 안 됨. 또 두 점이 모두 꼭짓점 자체와 같은 위치인 경우(= 그 자리에서 $S_n$ 이 최대/최소)와 헷갈리지 않게.</div></div>
+      <div class="caution">⑤ <strong>$p$ 와 $q$ 의 평균이 자연수가 아닐 때</strong>: $S_p = S_q$, $p+q$ 가 홀수면 대칭축이 분수 → "꼭짓점에서 정수 $n$" 같이 잘못된 추론 ❌. 답이 되는 $S_{p+q} = 0$ 만 성립.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초 — 쉽게 풀리는 경우</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 대칭축 즉시 (두 합이 같다)</div>
+        <div class="problem-body"><strong>문제:</strong> 등차수열 $\{a_n\}$ 의 합 $S_n$ 에 대해 $S_4 = S_9$ 가 성립한다. $S_{13}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>이차함수 핵심</strong>: $S_p = S_q \Rightarrow S_{p+q} = 0$. ($S_n$ 이 $n$ 의 이차함수이고 상수항 $0$, 즉 그래프가 원점·$p+q$ 두 점에서 $0$.)</p>
+          <p>$p+q = 4+9 = 13$ → $S_{13} = 0$.</p>
+          <p class="why">검산: 그래프 대칭축 $\dfrac{4+9}{2} = \dfrac{13}{2}$. 원점 반대편 근이 $13$. ✓</p>
+          <span class="answer-tag">정답: $S_{13} = 0$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — $S_n$ 식에서 $a_n$, $d$ 추출</div>
+        <div class="problem-body"><strong>문제:</strong> 등차수열 $\{a_n\}$ 의 합 $S_n = 2n^2 - 5n$ 일 때 공차 $d$ 와 $a_1$ 을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$An^2 + Bn$ 꼴이고 상수항 $0$ → 등차수열 OK. $A=2, B=-5$.</p>
+          <p><strong>$d = 2A = 4$</strong>, $a_1 = S_1 = A+B = 2-5 = -3$.</p>
+          <p class="why">검산: $a_n = a_1 + (n-1)d = -3 + 4(n-1) = 4n - 7$. $S_n = \sum_{k=1}^n (4k-7) = 4\cdot\tfrac{n(n+1)}{2} - 7n = 2n^2 + 2n - 7n = 2n^2 - 5n$ ✓</p>
+          <span class="answer-tag">정답: $d=4,\ a_1=-3$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본 — 꼭짓점·항의 부호로 최대 찾기</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — $S_n$ 의 최댓값 (감소 등차)</div>
+        <div class="problem-body"><strong>문제:</strong> 등차수열 $a_1 = 30,\ d = -4$ 일 때 $S_n$ 이 최대가 되는 $n$ 의 값과 최댓값 $S_n$ 을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>방법 1 (항의 부호)</strong>: $a_n = 30 + (n-1)(-4) = 34 - 4n$. $a_n &gt; 0 \Leftrightarrow n &lt; 8.5$ → 양수 항은 $a_1, \dots, a_8$ 까지(8개). <strong>$n=8$ 에서 최대</strong>.</p>
+          <p>$S_8 = \dfrac{8(2\cdot 30 + 7\cdot(-4))}{2} = \dfrac{8(60-28)}{2} = \dfrac{8\cdot 32}{2} = 128$.</p>
+          <p><strong>방법 2 (이차함수 꼭짓점)</strong>: $S_n = -2n^2 + 32n$ ($A=-2, B=32$). 꼭짓점 $n^* = -\dfrac{B}{2A} = -\dfrac{32}{-4} = 8$. 정확히 자연수 → 그 자리에서 최대. $S_8 = -2(64)+256 = 128$ ✓</p>
+          <span class="answer-tag">정답: $n=8$, $S_8=128$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 꼭짓점이 자연수가 아닐 때 (함정 ①)</div>
+        <div class="problem-body"><strong>문제:</strong> 등차수열 $a_1 = 25,\ d = -4$ 일 때 $S_n$ 이 최대가 되는 $n$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>꼭짓점 계산</strong>: $S_n = -2n^2 + 27n$. 꼭짓점 $n^* = \dfrac{27}{4} = 6.75$ → 자연수가 아님!</p>
+          <p><strong>주변 자연수 비교</strong>: $S_6, S_7$ 둘 다 계산.</p>
+          <p>$a_n = 29 - 4n$. $a_6 = 5 &gt; 0$, $a_7 = 1 &gt; 0$, $a_8 = -3 &lt; 0$.<br>$\Rightarrow$ 양수 항은 $a_7$ 까지 → <strong>$n=7$ 에서 최대</strong>.</p>
+          <p class="why">검산: $S_7 = \dfrac{7(50 + 6\cdot(-4))}{2} = \dfrac{7\cdot 26}{2} = 91$. $S_6 = \dfrac{6(50-20)}{2} = 90$. $S_8 = \dfrac{8(50-28)}{2} = 88$. <strong>$S_7 = 91$ 이 가장 큼</strong> ✓</p>
+          <span class="answer-tag">정답: $n=7$ (최댓값 $S_7=91$)</span>
+          <p class="warn">⚠️ 오답 주의: 꼭짓점 $6.75$ 만 보고 "$n=6$ 이나 반올림해서 $7$"이라고 어림짐작 ❌. <strong>꼭 두 자연수에서 직접 계산해 비교</strong>. (이 문제는 $a_7 &gt; 0$ 이므로 한 항 더 더하는 게 이득.)</p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화 — 함정 인식</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 상수항이 있는 경우 (함정 ②)</div>
+        <div class="problem-body"><strong>문제:</strong> 수열 $\{a_n\}$ 의 첫 $n$ 항 합 $S_n$ 이 $S_n = n^2 + 2n + 3$ 으로 주어졌다. ⑴ $\{a_n\}$ 이 등차수열인지 판정하고, ⑵ $a_n$ 의 일반항을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>⑴ 등차수열인가?</strong> $S_n$ 에 <strong>상수항 $3 \ne 0$</strong> 이 있다. 등차수열이면 $S_0 = 0$ 이어야 하는데 $S_0 = 3$ → <strong>등차수열 아님</strong>.</p>
+          <p><strong>⑵ $a_n$ 추출</strong>: $S_n - S_{n-1}$ 로 $n \ge 2$ 부분만 일단:<br>$a_n = (n^2+2n+3) - ((n-1)^2 + 2(n-1) + 3) = 2n + 1$ ($n \ge 2$).<br>$a_1 = S_1 = 1 + 2 + 3 = 6$.</p>
+          <p class="why">검산: $a_2 = 5$ (공식), $a_1 = 6$. $a_2 - a_1 = -1 \ne d$ ($a_3 - a_2 = 7-5 = 2 = d$). 즉 <strong>$n \ge 2$ 부터만 공차 2 인 등차</strong>이고 $a_1$ 은 별도. → 등차수열 ❌, 단지 "이차식으로 $S_n$ 이 표현된" 수열.</p>
+          <span class="answer-tag">정답: 등차수열 아님 / $a_1=6,\ a_n=2n+1$ ($n\ge 2$)</span>
+          <p class="warn">⚠️ <strong>$S_n = An^2+Bn+C$ 에서 $C \ne 0$ 인 순간 "등차수열" 가정 무너짐</strong>. 그래도 "$S_p = S_q \Rightarrow S_{p+q}=0$"같은 도구를 그대로 쓰면 큰 오답.</p>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 공차 $d=0$ 인 경우 (함정 ③)</div>
+        <div class="problem-body"><strong>문제:</strong> 등차수열 $\{a_n\}$ ($a_1 = 5$) 의 합 $S_n$ 이 $S_4 = S_9$ 를 만족한다. ⑴ 공차 $d$ 와 ⑵ $S_{13}$ 을 구하시오. (함정 주의)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>⑴ $d$ 결정</strong>: $S_n = \dfrac{d}{2}n^2 + (a_1-\dfrac{d}{2})n$.<br>$S_4 = S_9 \Rightarrow \dfrac{d}{2}(16-81) + (a_1-\dfrac{d}{2})(4-9) = 0$<br>$\Rightarrow -\dfrac{65d}{2} - 5(a_1-\dfrac{d}{2}) = 0$<br>$\Rightarrow -\dfrac{65d}{2} + \dfrac{5d}{2} - 5a_1 = 0$<br>$\Rightarrow -30d - 5a_1 = 0 \Rightarrow d = -\dfrac{a_1}{6} = -\dfrac{5}{6}$.</p>
+          <p>$d = -\dfrac{5}{6} \ne 0$ — 이차함수 도구 적용 가능. <strong>$S_{4+9} = S_{13} = 0$</strong>.</p>
+          <p class="why">검산: $S_{13} = \dfrac{-5/6}{2}\cdot 169 + (5+\dfrac{5}{12})\cdot 13 = -\dfrac{5\cdot 169}{12} + \dfrac{65\cdot 13}{12} = \dfrac{-845 + 845}{12} = 0$ ✓</p>
+          <span class="answer-tag">정답: $d=-\dfrac{5}{6}$, $S_{13}=0$</span>
+          <p class="warn">⚠️ <strong>만약 문제에서 "$a_1 = 0$" 이라는 조건이 함께 주어졌다면 $d=0$ 도 가능</strong>: 모든 항이 $0$, 모든 $S_n=0$ 자명. 그 경우 "$S_{p+q}=0$" 은 새로운 정보 ❌. 항상 $d \ne 0$ 인지 확인.</p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비 — 함정 결합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 단답형 (대칭축 활용)</div>
+        <div class="problem-body"><strong>문제:</strong> 등차수열의 합 $S_n$ 에 대해 $S_7 = S_{11}$ 이 성립할 때 $S_{18}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$S_p = S_q \Rightarrow S_{p+q} = 0$. $7+11 = 18$ → <strong>$S_{18} = 0$</strong>.</p>
+          <p class="why">검산: $S_n = An^2 + Bn$. $S_7 = S_{11}$ → 대칭축 $n = 9$. 원점·$18$ 두 근. ✓</p>
+          <span class="answer-tag">정답: $0$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 함정 결합 (꼭짓점 분수 + 음수)</div>
+        <div class="problem-body"><strong>문제:</strong> 등차수열 $\{a_n\}$ 의 첫째항이 $20$, 공차가 $-3$ 이다. 합 $S_n$ 이 양수가 되는 자연수 $n$ 의 최댓값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>$S_n$ 식</strong>: $S_n = -\dfrac{3}{2}n^2 + \left(20 + \dfrac{3}{2}\right)n = -\dfrac{3}{2}n^2 + \dfrac{43}{2}n$.</p>
+          <p><strong>$S_n &gt; 0$ 조건</strong>: $n\left(-\dfrac{3}{2}n + \dfrac{43}{2}\right) &gt; 0$. $n &gt; 0$ 이므로 $-\dfrac{3}{2}n + \dfrac{43}{2} &gt; 0 \Rightarrow n &lt; \dfrac{43}{3} = 14.33\ldots$</p>
+          <p><strong>자연수 $n$ 최대</strong>: $n = 14$ (이때 $S_{14}$ 양수 확인 필요).<br>$S_{14} = -\dfrac{3}{2}\cdot 196 + \dfrac{43}{2}\cdot 14 = -294 + 301 = 7 &gt; 0$ ✓<br>$S_{15} = -\dfrac{3}{2}\cdot 225 + \dfrac{43}{2}\cdot 15 = -337.5 + 322.5 = -15 &lt; 0$ → 안 됨.</p>
+          <p class="why">$S_n$ 그래프 근: $n=0$ 과 $n = \dfrac{43}{3}$. 자연수 근이 아니지만 양수 구간은 그 사이. <strong>$n=14$ 까지만 $S_n &gt; 0$.</strong></p>
+          <span class="answer-tag">정답: $n=14$</span>
+          <p class="warn">⚠️ 오답 주의: ① "근 $\dfrac{43}{3}$ 을 반올림해 $14$" 같이 어림짐작 ❌, 반드시 $S_{14}, S_{15}$ 부호 둘 다 확인. ② 또한 "$a_n &gt; 0$ 인 $n$"(여기서는 $n \le 7$)과 "$S_n &gt; 0$ 인 $n$"(여기서는 $n \le 14$) 은 <strong>다르다</strong>. $a_n$ 이 음수여도 누적합이 아직 양수일 수 있음.</p>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>모든 문항의 답을 <strong>직접 검산</strong>했습니다(각 풀이 "검산" 줄). 도입의 일반화 $S_p=S_q \Rightarrow S_{p+q}=0$ 는 $S_n = An^2+Bn$ 이라는 상수항 $0$ 의 이차식 + 대칭축 = 두 근의 중점이라는 두 사실에서 직접 유도. 함정 ①$\sim$④ 는 시험에서 실제로 빈출되는 오답 유형입니다.</p>
+      <p style="margin-top:8px">참고: 이 자료는 <strong>등차수열의 합과 이차함수의 동치 관계</strong> 를 다룹니다 — 교육과정 내(수학Ⅰ-등차수열) 정통 도구입니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260510_등차수열일등급풀이팁_b2XZHgdA.html">등차수열 1등급 풀이법 (b2XZHgdA)</a> · <a href="20260520_등차수열시그마변형과합공식회피_b2XZHgdA_v2.html">등차수열 실전 풀이 v2 (v2)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-06-16 · <strong>개념 학습자료</strong>(영상 없음, 자연어 요청 생성) · 수학Ⅰ 등차수열의 합 ↔ 이차함수<br>
+    AI가 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
