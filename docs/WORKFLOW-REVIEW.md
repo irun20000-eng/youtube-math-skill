@@ -1,74 +1,113 @@
-# 워크플로우 리뷰 & 보강안 (2026-06-16)
+# 워크플로우 리뷰 & 보강안 (2026-06-16, v2)
 
-옵시디언 개념 스텁이 며칠간 silent 하게 누락된 사고를 계기로, 전체 파이프라인을
-진단하고 보강안을 정리한다. 이 문서는 "왜 이렇게 하는지"의 단일 참조점.
+이 문서는 **두 트랙(A·B) 의 단일 참조점**이다. "어제는 됐는데 오늘은" 같은 혼선의 재발을 막기 위해 입력원·실행 환경·옵시디언 작성 방식의 차이를 명문화한다.
 
-## 1. 전체 워크플로우
+## 1. 두 트랙
+
+### 트랙 A — INBOX 루틴 (자동, 매일 09:00 KST)
 
 ```
-[입력]
-  (a) STAGE 1 보고서 (영상 자막+요약)
-  (b) 구글드라이브 INBOX  → process_inbox.py 가 매일 09:00 KST 처리
-  (c) 자연어 개념 요청     → Claude 세션에서 즉시 생성
-
-[생성]  박PM 5단계 / 하이브리드 표준
-  templates/lesson-hybrid-skeleton.html 베이스
-  → output/{학년}/{단원}/{YYYYMMDD}_{주제}_{video_id8}.html   (영상)
-     output/{학년}/{단원}/{YYYYMMDD}_{주제}_개념.html          (개념)
-
-[후처리 체인]  ★ scripts/post_process.py 하나로 5단계 일괄 (모두 idempotent)
-  ① add_back_button.py        갤러리 복귀 버튼
-  ② add_related.py            관련 자료 카드
-  ③ make_math_stubs.py        옵시디언 스텁  ← 과거 자주 누락
-  ④ regen_index.py            갤러리 index 재생성
-  ⑤ patch_pdf_mode.py         PDF 인쇄 모드
-
-[배포]
-  git push → MCP PR 생성 → rebase merge → deploy-pages → 갤러리 URL
-  옵시디언 실제 .md 생성 = 사용자 PC(Windows) 일일 09:00 루틴
+입력  : Gemini 통합 Gem → 기초자료 .md → 사용자가 Drive INBOX 폴더에 저장
+        INBOX folder ID: 1K1KndlwA4iY2VVasAcW8aDPu6AfyL2Bv
+실행자: "클라우드 에이전트" — cron-triggered Claude 세션, Linux 컨테이너
+처리  :
+  1. INBOX 새 .md 나열 (이름이 _ 시작이면 제외, _done/_queue 폴더 별도)
+  2. 메타 '타입:' 분기 → 수학강의 / 일반지식 / 시청 불가
+  3. (수학) HTML 생성 → output/{학년}/{단원}/{YYYYMMDD}_{주제}_{vid8}.html
+  4. add_back_button → add_related → regen_index → patch_pdf_mode
+  5. git commit + push → main → deploy-pages → 갤러리
+  6. ★ Drive MCP create_file → 수학영상노트/{YYYY}/{MM}/..._{vid8}.md
+       (수학영상노트 ID: 1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k)
+  7. 처리한 INBOX .md → _done 폴더에 마커 (중복 방지)
+  8. (가능 시) PlayMCP 카카오 '나에게 보내기' 로 결과 요약
+출력  : 수학영상노트, frontmatter type: youtube-math-stub, source: backfill
 ```
 
-## 2. 영상 자료 vs 개념 자료 차이
+### 트랙 B — 자연어 요청 (즉시, 사용자 세션에서 직접)
 
-| 항목 | 영상 자료 | 개념 자료 |
-|------|-----------|-----------|
-| 파일명 | `..._{video_id8}.html` | `..._개념.html` |
-| hero | 영상 썸네일/링크 | `src-badge` + 보라 그라데이션 |
-| 갤러리 | 일반 카드 | `data-source="concept"` |
-| 옵시디언 라우팅 | `수학영상노트/{YYYY}/{MM}/` | `수학개념노트/{YYYY}/{MM}/` |
-| 스텁 frontmatter | `type: youtube-math-stub` | `type: math-concept-stub` |
+```
+입력  : 사용자가 Claude Code 세션에서 자연어로 요청
+        (예: "등차수열의 합과 이차함수 관련성, 함정")
+        INBOX 거치지 않음 → 09:00 루틴이 영원히 못 봄
+실행자: 현재 대화 중인 세션 (Linux 컨테이너)
+처리  :
+  1. 학년·단원 매핑 확인 (애매하면 사용자 질문, 자의 판단 ❌)
+  2. HTML 생성 → output/{학년}/{단원}/{YYYYMMDD}_{주제}_개념.html
+     (파일명 _개념 끝, hero src-badge + 보라 그라데이션)
+  3. 갤러리 후처리 4단계 (make_math_stubs 제외):
+     add_back_button → add_related → regen_index → patch_pdf_mode
+  4. git push (작업 브랜치) → MCP PR → rebase 머지 → 갤러리
+  5. ★ Drive MCP create_file → 수학개념노트/{YYYY}/{MM}/..._개념.md
+       (수학개념노트 ID: 1FwBBxoaoKBMpd8dqZxGzyvxI3pUoBWSX)
+  6. get_file_metadata(id) 로 검증
+  7. 결과 보고 (갤러리 URL + Drive 파일 링크 + PR 해시)
+출력  : 수학개념노트, frontmatter type: math-concept-stub, source: concept-request
+```
 
-## 3. 발견된 약점 & 조치 상태
+### 공통
 
-| # | 약점 | 영향 | 조치 |
+- HTML 표준: `templates/lesson-hybrid-skeleton.html` + `GENERATION-STANDARD.md`
+- 출력 경로: `output/{학년}/{단원}/...html`
+- 문항 2/2/2/2, `filterable {level}` 클래스, 검산·오답주의 박스
+- 실재 기출 출처 표기 ❌, "수능 대비 — N번 유형(준킬러)" 만
+- 갤러리 발행: GitHub Pages (`deploy-pages.yml`)
+- **옵시디언 노트 작성은 Drive MCP** — 로컬 `G:\` ❌, `make_math_stubs.py` ❌
+
+## 2. 트랙 차이 한눈에
+
+| 항목 | 트랙 A (INBOX) | 트랙 B (자연어) |
+|------|---------------|-----------------|
+| 입력원 | Drive INBOX `.md` | 세션 채팅 |
+| 트리거 | 매일 09:00 KST cron | 사용자 발화 즉시 |
+| 실행자 | 클라우드 에이전트 | 현재 세션 |
+| 자료 종류 | 영상 (수학강의·일반지식) | 개념 (영상 없음) |
+| 파일명 | `..._{vid8}.html` | `..._개념.html` |
+| hero | 영상 썸네일/링크 | `src-badge` 보라 |
+| 갤러리 카드 | 일반 | `data-source="concept"` |
+| 옵시디언 폴더 | `수학영상노트/` | `수학개념노트/` |
+| 스텁 type | `youtube-math-stub` | `math-concept-stub` |
+| 스텁 source | `backfill` | `concept-request` |
+| 처리 끝 후 | `_done` 마커 + 카카오 알림 | PR 머지 + 세션 보고 |
+
+## 3. 누적 발견된 약점
+
+| # | 약점 | 트랙 | 상태 |
 |---|------|------|------|
-| ① | `make_math_stubs.py` 누락이 **silent failure** (갤러리는 정상이라 며칠 후 발견) | 🔴 | ✅ `post_process.py` 통합 진입점으로 단계 누락 차단 |
-| ② | 샌드박스에서 옵시디언 실파일 검증 불가 | 🟠 | ✅ dry-run 리포트로 "생성 예정 경로" 명시 |
-| ③ | `_개념` 라우팅 누락이 코드만 보면 안 보임 (커밋 메시지와 실제 코드 불일치) | 🟠 | ✅ PR #28 라우팅 구현 + 본 문서로 명문화 |
-| ④ | 자연어 개념 요청 워크플로우 미문서화 | 🟡 | ✅ CLAUDE.md 섹션 추가 |
-| ⑤ | 후처리 체인이 사람 손에 의존 (한 단계 빠뜨려도 push 됨) | 🟠 | ✅ `post_process.py` 일괄 + 결과 요약표 |
+| ① | "옵시디언 = 로컬 `G:\`" 오해 → 샌드박스 가짜 `G:\` 폴더 + 거짓 "성공" 로그 | A·B | ✅ 정정: Drive MCP 가 정답. `make_math_stubs.py` 는 비Windows 자동 dry-run + PC 백필 전용 |
+| ② | CLAUDE.md 자연어 워크플로우가 `post_process.py`(=`make_math_stubs` 포함) 호출 권장 | B | ✅ 정정: 4단계 갤러리 후처리 + Drive MCP 직접 호출로 변경 |
+| ③ | Drive 폴더 ID 가 사용자 루틴 프롬프트에만 있고 레포에 없음 | A·B | ✅ CLAUDE.md "옵시디언 = Drive" 섹션에 박제 |
+| ④ | Drive MCP `create_file` 첫 호출 권한 게이트 거부 | B | ⚠️ Auto mode 시 통과. 매 세션 1회 마찰 → `/permissions` 등록 권장 |
+| ⑤ | 작성 후 검증 부재 → silent failure 위험 | A·B | ✅ `get_file_metadata(id)` 검증 1회 명문화 |
+| ⑥ | 폴더 이름 변경(020→010)에 자동 대응? | A·B | ✅ ID 기반 호출이라 무관 — but **이름 검색 ❌, ID 만 사용** 명문화 |
+| ⑦ | 트랙 명문화 부재 → "어제는 됐는데 오늘은" 혼선 | 메타 | ✅ 본 문서로 명문화 |
 
-## 4. 핵심 안전장치 (이번 도입)
+## 4. 검증 체크리스트 (트랙 B 종료 직전)
 
-### `scripts/post_process.py`
-- 자료 생성 후 **이거 하나만** 호출하면 5단계가 순서대로 돈다.
-- 끝에 ✅/❌ 요약표 출력 → 어느 단계가 돌았는지 한눈에.
-- 단계 누락으로 인한 옵시디언 silent failure 재발 차단.
+- [ ] HTML 파일이 `output/{학년}/{단원}/{YYYYMMDD}_{주제}_개념.html` 에 있는가
+- [ ] `filterable basic/standard/advanced/csat` 클래스가 8문항 전부에 있는가
+- [ ] 갤러리 후처리 4단계 모두 "추가/건너뜀" 정상 종료했는가 (실패 0)
+- [ ] 작업 브랜치 push → PR 생성 → rebase 머지 성공했는가
+- [ ] Drive MCP `create_file` 응답에 `id` 가 있는가
+- [ ] `get_file_metadata(id)` 결과 `title`·`parentId` 일치하는가
+- [ ] 사용자 보고에 3개 링크(갤러리 URL · Drive 링크 · PR 해시) 포함했는가
 
-### `make_math_stubs.py --dry-run` (+ 비Windows 자동 dry-run)
-- 옵시디언 볼트는 Windows 전용 경로(`G:\...`). **비Windows(샌드박스/CI)에선 자동 dry-run**.
-- 샌드박스에 가짜 `G:\` 폴더가 생기던 오염 차단 (`os.name != "nt"` 기준).
-- dry-run 은 실제 파일을 안 쓰고 "어디에 생성될 예정인지"만 출력 → 사용자가 다음날 그 경로로 검증.
+## 5. 코드/도구 위치 (혼동 방지)
 
-## 5. 미적용 / 향후 (확장성)
+| 도구 | 환경 | 용도 |
+|------|------|------|
+| `scripts/add_back_button.py` | 어디서나 | 갤러리 복귀 버튼 패치 |
+| `scripts/add_related.py` | 어디서나 | 관련 자료 카드 |
+| `youtube-math-auto/scripts/regen_index.py` | 어디서나 | 갤러리 index 재생성 |
+| `youtube-math-auto/scripts/patch_pdf_mode.py` | 어디서나 | PDF 인쇄 모드 |
+| **Drive MCP `create_file`** | 세션·클라우드 | **옵시디언 스텁 작성 (일상 경로)** |
+| `scripts/make_math_stubs.py` | **PC(Windows) 전용** | 갤러리→옵시디언 **백필**(과거 자료 일괄) 용. 비Windows 에선 자동 dry-run |
+| `scripts/post_process.py` | 어디서나 | 후처리 5단계 통합 — 단 ③ 스텁은 비Windows 자동 dry-run. 일상 트랙 A·B 에선 4단계 개별 호출 권장 |
 
-- **D. PR template 체크리스트** — 후처리 5단계 체크박스 강제 (자기검증)
-- **E. CI 검증 워크플로우** — 새 HTML PR 에 `--dry-run` 결과를 코멘트로 자동 게시
-- **F. INBOX 통합** — 자연어 요청도 INBOX 텍스트로 떨어뜨려 단일 파이프라인
-- **G. 옵시디언 동기화 요약 노트** — 일일 루틴 후 "오늘 N개 동기화/실패 0" 노트 자동 생성
+## 6. 미적용 / 향후 (참고)
 
-## 6. 사용자 검증 포인트
-
-1. **갤러리**: https://irun20000-eng.github.io/youtube-math-skill/ (push 1~2분 후, Ctrl+Shift+R)
-2. **옵시디언**: 다음 09:00 루틴 후 `수학개념노트/{YYYY}/{MM}/` 에 `_개념.md` 생성 확인.
-   - 안 보이면 → 루틴이 옛 스크립트 캐싱했거나 git pull 실패. 이 둘이 거의 유일한 실패 경로.
+- **d. `post_process.py` 의 ③ 단계 기본 OFF**: `--include-stubs` 플래그로 옵트인. PC 백필 시만 켜기.
+- **e. `make_math_stubs.py` 헤더에 "PC 백필 전용" 명시**: 미래 세션 혼동 방지.
+- **g. 갤러리 카드 sanity check**: push 전에 `index.html` 에 새 카드 존재 + `data-source` 정확한지 1회 확인.
+- **h. PR template 체크리스트**: §4 체크리스트를 PR body 에 박아 자기검증 강제.
+- **i. Drive MCP 권한 자동 허용**: 세션 시작 시 `create_file` 권한 ask → allow 자동 처리.
+- **j. INBOX 통합**: 자연어 요청도 INBOX 텍스트로 떨어뜨려 단일 파이프라인. 단 사용자 결정: **"자연어는 세션에서 바로 처리, 루틴에 포함 안 함"** — 이 결정 유지 시 j 불필요.
