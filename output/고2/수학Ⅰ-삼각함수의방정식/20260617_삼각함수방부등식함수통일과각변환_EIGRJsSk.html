@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅰ-삼각함수의 방정식]</div><h1>삼각함수 방·부등식 — <strong>처음 5초에 갈린다</strong> · 함수의 통일 · 각 변환</h1><p class="sub">🎯 복잡한 각이 보이면 그래프 두 개 그릴 생각부터 버리자. 한 함수로 통일 → 각 변환 → 같은 사분면에서 단순 비교. 정수 $\pi$ 와 사분면 부호만 챙기면 풀린다.</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=EIGRJsSkyWE" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/EIGRJsSkyWE/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 삼각함수 방정식, 처음 5초에 갈립니다.</div><div class="v-meta">📺 수학강사 이정환, 9분 56초 · 2026-06-17</div><a class="v-link" href="https://www.youtube.com/watch?v=EIGRJsSkyWE" target="_blank" rel="noopener">https://www.youtube.com/watch?v=EIGRJsSkyWE</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 질문</h2>
+      <article class="problem basic">
+        <h3>예시 — 영상의 핵심 문제 (수능 대비형)</h3>
+        <p class="problem-body"><strong>문제:</strong> $2$ 이상 $10$ 이하의 두 자연수 $a, b$ 가 다음 조건을 만족할 때, 순서쌍 $(a, b)$ 의 개수는?</p>
+        <p>(가) $a+b$ 는 짝수이다.<br>(나) $\sin\!\left(a\pi + \dfrac{\pi}{b}\right) \le \cos\!\left(b\pi + \dfrac{\pi}{a}\right)$</p>
+        <details open>
+          <summary>📖 풀이 보기 (영상의 결론)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 분기:</strong> $a+b$ 짝수 → (둘 다 짝수) 또는 (둘 다 홀수).</p>
+            <p><strong>STEP 2 — 둘 다 짝수:</strong> 짝수 $\pi$ 는 주기 $2\pi$ 의 정수배라 소거. $\sin\!\left(\dfrac{\pi}{b}\right) \le \cos\!\left(\dfrac{\pi}{a}\right)$. 우변을 각 변환 $\cos\theta = \sin(\pi/2 - \theta)$ 로 sin 통일: $\sin\!\left(\dfrac{\pi}{b}\right) \le \sin\!\left(\dfrac{\pi}{2} - \dfrac{\pi}{a}\right)$. 두 각 모두 1사분면 → $\dfrac{\pi}{b} \le \dfrac{\pi}{2} - \dfrac{\pi}{a}$ → $\dfrac{1}{a} + \dfrac{1}{b} \le \dfrac{1}{2}$. 짝수 $\{4,6,8,10\}$ 어느 조합이든 만족 → $4\times4 = 16$ 개.</p>
+            <p><strong>STEP 3 — 둘 다 홀수:</strong> 홀수 $\pi$ 소거 시 부호 반전 → $-\sin\!\left(\dfrac{\pi}{b}\right) \le -\cos\!\left(\dfrac{\pi}{a}\right)$. 양변 $\times(-1)$ 부등호 뒤집기: $\dfrac{1}{a} + \dfrac{1}{b} \ge \dfrac{1}{2}$. 홀수 자연수 대입 → $(3,3), (3,5), (5,3)$ → $3$ 개.</p>
+            <p class="answer"><strong>정답:</strong> $16 + 3 = \mathbf{19}$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 그래프 $\sin 5x$, $\cos 3x$ 를 그릴 생각부터 버릴 것. ① 정수 $\pi$ 소거 ② 한 함수로 통일 ③ 같은 사분면에서 단순 비교 — 세 도구가 전부다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (함수의 통일 · 각 변환 · 사분면)</h2>
+
+      <div class="concept-block">
+        <h3>① 큰 그림 — "처음 5초의 판단"</h3>
+        <p>방정식 $\sin x = \sin 2x$ 는 그래프 두 개를 그려서 교점으로 풀 만합니다. 그런데 $\sin 2x = \sin 5x$ 처럼 각이 커지면? $\sin 5x$ 같은 건 우리는 안 그려요.</p>
+        <p>강사 메시지: <strong>"하나의 함수에 서로 다른 값 두 개가 들어갔다"</strong> 고 관점을 바꾸자. 들어간 두 값이 주기 · 대칭 관계에 놓이는지 보는 것이 훨씬 빠릅니다.</p>
+        <p>$\sin 2x = \cos 3x$ 처럼 사인 · 코사인이 섞이고 각도 다르면 더 불편 → 각 변환으로 <strong>함수를 통일</strong>해 한 함수로 만들고 끝.</p>
+        <div class="insight">
+          처음 5초에 결정해야 할 것은 <strong>그래프를 그릴 것인가, 통일 · 각변환으로 식을 다룰 것인가</strong>. 복잡한 각이 보이면 거의 항상 후자.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 선수 지식 1 — 주기성과 정수 $\pi$ 소거</h3>
+        <div class="prereq">
+          <p>$\sin(x + 2\pi) = \sin x$, $\cos(x + 2\pi) = \cos x$ — 주기 $2\pi$.</p>
+          <p>그래서 $\sin(2n\pi + \theta) = \sin\theta$, $\cos(2n\pi + \theta) = \cos\theta$ (짝수 $\pi$ 는 그냥 소거).</p>
+          <p>홀수 $\pi$ 는? $\sin(\pi + \theta) = -\sin\theta$, $\cos(\pi + \theta) = -\cos\theta$ → <strong>부호 반전</strong>.</p>
+          <p>한 줄: <strong>각 안의 $n\pi$ 는 $n$ 의 짝/홀에 따라 소거 vs 부호반전</strong>.</p>
+        </div>
+        <p>영상 문제의 첫 단추 — $\sin(a\pi + \pi/b)$ 의 $a\pi$ 는 $a$ 짝수면 그냥 사라지고, $a$ 홀수면 부호가 뒤집힌다. 이걸 먼저 정리해야 식이 보입니다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 선수 지식 2 — 각 변환 공식 (단위원에서)</h3>
+        <div class="prereq">
+          <p>$\sin\!\left(\dfrac{\pi}{2} - \theta\right) = \cos\theta$, $\cos\!\left(\dfrac{\pi}{2} - \theta\right) = \sin\theta$ (여각 관계).</p>
+          <p>$\sin\!\left(\dfrac{\pi}{2} + \theta\right) = \cos\theta$, $\cos\!\left(\dfrac{\pi}{2} + \theta\right) = -\sin\theta$.</p>
+        </div>
+        <p>왜 그런가? — 단위원에서 한 점을 $\pi/2$ 만큼 회전하면 $x, y$ 좌표가 뒤바뀝니다. 회전 방향(+ 또는 -)에 따라 부호가 달라질 뿐.</p>
+        <p>활용: $\cos B$ 를 $\sin$ 으로 갈아치우는 두 가지 — $\sin(\pi/2 - B)$ 또는 $\sin(\pi/2 + B)$. <strong>둘 다 가능</strong> 하고 어느 쪽을 써도 결국 같은 답이 나옵니다 (대칭성). 다만 어느 쪽 쓰느냐에 따라 <strong>참조할 사분면이 달라짐</strong>.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 정리 1 — 함수의 통일 (cos → sin)</h3>
+        <p>$\sin A \le \cos B$ 같은 부등식에서 두 함수를 그리는 대신 한 함수로 갈무리:</p>
+        <div class="formula-box">
+          $\cos B = \sin\!\left(\dfrac{\pi}{2} - B\right)$ 대입 → $\sin A \le \sin\!\left(\dfrac{\pi}{2} - B\right)$
+        </div>
+        <p>이제 좌 · 우 둘 다 $\sin$. <strong>같은 함수 안의 두 값 비교</strong> 문제로 환원됨.</p>
+        <div class="insight">
+          함수만 통일되면 부등식 풀이는 두 단계 — (1) 두 각이 같은 사분면에 들어가는지 확인 (2) 그 사분면의 증감으로 단순 비교. 그래프 안 그려도 됨.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 핵심 정리 2 — 같은 사분면에서 단순 비교</h3>
+        <p>$\sin$ 은 사분면마다 증감 방향이 다릅니다.</p>
+        <div class="callout">
+          <p><strong>1사분면 ($0 \le \theta \le \pi/2$)</strong>: $\sin\theta$ 는 증가. 각 큰 쪽이 sin 값 큼.</p>
+          <p><strong>2사분면 ($\pi/2 \le \theta \le \pi$)</strong>: $\sin\theta$ 는 감소. 각 큰 쪽이 sin 값 작음.</p>
+        </div>
+        <p>전제 — 두 각이 <strong>같은 사분면</strong> 안에 있어야 단순 대소 비교가 됩니다.</p>
+        <div class="step-derive">
+          <p>영상 문제 둘 다 짝수 케이스: $\dfrac{\pi}{b}$, $\dfrac{\pi}{2} - \dfrac{\pi}{a}$ 둘 다 1사분면 (양수, $\pi/2$ 이하).</p>
+          <p>$\sin$ 단조증가 적용 → $\dfrac{\pi}{b} \le \dfrac{\pi}{2} - \dfrac{\pi}{a}$.</p>
+          <p>이항해서 $\dfrac{1}{a} + \dfrac{1}{b} \le \dfrac{1}{2}$ 한 줄로 정리.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 핵심 정리 3 — 다른 각 변환을 써도 결과는 같다</h3>
+        <p>$\cos(\pi/a) = \sin(\pi/2 + \pi/a)$ 를 대신 쓰면 어떻게 되나? — 이번엔 우변 각이 2사분면.</p>
+        <div class="step-derive">
+          <p>식: $\sin(\pi/b) \le \sin(\pi/2 + \pi/a)$. 좌변은 1사분면, 우변은 2사분면.</p>
+          <p>2사분면 $\sin$ 의 대칭성: $\sin(\pi/2 + \pi/a) = \sin(\pi - (\pi/2 + \pi/a)) = \sin(\pi/2 - \pi/a)$.</p>
+          <p>결국 좌변과 우변 모두 1사분면 비교로 환원 → 같은 부등식 $\dfrac{1}{a} + \dfrac{1}{b} \le \dfrac{1}{2}$.</p>
+        </div>
+        <div class="insight">
+          어느 각 변환을 골라도 결국 같은 결론. 다만 <strong>중간 사분면 확인</strong> 한 번이 더 들어갑니다. 빠르고 안전한 선택은 $\sin(\pi/2 - \theta)$ — 한 번에 1사분면 정렬.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑦ 함정 — 흔히 놓치는 4가지</h3>
+        <div class="callout">
+          <p>① <strong>홀수 $\pi$ 의 부호 반전</strong> 잊기. $\sin(3\pi + \theta) = -\sin\theta$. 영상 문제 "둘 다 홀수" 케이스에서 부등호가 뒤집히는 이유.</p>
+          <p>② <strong>사분면 미확인</strong>. 두 각이 다른 사분면에 있으면 단순 대소 비교 불가. 한 번 더 대칭성으로 같은 사분면으로 옮겨야 함.</p>
+          <p>③ <strong>각 변환 선택</strong>이 문제 풀이의 성패를 가르는 게 아님. 어느 쪽 골라도 풀린다 — 단 <strong>참조 사분면</strong>이 달라질 뿐.</p>
+          <p>④ "그래프 그리려 함" — 처음 5초에 멈춰서 식 자체를 정리할 수 있는지 먼저 살핀다. 복잡한 각이 보이면 거의 항상 그래프 ❌.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 정수 $\pi$ 소거 (짝수)</h3>
+        <p class="problem-body"><strong>문제:</strong> $\sin\!\left(4\pi + \dfrac{\pi}{3}\right)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> $4\pi = 2 \cdot 2\pi$ 는 $\sin$ 의 주기 $2\pi$ 의 정수배 → 그냥 소거.</p>
+            <p><strong>STEP 2:</strong> $\sin\!\left(4\pi + \dfrac{\pi}{3}\right) = \sin\!\left(\dfrac{\pi}{3}\right) = \dfrac{\sqrt{3}}{2}$.</p>
+            <p class="answer"><strong>정답:</strong> $\dfrac{\sqrt{3}}{2}$</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 각 변환 ($\cos \to \sin$)</h3>
+        <p class="problem-body"><strong>문제:</strong> $\cos\theta$ 를 $\sin$ 함수의 두 가지 형태로 표현하시오 ($\theta$ 는 일반각).</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>여각 관계:</strong> $\cos\theta = \sin\!\left(\dfrac{\pi}{2} - \theta\right)$.</p>
+            <p><strong>또는 평행이동:</strong> $\cos\theta = \sin\!\left(\dfrac{\pi}{2} + \theta\right)$.</p>
+            <p class="answer"><strong>정답:</strong> $\cos\theta = \sin\!\left(\dfrac{\pi}{2} - \theta\right) = \sin\!\left(\dfrac{\pi}{2} + \theta\right)$</p>
+            <p class="key-point"><strong>핵심:</strong> 둘 다 맞는데, 변환 후 <strong>참조할 사분면이 다름</strong>. $\pi/2 - \theta$ 면 1사분면, $\pi/2 + \theta$ 면 2사분면.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 정수 $\pi$ 소거 (홀수, 부호 반전)</h3>
+        <p class="problem-body"><strong>문제:</strong> $\sin\!\left(5\pi + \dfrac{\pi}{4}\right)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> $5\pi = 4\pi + \pi = 2\cdot 2\pi + \pi$. 주기 $4\pi$ 는 소거되고 $\pi$ 만 남음.</p>
+            <p><strong>STEP 2:</strong> $\sin\!\left(\pi + \dfrac{\pi}{4}\right) = -\sin\!\left(\dfrac{\pi}{4}\right)$ (홀수 $\pi$ 부호 반전).</p>
+            <p><strong>STEP 3:</strong> $-\sin(\pi/4) = -\dfrac{\sqrt{2}}{2}$.</p>
+            <p class="answer"><strong>정답:</strong> $-\dfrac{\sqrt{2}}{2}$</p>
+            <p class="key-point"><strong>오답주의:</strong> "$5\pi$ 도 다 소거" ❌ — $5$ 가 홀수라 $\pi$ 가 하나 남음. 그 $\pi$ 가 부호를 뒤집습니다.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 함수의 통일로 방정식 풀기</h3>
+        <p class="problem-body"><strong>문제:</strong> $0 \le x < 2\pi$ 에서 $\sin x = \cos x$ 를 만족하는 $x$ 를 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 함수 통일:</strong> $\cos x = \sin(\pi/2 - x)$ 대입 → $\sin x = \sin(\pi/2 - x)$.</p>
+            <p><strong>STEP 2 — 두 사인이 같을 조건:</strong></p>
+            <p>(i) 각이 같음 ($+2n\pi$): $x = \pi/2 - x + 2n\pi$ → $2x = \pi/2 + 2n\pi$ → $x = \pi/4 + n\pi$.</p>
+            <p>(ii) 보각 ($\sin\theta = \sin(\pi-\theta)$): $x = \pi - (\pi/2 - x) + 2n\pi$ → $x = \pi/2 + x + 2n\pi$ — 정수 해 없음.</p>
+            <p><strong>STEP 3 — 범위 적용:</strong> $0 \le x < 2\pi$ 에서 $n=0,1$: $x = \pi/4$, $x = 5\pi/4$.</p>
+            <p class="answer"><strong>정답:</strong> $x = \dfrac{\pi}{4}$ 또는 $x = \dfrac{5\pi}{4}$</p>
+            <p class="key-point"><strong>검산:</strong> $\sin(\pi/4) = \cos(\pi/4) = \sqrt{2}/2$ ✓, $\sin(5\pi/4) = \cos(5\pi/4) = -\sqrt{2}/2$ ✓.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 함수 통일로 부등식의 자연수 풀이</h3>
+        <p class="problem-body"><strong>문제:</strong> $\sin\!\left(\dfrac{\pi}{a}\right) \le \cos\!\left(\dfrac{\pi}{b}\right)$ 를 만족하는 $2$ 이상 $10$ 이하 자연수 순서쌍 $(a, b)$ 의 개수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 함수 통일:</strong> 우변 $\cos(\pi/b) = \sin(\pi/2 - \pi/b)$. 식: $\sin(\pi/a) \le \sin(\pi/2 - \pi/b)$.</p>
+            <p><strong>STEP 2 — 사분면 확인:</strong> $a, b \ge 2$ → $\pi/a \le \pi/2$ (1사분면), $\pi/2 - \pi/b \in (0, \pi/2]$ (1사분면). 둘 다 1사분면이라 $\sin$ 단조증가 적용.</p>
+            <p><strong>STEP 3 — 대소 비교:</strong> $\dfrac{\pi}{a} \le \dfrac{\pi}{2} - \dfrac{\pi}{b}$ → $\dfrac{1}{a} + \dfrac{1}{b} \le \dfrac{1}{2}$.</p>
+            <p><strong>STEP 4 — 자연수 풀이:</strong> $a=2$ 면 $1/a = 1/2$ 이라 $1/b \le 0$ 불가. $a \ge 3$ 일 때 가능한 $b$ 확인:</p>
+            <p>$a=3$: $1/b \le 1/6$ → $b \ge 6$ → $b \in \{6,7,8,9,10\}$ — 5개.<br>
+               $a=4$: $1/b \le 1/4$ → $b \ge 4$ → $b \in \{4,5,...,10\}$ — 7개.<br>
+               $a=5$: $1/b \le 3/10$ → $b \ge 10/3 \approx 3.33$ → $b \in \{4,...,10\}$ — 7개.<br>
+               $a=6$: $1/b \le 1/3$ → $b \ge 3$ → $b \in \{3,...,10\}$ — 8개.<br>
+               $a=7$: $1/b \le 5/14$ → $b \ge 14/5 = 2.8$ → $b \in \{3,...,10\}$ — 8개.<br>
+               $a=8$: $1/b \le 3/8$ → $b \ge 8/3 \approx 2.67$ → $b \in \{3,...,10\}$ — 8개.<br>
+               $a=9$: $1/b \le 7/18$ → $b \ge 18/7 \approx 2.57$ → $b \in \{3,...,10\}$ — 8개.<br>
+               $a=10$: $1/b \le 2/5$ → $b \ge 5/2 = 2.5$ → $b \in \{3,...,10\}$ — 8개.</p>
+            <p>합: $5 + 7 + 7 + 8 + 8 + 8 + 8 + 8 = \mathbf{59}$.</p>
+            <p class="answer"><strong>정답:</strong> $59$ 개</p>
+            <p class="key-point"><strong>핵심:</strong> 문제의 본질은 그래프가 아니라 <strong>분수 부등식의 자연수 풀이</strong>. 함수 통일이 그 환원의 열쇠.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 두 각이 다른 사분면일 때</h3>
+        <p class="problem-body"><strong>문제:</strong> $\sin\!\left(\dfrac{\pi}{4}\right)$ 과 $\sin\!\left(\dfrac{3\pi}{4}\right)$ 의 대소를 비교하시오. 두 각이 서로 다른 사분면에 있다는 사실에 어떻게 대처해야 하는지 함께 설명하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 사분면 확인:</strong> $\pi/4$ 는 1사분면, $3\pi/4$ 는 2사분면. 단순 대소 비교 불가.</p>
+            <p><strong>STEP 2 — 대칭성으로 한 사분면으로 옮기기:</strong> $\sin(3\pi/4) = \sin(\pi - 3\pi/4) = \sin(\pi/4)$ ($\sin$ 의 보각 대칭).</p>
+            <p><strong>STEP 3 — 결론:</strong> $\sin(\pi/4) = \sin(3\pi/4) = \dfrac{\sqrt{2}}{2}$.</p>
+            <p class="answer"><strong>정답:</strong> 두 값은 <strong>같다</strong>. 이유 — $\sin$ 의 보각 대칭 $\sin\theta = \sin(\pi - \theta)$.</p>
+            <p class="key-point"><strong>핵심:</strong> 영상 강사가 강조한 부분 — 어떤 각 변환을 선택하느냐에 따라 두 각이 같은 사분면에 들어갈지 다른 사분면에 들어갈지가 달라짐. 다른 사분면이면 한 번 더 대칭성으로 옮기면 끝.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 영상의 핵심 문제 (준킬러 패턴)</h3>
+        <p class="problem-body"><strong>문제:</strong> $2$ 이상 $10$ 이하의 두 자연수 $a, b$ 가 다음 조건을 만족할 때, 순서쌍 $(a, b)$ 의 개수를 구하시오.</p>
+        <p>(가) $a+b$ 는 짝수이다.<br>(나) $\sin\!\left(a\pi + \dfrac{\pi}{b}\right) \le \cos\!\left(b\pi + \dfrac{\pi}{a}\right)$</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 분기:</strong> $a+b$ 짝수 → (둘 다 짝수) 또는 (둘 다 홀수).</p>
+            <p><strong>STEP 2 — 둘 다 짝수 케이스 ($a, b \in \{2,4,6,8,10\}$):</strong></p>
+            <p>$a\pi$, $b\pi$ 모두 짝수 $\pi$ → 소거. 식: $\sin(\pi/b) \le \cos(\pi/a)$. 우변 sin 통일: $\sin(\pi/b) \le \sin(\pi/2 - \pi/a)$. 두 각 1사분면 → $\dfrac{\pi}{b} \le \dfrac{\pi}{2} - \dfrac{\pi}{a}$ → $\dfrac{1}{a} + \dfrac{1}{b} \le \dfrac{1}{2}$.</p>
+            <p>$a=2$: $1/2 + 1/b \le 1/2$ — 불가. $a \ge 4$ 일 때 짝수 $b$ 별:</p>
+            <p>$a=4$: $1/b \le 1/4$ → $b \ge 4$ → $b \in \{4,6,8,10\}$ — 4개.<br>
+               $a=6$: $1/b \le 1/3$ → $b \ge 3$ → $b \in \{4,6,8,10\}$ — 4개.<br>
+               $a=8$: $1/b \le 3/8$ → $b \ge 8/3 \approx 2.67$ → $b \in \{4,6,8,10\}$ — 4개.<br>
+               $a=10$: $1/b \le 2/5$ → $b \ge 2.5$ → $b \in \{4,6,8,10\}$ — 4개.</p>
+            <p>짝수 합계: $4 \times 4 = \mathbf{16}$ 개.</p>
+            <p><strong>STEP 3 — 둘 다 홀수 케이스 ($a, b \in \{3,5,7,9\}$):</strong></p>
+            <p>$a\pi$, $b\pi$ 모두 홀수 $\pi$ → 부호 반전. $\sin(a\pi + \pi/b) = -\sin(\pi/b)$, $\cos(b\pi + \pi/a) = -\cos(\pi/a)$. 식: $-\sin(\pi/b) \le -\cos(\pi/a)$. 양변 $\times(-1)$ 부등호 뒤집기: $\sin(\pi/b) \ge \cos(\pi/a) = \sin(\pi/2 - \pi/a)$. 1사분면 단조증가 → $\dfrac{1}{a} + \dfrac{1}{b} \ge \dfrac{1}{2}$.</p>
+            <p>홀수 직접 확인:<br>
+               $(3,3)$: $2/3 \ge 1/2$ ✓.<br>
+               $(3,5)$: $1/3 + 1/5 = 8/15 \approx 0.533 \ge 0.5$ ✓.<br>
+               $(5,3)$: 대칭으로 ✓.<br>
+               $(3,7)$: $1/3 + 1/7 = 10/21 \approx 0.476 < 0.5$ ✗.<br>
+               $(5,5)$: $2/5 = 0.4 < 0.5$ ✗.<br>
+               나머지는 모두 더 작음.</p>
+            <p>홀수 합계: $\mathbf{3}$ 개 — $(3,3), (3,5), (5,3)$.</p>
+            <p class="answer"><strong>정답:</strong> $16 + 3 = \mathbf{19}$</p>
+            <p class="key-point"><strong>핵심:</strong> 그래프 $\sin 5x$, $\cos 3x$ 그릴 생각부터 버린다. ① 정수 $\pi$ 소거 (짝수 = 그냥, 홀수 = 부호반전) ② sin 통일 ③ 1사분면 단조증가 — 세 도구가 전부다.</p>
+            <p class="key-point"><strong>오답주의:</strong> 홀수 케이스에서 양변 $\times(-1)$ 시 <strong>부등호 방향 뒤집기</strong> 잊으면 해 개수가 정반대로 나옴.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 영상 문제의 변형 (반대 방향 부등호)</h3>
+        <p class="problem-body"><strong>문제:</strong> $2$ 이상 $10$ 이하의 두 자연수 $a, b$ 가 다음 조건을 만족할 때, 순서쌍 $(a, b)$ 의 개수를 구하시오.</p>
+        <p>(가) $a+b$ 는 짝수이다.<br>(나) $\sin\!\left(a\pi + \dfrac{\pi}{b}\right) \ge \cos\!\left(b\pi + \dfrac{\pi}{a}\right)$</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>관찰:</strong> 부등호만 반대. 같은 분기 · 통일 과정 적용.</p>
+            <p><strong>둘 다 짝수:</strong> $\dfrac{1}{a} + \dfrac{1}{b} \ge \dfrac{1}{2}$, $a, b \in \{2,4,6,8,10\}$.</p>
+            <p>$a=2$: $1/2 + 1/b \ge 1/2$ ⇔ $1/b \ge 0$ — 모든 $b$ 만족 → 5개.<br>
+               $a=4$: $1/4 + 1/b \ge 1/2$ ⇔ $1/b \ge 1/4$ ⇔ $b \le 4$ → $b \in \{2,4\}$ — 2개.<br>
+               $a=6$: $1/b \ge 1/3$ ⇔ $b \le 3$ → $b \in \{2\}$ — 1개.<br>
+               $a=8$: $1/b \ge 3/8$ ⇔ $b \le 8/3 \approx 2.67$ → $b \in \{2\}$ — 1개.<br>
+               $a=10$: $1/b \ge 2/5$ ⇔ $b \le 5/2 = 2.5$ → $b \in \{2\}$ — 1개.</p>
+            <p>짝수 합계: $5 + 2 + 1 + 1 + 1 = \mathbf{10}$ 개.</p>
+            <p><strong>둘 다 홀수:</strong> $\dfrac{1}{a} + \dfrac{1}{b} \le \dfrac{1}{2}$, $a, b \in \{3,5,7,9\}$.</p>
+            <p>$a=3$: $1/b \le 1/6$ ⇔ $b \ge 6$ → $b \in \{7,9\}$ — 2개.<br>
+               $a=5$: $1/b \le 3/10$ ⇔ $b \ge 10/3 \approx 3.33$ → $b \in \{5,7,9\}$ — 3개.<br>
+               $a=7$: $1/b \le 5/14$ ⇔ $b \ge 14/5 = 2.8$ → $b \in \{3,5,7,9\}$ — 4개.<br>
+               $a=9$: $1/b \le 7/18$ ⇔ $b \ge 18/7 \approx 2.57$ → $b \in \{3,5,7,9\}$ — 4개.</p>
+            <p>홀수 합계: $2 + 3 + 4 + 4 = \mathbf{13}$ 개.</p>
+            <p class="answer"><strong>정답:</strong> $10 + 13 = \mathbf{23}$</p>
+            <p class="key-point"><strong>검산:</strong> 짝수 쌍 전체 $5 \times 5 = 25$ 가지, 홀수 쌍 전체 $4 \times 4 = 16$ 가지 — 합 $41$. 본 문제(≥, 23개) + 수능 대비 1(≤, 19개) = 42, 중복(등호) 1쌍 차감 → 41 일치 ✓.</p>
+            <p class="key-point"><strong>핵심:</strong> "처음 5초" — 영상 강사가 강조한 부분. 식 형태가 익숙해지면, 부등호 방향만 보고 패턴을 잡아낼 수 있게 됩니다.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 적용 결과</h3>
+    <p>본 자료는 영상에서 강사가 압축한 부분을 중수준(하위 40%) 학습자도 따라갈 수 있도록 풀어 작성:</p>
+    <ul>
+      <li><strong>"sin 5x 안 그려요"</strong> → 그래프를 안 쓰는 이유와 대안(함수 통일 · 각변환)을 개념 ① ② 에서 분리 설명.</li>
+      <li><strong>"각 안의 짝수 파이 그냥 지워"</strong> → 주기성 $\sin(2n\pi+\theta)=\sin\theta$, 홀수 $\pi$ 는 부호 반전 — 개념 ② 에서 단계별 유도.</li>
+      <li><strong>각 변환 공식</strong> → $\cos\theta = \sin(\pi/2 \pm \theta)$ 두 형태 모두 단위원에서 유도 (개념 ③). 선택에 따른 사분면 차이도 짚음 (개념 ⑥).</li>
+      <li><strong>"같은 사분면에서 단순 비교"</strong> → $\sin$ 의 사분면별 증감을 표로 정리 (개념 ⑤).</li>
+      <li><strong>홀수 케이스 부등호 뒤집기</strong> → 영상 강사가 빠르게 지나간 부분을 양변 $\times(-1)$ 절차로 명시 (수능 대비 1, STEP 3).</li>
+      <li><strong>변형 문제 자체 검산</strong> → 수능 대비 2 에서 본 문항과 합산해 등호 케이스로 정합성 확인.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>심화 1</strong> 의 자연수 계산은 일일이 손으로 검산 권장. (확신도 ★★★)</li>
+      <li>"수능 대비"는 출제 패턴 · 난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../../고1/수학Ⅰ-삼각함수의방정식/20260505_삼각함수방정식세관점_4Z2CnsDM.html">삼각함수 방정식 sin A = cos B — 세 관점 통합 정리 (4Z2CnsDM)</a> · <a href="../수학II-함수의극한/20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="../수학Ⅰ-삼각함수의그래프/20260505_일반형삼각함수출발지점속도_LDxBveuk.html">일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기 (LDxBveuk)</a> · <a href="../수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html">삼각함수 활용 고난도 (xuzuEsxr)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-06-16 | 영상 출처: <a href="https://www.youtube.com/watch?v=EIGRJsSkyWE">https://www.youtube.com/watch?v=EIGRJsSkyWE</a> (수학강사 이정환, 게시 2026-06-17)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>

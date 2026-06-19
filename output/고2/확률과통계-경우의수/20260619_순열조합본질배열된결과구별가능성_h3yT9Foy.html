@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-확률과 통계-경우의 수]</div><h1>순열·조합의 본질 — <strong>배열된 결과의 구별가능성</strong><br>"다르면 곱하고, 같으면 나눈다"</h1><p class="sub">🎯 "배열하는" 이라는 동사적 행위가 아니라 <strong>"배열된 결과가 구별되는가"</strong> 가 본질이다. 순열은 조합의 곱셈일 뿐 — "이게 순열 문제냐 조합 문제냐"는 가장 어리석은 질문. 분필 두 개, 빈 의자 같은 구별불가 대상은 배열 방법이 $1$ 가지뿐.</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=h3yT9FoyZ5E" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/h3yT9FoyZ5E/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 당신은 확통을 '잘못' 배웠습니다.</div><div class="v-meta">📺 시대수학 김성호, 16분 36초 · 2026-06-19</div><a class="v-link" href="https://youtu.be/h3yT9FoyZ5E" target="_blank" rel="noopener">https://youtu.be/h3yT9FoyZ5E</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 질문</h2>
+      <article class="problem basic">
+        <h3>예시 — 영상의 핵심 문제</h3>
+        <p class="problem-body"><strong>문제:</strong> $8$ 개의 의자가 일렬로 놓여 있다. $A, B, C, D$ 네 사람이 앉을 때 어느 두 사람도 이웃하지 않게 앉는 방법의 수를 구하시오.</p>
+        <details open>
+          <summary>📖 풀이 보기 (영상의 결론)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 배열된 결과를 상상:</strong> 사람이 앉은 의자 $4$ 개 + 빈 의자 $4$ 개.</p>
+            <p><strong>STEP 2 — 이웃해도 되는 빈 의자 먼저 배열:</strong> <strong>빈 의자 4개는 서로 구별되지 않으므로 배열 방법 = $1$ 가지</strong>. (이게 본 영상의 핵심 함정.)</p>
+            <p><strong>STEP 3 — 사람을 빈 의자 사이에 끼우기:</strong> 빈 의자 $4$ 개의 양 끝 + 사이사이 = $5$ 개 자리. 그중 $4$ 자리에 서로 다른 $A, B, C, D$ 를 배열 → $_5P_4$.</p>
+            <p class="answer"><strong>정답:</strong> $1 \times {}_5P_4 = 5 \times 4 \times 3 \times 2 = \mathbf{120}$ 가지</p>
+            <p class="key-point"><strong>왜 헷갈리나?</strong> "빈 의자 $4$ 개를 배열" 이라고 하면 반사적으로 $4!$ 라고 쓰는 학생이 많다. 그러나 빈 의자끼리는 구별되지 않는다 → 배열 결과가 단 1가지뿐. <strong>"배열하는 행위"가 아니라 "배열된 결과의 구별 가능성"</strong> 이 본질이다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (구별가능성 · 나눗셈 원리)</h2>
+
+      <div class="concept-block">
+        <h3>① "배열하는" 이 아니라 "배열된 결과"</h3>
+        <p>교과서 문장: "서로 다른 $n$ 개 중에서 $r$ 개를 뽑아 일렬로 <strong>배열하는</strong> 경우의 수." 이 동사가 오개념을 심는다.</p>
+        <p>강사 메시지: 경우의 수는 <strong>배열하는 행위</strong>를 세는 게 아니다. 배열이 다 끝난 뒤 눈을 감았다 떴을 때 <strong>"서로 다르게 보이는 결과"</strong> 가 몇 가지인지를 세는 것이다.</p>
+        <div class="callout">
+          <p><strong>똑같이 생긴 흰 분필 2개</strong>를 일렬로 놓는 방법의 수는?</p>
+          <p>"두 자리에 어느 분필을 먼저 놓느냐" 로 따지면 $2!=2$ 가지. 그러나 결과를 보면 둘이 똑같아 구별 불가 → 정답은 <strong>$1$ 가지</strong>.</p>
+        </div>
+        <div class="insight">
+          핵심 — <strong>"일렬"</strong> 이라는 단어 자체는 "자리들이 구별된다" 는 뜻. 그러나 자리에 놓인 <strong>대상</strong>이 구별 안 되면 결과는 $1$ 가지뿐이다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 순열도 결국 조합 — "다 조합이다"</h3>
+        <div class="prereq">
+          <p>순열: $_nP_r = \dfrac{n!}{(n-r)!}$ — 서로 다른 $n$ 개 중 $r$ 개를 뽑아 일렬 배열.</p>
+          <p>조합: $_nC_r = \dfrac{n!}{(n-r)!\, r!}$ — 서로 다른 $n$ 개 중 $r$ 개를 단순히 뽑아 묶음(순서 무시).</p>
+          <p>관계: $_nP_r = {}_nC_r \times r!$ — 뽑은 뒤 $r$ 자리에 배열하는 $r!$ 배.</p>
+        </div>
+        <p>강사 메시지: 대학에 가면 <strong>"순열론"이라는 과목은 없다</strong> — 전부 "조합론(combinatorics)". 순열은 조합의 곱셈에 불과하기 때문.</p>
+        <p>실용 전략 — 복잡한 경우의 수 문제일수록 <strong>(가) 조합으로 뽑기 → (나) 배열을 곱하기</strong> 라는 세분화가 안전하다.</p>
+        <div class="insight">
+          "이게 순열 문제냐 조합 문제냐" 는 강사가 꼽은 <strong>가장 어리석은 질문</strong>. 둘이 분리된 게 아니다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 대원칙 — 다르면 곱하고, 같으면 나눈다</h3>
+        <div class="formula-box">
+          <strong>서로 다른 두 작업이 잇따라 일어나면 → 곱하기</strong><br>
+          <strong>구별되지 않는 중복이 생기면 → 그 중복 횟수만큼 나누기</strong>
+        </div>
+        <p>이 한 줄이 경우의 수 전체를 관통한다. 순열 공식 $_nP_r = \dfrac{n!}{(n-r)!}$ 의 의미도 이걸로 다 설명됨:</p>
+        <div class="step-derive">
+          <p>$n!$ — "$n$ 개가 다 구별된다" 고 일단 모두 일렬 배열 (질러놓기).</p>
+          <p>그러나 뒤쪽 $(n-r)$ 개는 우리가 관심 없는 부분 → 그 자리들끼리 서로 자리 바꿔도 결과가 같음 → 구별 안 되는 횟수 = $(n-r)!$.</p>
+          <p>구별 안 되는 만큼 나눠줌 → $\dfrac{n!}{(n-r)!}$.</p>
+        </div>
+        <p>같은 원리가 원순열·같은 것이 있는 순열·조 편성 다 적용됨.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 조 편성에서의 나눗셈 — 토너먼트 4명을 2조로</h3>
+        <p>$A, B, C, D$ 4명을 2명씩 두 조로 나누는 경우의 수는?</p>
+        <div class="step-derive">
+          <p>(가) 첫 조 뽑기: ${}_4C_2 = 6$ 가지.</p>
+          <p>(나) 둘째 조 뽑기: 남은 2명 중 2명 → ${}_2C_2 = 1$ 가지.</p>
+          <p>곱하면 $6 \times 1 = 6$. 그러나 두 조는 인원수도 같고 임무도 같음 → "1조-2조 vs 2조-1조" 구별 안 됨 → 자리 바꾸는 횟수 $2!$ 로 나눠야.</p>
+          <p>최종: $\dfrac{{}_4C_2 \times {}_2C_2}{2!} = \dfrac{6}{2} = \mathbf{3}$ 가지.</p>
+        </div>
+        <div class="callout">
+          <p><strong>그런데 "농구 대표 2명, 축구 대표 2명" 으로 뽑으면?</strong></p>
+          <p>이번엔 농구조와 축구조의 <strong>임무가 다름</strong> → 두 조가 구별됨 → $2!$ 로 나눌 필요 없음.</p>
+          <p>$_4C_2 \times {}_2C_2 = 6 \times 1 = \mathbf{6}$ 가지.</p>
+        </div>
+        <div class="insight">
+          핵심 질문 — <strong>두 묶음이 구별 가능한가?</strong> 같으면 나누고, 다르면 곱한 채로 둔다. 임무·역할·이름이 다르면 구별됨.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 이웃하지 않게 배열 — 표준 전략</h3>
+        <p>"$\bigcirc$ 끼리 이웃하지 않게" 라는 조건이 나오면 다음 절차:</p>
+        <div class="step-derive">
+          <p>① <strong>이웃해도 괜찮은 대상을 먼저 일렬 배열</strong>.</p>
+          <p>② 그 결과 생긴 <strong>양 끝 + 사이사이 자리</strong>($k$ 명을 깔면 $k+1$ 개 자리) 에서, 이웃 못 하는 대상의 수만큼 자리를 골라 배열.</p>
+          <p>③ 두 작업은 서로 다른 행위 → 곱한다.</p>
+        </div>
+        <p>"먼저 깔 대상" 이 사람처럼 구별되면 그 부분은 $k!$ 또는 ${}_kP_k$. 빈 의자처럼 구별 안 되면 $1$.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 함정 — 흔히 놓치는 4가지</h3>
+        <div class="callout">
+          <p>① <strong>빈 의자·같은 분필 = $1$ 가지</strong>. 반사적으로 $n!$ 쓰면 틀림.</p>
+          <p>② <strong>"순열이냐 조합이냐"</strong> 물음에 답하려고 하면 안 됨. 두 단어가 본질이 아니다 — 본질은 구별 가능성.</p>
+          <p>③ <strong>조 편성에서 임무 차이</strong>: 같은 인원수 조라도 임무 다르면 구별됨 → 나누면 안 됨.</p>
+          <p>④ <strong>홀수 $\pi$ 같은 부호 반전 함정</strong> 아니라 — <strong>구별 안 되는 묶음 자체 배열 횟수</strong> 만큼 나눠야 한다. 무엇으로 나눠야 할지 모르면 같은 결과가 몇 번 중복되는지 직접 세어 본다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 똑같은 분필의 배열</h3>
+        <p class="problem-body"><strong>문제:</strong> 똑같이 생긴 흰색 분필 $3$ 개를 일렬로 배열하는 방법의 수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 분필 $3$ 개가 모두 같음 → 자리 바꿔도 결과 동일.</p>
+            <p><strong>STEP 2:</strong> 배열된 결과 = $1$ 가지뿐.</p>
+            <p class="answer"><strong>정답:</strong> $1$ 가지</p>
+            <p class="key-point"><strong>오답주의:</strong> $3! = 6$ 으로 쓰면 함정에 빠짐. "분필이 구별 안 되니 자리 바꾼 횟수 $3!$ 로 나눠야" → $\dfrac{3!}{3!} = 1$.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 순열과 조합의 관계</h3>
+        <p class="problem-body"><strong>문제:</strong> $_5P_3$ 과 $_5C_3 \times 3!$ 의 값이 같음을 확인하시오. 두 식이 같은 이유를 한 줄로 설명하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$_5P_3 = 5 \times 4 \times 3 = 60$.</p>
+            <p>$_5C_3 = \dfrac{5!}{3!\,2!} = 10$, $\;10 \times 3! = 10 \times 6 = 60$ ✓.</p>
+            <p><strong>이유:</strong> $_5C_3$ = 5명 중 3명 뽑기 (10가지), 그 3명을 일렬로 배열하면 $3!$ 배. 즉 $_5P_3 = {}_5C_3 \times 3!$.</p>
+            <p class="answer"><strong>정답:</strong> 두 값 모두 $60$, 순열 = 조합 × 배열.</p>
+            <p class="key-point"><strong>핵심:</strong> 순열은 조합의 곱하기 버전. "둘이 다른 문제 종류" 가 아니라 "조합으로 뽑은 후 배열" 로 항상 환원 가능.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 4명을 2명씩 두 조로 (조 구별 무)</h3>
+        <p class="problem-body"><strong>문제:</strong> $A, B, C, D$ 네 사람을 $2$ 명씩 두 조로 나누는 경우의 수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 곱하기로 일단 뽑기:</strong> $_4C_2 \times {}_2C_2 = 6 \times 1 = 6$.</p>
+            <p><strong>STEP 2 — 조 구별 가능성 검토:</strong> 두 조 모두 $2$ 명, 임무도 같음 → 두 조의 자리 바꿈은 같은 결과. 자체 배열 $2! = 2$ 회 중복.</p>
+            <p><strong>STEP 3 — 나누기:</strong> $\dfrac{6}{2!} = 3$.</p>
+            <p class="answer"><strong>정답:</strong> $\mathbf{3}$ 가지</p>
+            <p class="key-point"><strong>검산:</strong> 직접 나열 — $\{A,B\}|\{C,D\}$, $\{A,C\}|\{B,D\}$, $\{A,D\}|\{B,C\}$ — 3가지 ✓.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 4명을 농구 2명, 축구 2명으로 (조 구별 유)</h3>
+        <p class="problem-body"><strong>문제:</strong> $A, B, C, D$ 네 사람 중에서 농구 대표 $2$ 명과 축구 대표 $2$ 명을 정하는 경우의 수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 농구조 먼저: ${}_4C_2 = 6$.</p>
+            <p><strong>STEP 2:</strong> 남은 2명 = 축구조: ${}_2C_2 = 1$.</p>
+            <p><strong>STEP 3 — 조 구별 가능성:</strong> 농구 vs 축구는 임무가 다름 → 두 조 구별됨 → 나누지 않음.</p>
+            <p class="answer"><strong>정답:</strong> ${}_4C_2 \times {}_2C_2 = 6 \times 1 = \mathbf{6}$ 가지</p>
+            <p class="key-point"><strong>핵심:</strong> 기본 1과 같은 인원·같은 뽑기 절차인데 답이 다름. 차이는 "조의 임무가 같은가 다른가" 단 하나. <strong>구별 가능성</strong>이 곱과 나눗셈을 가른다.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 여학생끼리 이웃하지 않게</h3>
+        <p class="problem-body"><strong>문제:</strong> 남학생 $4$ 명과 여학생 $3$ 명이 일렬로 놓인 $7$ 개의 의자에 앉는다. 여학생끼리 이웃하지 않게 앉는 방법의 수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 이웃해도 되는 남학생부터:</strong> 남학생 $4$ 명을 일렬 배열 → $4! = 24$.</p>
+            <p><strong>STEP 2 — 사이·끝 자리 만들기:</strong> 남학생 $4$ 명이 깔리면 양 끝과 사이사이에 $5$ 개의 빈 자리가 생김.</p>
+            <p><strong>STEP 3 — 여학생을 그 자리에:</strong> $5$ 자리 중 $3$ 자리를 골라 서로 다른 여학생 $3$ 명을 배열 → ${}_5P_3 = 60$.</p>
+            <p><strong>STEP 4 — 곱하기:</strong> 두 작업은 서로 다름.</p>
+            <p class="answer"><strong>정답:</strong> $4! \times {}_5P_3 = 24 \times 60 = \mathbf{1440}$ 가지</p>
+            <p class="key-point"><strong>핵심:</strong> "이웃하지 않게" 의 표준 전략 — 먼저 깔고, 사이 끼우기.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 같은 것이 있는 순열 (B 3개, A 4개)</h3>
+        <p class="problem-body"><strong>문제:</strong> 같은 문자 $A$ 가 $4$ 개, 같은 문자 $B$ 가 $3$ 개 있을 때, $7$ 개의 문자를 일렬로 배열하되 $B$ 끼리 이웃하지 않게 배열하는 방법의 수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 이웃 가능한 $A$ 부터 배열:</strong> $A$ 가 $4$ 개 모두 같음 → 배열 방법 $\dfrac{4!}{4!} = 1$ 가지. (강사 메시지: "구별 안 되는 대상 = $1$ 가지".)</p>
+            <p><strong>STEP 2 — 자리 만들기:</strong> $A$ $4$ 개 양 끝과 사이사이 = $5$ 개 자리.</p>
+            <p><strong>STEP 3 — $B$ 끼리 같음을 고려:</strong> 그 $5$ 자리 중 $3$ 자리를 골라 $B$ 를 둠. $B$ 끼리 구별 안 되므로 배열이 아니라 <strong>조합</strong> → ${}_5C_3 = 10$.</p>
+            <p class="answer"><strong>정답:</strong> $1 \times {}_5C_3 = \mathbf{10}$ 가지</p>
+            <p class="key-point"><strong>오답주의:</strong> $B$ 자리를 $_5P_3$ 으로 쓰면 틀림 — $B$ 끼리 자리 바꿔도 같은 배열. ${}_5P_3 / 3! = {}_5C_3$ 가 같은 결과를 다른 길로 도출.</p>
+            <p class="key-point"><strong>핵심:</strong> "다르면 곱하고 같으면 나눈다" — 깔린 $A$ 끼리 같음이라 $4! / 4!$, $B$ 끼리 같음이라 $_5P_3 / 3!$. 결과는 단순한 $_5C_3$.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 영상의 핵심 문제</h3>
+        <p class="problem-body"><strong>문제:</strong> $8$ 개의 의자가 일렬로 놓여 있다. $A, B, C, D$ 네 사람이 앉을 때 어느 두 사람도 이웃하지 않게 앉는 방법의 수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 상황 파악:</strong> 사람 $4$ 명 + 빈 의자 $4$ 개 = 8개 자리.</p>
+            <p><strong>STEP 2 — 빈 의자부터 배열:</strong> 빈 의자 $4$ 개는 서로 구별 안 됨 → 배열 $1$ 가지.</p>
+            <p><strong>STEP 3 — 사이 자리:</strong> 빈 의자 $4$ 개의 양 끝·사이사이 = $5$ 자리.</p>
+            <p><strong>STEP 4 — 사람 배열:</strong> $5$ 자리 중 $4$ 자리를 골라 서로 다른 $A, B, C, D$ 배열 → ${}_5P_4 = 120$.</p>
+            <p><strong>STEP 5 — 곱하기:</strong> $1 \times 120 = 120$.</p>
+            <p class="answer"><strong>정답:</strong> $\mathbf{120}$ 가지</p>
+            <p class="key-point"><strong>흔한 오답:</strong> "빈 의자 $4$ 개 배열" 을 $4! = 24$ 로 두고 $24 \times {}_5P_4 = 2880$. 강사가 지적한 함정 그대로.</p>
+            <p class="key-point"><strong>핵심:</strong> <strong>의자는 분필과 같다</strong> — 똑같이 생긴 빈 의자끼리는 구별 안 됨 → 배열 $1$.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 토너먼트 대진표 (3조 차등 구성)</h3>
+        <p class="problem-body"><strong>문제:</strong> $A, B, C, D, E, F$ 여섯 명을 $3$ 명, $3$ 명의 $2$ 개 조로 나누어 토너먼트 대진표를 만든다. 두 조의 임무는 같아 구별되지 않는다. 그 후 각 조 안에서 $3$ 명 중 $2$ 명이 1차전을 치르고, 그 승자가 나머지 1명과 2차전을 치른다(1번 시드). 시드 결정까지 포함한 전체 경우의 수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 두 조로 나누기 (인원 같음, 임무 같음):</strong> ${}_6C_3 \times {}_3C_3 = 20 \times 1 = 20$. 두 조 구별 안 됨 → $2!$ 로 나누기 → $20 / 2 = 10$.</p>
+            <p><strong>STEP 2 — 각 조에서 1차전 두 명 vs 시드 한 명 선정:</strong> 한 조 안 $3$ 명 중 시드 $1$ 명을 뽑기 = ${}_3C_1 = 3$. 두 조 각각 → $3 \times 3 = 9$.</p>
+            <p><strong>STEP 3 — 곱하기:</strong> 두 조 분할(STEP 1) 과 각 조 시드 선정(STEP 2) 은 서로 다른 작업 → 곱한다.</p>
+            <p class="answer"><strong>정답:</strong> $10 \times 9 = \mathbf{90}$ 가지</p>
+            <p class="key-point"><strong>검산:</strong> 다른 길 — 직접 ${}_6C_3 \times {}_3C_3 \times \dfrac{1}{2!} \times {}_3C_1 \times {}_3C_1 = 20 \times 1 \times \dfrac{1}{2} \times 3 \times 3 = 90$ ✓.</p>
+            <p class="key-point"><strong>핵심:</strong> "조가 구별되지 않는다" → $\dfrac{1}{2!}$ 한 줄 추가. 강사 메시지: <strong>"조가 구별되는지" 단 하나만 묻는다</strong>. 영상의 마지막 칠판 식 $_6C_3 \times {}_3C_3 \times \dfrac{1}{2!} \times {}_3C_2 \times {}_3C_2$ 도 같은 사고 — 각 조에서 1차전 $2$ 명 뽑기는 ${}_3C_2$. 결과는 $10 \times 3 \times 3 = 90$ 으로 동일.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 적용 결과</h3>
+    <p>본 자료는 영상에서 강사가 압축한 부분을 중수준(하위 40%) 학습자도 따라갈 수 있도록 풀어 작성:</p>
+    <ul>
+      <li><strong>"배열하는" vs "배열된 결과"</strong> → 분필 예시로 시각적 차이를 개념 ① 에서 명시.</li>
+      <li><strong>"순열 = 조합 × 배열"</strong> → 공식 관계와 "왜 같은가" 한 줄 설명 (개념 ②, 기초 2).</li>
+      <li><strong>"다르면 곱하고 같으면 나눈다"</strong> → 대원칙 박스로 강조 + 순열 공식 $_nP_r = n!/(n-r)!$ 의 의미 단계별 유도 (개념 ③).</li>
+      <li><strong>같은 인원 같은 절차인데 답이 다른 두 케이스</strong> → 기본 1 (조 구별 안 됨, 3) vs 기본 2 (조 구별 됨, 6) 를 나란히 배치.</li>
+      <li><strong>이웃하지 않게 배열의 표준 절차</strong> → ① 깔기 ② 사이 끼우기 ③ 곱하기 — 개념 ⑤ 에서 명시.</li>
+      <li><strong>"빈 의자 = 분필" 비유</strong> → 영상 강사가 강조한 부분을 도입(예시) 와 수능 대비 1 두 군데에 박아 단단히 각인.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>수능 대비 2</strong> 의 대진표 시드 절차는 문제 상황의 해석에 따라 변형 가능 — 시드의 정의·1차전 페어링 방식에 따라 답이 달라질 수 있음. (확신도 ★★)</li>
+      <li>"수능 대비"는 출제 패턴 · 난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
+    </ul>
+  </div>
+<footer>
+    <p>생성일: 2026-06-16 | 영상 출처: <a href="https://youtu.be/h3yT9FoyZ5E">https://youtu.be/h3yT9FoyZ5E</a> (시대수학 김성호, 게시 2026-06-19)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
