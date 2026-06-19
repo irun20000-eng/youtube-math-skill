@@ -334,3 +334,25 @@ body.print-mode .print-mode-banner {
 @media print {
   .print-mode-banner { display: none !important; }
 }
+
+/* ===== 모바일 — PDF 토글 위치 조정 (2026-06-19)
+ *
+ * 좁은 화면에서 우측 상단 .pdf-toolbar 가 hybrid-toolbar 의
+ * 우측 필터 버튼("수능 대비")을 가리는 문제 해소.
+ * → 모바일에선 우측 하단(scrollTopBtn 위)으로 옮긴다.
+ * ========================================================================
+ */
+@media (max-width: 700px) {
+  .pdf-toolbar {
+    top: auto !important;
+    bottom: 84px !important;  /* scrollTopBtn(bottom:24px, h:48px) 위 */
+    right: 12px !important;
+  }
+  .pdf-toolbar button {
+    padding: 8px 14px;
+    font-size: 12px;
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+}
+
