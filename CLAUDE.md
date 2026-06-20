@@ -117,10 +117,11 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
 
 ### 옵시디언 스텁 작성 절차 (Drive MCP)
 
-1. 위 표의 `parent_id` 아래에서 `search_files` 로 `{YYYY}` → `{MM}` 폴더 확인. 없으면 `create_file (mimeType=application/vnd.google-apps.folder)` 로 생성.
-2. `create_file (contentMimeType="text/markdown", disableConversionToGoogleType=true, parentId={MM 폴더 ID})` 로 `.md` 작성.
-3. **★ 작성 후 검증**: 응답에서 받은 `id` 로 `get_file_metadata(id)` → `title`·`parentId` 가 의도와 일치하는지 1회 확인. silent failure(어딘가 잘못 들어감) 의 마지막 안전망.
-4. 사용자 보고에 Drive 파일 링크 `https://drive.google.com/file/d/{id}/view` 를 항상 포함.
+> **★ 2026-06-20 변경**: YYYY/MM 하위 폴더를 만들지 않는다. 노트는 **`수학영상노트/`, `수학개념노트/` 바로 아래**에 작성. 정렬·검색은 파일명 접두사 `YYYYMMDD_` 로 충분.
+
+1. `create_file (contentMimeType="text/markdown", disableConversionToGoogleType=true, parentId={수학영상노트 또는 수학개념노트 ID})` 로 `.md` 작성. **YYYY/MM 폴더 만들지 말 것.**
+2. **★ 작성 후 검증**: 응답에서 받은 `id` 로 `get_file_metadata(id)` → `title`·`parentId` 가 의도(부모 폴더 ID 와 일치) 와 맞는지 1회 확인. silent failure 의 마지막 안전망.
+3. 사용자 보고에 Drive 파일 링크 `https://drive.google.com/file/d/{id}/view` 를 항상 포함.
 
 ### `make_math_stubs.py` 위치 (혼동 방지)
 
@@ -143,7 +144,7 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
    - `python youtube-math-auto/scripts/patch_pdf_mode.py output/` ④ PDF 인쇄 모드
 6. **push**: 위 "자동 push" 단계 (작업 브랜치 → MCP PR → rebase 머지 → deploy-pages)
 7. **★ 옵시디언 스텁 — Drive MCP `create_file` 로 직접 작성** (위 "옵시디언 = Drive" 섹션 절차 사용):
-   - 부모: 수학영상노트 ID `1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k` 아래 `{YYYY}/{MM}`
+   - 부모: 수학영상노트 ID `1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k` **바로 아래** (YYYY/MM ❌)
    - frontmatter `type: youtube-math-stub`, `source: backfill`, `tags: [math]`
    - 작성 후 `get_file_metadata(id)` 검증 필수
 8. **결과 보고 (3개 링크 + 상태)**: 갤러리 URL · Drive 파일 링크 · PR 머지 해시
@@ -165,7 +166,7 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
    - `python youtube-math-auto/scripts/patch_pdf_mode.py output/`
 6. **push**: 작업 브랜치 commit + push → MCP PR rebase 머지 → deploy-pages.
 7. **★ 옵시디언 스텁 — Drive MCP `create_file` 로 직접 작성** (위 "옵시디언 = Drive" 섹션 절차 사용):
-   - 부모: 수학개념노트 ID `1FwBBxoaoKBMpd8dqZxGzyvxI3pUoBWSX` 아래 `{YYYY}/{MM}`
+   - 부모: 수학개념노트 ID `1FwBBxoaoKBMpd8dqZxGzyvxI3pUoBWSX` **바로 아래** (YYYY/MM ❌)
    - frontmatter `type: math-concept-stub`, `source: concept-request`, `tags: [math, concept]`
    - 작성 후 `get_file_metadata(id)` 검증 필수
 8. **결과 보고 (3개 링크 + 상태)**:

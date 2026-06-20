@@ -16,7 +16,7 @@
   3. (수학) HTML 생성 → output/{학년}/{단원}/{YYYYMMDD}_{주제}_{vid8}.html
   4. add_back_button → add_related → regen_index → patch_pdf_mode
   5. git commit + push → main → deploy-pages → 갤러리
-  6. ★ Drive MCP create_file → 수학영상노트/{YYYY}/{MM}/..._{vid8}.md
+  6. ★ Drive MCP create_file → 수학영상노트/..._{vid8}.md  (★ 2026-06-20: YYYY/MM 폴더 안 씀)
        (수학영상노트 ID: 1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k)
   7. 처리한 INBOX .md → _done 폴더에 마커 (중복 방지)
   8. (가능 시) PlayMCP 카카오 '나에게 보내기' 로 결과 요약
@@ -37,7 +37,7 @@
   3. 갤러리 후처리 4단계 (make_math_stubs 제외):
      add_back_button → add_related → regen_index → patch_pdf_mode
   4. git push (작업 브랜치) → MCP PR → rebase 머지 → 갤러리
-  5. ★ Drive MCP create_file → 수학개념노트/{YYYY}/{MM}/..._개념.md
+  5. ★ Drive MCP create_file → 수학개념노트/..._개념.md  (★ 2026-06-20: YYYY/MM 폴더 안 씀)
        (수학개념노트 ID: 1FwBBxoaoKBMpd8dqZxGzyvxI3pUoBWSX)
   6. get_file_metadata(id) 로 검증
   7. 결과 보고 (갤러리 URL + Drive 파일 링크 + PR 해시)
