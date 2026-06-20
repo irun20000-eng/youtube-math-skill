@@ -145,7 +145,9 @@ source: concept-request
 > 본체(개념 유도·수준별 문항·풀이)는 HTML 학습자료에 있다.
 > 한 줄 요지·개념은 제목 기반 초안이므로 필요 시 보강.
 """
-        dest = VAULT_CONCEPT / yyyy / mm / f"{slug}.md"
+        # 2026-06-20: YYYY/MM 하위 폴더 안 씀. 부모 폴더 바로 아래 작성.
+        # 정렬·검색은 파일명 YYYYMMDD_ 접두사로 충분.
+        dest = VAULT_CONCEPT / f"{slug}.md"
     else:
         body = f"""---
 type: youtube-math-stub
@@ -178,7 +180,8 @@ source: backfill
 > 갤러리 백필로 자동 생성한 **스텁(index)** — 본체(수식·수준별 문항·풀이)는 HTML 학습자료에 있다.
 > 한 줄 요지·개념은 제목 기반 초안이므로 필요 시 보강.
 """
-        dest = VAULT_STUB / yyyy / mm / f"{slug}.md"
+        # 2026-06-20: YYYY/MM 하위 폴더 안 씀. 부모 폴더 바로 아래 작성.
+        dest = VAULT_STUB / f"{slug}.md"
     return dest, body
 
 
