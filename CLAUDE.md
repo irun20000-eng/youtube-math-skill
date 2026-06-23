@@ -8,7 +8,7 @@
 
 ```bash
 # 작업 디렉토리로 이동 (사용자 OS 별)
-cd C:/Users/user/Desktop/Claude_ProjecT/Youtube-math_skill   # Windows PC
+cd "G:/내 드라이브/Claude_Project/Youtube-math_skill"   # Windows PC (현 정본 경로)
 # 또는 cd ~/youtube-math-skill   # Mac/Linux/샌드박스
 git fetch origin
 git checkout main && git pull --rebase
@@ -46,7 +46,9 @@ PC 로컬 `output/index.html` 파일은 git pull 안 하면 옛날 그대로다.
 - 작업 완료 시 반드시 commit + push
 - push 안 한 자료는 다른 기기에서 못 봄
 
-## ✅ 자료 생성 후 자동 push (작업 브랜치만 푸시하면 끝)
+## ✅ 자료 생성 후 push — 빠른 경로 (작업 브랜치만, fallback용)
+
+> ⚠️ **정식 방법은 아래 "PR + 머지가 가장 안정" 섹션이다.** 이 빠른 경로는 작은 변경의 임시 fallback — 작업 브랜치 push만으로는 main 갤러리 배포가 트리거되지 않으니, 갤러리 갱신이 필요하면 아래 PR+머지를 쓸 것.
 
 새 학습자료(.html)를 `output/` 에 만들었거나 카탈로그가 갱신됐으면, 사용자가 별도 요청 없어도 다음만 수행:
 
