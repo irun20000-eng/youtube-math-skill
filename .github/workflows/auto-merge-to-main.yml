@@ -3,11 +3,15 @@ name: 작업브랜치 → main + 카탈로그 + Pages 배포
 # claude/** 작업 브랜치 push 한 번으로
 # (1) main ff-merge → (2) 카탈로그 재생성 → (3) GitHub Pages 배포
 # 까지 모두 처리. GITHUB_TOKEN 으로 인한 후속 워크플로우 미트리거 문제 회피.
+#
+# ⚠️ 2026-06-20: 자동 트리거(on: push) 비활성. runner 할당 직전 2초 만에
+# environment(github-pages) 보호 정책으로 거부되는 패턴이 누적 30회 이상 실패.
+# CLAUDE.md 의 "신뢰하지 말 것" 명시 사항과 일치 — 일상 워크플로우는
+# (a) 사용자 PR 머지 → deploy-pages.yml 트리거 / (b) 사용자 측 regen_index.py
+# commit 으로 카탈로그 처리. 본 통합 워크플로우는 디버깅용 수동 실행만 남김.
 
 on:
-  push:
-    branches:
-      - 'claude/**'
+  workflow_dispatch:  # 수동 실행만 (자동 push 트리거 비활성)
 
 permissions:
   contents: write
