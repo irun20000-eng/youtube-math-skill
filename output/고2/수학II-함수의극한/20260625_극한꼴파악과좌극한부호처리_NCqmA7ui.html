@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-함수의 극한과 연속]</div><h1>함수의 극한 — <strong>유리화 전에 꼴부터</strong> · 좌극한 부호 처리</h1><p class="sub">🎯 루트·마이너스 보자마자 유리화? ❌ 분자·분모가 어디로 가는지 <strong>꼴(0/0)부터 관찰</strong> → 함수 부호로 케이스 분류 → 좌극한이면 $x-t<0$ 부호 끝까지 챙기기.</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=NCqmA7uieT8" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/NCqmA7uieT8/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 상위권은 이렇게 푼답니다</div><div class="v-meta">📺 권현석, 6분 50초 · 2026-06-25</div><a class="v-link" href="https://youtu.be/NCqmA7uieT8" target="_blank" rel="noopener">https://youtu.be/NCqmA7uieT8</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 질문</h2>
+      <article class="problem basic">
+        <h3>예시 — 영상의 출발 장면</h3>
+        <p class="problem-body"><strong>상황:</strong> 루트와 마이너스가 섞인 극한식을 보자마자 학생들이 <strong>반사적으로 유리화</strong>부터 시작한다. 강사는 이를 "파블로프의 개"라 부르며 멈추라고 한다.</p>
+        <details open>
+          <summary>📖 핵심 메시지</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 꼴부터:</strong> 유리화는 <strong>0/0 부정형</strong>일 때 "형태를 알 수 없어서" 하는 것. 먼저 분자·분모가 각각 어디로 가는지 본다.</p>
+            <p><strong>STEP 2 — 부호로 케이스 분류:</strong> 분모가 $|f(t)|-f(t)$ 로 갈 때, $f(t)$ 의 부호(음수/0/양수)에 따라 수렴·발산이 완전히 갈린다.</p>
+            <p><strong>STEP 3 — 방향성은 단서:</strong> 좌극한 $x\to t^-$ 이면 $x-t<0$. 이 부호가 절댓값을 풀거나 식을 루트 안에 넣을 때 결정적.</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> "유리화부터"가 아니라 <strong>꼴 파악 → 부호 케이스 분류 → 방향성 부호 처리</strong>. 이 순서가 상위권의 접근이다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (꼴 파악 · 케이스 분류 · 부호 처리)</h2>
+
+      <div class="concept-block">
+        <h3>① 큰 그림 — 유리화는 수단이지 반사행동이 아니다</h3>
+        <p>극한식에 루트가 보인다고 무조건 유리화하면, 정작 식이 어떤 상태인지 모른 채 계산만 굴리게 됩니다.</p>
+        <p>강사 메시지: <strong>"꼴 파악을 먼저 해야지 왜 유리화부터 때려박고 있냐"</strong>. 유리화는 <strong>0/0 처럼 형태를 알 수 없을 때</strong> 그 형태를 드러내려고 쓰는 도구입니다.</p>
+        <div class="insight">
+          극한 풀이의 첫 동작은 항상 <strong>"$x$ 를 대입해 분자·분모가 각각 어디로 가는지"</strong> 관찰하는 것. 0/0 이면 그제서야 변형(유리화·인수분해)을 고민한다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 선수 지식 1 — 극한의 꼴 분류</h3>
+        <div class="prereq">
+          <p>$x\to a$ 대입 결과로 분류:</p>
+          <p><strong>(수)/(0이 아닌 수)</strong> → 그 값으로 바로 수렴. 변형 불필요.</p>
+          <p><strong>(0이 아닌 수)/(0)</strong> → 발산(±∞). 부호만 판단.</p>
+          <p><strong>0/0</strong> → <strong>부정형</strong>. 형태를 모름 → 인수분해·유리화로 공통인수를 소거해 형태를 드러낸다.</p>
+        </div>
+        <p>유리화가 정당한 건 마지막 0/0 한 경우뿐. 앞의 두 경우엔 꼴만 보고 끝낼 수 있습니다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 선수 지식 2 — 좌극한과 부호</h3>
+        <div class="prereq">
+          <p>좌극한 $x\to t^-$: $x$ 가 $t$ <strong>보다 작은</strong> 쪽에서 다가감 → $x - t < 0$.</p>
+          <p>그래서 $|x-t| = -(x-t)$ (절댓값 안이 음수라 부호 반전).</p>
+          <p>루트도 마찬가지: $\sqrt{(x-t)^2} = |x-t| = -(x-t)$ (좌극한).</p>
+        </div>
+        <div class="insight">
+          음수인 식을 루트 안에 넣을 때 <strong>그냥 제곱하면 부호를 뭉갠다</strong>. $x-t<0$ 이면 $x-t = -\sqrt{(x-t)^2}$ — 마이너스를 밖으로 빼고 제곱해 넣어야 한다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 — 함수 부호에 따른 케이스 분류</h3>
+        <p>분모가 $|f(t)| - f(t)$ 꼴로 가는 극한을 생각하면, $f(t)$ 의 부호로 분모의 운명이 갈립니다.</p>
+        <div class="step-derive">
+          <p>$f(t) < 0$: $|f(t)| = -f(t)$ → 분모 $= -f(t)-f(t) = -2f(t) > 0$. 분자→0 이면 <strong>0/양수 = 0 으로 수렴</strong>.</p>
+          <p>$f(t) > 0$: $|f(t)| = f(t)$ → 분모 $= f(t)-f(t) = 0$. <strong>0/0 부정형</strong> → 유리화로 형태 확인.</p>
+          <p>$f(t) = 0$: 역시 분모 0 → 0/0 → 방향성(좌극한)으로 극한 존재 여부 재판단.</p>
+        </div>
+        <div class="callout">
+          <p>유리화 후 분자가 $|f(t)|+f(t)$ 로 가면: $f(t)>0$ 이면 분자 $=2f(t)>0$, 분모 0 → <strong>발산</strong>. $f(t)=0$ 이면 다시 0/0 → 방향성으로 수렴.</p>
+          <p>결론: <strong>$f(t)\le 0$ 일 때만 수렴</strong>. 수렴 범위가 $0\le t\le 1$ 로 주어졌다면, 그 구간에서 $f(t)\le 0$ 인 이차함수 → $f(x) = a\,x(x-1)$ ($a>0$).</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 함정 — 흔히 놓치는 3가지</h3>
+        <div class="callout">
+          <p>① <strong>반사적 유리화</strong>: 0/0 인지 확인 전에 유리화. 발산하는 식을 붙잡고 헛고생.</p>
+          <p>② <strong>경계값 무시</strong>: 수렴 범위가 $0\le t\le 1$ 처럼 <strong>닫힌 구간</strong>이면 경계 $f(t)=0$ 에서도 수렴해야 함 → 역으로 $f$ 추론의 근거.</p>
+          <p>③ <strong>음수를 그냥 제곱</strong>: 좌극한에서 $x-t<0$ 인데 루트 안에 그냥 제곱해 넣으면 부호 소멸. 반드시 $x-t = -\sqrt{(x-t)^2}$.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 0/0 꼴 판별 후 처리</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 1}\dfrac{x^2-1}{x-1}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 꼴 파악:</strong> $x=1$ 대입 → 분자 $0$, 분모 $0$ → <strong>0/0 부정형</strong>. 변형 필요.</p>
+            <p><strong>STEP 2 — 인수분해:</strong> $\dfrac{(x-1)(x+1)}{x-1} = x+1$ (공통인수 소거).</p>
+            <p><strong>STEP 3:</strong> $\lim_{x\to1}(x+1) = 2$.</p>
+            <p class="answer"><strong>정답:</strong> $2$</p>
+            <p class="key-point"><strong>핵심:</strong> 루트가 없으니 유리화 아니라 인수분해. "변형 도구는 꼴이 정한다."</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 좌극한의 부호</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 3^-}\dfrac{|x-3|}{x-3}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 방향성:</strong> $x\to 3^-$ → $x<3$ → $x-3<0$.</p>
+            <p><strong>STEP 2 — 절댓값 풀기:</strong> 안이 음수 → $|x-3| = -(x-3)$.</p>
+            <p><strong>STEP 3:</strong> $\dfrac{-(x-3)}{x-3} = -1$.</p>
+            <p class="answer"><strong>정답:</strong> $-1$</p>
+            <p class="key-point"><strong>검산:</strong> 우극한 $x\to3^+$ 이면 $+1$. 좌·우가 달라 $x\to3$ 양쪽 극한은 존재하지 않음. 방향성이 값을 가른다.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 유리화가 정당한 경우</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 0}\dfrac{\sqrt{x+4}-2}{x}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 꼴 파악:</strong> $x=0$ 대입 → 분자 $\sqrt4-2=0$, 분모 $0$ → <strong>0/0</strong>. 루트가 있으니 이번엔 유리화가 정당.</p>
+            <p><strong>STEP 2 — 분자 유리화:</strong> $\dfrac{(\sqrt{x+4}-2)(\sqrt{x+4}+2)}{x(\sqrt{x+4}+2)} = \dfrac{(x+4)-4}{x(\sqrt{x+4}+2)} = \dfrac{x}{x(\sqrt{x+4}+2)}$.</p>
+            <p><strong>STEP 3 — 소거:</strong> $\dfrac{1}{\sqrt{x+4}+2} \to \dfrac{1}{2+2} = \dfrac14$.</p>
+            <p class="answer"><strong>정답:</strong> $\dfrac14$</p>
+            <p class="key-point"><strong>핵심:</strong> 0/0 + 루트 → 유리화로 공통인수 $x$ 가 드러나 소거됨. 이게 유리화의 본래 목적.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 유리화하면 안 되는 경우 (꼴 파악의 승리)</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 1^+}\dfrac{\sqrt{x-1}}{x-1}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 꼴 파악:</strong> $x\to1^+$ → 분자 $\sqrt{x-1}\to 0^+$, 분모 $x-1\to 0^+$. 0/0 처럼 보이지만…</p>
+            <p><strong>STEP 2 — 형태 정리:</strong> $\dfrac{\sqrt{x-1}}{x-1} = \dfrac{\sqrt{x-1}}{(\sqrt{x-1})^2} = \dfrac{1}{\sqrt{x-1}}$.</p>
+            <p><strong>STEP 3:</strong> $x\to1^+$ → $\sqrt{x-1}\to0^+$ → $\dfrac{1}{0^+} = +\infty$. <strong>발산</strong>.</p>
+            <p class="answer"><strong>정답:</strong> 발산 ($+\infty$)</p>
+            <p class="key-point"><strong>오답주의:</strong> 여기서 분모·분자에 유리화를 들이대면 시간만 버린다. $\sqrt{\ }=(\ )^{1/2}$ 임을 알면 곧장 $1/\sqrt{x-1}$ 로 정리돼 발산이 보인다. <strong>꼴 파악이 유리화를 이긴 사례.</strong></p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 루트 분모와 좌·우극한</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 0^-}\dfrac{x}{\sqrt{x^2}}$ 의 값을 구하고, $x\to0^+$ 일 때와 비교하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 루트 정리:</strong> $\sqrt{x^2} = |x|$ (항상 $\ge 0$).</p>
+            <p><strong>STEP 2 — 좌극한 부호:</strong> $x\to0^-$ → $x<0$ → $|x| = -x$. 따라서 $\dfrac{x}{|x|} = \dfrac{x}{-x} = -1$.</p>
+            <p><strong>STEP 3 — 우극한 비교:</strong> $x\to0^+$ → $|x|=x$ → $\dfrac{x}{x} = +1$.</p>
+            <p class="answer"><strong>정답:</strong> 좌극한 $=-1$, 우극한 $=+1$ (서로 달라 $x\to0$ 극한은 없음)</p>
+            <p class="key-point"><strong>핵심:</strong> 분모 $\sqrt{x^2}$ 는 항상 양수. 분자 $x$ 의 부호가 방향에 따라 갈리며 극한값이 결정. 영상의 "분모는 루트라 양수, 분자 부호가 결정" 구조와 동일.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 음수를 루트 안에 넣기</h3>
+        <p class="problem-body"><strong>문제:</strong> $x < t$ 일 때 $x - t$ 를 루트를 사용한 꼴로 바르게 변형하고, 이를 이용해 $\displaystyle\lim_{x\to t^-}\dfrac{x-t}{\sqrt{(x-t)^2+(x-t)^4}}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 음수의 루트 변형:</strong> $x<t$ → $x-t<0$. 그냥 제곱하면 부호 소멸이므로 $x-t = -\sqrt{(x-t)^2}$ (마이너스를 밖으로).</p>
+            <p><strong>STEP 2 — 분모 정리:</strong> $\sqrt{(x-t)^2+(x-t)^4} = \sqrt{(x-t)^2\{1+(x-t)^2\}} = |x-t|\sqrt{1+(x-t)^2}$.</p>
+            <p><strong>STEP 3 — 좌극한 부호:</strong> $|x-t| = -(x-t)$ (좌극한). 식 $= \dfrac{x-t}{-(x-t)\sqrt{1+(x-t)^2}} = \dfrac{-1}{\sqrt{1+(x-t)^2}}$.</p>
+            <p><strong>STEP 4 — 극한:</strong> $x\to t^-$ → $(x-t)^2\to0$ → $\dfrac{-1}{\sqrt{1+0}} = -1$.</p>
+            <p class="answer"><strong>정답:</strong> $-1$</p>
+            <p class="key-point"><strong>오답주의:</strong> STEP 1 에서 $x-t = +\sqrt{(x-t)^2}$ 로 쓰면(부호 무시) 답이 $+1$ 로 뒤집힌다. 강사가 "음수를 그냥 제곱하면 부호를 뭉갠다"고 경고한 바로 그 지점.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 영상의 핵심 문제 (준킬러, 역추론)</h3>
+        <p class="problem-body"><strong>문제:</strong> 이차함수 $f(x)$ 에 대해 좌극한으로 정의된 함수 $g(t)$ 가 있다. $g(t)$ 가 수렴하는 $t$ 의 범위가 $0\le t\le 1$ 이고, 그 극한값의 최솟값이 $-2$ 이다. 이때 $f(x)$ 의 최고차항 계수 $a$ 를 구하는 과정을 따라가시오. (단, 경계에서 극한값은 $h(t) = -\sqrt{f'(t)^2+1} + f'(t)$.)</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 꼴 & 케이스 (개념 ④):</strong> 분모 $|f(t)|-f(t)$ 가 $f(t)\le0$ 일 때만 수렴. 수렴 범위가 닫힌 구간 $[0,1]$ 이므로 그 구간에서 $f(t)\le0$, 경계 $f(0)=f(1)=0$.</p>
+            <p><strong>STEP 2 — 함수 확정:</strong> $0,1$ 에서 $0$ 이고 그 사이 $\le0$, $a>0$ → $f(x) = a\,x(x-1)$.</p>
+            <p><strong>STEP 3 — 도함수:</strong> $f'(x) = a(2x-1)$ → $f'(0) = -a$, $f'(1) = a$.</p>
+            <p><strong>STEP 4 — 최솟값 위치:</strong> $h(t) = -\sqrt{f'(t)^2+1}+f'(t)$ 는 $u=f'(t)$ 에 대해 증가함수 ($h'(u)=1-\tfrac{u}{\sqrt{u^2+1}}>0$). $u=f'(t)$ 는 $t$ 증가 시 증가하므로 $h$ 는 $t=0$ 에서 최소.</p>
+            <p><strong>STEP 5 — 방정식:</strong> $h(0) = -\sqrt{(-a)^2+1}+(-a) = -\sqrt{a^2+1}-a = -2$.</p>
+            <p>$\sqrt{a^2+1} = 2-a$ → 양변 제곱 $a^2+1 = 4-4a+a^2$ → $1 = 4-4a$ → $a = \dfrac34$.</p>
+            <p class="answer"><strong>정답:</strong> $a = \dfrac34$ (영상의 최종 답은 추가 정리를 거쳐 $\mathbf{21}$).</p>
+            <p class="key-point"><strong>핵심:</strong> 꼴 파악(0/0) → 부호 케이스($f\le0$) → 닫힌 구간 경계 조건 → 좌극한 부호로 극한값 식 완성 → 최솟값. 영상의 5단계 사고가 그대로.</p>
+            <p class="key-point"><strong>검산:</strong> $a=\tfrac34$ → $\sqrt{a^2+1}=\sqrt{9/16+1}=\sqrt{25/16}=5/4$, $2-a=5/4$ ✓.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 변형 (다른 최솟값)</h3>
+        <p class="problem-body"><strong>문제:</strong> 수능 대비 1 과 같은 구조에서, 극한값의 최솟값이 $-\dfrac{5}{2}$ 라면 최고차항 계수 $a$ 는?</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 같은 식:</strong> $h(0) = -\sqrt{a^2+1}-a = -\dfrac52$ → $\sqrt{a^2+1} = \dfrac52 - a$.</p>
+            <p><strong>STEP 2 — 제곱:</strong> $a^2+1 = \dfrac{25}{4} - 5a + a^2$ → $1 = \dfrac{25}{4} - 5a$ → $5a = \dfrac{21}{4}$ → $a = \dfrac{21}{20}$.</p>
+            <p><strong>STEP 3 — 유효성 검토:</strong> $\sqrt{a^2+1} = \tfrac52 - a$ 가 성립하려면 우변 $>0$ 필요 → $a < \tfrac52$. $a=\tfrac{21}{20}=1.05 < 2.5$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> $a = \dfrac{21}{20}$</p>
+            <p class="key-point"><strong>오답주의:</strong> 제곱 후엔 반드시 $2-a>0$ (또는 $\tfrac52-a>0$) 같은 <strong>무연근 검토</strong>를 해야 한다. 좌변 루트는 음수가 될 수 없으므로 우변도 양수여야 정당.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 적용 결과</h3>
+    <p>본 자료는 영상에서 강사가 압축한 부분을 중수준(하위 40%) 학습자도 따라갈 수 있도록 풀어 작성:</p>
+    <ul>
+      <li><strong>"꼴 파악 먼저"</strong> → 극한의 세 가지 꼴(수/0, 0/0, 발산)을 표로 분류 (개념 ②).</li>
+      <li><strong>케이스 분류</strong> → $f(t)$ 의 부호별 분모 운명을 단계별로 (개념 ④).</li>
+      <li><strong>좌극한 부호</strong> → $x-t<0$ 의 절댓값·루트 처리를 prereq 박스로 명시 (개념 ③).</li>
+      <li><strong>음수를 루트에 넣기</strong> → $x-t=-\sqrt{(x-t)^2}$ 를 심화 2 에서 직접 적용, 부호 무시 시 답이 뒤집힘을 대조.</li>
+      <li><strong>유리화 vs 꼴 파악</strong> → 기본 1(유리화가 옳음) vs 기본 2(유리화가 헛수고)를 나란히 배치.</li>
+      <li><strong>역추론 흐름</strong> → 수능 대비 1 에서 닫힌 구간 경계 조건 → $f(x)=ax(x-1)$ → 최솟값 $a=\tfrac34$ 까지 전 단계 검산.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>수능 대비 1</strong> — 영상 원문제의 정확한 식 전체는 영상 화면 기준이라, 본 자료는 핵심 단계($f$ 확정·최솟값 방정식)에 집중했습니다. 최종 답 "21"은 영상의 추가 정리 결과로 인용. (확신도 ★★ — $a=3/4$ 유도는 ★★★ 검산 완료)</li>
+      <li>"수능 대비"는 출제 패턴 · 난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="../수학Ⅰ-삼각함수의방정식/20260617_삼각함수방부등식함수통일과각변환_EIGRJsSk.html">삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단) (EIGRJsSk)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-06-25 | 영상 출처: <a href="https://youtu.be/NCqmA7uieT8">https://youtu.be/NCqmA7uieT8</a> (권현석, 게시 2026-06-25)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
