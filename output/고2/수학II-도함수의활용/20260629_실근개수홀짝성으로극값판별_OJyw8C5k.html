@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기 | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-도함수의 활용]</div><h1>실근의 개수 × 차수 홀짝성 → <strong>극값 판별</strong></h1><p class="sub">🎯 $f(x)=k$ 의 실근 개수와 함수 개형(홀수차/짝수차)만 알면 — 홀수차인데 짝수 개, 짝수차인데 홀수 개면 그 $k$ 는 <strong>극값</strong>. 다른 곳 조사 없이 극점만 보면 끝. 구간별 함수도 무한대 극한 방향으로 홀짝 판정.</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/shorts/OJyw8C5kZAs" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/OJyw8C5kZAs/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 이럴 땐 극점만 조사해 (Shorts)</div><div class="v-meta">📺 정병훈T 요리조리 수학, 1분 9초 · 2026-06-29</div><a class="v-link" href="https://youtube.com/shorts/OJyw8C5kZAs" target="_blank" rel="noopener">https://youtube.com/shorts/OJyw8C5kZAs</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 명제</h2>
+      <article class="problem basic">
+        <h3>예시 — 외울 가치가 있는 명제</h3>
+        <p class="problem-body"><strong>명제:</strong> 다항함수 $f(x)$ 와 상수 $k$ 에 대하여 방정식 $f(x)=k$ 의 실근(서로 다른 실근)의 개수를 볼 때,</p>
+        <p>• <strong>홀수차</strong> 함수인데 실근이 <strong>짝수 개</strong> → 그 $k$ 는 극값<br>
+           • <strong>짝수차</strong> 함수인데 실근이 <strong>홀수 개</strong> → 그 $k$ 는 극값</p>
+        <details open>
+          <summary>📖 왜 그런가 (한눈에)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 기본 패리티:</strong> $f(x)-k$ 도 같은 차수. 모든 근이 단순근(접하지 않음)이면 서로 다른 실근의 개수는 <strong>차수와 같은 홀짝성</strong>을 가진다. (홀수차→홀수 개, 짝수차→짝수 개)</p>
+            <p><strong>STEP 2 — 패리티가 깨지는 순간:</strong> 직선 $y=k$ 가 그래프에 <strong>접하면</strong> 그 접점이 중근(짝수 중복도) → 서로 다른 실근 개수가 1 줄어 홀짝이 뒤집힌다.</p>
+            <p><strong>STEP 3 — 접점 = 극점:</strong> 다항함수가 수평선과 접하는 곳은 곧 극대·극소(극점). 그래서 홀짝성이 "기본과 반대"면 $k$ 가 극값.</p>
+            <p class="key-point"><strong>핵심:</strong> 실근 개수의 홀짝성이 차수와 어긋나면 → 어딘가서 수평선이 접함 → 그 $k$ 는 극값. <strong>극점만 조사</strong>하면 된다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (개형 · 실근 패리티 · 구간 함수 확장)</h2>
+
+      <div class="concept-block">
+        <h3>① 큰 그림 — 교점 개수로 극값을 "역으로" 안다</h3>
+        <p>보통은 미분 → $f'(x)=0$ → 극값 계산 순서로 갑니다. 이 명제는 반대로, <strong>교점 개수만 보고 "이 $k$ 가 극값이다"를 즉시 단정</strong>합니다.</p>
+        <div class="insight">
+          $y=k$ 와 그래프의 교점(=$f(x)=k$ 의 실근) 개수가 차수의 홀짝성과 어긋나면, 다른 점은 볼 것 없이 <strong>극점만 조사</strong>하면 됩니다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 선수 지식 1 — 차수와 무한대 극한 방향</h3>
+        <div class="prereq">
+          <p><strong>홀수차</strong> (최고차항 양수): $x\to-\infty$ 면 $-\infty$, $x\to+\infty$ 면 $+\infty$ → 양 끝이 <strong>반대 방향</strong>.</p>
+          <p><strong>짝수차</strong> (최고차항 양수): 양 끝 모두 $+\infty$ → <strong>같은 방향</strong>.</p>
+          <p>최고차항이 음수면 위 방향이 전부 뒤집힘.</p>
+        </div>
+        <p>핵심: 차수 숫자 자체보다 <strong>양 끝 극한이 같은 방향인지 반대 방향인지</strong>가 개형의 홀짝성을 결정합니다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 선수 지식 2 — 실근 개수의 기본 패리티</h3>
+        <div class="prereq">
+          <p>$n$ 차 다항방정식은 (중복도 포함) 복소근이 정확히 $n$ 개. 허근은 켤레쌍으로 <strong>짝수 개</strong>.</p>
+          <p>→ <strong>실근(중복도 포함)의 개수는 차수와 같은 홀짝성</strong>. 홀수차면 실근 최소 1개 보장.</p>
+        </div>
+        <p>여기서 "접하는 중근"이 생기면 서로 다른 실근의 개수(눈에 보이는 교점 수)가 줄며 홀짝이 뒤집힙니다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 — 명제 적용 흐름</h3>
+        <div class="step-derive">
+          <p>① 양 끝 무한대 극한으로 개형이 <strong>홀수차형/짝수차형</strong> 판정.</p>
+          <p>② $f(x)=k$ 의 서로 다른 실근(교점) 개수 세기.</p>
+          <p>③ 홀수차형↔짝수 개 / 짝수차형↔홀수 개 면 → <strong>$k$ 는 극값 확정</strong>.</p>
+          <p>④ 극점만 조사 (다른 교점 계산 생략).</p>
+        </div>
+        <div class="callout">
+          <p><strong>예:</strong> 4차(짝수차) 함수에서 $f(x)=k$ 실근이 <strong>3개(홀수)</strong> → $k$ 는 극값. / 3차(홀수차)에서 실근 <strong>2개(짝수)</strong> → $k$ 는 극값.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 확장 — 구간별로 잘린 함수도 똑같이</h3>
+        <p>평가원 기출에 자주 나오는 개형: 왼쪽은 2차, 오른쪽은 3차처럼 <strong>구간별로 다른 차수</strong>로 정의된 함수.</p>
+        <div class="insight">
+          차수가 섞여도 당황 ❌. <strong>양 끝 무한대 극한 방향만</strong> 본다. $x\to-\infty$ 에서 $-\infty$, $x\to+\infty$ 에서 $+\infty$ (반대 방향)이면 — 마치 <strong>홀수차 함수처럼</strong> 명제를 그대로 적용. 교점이 짝수 개면 극값, 극점만 조사.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 함정 — 흔히 놓치는 3가지</h3>
+        <div class="callout">
+          <p>① <strong>"서로 다른" 실근</strong>으로 세야 함. 중근을 2개로 세면 패리티 판단이 틀어짐.</p>
+          <p>② <strong>최고차항 부호</strong>: 음수면 극한 방향이 뒤집힘. 양 끝 방향으로 홀짝형 판정.</p>
+          <p>③ <strong>접한다 ≠ 무조건 극점이라 단정하기 전에</strong>, 다항함수에서 수평선과 접점은 극점임을 근거로 — 변곡점에서의 수평접선(예 $y=x^3$ 의 원점)은 교점 패리티를 바꾸지 않으므로 명제와 모순되지 않음.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 개형의 홀짝 판정</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^3 - 3x$ 에서 $x\to-\infty$, $x\to+\infty$ 의 극한 방향을 쓰고, 홀수차형인지 짝수차형인지 판정하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 최고차항 $x^3$ (양수 계수). $x\to-\infty$ → $-\infty$, $x\to+\infty$ → $+\infty$.</p>
+            <p><strong>STEP 2:</strong> 양 끝이 <strong>반대 방향</strong> → <strong>홀수차형</strong>.</p>
+            <p class="answer"><strong>정답:</strong> $x\to-\infty$ 면 $-\infty$, $x\to+\infty$ 면 $+\infty$. 홀수차형.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 극값 직접 계산</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^3 - 3x$ 의 극댓값과 극솟값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 미분:</strong> $f'(x) = 3x^2 - 3 = 3(x-1)(x+1)$ → $x=\pm1$.</p>
+            <p><strong>STEP 2 — 부호:</strong> $x=-1$ 좌우 $+\to-$ → 극대, $x=1$ 좌우 $-\to+$ → 극소.</p>
+            <p><strong>STEP 3 — 값:</strong> $f(-1) = -1+3 = 2$, $f(1) = 1-3 = -2$.</p>
+            <p class="answer"><strong>정답:</strong> 극댓값 $2$ ($x=-1$), 극솟값 $-2$ ($x=1$)</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 명제 적용 (홀수차 + 짝수 개)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^3 - 3x$ 에 대해 $f(x) = 2$ 의 서로 다른 실근 개수를 구하고, 명제로 $k=2$ 가 극값인지 판정하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 방정식:</strong> $x^3 - 3x - 2 = 0$. 인수분해: $x=-1$ 대입 $-1+3-2=0$ → 근. $(x+1)$ 로 나누면 $x^3-3x-2=(x+1)(x^2-x-2)=(x+1)(x-2)(x+1)=(x+1)^2(x-2)$.</p>
+            <p><strong>STEP 2 — 실근:</strong> $x=-1$ (중근), $x=2$ → <strong>서로 다른 실근 2개</strong>.</p>
+            <p><strong>STEP 3 — 명제:</strong> 홀수차형(기초 1)인데 실근 짝수(2개) → $k=2$ 는 극값.</p>
+            <p class="answer"><strong>정답:</strong> 실근 2개, $k=2$ 는 극값 (= 극댓값, 기초 2와 일치 ✓)</p>
+            <p class="key-point"><strong>검산:</strong> $x=-1$ 이 중근 → 그 점에서 $y=2$ 가 그래프에 접함 → 극점. 명제·직접계산 일치.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 명제 적용 (짝수차 + 홀수 개)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^4 - 2x^2$ 에 대해 $f(x) = 0$ 의 서로 다른 실근 개수를 구하고, $k=0$ 이 극값인지 명제로 판정하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 개형:</strong> 최고차 $x^4$ → 양 끝 모두 $+\infty$ (같은 방향) → <strong>짝수차형</strong>.</p>
+            <p><strong>STEP 2 — 방정식:</strong> $x^4 - 2x^2 = x^2(x^2-2) = 0$ → $x=0$ (중근), $x=\pm\sqrt2$ → <strong>서로 다른 실근 3개</strong>.</p>
+            <p><strong>STEP 3 — 명제:</strong> 짝수차형인데 실근 홀수(3개) → $k=0$ 는 극값.</p>
+            <p><strong>검산:</strong> $f'(x)=4x^3-4x=4x(x-1)(x+1)$ → $x=0,\pm1$. $f(0)=0$ (극대). 일치 ✓.</p>
+            <p class="answer"><strong>정답:</strong> 실근 3개, $k=0$ 는 극값 (극댓값 $0$)</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 실근 개수가 바뀌는 $k$ 범위</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^3 - 3x$ 에서 방정식 $f(x)=k$ 의 서로 다른 실근 개수가 $k$ 값에 따라 어떻게 변하는지 구하고, 실근 개수가 짝수가 되는 $k$ 를 모두 찾으시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 극값:</strong> 극대 $2$ ($x=-1$), 극소 $-2$ ($x=1$).</p>
+            <p><strong>STEP 2 — $k$ 별 실근:</strong></p>
+            <p>$k>2$ 또는 $k<-2$ → 1개 (홀수).<br>
+               $k=2$ 또는 $k=-2$ → 2개 (짝수, <strong>접점=극점</strong>).<br>
+               $-2<k<2$ → 3개 (홀수).</p>
+            <p><strong>STEP 3 — 짝수가 되는 $k$:</strong> $k=2$, $k=-2$ — 정확히 극댓값·극솟값.</p>
+            <p class="answer"><strong>정답:</strong> 실근이 짝수(2개)가 되는 $k$ 는 $k=2,\,-2$ → 둘 다 극값.</p>
+            <p class="key-point"><strong>핵심:</strong> 홀수차에서 실근이 짝수 개가 되는 순간은 오직 $k$ 가 극값일 때뿐. 명제가 정확히 이 경계를 짚는다.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 4차 함수, 실근 홀수 개인 $k$</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^4 - 2x^2$ (극댓값 $0$ at $x=0$, 극솟값 $-1$ at $x=\pm1$) 에서 $f(x)=k$ 의 실근이 홀수 개가 되는 $k$ 를 모두 구하고 극값과의 관계를 설명하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — $k$ 별 실근 (W자 개형):</strong></p>
+            <p>$k<-1$ → 0개 (짝수).<br>
+               $k=-1$ → 2개 (양쪽 극소 접점, 짝수).<br>
+               $-1<k<0$ → 4개 (짝수).<br>
+               $k=0$ → 3개 (가운데 극대 접점 + 양쪽, <strong>홀수</strong>).<br>
+               $k>0$ → 2개 (짝수).</p>
+            <p><strong>STEP 2 — 홀수 개:</strong> $k=0$ 뿐 → 극댓값.</p>
+            <p class="answer"><strong>정답:</strong> $k=0$ (극댓값). 짝수차에서 실근 홀수 개 → 극값, 명제 일치.</p>
+            <p class="key-point"><strong>오답주의:</strong> $k=-1$ 은 실근 2개(짝수)라 명제로는 "극값 판정 대상이 아님"처럼 보이지만, 실제로 극솟값이다. 명제는 <strong>"홀짝 어긋남 → 극값"의 충분조건</strong>일 뿐, 모든 극값을 잡아내는 필요충분이 아님에 주의. (대칭축 양쪽 극소가 동시에 접해 2개로 보임)</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 구간별 정의 함수 (2차 + 3차)</h3>
+        <p class="problem-body"><strong>문제:</strong> 함수 $f(x)$ 가 $x\to-\infty$ 에서 $-\infty$, $x\to+\infty$ 에서 $+\infty$ 로 발산하는 연속함수이고(왼쪽은 2차, 오른쪽은 3차 꼴로 이어 붙인 개형), $f(x)=k$ 의 서로 다른 실근이 $4$ 개라 한다. $k$ 가 극값인지 판정하고 풀이 전략을 쓰시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 개형 판정:</strong> 차수가 섞였지만 양 끝 극한이 반대 방향($-\infty,+\infty$) → <strong>홀수차형으로 취급</strong>.</p>
+            <p><strong>STEP 2 — 명제:</strong> 홀수차형인데 실근 $4$ 개(짝수) → $k$ 는 <strong>극값</strong>.</p>
+            <p><strong>STEP 3 — 전략:</strong> 다른 교점들 식 계산 없이 <strong>극점(극대·극소)만 조사</strong>해서 $k$ 와 같은 극값을 찾으면 끝.</p>
+            <p class="answer"><strong>정답:</strong> $k$ 는 극값. 극점만 조사하면 됨.</p>
+            <p class="key-point"><strong>핵심:</strong> 강사 메시지 — "차수가 중요한 게 아니라 무한대 극한 방향이 중요". 양 끝 반대 방향이면 홀수차 함수처럼 명제 적용.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 최고차항 음수 + 실근 개수</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼차함수 $g(x) = -2x^3 + 6x - 17$ 에서 방정식 $g(x)=k$ 의 실근이 짝수 개가 되는 $k$ 를 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 개형:</strong> 최고차 $-2x^3$ (음수) → $x\to-\infty$ 면 $+\infty$, $x\to+\infty$ 면 $-\infty$. 양 끝 반대 방향 → <strong>홀수차형</strong>.</p>
+            <p><strong>STEP 2 — 극값:</strong> $g'(x) = -6x^2 + 6 = -6(x-1)(x+1)$ → $x=\pm1$. $g(1) = -2+6-17 = -13$ (극대), $g(-1) = 2-6-17 = -21$ (극소).</p>
+            <p><strong>STEP 3 — 명제:</strong> 홀수차형에서 실근이 짝수(2개)가 되는 $k$ 는 극값일 때뿐 → $k=-13,\,-21$.</p>
+            <p class="answer"><strong>정답:</strong> $k = -13$ 또는 $k = -21$</p>
+            <p class="key-point"><strong>검산:</strong> $-21<k<-13$ 이면 실근 3개, 그 밖이면 1개, 경계 $k=-13,-21$ 에서 2개(접점=극점). 명제 일치 ✓.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 적용 결과</h3>
+    <p>본 자료는 영상(쇼츠)에서 압축된 명제를 중수준(하위 40%) 학습자도 따라갈 수 있도록 풀어 작성:</p>
+    <ul>
+      <li><strong>명제의 "왜"</strong> → 복소근 패리티 + 접점=중근=극점 으로 단계별 유도 (도입·개념 ③).</li>
+      <li><strong>개형 홀짝 판정</strong> → 차수 숫자가 아니라 양 끝 무한대 극한 방향으로 (개념 ②, 기초 1).</li>
+      <li><strong>명제 ↔ 직접 미분 일치</strong> → 기본 1·2 에서 같은 함수로 양쪽 풀이 비교 검산.</li>
+      <li><strong>$k$ 범위별 실근 변화</strong> → 심화 1·2 에서 극값이 실근 개수의 경계임을 표로.</li>
+      <li><strong>구간별 함수 확장</strong> → 수능 대비 1 에서 무한대 극한 방향만으로 홀수차형 취급.</li>
+      <li><strong>최고차항 음수 처리</strong> → 수능 대비 2 에서 극한 방향 뒤집힘 + 극값 직접 계산.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>심화 2 오답주의</strong> — 명제는 "홀짝 어긋남 → 극값"의 <strong>충분조건</strong>이지, 모든 극값을 검출하는 필요충분이 아님. 대칭으로 양쪽 극값이 동시에 접하면 패리티가 유지될 수 있음. (확신도 ★★★)</li>
+      <li>"수능 대비"는 출제 패턴 · 난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html">교점 개수 함수와 3차함수 높이차 2대1 공식 (ONHx5OaS)</a> · <a href="20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a> · <a href="20260520_차함수특강관계내리기와보정_WhojOfqC.html">차함수 특강 (WhojOfqC)</a> · <a href="../../고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 (00ByGXdH)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-06-29 | 영상 출처: <a href="https://youtube.com/shorts/OJyw8C5kZAs">https://youtube.com/shorts/OJyw8C5kZAs</a> (정병훈T 요리조리 수학, 게시 2026-06-29)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
