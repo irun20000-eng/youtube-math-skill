@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) | 학습자료</title>
+  <title>도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) | 학습자료</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
@@ -108,128 +108,122 @@
   </div>
 
   <div class="hero">
-    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — Ⅰ. 함수의 극한과 연속 › 1. 함수의 극한</div>
-    <h1>함수의 극한 — 계산 꿀팁 · 오개념 정리</h1>
-    <p class="sub">교과서의 뻔한 정의는 걷어내고 <strong>이해 꿀팁 · 계산 효율 · 자주 틀리는 오개념</strong>에 집중한 <strong>중단원 팁 노트</strong>. 각 팁마다 <strong>계산 예시</strong>로 바로 확인.</p>
+    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — Ⅱ. 미분 › 2. 도함수의 활용</div>
+    <h1>도함수의 활용 — 계산 꿀팁 · 오개념 정리</h1>
+    <p class="sub">도함수 부호로 <strong>증감·극값·그래프</strong>를 읽고, 최대최소·실근 개수·속도까지. 각 팁마다 <strong>계산 예시</strong>, 오개념은 <strong>❌vs✅</strong>.</p>
     <div class="src-badge">📘 개념노트 · 팁 중심 (영상 없음 · 단원 큐레이션)</div>
-    <p class="learn">🎯 <strong>대상</strong>: 미적분Ⅰ(구 수학Ⅱ) 첫 단원 · 중하위권도 따라오는 호흡. <strong>범위</strong>: 다항·유리·무리함수의 극한(삼각·지수로그 극한은 선택 미적분이라 제외).</p>
+    <p class="learn">🎯 <strong>대상</strong>: 미적분Ⅰ(구 수학Ⅱ) · 중하위권도 따라오는 호흡. <strong>범위</strong>: 다항함수의 증감·극값·최대최소·방정식과 부등식·속도와 가속도.</p>
   </div>
 
   <div class="container">
 
     <div class="section-title">🧭 이 노트의 사용법</div>
     <div class="card">
-      <p><strong>💡 이해 꿀팁</strong>(직관) · <strong>⚡ 계산 효율</strong>(시간 단축) · <strong>⚠️ 오개념</strong>(자주 틀림) 세 축. 각 카드 <span style="color:var(--standard);font-weight:700;">예:</span> 박스에서 <strong>직접 계산</strong>, 오개념은 <strong>❌틀린 계산 vs ✅맞는 계산</strong> 비교. 맨 아래 <strong>확인 문항 6개</strong>로 종합 점검.</p>
+      <p><strong>💡 이해 꿀팁</strong> · <strong>⚡ 계산 효율</strong> · <strong>⚠️ 오개념</strong> 세 축. 각 카드 <span style="color:var(--standard);font-weight:700;">예:</span> 박스에서 직접 계산, 오개념은 <strong>❌vs✅</strong>. 맨 아래 <strong>확인 문항 6개</strong>.</p>
     </div>
 
     <div class="section-title">💡 이해 꿀팁 — 개념을 직관으로</div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 1 — 극한은 "목적지", 함숫값은 "실제 그 점"</div>
-      <div class="problem-body">$\displaystyle\lim_{x\to a}f(x)$ 는 $x$ 가 $a$ 로 <strong>다가갈 때</strong> 향하는 값, $f(a)$ 는 <strong>정확히 그 점</strong>. 둘은 <strong>다를 수 있다</strong>.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $f(x)=\dfrac{x^2-1}{x-1}$ 에서 $\displaystyle\lim_{x\to1}f(x)=2$ 이지만 $f(1)$ 은 정의되지 않음.</div>
+      <div class="problem-num">꿀팁 1 — 도함수의 부호 = 증가/감소</div>
+      <div class="problem-body">$f'(x)>0$ 인 구간에서 <strong>증가</strong>, $f'(x)<0$ 이면 <strong>감소</strong>. 도함수는 "오르막/내리막" 판별기.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f=x^2-4x$ → $f'=2x-4$. $x<2$ 면 $f'<0$(감소), $x>2$ 면 $f'>0$(증가).</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 2 — $\dfrac00$ 은 "아직 미정" 신호</div>
-      <div class="problem-body">$0$ 도 $\infty$ 도 아니다. <strong>숨은 공통인수 $(x-a)$</strong> 가 있다는 뜻 → 약분·유리화로 제거.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to3}\dfrac{x^2-9}{x-3}=\lim_{x\to3}(x+3)=6$.</div>
+      <div class="problem-num">꿀팁 2 — 극값 = 증감이 바뀌는 곳</div>
+      <div class="problem-body">$f'(a)=0$ <strong>이고 그 좌우로 부호가 바뀌면</strong> 극값. $+\to-$ 면 극대, $-\to+$ 면 극소.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f=x^3-3x$ → $f'=3(x-1)(x+1)$. $x=-1$ 서 $+\to-$(극대 $2$), $x=1$ 서 $-\to+$(극소 $-2$).</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 3 — $\infty$ 계산은 "누가 더 센가" 싸움</div>
-      <div class="problem-body">다항식은 <strong>최고차항이 지배</strong>. 낮은 차수는 잔챙이.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to\infty}\dfrac{2x^2+1}{5x^2-x}=\dfrac25$ (최고차 $2x^2$ vs $5x^2$).</div>
+      <div class="problem-num">꿀팁 3 — 증감표가 그래프의 설계도</div>
+      <div class="problem-body">$f'=0$ 인 점으로 구간을 나눠 <strong>부호표</strong>를 만들면, 오르내림·극값·개형이 한눈에.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f'$ 부호 $+,-,+$ 로 바뀌면 그래프는 올라갔다 내려갔다 다시 오르는 $\mathrm{N}$자형(삼차) 개형.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 4 — 극한의 성질은 "각자 수렴할 때만" 쪼갠다</div>
-      <div class="problem-body">$\lim(f\pm g)=\lim f\pm\lim g$, $\lim(fg)=\lim f\cdot\lim g$ 는 <strong>$f,g$ 각각 수렴</strong>할 때만. 발산이 섞이면 통째로 봐야 한다.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to\infty}\Big(\dfrac{x^2}{x+1}-x\Big)$ 는 각각 $\infty$ 라 못 쪼갬 → 통분 $\dfrac{-x}{x+1}\to-1$.</div>
+      <div class="problem-num">꿀팁 4 — $f'(a)=0$ 이라고 다 극값은 아니다</div>
+      <div class="problem-body">부호가 <strong>안 바뀌면</strong> 극값이 아니다. 접선만 수평이고 계속 증가할 수도.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f=x^3$ → $f'=3x^2\ge0$. $f'(0)=0$ 이지만 좌우 모두 증가 → $x=0$ 은 극값 <strong>아님</strong>.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 5 — 좌극한·우극한은 "다가오는 방향"</div>
-      <div class="problem-body">$x\to a^-$ 는 왼쪽(작은 값)에서, $x\to a^+$ 는 오른쪽(큰 값)에서. 절댓값·가우스·조각함수는 방향이 결과를 가른다.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to1^-}[x]=0$, $\displaystyle\lim_{x\to1^+}[x]=1$ ($[x]$ 는 가우스). 좌우 달라 $x\to1$ 극한 없음.</div>
+      <div class="problem-num">꿀팁 5 — 위치를 미분하면 속도, 속도를 미분하면 가속도</div>
+      <div class="problem-body">$x(t)$ 위치 → $v(t)=x'(t)$ 속도 → $a(t)=v'(t)$ 가속도. 미분계수의 "변화율" 의미가 물리로.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $x(t)=t^2-4t$ → $v=2t-4$. $t=2$ 서 $v=0$ (순간 정지·방향 전환).</div>
     </div>
 
     <div class="section-title">⚡ 계산 효율 — 시험장 시간 단축</div>
 
     <div class="card">
-      <div class="problem-num">효율 1 — $\dfrac\infty\infty$ 유리식 3초 판정</div>
-      <div class="problem-body">차수 <strong>같음</strong>→계수비 / 분자<분모→$0$ / 분자>분모→$\pm\infty$.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $\dfrac{2x+3}{x^2+1}\to0$ · $\dfrac{x^2}{2x+1}\to\infty$ · $\dfrac{3x^2}{2x^2}\to\dfrac32$.</div>
+      <div class="problem-num">효율 1 — 극값: $f'=0$ 풀고 부호표</div>
+      <div class="problem-body">$f'(x)=0$ 의 해로 구간 나눔 → 각 구간 $f'$ 부호 → 극대·극소.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f=x^3-3x$ → $f'=3(x-1)(x+1)=0$ → $x=\pm1$ → 극대 $f(-1)=2$, 극소 $f(1)=-2$.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">효율 2 — $\dfrac00$ 다항은 인수정리로 즉시</div>
-      <div class="problem-body">$x=a$ 대입 $0$ 이면 $(x-a)$ 가 인수. 조립제법으로 바로 약분 (전개 금지).</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to2}\dfrac{x^3-8}{x-2}=\lim_{x\to2}(x^2+2x+4)=12$.</div>
+      <div class="problem-num">효율 2 — 최대·최소는 "극값 + 양 끝값" 비교</div>
+      <div class="problem-body">닫힌구간 $[a,b]$ 에서 최대최소는 <strong>극값 후보와 양 끝 $f(a),f(b)$</strong> 를 모두 비교.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f=x^3-3x$, $[0,3]$: $f(1)=-2$(극소), $f(0)=0$, $f(3)=18$ → 최대 $18$, 최소 $-2$.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">효율 3 — 미정계수 황금률 ★</div>
-      <div class="problem-body">$\displaystyle\lim_{x\to a}\dfrac{(분자)}{(분모)}=(유한값)$ 인데 <strong>분모 $\to0$</strong> ⟹ <strong>분자도 $\to0$</strong>. (분자가 $\to$0이 아니면 극한이 $\pm\infty$가 되어 유한값 모순.)</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to2}\dfrac{x^2+ax-6}{x-2}$ 가 존재 → $4+2a-6=0$ → $a=1$, 극한값 $\lim(x+3)=5$.</div>
+      <div class="problem-num">효율 3 — 실근 개수는 "$y=k$ 수평선과 교점"</div>
+      <div class="problem-body">$f(x)=k$ 실근 개수 = 그래프와 $y=k$ 의 교점 수. <strong>극대·극소값과 $k$ 를 비교</strong>.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $x^3-3x=k$: 극대 $2$·극소 $-2$. $-2<k<2$ 면 3개, $k=\pm2$ 면 2개, 그 밖 1개.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">효율 4 — 무리식은 유리화, $x\to-\infty$ 는 부호 주의</div>
-      <div class="problem-body">$\dfrac00$·$\infty-\infty$ 무리식은 <strong>켤레 곱</strong>. $\sqrt{x^2}=|x|$ 이므로 $x\to-\infty$ 면 $|x|=-x$.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to-\infty}\dfrac{\sqrt{x^2+1}}{x}=\dfrac{-x\sqrt{1+1/x^2}}{x}\to-1$ (부호 놓치면 $+1$ 오답).</div>
+      <div class="problem-num">효율 4 — 부등식 증명은 "최솟값 ≥ 0"</div>
+      <div class="problem-body">$f(x)\ge0$ 를 보이려면 $f$ 의 <strong>최솟값이 $0$ 이상</strong>임을 도함수로 확인.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $x\ge0$ 에서 $x^3-3x+2\ge0$? $f'=3x^2-3=0$→$x=1$, $f(1)=0$ 이 최소 → $\ge0$ 성립.</div>
     </div>
 
-    <div class="card">
-      <div class="problem-num">효율 5 — 대소 관계(샌드위치)로 가두기</div>
-      <div class="problem-body">$f(x)\le g(x)\le h(x)$ 이고 $\lim f=\lim h=L$ 이면 <strong>$\lim g=L$</strong>. 직접 못 구하는 극한을 위아래로 가둬 결정.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $-\dfrac1x\le\dfrac{\text{(진동 유한)}}{x}\le\dfrac1x$ 꼴에서 $x\to\infty$ 면 양끝 $\to0$ → 가운데도 $\to0$.</div>
-    </div>
-
-    <div class="section-title">⚠️ 오개념 유의점 — ❌틀린 계산 vs ✅맞는 계산</div>
+    <div class="section-title">⚠️ 오개념 유의점 — ❌틀린 판단 vs ✅맞는 판단</div>
 
     <div class="card">
-      <div class="problem-num">오개념 1 — $\lim f(x)=f(a)$ 를 당연시</div>
-      <div class="problem-body">연속일 때만 성립. "구멍"에서는 극한값과 함숫값이 다를 수 있다.</div>
+      <div class="problem-num">오개념 1 — $f'(a)=0$ 이면 무조건 극값?</div>
+      <div class="problem-body">부호가 <strong>바뀌어야</strong> 극값. 안 바뀌면 극값이 아니다.</div>
       <div class="cmp">
-        <div class="bad">❌ $f(x)=\dfrac{x^2-1}{x-1}\,(x\neq1),\ f(1)=5$ 에서 "$\lim_{x\to1}f=f(1)=5$".</div>
-        <div class="good">✅ $\lim_{x\to1}f=2$, 그런데 $f(1)=5$ → $2\neq5$ 이므로 $x=1$ 에서 불연속.</div>
+        <div class="bad">❌ $f=x^3$ 은 $f'(0)=0$ 이니 "$x=0$ 에서 극값".</div>
+        <div class="good">✅ $f'=3x^2\ge0$ 로 좌우 모두 증가 → 부호 안 바뀜 → 극값 아님.</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 2 — $\infty$ 를 수처럼 계산</div>
-      <div class="problem-body">$\infty-\infty=0$ ❌, $\dfrac\infty\infty=1$ ❌. 부정형이라 변형 후 판단.</div>
+      <div class="problem-num">오개념 2 — 극댓값은 항상 극솟값보다 크다?</div>
+      <div class="problem-body">국소적 개념이라 <strong>그래프 전체</strong>에서는 극댓값 < 극솟값일 수도 있다(멀리 떨어진 봉우리·골).</div>
       <div class="cmp">
-        <div class="bad">❌ $\displaystyle\lim_{x\to\infty}(\sqrt{x^2+x}-x)=\infty-\infty=0$.</div>
-        <div class="good">✅ 유리화 $\dfrac{x}{\sqrt{x^2+x}+x}\to\dfrac12$.</div>
+        <div class="bad">❌ "극댓값이니 무조건 극솟값보다 크다".</div>
+        <div class="good">✅ 극값은 <strong>주변에서만</strong> 최대/최소. 예로 왼쪽 극대가 오른쪽 극소보다 낮은 그래프도 있다.</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 3 — 한쪽 극한만 보고 "극한 존재" 단정</div>
-      <div class="problem-body">극한 존재 ⟺ 좌극한 = 우극한.</div>
+      <div class="problem-num">오개념 3 — 최대·최소는 극값 중에서만?</div>
+      <div class="problem-body">닫힌구간에서는 <strong>양 끝점</strong>도 최대·최소 후보. 극값만 보면 틀린다.</div>
       <div class="cmp">
-        <div class="bad">❌ $\displaystyle\lim_{x\to0}\dfrac{|x|}{x}=0$.</div>
-        <div class="good">✅ 좌 $-1$, 우 $+1$ → 좌$\neq$우 → 극한 없음(발산).</div>
+        <div class="bad">❌ $f=x^3-3x$, $[0,3]$ 의 최대를 "극대 $f(-1)=2$".</div>
+        <div class="good">✅ $x=-1$ 은 구간 밖. 후보는 $f(1)=-2$, $f(0)=0$, $f(3)=18$ → 최대 $18$(끝점).</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 4 — 극한의 성질을 발산에 적용</div>
-      <div class="problem-body">$\lim(fg)=\lim f\cdot\lim g$ 는 <strong>각각 수렴할 때만</strong>. $\infty\cdot0$ 은 부정형이라 못 씀.</div>
+      <div class="problem-num">오개념 4 — 증가함수면 $f'>0$?</div>
+      <div class="problem-body">증가함수는 $f'\ge0$ (등호 허용). 한 점에서 $f'=0$ 이어도 증가일 수 있다.</div>
       <div class="cmp">
-        <div class="bad">❌ $\displaystyle\lim_{x\to\infty}\Big(x\cdot\dfrac1x\Big)=\lim x\cdot\lim\dfrac1x=\infty\cdot0=0$.</div>
-        <div class="good">✅ 먼저 $x\cdot\dfrac1x=1$ 로 정리 → $\lim 1=1$.</div>
+        <div class="bad">❌ $f=x^3$ 은 증가함수니까 "모든 $x$ 에서 $f'>0$".</div>
+        <div class="good">✅ $f'=3x^2$ 은 $x=0$ 에서 $0$. $f'\ge0$ 이고 $f'=0$ 인 점이 고립되어 있어 여전히 증가.</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 5 — $f<g$ 면 극한도 $<$?</div>
-      <div class="problem-body">부등식은 극한에서 <strong>등호가 살아난다</strong>: $f(x)<g(x)$ 여도 $\lim f\le\lim g$ (등호 가능).</div>
+      <div class="problem-num">오개념 5 — 속도 $0$ = "정지(멈춤)"?</div>
+      <div class="problem-body">$v=0$ 은 <strong>순간 속도</strong>가 $0$ 인 시점. 대개 <strong>방향 전환</strong>점이지 영구히 멈춘 게 아니다.</div>
       <div class="cmp">
-        <div class="bad">❌ 모든 $x$ 에서 $0<\dfrac1{x^2}$ 이니 "$\displaystyle\lim_{x\to\infty}\dfrac1{x^2}>0$".</div>
-        <div class="good">✅ 실제 극한은 $0$. 강한 부등호 $<$ 도 극한에선 $\le$ 로 약해진다.</div>
+        <div class="bad">❌ $x(t)=t^2-4t$ 에서 $v(2)=0$ 이니 "$t=2$ 이후 정지".</div>
+        <div class="good">✅ $v=2t-4$ 는 $t=2$ 전 음수(왼쪽)·후 양수(오른쪽) → $t=2$ 는 <strong>방향 전환</strong>, 이후 계속 운동.</div>
       </div>
     </div>
 
@@ -238,78 +232,80 @@
 
       <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
       <div class="problem-card filterable basic">
-        <div class="problem-num">기초 1 — 0/0 인수분해</div>
-        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 2}\dfrac{x^2-4}{x-2}$</div>
+        <div class="problem-num">기초 1 — 증가·감소 구간</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^2-6x+1$ 의 증가·감소 구간을 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>$0/0$ → $\dfrac{(x-2)(x+2)}{x-2}=x+2$ → $\displaystyle\lim_{x\to2}(x+2)=4$.</p>
-          <p><strong>정답:</strong> $4$</p>
+          <p>$f'=2x-6=0$ → $x=3$. $x<3$ 면 $f'<0$(감소), $x>3$ 면 $f'>0$(증가).</p>
+          <p><strong>정답:</strong> $x\le3$ 감소, $x\ge3$ 증가</p>
         </div></details>
       </div>
       <div class="problem-card filterable basic">
-        <div class="problem-num">기초 2 — ∞/∞ 계수비</div>
-        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to\infty}\dfrac{4x^2-3x}{2x^2+1}$</div>
+        <div class="problem-num">기초 2 — 극값</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3-12x$ 의 극댓값과 극솟값을 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>차수 같음 → 최고차 계수비 $\dfrac42=2$.</p>
-          <p><strong>정답:</strong> $2$</p>
+          <p>$f'=3x^2-12=3(x-2)(x+2)=0$ → $x=\pm2$.</p>
+          <p>$x=-2$: $+\to-$ 극대 $f(-2)=-8+24=16$. $x=2$: $-\to+$ 극소 $f(2)=8-24=-16$.</p>
+          <p><strong>정답:</strong> 극댓값 $16$, 극솟값 $-16$</p>
         </div></details>
       </div>
 
       <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
       <div class="problem-card filterable standard">
-        <div class="problem-num">기본 1 — 무리식 유리화</div>
-        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 0}\dfrac{\sqrt{x+4}-2}{x}$</div>
+        <div class="problem-num">기본 1 — 닫힌구간 최대·최소</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3-3x+1$ 의 $[-2,2]$ 에서 최댓값과 최솟값을 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>$0/0$ → 분자 유리화: $\dfrac{(x+4)-4}{x(\sqrt{x+4}+2)}=\dfrac{1}{\sqrt{x+4}+2}\to\dfrac14$.</p>
-          <p><strong>정답:</strong> $\dfrac14$</p>
+          <p>$f'=3x^2-3=0$ → $x=\pm1$. 후보: $f(-2)=-1$, $f(-1)=3$, $f(1)=-1$, $f(2)=3$.</p>
+          <p><strong>정답:</strong> 최댓값 $3$ ($x=-1,2$), 최솟값 $-1$ ($x=-2,1$) — 끝점·극값 모두 비교(오개념 3)</p>
         </div></details>
       </div>
       <div class="problem-card filterable standard">
-        <div class="problem-num">기본 2 — ∞−∞ 유리화</div>
-        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to\infty}\left(\sqrt{x^2+3x}-x\right)$</div>
+        <div class="problem-num">기본 2 — 실근의 개수</div>
+        <div class="problem-body"><strong>문제:</strong> 방정식 $x^3-3x-k=0$ 이 서로 다른 세 실근을 갖도록 하는 $k$ 의 범위를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>유리화 $\dfrac{3x}{\sqrt{x^2+3x}+x}$ → $x$ 로 나눔 $\dfrac{3}{\sqrt{1+3/x}+1}\to\dfrac32$.</p>
-          <p><strong>정답:</strong> $\dfrac32$ (오개념 2 주의)</p>
+          <p>$x^3-3x=k$ 로 보면 $f=x^3-3x$ 의 극대 $2$·극소 $-2$. 세 교점 조건은 극소<$k$<극대.</p>
+          <p><strong>정답:</strong> $-2<k<2$ (효율 3)</p>
         </div></details>
       </div>
 
       <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
       <div class="problem-card filterable advanced">
-        <div class="problem-num">심화 1 — 미정계수 황금률</div>
-        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 1}\dfrac{x^2+ax+b}{x-1}=3$ 일 때 $a,b$.</div>
+        <div class="problem-num">심화 1 — 극값 조건으로 미정계수</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3+ax^2+bx$ 가 $x=1$ 에서 극댓값 $2$ 를 가질 때 상수 $a,b$ 를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>분모 $\to0$·극한 유한 → 분자 $\to0$: $1+a+b=0$. 분자 $=(x-1)(x+(a+1))$, $\lim=a+2=3$ → $a=1$, $b=-2$.</p>
-          <p><strong>검산:</strong> $x^2+x-2=(x-1)(x+2)$, $\lim(x+2)=3$ ✓. <strong>정답:</strong> $a=1,b=-2$</p>
+          <p><strong>조건 1:</strong> $f'(1)=0$. $f'=3x^2+2ax+b$ → $3+2a+b=0$.</p>
+          <p><strong>조건 2:</strong> $f(1)=2$ → $1+a+b=2$ → $a+b=1$.</p>
+          <p>두 식: $2a+b=-3$, $a+b=1$ → $a=-4$, $b=5$.</p>
+          <p><strong>검산:</strong> $f'=3x^2-8x+5=(3x-5)(x-1)$, $x=1$ 서 $+\to-$ 극대 ✓. <strong>정답:</strong> $a=-4,b=5$</p>
         </div></details>
       </div>
       <div class="problem-card filterable advanced">
-        <div class="problem-num">심화 2 — 좌우극한 (조각함수)</div>
-        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to1}\dfrac{x^2-1}{|x-1|}$ 이 존재하는지 판정하시오.</div>
+        <div class="problem-num">심화 2 — 부등식 증명</div>
+        <div class="problem-body"><strong>문제:</strong> $x\ge0$ 일 때 $x^3+4\ge3x^2$ 임을 도함수로 보이시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>분자 $=(x-1)(x+1)$. 우극한($x>1$, $|x-1|=x-1$): $\dfrac{(x-1)(x+1)}{x-1}=x+1\to2$.</p>
-          <p>좌극한($x<1$, $|x-1|=-(x-1)$): $\dfrac{(x-1)(x+1)}{-(x-1)}=-(x+1)\to-2$.</p>
-          <p>좌 $-2\neq$ 우 $2$ → <strong>극한 없음</strong>.</p>
+          <p>$g(x)=x^3-3x^2+4$ 로 두고 $x\ge0$ 에서 $g\ge0$ 을 보이면 됨.</p>
+          <p>$g'=3x^2-6x=3x(x-2)=0$ → $x=0,2$. $x\ge0$ 에서 최소는 $g(2)=8-12+4=0$.</p>
+          <p>최솟값 $0\ge0$ 이므로 $g(x)\ge0$, 즉 $x^3+4\ge3x^2$. ∎ (효율 4)</p>
         </div></details>
       </div>
 
       <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
       <div class="problem-card filterable csat">
-        <div class="problem-num">수능 대비 — 분모·분자 동시 미정계수</div>
-        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 1}\dfrac{x^2+ax+b}{x^2-1}=2$ 일 때 상수 $a,b$ 를 구하시오.</div>
+        <div class="problem-num">수능 대비 — 속도·가속도</div>
+        <div class="problem-body"><strong>문제:</strong> 수직선 위를 움직이는 점 P의 위치가 $x(t)=t^3-6t^2+9t$ 이다. ⑴ P가 운동 방향을 바꾸는 시각, ⑵ 그때의 가속도를 구하시오. (단 $t>0$)</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p><strong>STEP 1:</strong> 분모 $x^2-1\to0$·극한 유한 → 분자 $\to0$: $1+a+b=0$ … ①</p>
-          <p><strong>STEP 2:</strong> 분자도 $(x-1)$ 인수 가짐 → $x^2+ax+b=(x-1)(x-\beta)$. 분모 $=(x-1)(x+1)$.</p>
-          <p>$\displaystyle\lim_{x\to1}\dfrac{(x-1)(x-\beta)}{(x-1)(x+1)}=\dfrac{1-\beta}{2}=2$ → $1-\beta=4$ → $\beta=-3$.</p>
-          <p><strong>STEP 3:</strong> $x^2+ax+b=(x-1)(x+3)=x^2+2x-3$ → $a=2,\ b=-3$. (①: $1+2-3=0$ ✓)</p>
-          <p><strong>정답:</strong> $a=2,\ b=-3$</p>
+          <p><strong>속도:</strong> $v(t)=x'(t)=3t^2-12t+9=3(t-1)(t-3)$.</p>
+          <p><strong>⑴ 방향 전환:</strong> $v=0$ 이고 부호 바뀌는 $t=1,\ 3$. ($t=1$ 전후 $+\to-$, $t=3$ 전후 $-\to+$ 모두 전환.)</p>
+          <p><strong>가속도:</strong> $a(t)=v'(t)=6t-12$. $a(1)=-6$, $a(3)=6$.</p>
+          <p><strong>정답:</strong> ⑴ $t=1,\ t=3$ ⑵ 각각 $-6,\ 6$ (오개념 5 — $v=0$ 은 방향 전환)</p>
         </div></details>
       </div>
 
     </div>
 
 
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260708_함수의연속꿀팁과오개념_개념.html">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) (NCqmA7ui)</a> · <a href="../수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html">미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html">미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html">교점 개수 함수와 3차함수 높이차 2대1 공식 (ONHx5OaS)</a></div><!--REL_END-->
 <footer>
-    생성일 2026-07-08 · <strong>개념노트(팁 중심)</strong>(영상 없음 · 단원 큐레이션) · 미적분Ⅰ(수학Ⅱ) 함수의 극한<br>
+    생성일 2026-07-08 · <strong>개념노트(팁 중심)</strong>(영상 없음 · 단원 큐레이션) · 미적분Ⅰ(수학Ⅱ) 도함수의 활용<br>
     AI가 정리한 팁 노트입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
   </footer>
 
