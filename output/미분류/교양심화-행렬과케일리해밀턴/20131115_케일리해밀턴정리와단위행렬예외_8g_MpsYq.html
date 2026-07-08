@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>케일리-해밀턴 정리와 단위행렬 예외 (교양·심화, 현 교육과정 외) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero" style="background:linear-gradient(135deg,#4e342e 0%,#6d4c41 55%,#8d6e63 100%);"><div class="tag" style="background:rgba(255,193,7,.25);">⚠️ 교양·심화 — 행렬 (현 교육과정·수능 범위 밖)</div><h1>케일리-해밀턴 정리와 <strong>단위행렬 꼴 예외</strong></h1><p class="sub">🎯 $2\times2$ 행렬의 $A^2-(a+d)A+(ad-bc)E=O$. 역이 성립하지 않는 함정($A=kE$ 꼴)과, $A^3=\pm E$ 를 끌어내는 식 변형 팁. <strong>※ 현 고2 교육과정에 행렬 단원은 없습니다 — 경시·교양·구 과정 복습용.</strong></p><div class="video-card"><a class="thumb" href="https://youtu.be/8g_MpsYqLf8" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/8g_MpsYqLf8/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — EBS 수학Ⅰ 케일리-해밀턴 정리 (구 교육과정)</div><div class="v-meta">📺 EBSi, 8분 26초 · 2013-11-15</div><a class="v-link" href="https://youtu.be/8g_MpsYqLf8" target="_blank" rel="noopener">https://youtu.be/8g_MpsYqLf8</a></div></div></div>
+
+  
+
+  <main>
+
+    <div class="concept-block" style="border:2px solid #ffa726;background:#fff8e1;border-radius:8px;padding:14px 18px;margin-bottom:8px;">
+      <strong>📢 범위 안내:</strong> 행렬·케일리-해밀턴 정리는 <strong>2022 개정 교육과정(현 고2 대수·미적분Ⅰ)에 없는 단원</strong>입니다. 현 수능 범위 밖이며, 본 자료는 <strong>경시·교양·구 교육과정 복습용</strong>입니다. 갤러리에서도 <em>미분류 · 교양심화</em> 로 분리되어 있습니다.
+    </div>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 정리</h2>
+      <article class="problem basic">
+        <h3>예시 — 케일리-해밀턴 정리 (2×2)</h3>
+        <p class="problem-body"><strong>정리:</strong> $2\times2$ 행렬 $A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$ 에 대하여
+        $$A^2 - (a+d)A + (ad-bc)E = O$$
+        가 항상 성립한다. ($E$: 단위행렬, $O$: 영행렬)</p>
+        <details open>
+          <summary>📖 어떻게 쓰나</summary>
+          <div class="solution">
+            <p><strong>구조:</strong> $a+d$ 는 <strong>대각합(trace)</strong>, $ad-bc$ 는 <strong>행렬식(det)</strong>. 즉 $A^2 = (a+d)A - (ad-bc)E$ 로 <strong>$A^2$ 을 $A$ 와 $E$ 의 일차식으로</strong> 낮춘다.</p>
+            <p><strong>효용:</strong> $A^2, A^3, \dots$ 고차 거듭제곱을 일차식으로 계속 내려 계산량을 크게 줄인다.</p>
+            <p class="key-point"><strong>주의:</strong> 이 정리를 몰라도 문제는 풀리지만, 알면 계산 시간을 단축. 단 <strong>역은 성립하지 않음</strong>(아래 개념 ③).</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (정리 · 예외 · 식 변형)</h2>
+
+      <div class="concept-block">
+        <h3>① 선수 지식 — 단위행렬 $E$ 와 영행렬 $O$</h3>
+        <div class="prereq">
+          <p>$E = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}$ (곱셈의 항등원: $AE = EA = A$).</p>
+          <p>$O = \begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix}$ (덧셈의 항등원, 곱셈의 흡수원).</p>
+          <p>$kE = \begin{pmatrix} k & 0 \\ 0 & k \end{pmatrix}$ — 이를 <strong>스칼라 행렬</strong>이라 한다. $(kE)^2 = k^2 E$.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 정리의 유도 감각</h3>
+        <p>$A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$ 의 $A^2$ 을 직접 계산하면:</p>
+        <div class="step-derive">
+          <p>$A^2 = \begin{pmatrix} a^2+bc & ab+bd \\ ca+dc & cb+d^2 \end{pmatrix}$.</p>
+          <p>$(a+d)A = \begin{pmatrix} a^2+ad & ab+bd \\ ac+cd & ad+d^2 \end{pmatrix}$.</p>
+          <p>$A^2 - (a+d)A = \begin{pmatrix} bc-ad & 0 \\ 0 & cb-ad \end{pmatrix} = (bc-ad)E = -(ad-bc)E$.</p>
+          <p>이항하면 $A^2 - (a+d)A + (ad-bc)E = O$. ∎</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 핵심 함정 — 역은 성립하지 않는다 (단위행렬 꼴)</h3>
+        <p>"$A^2 - 5A + 4E = O$ 이면 $a+d = 5$" 라고 단정하면 <strong>틀린다</strong>. 등식이 성립해도 $A$ 가 <strong>스칼라 행렬 $kE$</strong> 일 수 있기 때문.</p>
+        <div class="step-derive">
+          <p>$A = kE$ 로 놓으면 $A^2 = k^2 E$. 식에 대입: $k^2 E - 5kE + 4E = (k^2-5k+4)E = O$.</p>
+          <p>$k^2 - 5k + 4 = 0$ → $(k-1)(k-4)=0$ → $k=1$ 또는 $k=4$.</p>
+          <p>$A = E$ ($k=1$): $a+d = 1+1 = 2$. / $A = 4E$ ($k=4$): $a+d = 4+4 = 8$.</p>
+        </div>
+        <div class="insight">
+          그러므로 $a+d$ 는 케일리-해밀턴이 주는 $5$ 뿐 아니라 <strong>$2$ 또는 $8$</strong> 도 가능. 스칼라 행렬 예외를 빠뜨리면 오답. (내신·전국연합 단골 함정)
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 실전 팁 — $A^3 = \pm E$ 식 변형</h3>
+        <div class="callout">
+          <p><strong>Tip 1:</strong> $A^2 - A + E = O$ 이면, 양변에 $(A+E)$ 를 곱한다.</p>
+        </div>
+        <div class="step-derive">
+          <p>$(A+E)(A^2-A+E) = A^3 - A^2 + A + A^2 - A + E = A^3 + E$.</p>
+          <p>좌변 $= (A+E)\cdot O = O$ → $A^3 + E = O$ → $\boxed{A^3 = -E}$.</p>
+        </div>
+        <div class="callout">
+          <p><strong>Tip 2:</strong> $A^2 + A + E = O$ 이면, 양변에 $(A-E)$ 를 곱한다.</p>
+        </div>
+        <div class="step-derive">
+          <p>$(A-E)(A^2+A+E) = A^3 + A^2 + A - A^2 - A - E = A^3 - E$.</p>
+          <p>좌변 $= O$ → $A^3 - E = O$ → $\boxed{A^3 = E}$.</p>
+        </div>
+        <div class="insight">
+          $x^3\pm1 = (x\pm1)(x^2\mp x+1)$ 의 <strong>인수분해 곱셈공식을 행렬에 그대로</strong> 적용한 것. $A$ 와 $E$ 는 곱셈이 교환되므로($AE=EA$) 다항식처럼 다뤄도 된다.
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 응용 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 정리 세우기</h3>
+        <p class="problem-body"><strong>문제:</strong> $A = \begin{pmatrix} 2 & 1 \\ 3 & 4 \end{pmatrix}$ 에 대해 케일리-해밀턴 정리를 식으로 쓰시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 대각합:</strong> $a+d = 2+4 = 6$.</p>
+            <p><strong>STEP 2 — 행렬식:</strong> $ad-bc = 2\cdot4 - 1\cdot3 = 8-3 = 5$.</p>
+            <p><strong>STEP 3 — 대입:</strong> $A^2 - 6A + 5E = O$.</p>
+            <p class="answer"><strong>정답:</strong> $A^2 - 6A + 5E = O$</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 스칼라 행렬의 제곱</h3>
+        <p class="problem-body"><strong>문제:</strong> $A = 3E$ 일 때 $A^2$ 을 $E$ 로 나타내시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> $A^2 = (3E)^2 = 3E \cdot 3E = 9\,E^2$.</p>
+            <p><strong>STEP 2:</strong> $E^2 = E$ 이므로 $A^2 = 9E$.</p>
+            <p class="answer"><strong>정답:</strong> $A^2 = 9E$</p>
+            <p class="key-point"><strong>핵심:</strong> 스칼라 행렬은 실수처럼 지수 계산 가능. 이 성질이 개념 ③ 함정의 근원.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 정리로 $A^2$ 낮추기</h3>
+        <p class="problem-body"><strong>문제:</strong> $A = \begin{pmatrix} 1 & 2 \\ 0 & 3 \end{pmatrix}$ 에 대해 $A^2$ 을 $A$ 와 $E$ 의 일차식으로 나타내시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 정리:</strong> $a+d = 4$, $ad-bc = 3-0 = 3$ → $A^2 - 4A + 3E = O$.</p>
+            <p><strong>STEP 2 — 이항:</strong> $A^2 = 4A - 3E$.</p>
+            <p><strong>검산 (직접 계산):</strong> $A^2 = \begin{pmatrix} 1 & 8 \\ 0 & 9 \end{pmatrix}$, $4A-3E = \begin{pmatrix} 4-3 & 8 \\ 0 & 12-3 \end{pmatrix} = \begin{pmatrix} 1 & 8 \\ 0 & 9 \end{pmatrix}$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> $A^2 = 4A - 3E$</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 역이 성립하지 않는 예외</h3>
+        <p class="problem-body"><strong>문제:</strong> $2\times2$ 행렬 $A$ 가 $A^2 - 5A + 4E = O$ 를 만족한다. $a+d$ 의 값으로 가능한 것을 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>경우 1 — 일반 행렬:</strong> 케일리-해밀턴과 비교하면 $a+d = 5$, $ad-bc = 4$.</p>
+            <p><strong>경우 2 — 스칼라 행렬 $A=kE$:</strong> $(k^2-5k+4)E = O$ → $k^2-5k+4=0$ → $k=1$ 또는 $k=4$.</p>
+            <p>$A=E$ → $a+d=2$. $A=4E$ → $a+d=8$.</p>
+            <p class="answer"><strong>정답:</strong> $a+d = 2,\ 5,\ 8$</p>
+            <p class="key-point"><strong>오답주의:</strong> "$a+d=5$" 만 답하면 감점. $A=kE$ 예외로 $2, 8$ 도 가능함을 반드시 포함.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — $A^3 = -E$ 유도</h3>
+        <p class="problem-body"><strong>문제:</strong> 행렬 $A$ 가 $A^2 - A + E = O$ 를 만족할 때 $A^3$ 을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 곱셈공식 착안:</strong> $x^3+1 = (x+1)(x^2-x+1)$. 양변에 $(A+E)$ 를 곱한다.</p>
+            <p><strong>STEP 2 — 전개:</strong> $(A+E)(A^2-A+E) = A^3 - A^2 + A + A^2 - A + E = A^3 + E$.</p>
+            <p><strong>STEP 3:</strong> 우변 $(A+E)\cdot O = O$ → $A^3 + E = O$.</p>
+            <p class="answer"><strong>정답:</strong> $A^3 = -E$</p>
+            <p class="key-point"><strong>검산:</strong> $A^3 = -E$ → $A^6 = E$. 주기 6. (실수 $x^2-x+1=0$ 의 근은 1의 6제곱근과 관련.)</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — $A^3 = E$ 로 고차 거듭제곱</h3>
+        <p class="problem-body"><strong>문제:</strong> $A^2 + A + E = O$ 일 때 $A^{100}$ 을 $A$ 와 $E$ 로 나타내시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — $A^3$ 구하기:</strong> $(A-E)(A^2+A+E) = A^3 - E = O$ → $A^3 = E$.</p>
+            <p><strong>STEP 2 — 지수 나머지:</strong> $100 = 3\times33 + 1$ → $A^{100} = (A^3)^{33}\cdot A = E^{33}\cdot A = A$.</p>
+            <p class="answer"><strong>정답:</strong> $A^{100} = A$</p>
+            <p class="key-point"><strong>핵심:</strong> $A^3=E$ → 지수는 mod 3 으로 순환. $A^{100}=A^{1}=A$.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 응용 (경시·내신 — 수능 아님)</h3>
+
+      <article class="problem exam-style">
+        <h3>응용 1 — 정리 + 예외 종합</h3>
+        <p class="problem-body"><strong>문제:</strong> $2\times2$ 행렬 $A$ 가 $A^2 - 6A + 9E = O$ 를 만족한다. $a+d$ 로 가능한 값을 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>경우 1 — 일반 행렬:</strong> $a+d = 6$, $ad-bc = 9$.</p>
+            <p><strong>경우 2 — 스칼라 행렬:</strong> $k^2 - 6k + 9 = (k-3)^2 = 0$ → $k=3$ (중근). $A = 3E$ → $a+d = 6$.</p>
+            <p class="answer"><strong>정답:</strong> $a+d = 6$ (두 경우가 일치)</p>
+            <p class="key-point"><strong>주의:</strong> 이번엔 예외 $k=3$ 이 $a+d=6$ 으로 일반 경우와 <strong>같아</strong> 추가 값이 없다. "예외를 확인했더니 같더라"까지가 완결. 기본 2처럼 항상 갈리는 건 아님.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>응용 2 — 판별식으로 예외 존재 여부 판단</h3>
+        <p class="problem-body"><strong>문제:</strong> $A^2 - tA + E = O$ ($t$ 는 실수) 를 만족하는 스칼라 행렬 $A=kE$ 가 존재하려면 $t$ 가 어떤 조건을 만족해야 하는가?</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 대입:</strong> $A=kE$ → $(k^2 - tk + 1)E = O$ → $k^2 - tk + 1 = 0$.</p>
+            <p><strong>STEP 2 — 실수 $k$ 존재 조건:</strong> 판별식 $D = t^2 - 4 \ge 0$ → $t \le -2$ 또는 $t \ge 2$.</p>
+            <p class="answer"><strong>정답:</strong> $t \le -2$ 또는 $t \ge 2$ (즉 $|t| \ge 2$)</p>
+            <p class="key-point"><strong>핵심:</strong> 스칼라 행렬 예외의 "존재 여부"도 결국 실수 이차방정식의 판별식 문제로 환원. $|t|<2$ 면 스칼라 행렬 예외가 없어 케일리-해밀턴 값만 유효.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 범위 안내</h3>
+    <p><strong>범위 주의:</strong> 본 자료(행렬·케일리-해밀턴)는 <strong>현 고2 교육과정(대수·미적분Ⅰ) 및 수능 범위 밖</strong>입니다. 갤러리에서 <em>미분류 · 교양심화</em> 로 분리했으며, "응용" 문항은 수능이 아니라 <strong>경시·내신·구 교육과정</strong> 성격입니다.</p>
+    <p>영상(2013 EBS 구 교육과정)의 압축된 내용을 다음과 같이 풀어 작성:</p>
+    <ul>
+      <li><strong>정리의 유도</strong> → $A^2$ 직접 계산으로 $(bc-ad)E$ 가 나오는 과정 (개념 ②).</li>
+      <li><strong>역이 성립 안 함</strong> → $A=kE$ 스칼라 행렬 예외를 $k^2-5k+4=0$ 으로 (개념 ③, 기본 2).</li>
+      <li><strong>$A^3=\pm E$ 팁</strong> → $x^3\pm1$ 인수분해를 행렬에 적용, $AE=EA$ 근거 명시 (개념 ④, 심화 1·2).</li>
+      <li><strong>예외가 항상 새 값은 아님</strong> → 응용 1 (중근이라 값 일치), 응용 2 (판별식으로 존재 조건).</li>
+      <li>모든 문항 <strong>직접 계산 검산</strong> 병기.</li>
+    </ul>
+  </div>
+<footer>
+    <p>생성일: 2026-07-01 | 영상 출처: <a href="https://youtu.be/8g_MpsYqLf8">https://youtu.be/8g_MpsYqLf8</a> (EBSi, 게시 2013-11-15) · ⚠️ 구 교육과정(행렬) 자료</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
