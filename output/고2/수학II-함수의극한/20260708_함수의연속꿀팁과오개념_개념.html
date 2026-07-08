@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 55%, #8e24aa 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .92; max-width: 660px; margin: 0 auto; }
+    .src-badge { display: inline-block; margin: 18px auto 0; padding: 8px 18px; border-radius: 24px; background: rgba(255,255,255,.16); font-size: 14px; font-weight: 700; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .92; text-align: left; }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink:0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn { display: none !important; } body { background: #fff; color: #000; } .hero { background: #6a1b9a !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+
+    /* 미니 계산 예시 (팁노트 확장) */
+    .mini-ex { margin-top: 9px; padding: 8px 12px; background: var(--summary-bg); border-radius: 6px; font-size: .93em; border-left: 3px solid var(--standard); }
+    .mini-ex .lbl { font-weight: 700; color: var(--standard); }
+    .cmp { margin-top: 9px; font-size: .93em; }
+    .cmp .bad { padding: 6px 11px; background: rgba(244,67,54,.12); border-radius: 5px; margin-bottom: 5px; border-left: 3px solid #f44336; }
+    .cmp .good { padding: 6px 11px; background: rgba(76,175,80,.15); border-radius: 5px; border-left: 3px solid #4caf50; }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — Ⅰ. 함수의 극한과 연속 › 2. 함수의 연속</div>
+    <h1>함수의 연속 — 계산 꿀팁 · 오개념 정리</h1>
+    <p class="sub">연속의 <strong>3조건</strong>·불연속의 <strong>모양</strong>·사잇값/최대최소 정리의 <strong>전제 조건</strong>을 팁으로. 각 팁마다 <strong>계산 예시</strong>, 오개념은 <strong>❌vs✅</strong> 대조.</p>
+    <div class="src-badge">📘 개념노트 · 팁 중심 (영상 없음 · 단원 큐레이션)</div>
+    <p class="learn">🎯 <strong>대상</strong>: 미적분Ⅰ(구 수학Ⅱ) · 중하위권도 따라오는 호흡. <strong>범위</strong>: 다항·유리·무리함수의 연속과 연속함수의 성질(사잇값·최대최소 정리).</p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">🧭 이 노트의 사용법</div>
+    <div class="card">
+      <p><strong>💡 이해 꿀팁</strong> · <strong>⚡ 계산 효율</strong> · <strong>⚠️ 오개념</strong> 세 축. 각 카드 <span style="color:var(--standard);font-weight:700;">예:</span> 박스에서 직접 확인, 오개념은 <strong>❌vs✅</strong> 비교. 맨 아래 <strong>확인 문항 6개</strong>.</p>
+    </div>
+
+    <div class="section-title">💡 이해 꿀팁 — 개념을 직관으로</div>
+
+    <div class="card">
+      <div class="problem-num">꿀팁 1 — 연속의 세 조건을 한 문장으로</div>
+      <div class="problem-body">$x=a$ 에서 연속 ⟺ <strong>"① $f(a)$ 존재 + ② $\displaystyle\lim_{x\to a}f(x)$ 존재 + ③ 둘이 같음"</strong>. 하나만 깨져도 불연속.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f(x)=\dfrac{|x|}{x}$ 는 $x=0$ 에서 ① $f(0)$ 없음 + ② 좌우극한 다름 → 불연속.</div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">꿀팁 2 — 연속 = "붓을 떼지 않고 그린다"</div>
+      <div class="problem-body">그래프가 끊기지 않으면 연속. 끊기는 곳(구멍·점프·발산)이 불연속점.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> 다항함수 $y=x^3-2x$ 는 모든 실수에서 붓 안 떼고 그려짐 → 어디서나 연속.</div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">꿀팁 3 — 불연속의 세 가지 모양</div>
+      <div class="problem-body"><strong>제거가능</strong>(구멍: 극한은 있는데 함숫값이 다름/없음) · <strong>도약</strong>(좌≠우) · <strong>무한</strong>(발산). 어느 조건이 깨졌는지로 구분.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\dfrac{x^2-1}{x-1}$ 은 $x=1$ 에서 <strong>구멍(제거가능)</strong>, $[x]$(가우스)는 정수에서 <strong>도약</strong>, $\dfrac1x$ 는 $x=0$ 에서 <strong>무한</strong>.</div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">꿀팁 4 — 연속함수끼리는 사칙·합성도 연속</div>
+      <div class="problem-body">$f,g$ 연속이면 $f\pm g,\ fg,\ f\circ g$ 도 연속. $\dfrac fg$ 는 <strong>$g\neq0$</strong> 인 곳에서 연속.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\dfrac{x+1}{x-2}$ 는 다항÷다항 → <strong>$x=2$ 만 빼고</strong> 모든 실수에서 연속.</div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">꿀팁 5 — 익숙한 함수의 연속 지도</div>
+      <div class="problem-body"><strong>다항함수</strong>: 모든 실수에서 연속. <strong>유리함수</strong>: 분모$\neq0$ 에서. <strong>무리함수</strong> $\sqrt{\ }$: 근호 안 $\ge0$ 인 정의역에서 연속.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\sqrt{x-1}$ 은 $x\ge1$ 에서 정의·연속. $x<1$ 은 정의역 밖이라 "연속" 논의 대상이 아님.</div>
+    </div>
+
+    <div class="section-title">⚡ 계산 효율 — 시험장 시간 단축</div>
+
+    <div class="card">
+      <div class="problem-num">효율 1 — 연속이면 극한은 그냥 "대입"</div>
+      <div class="problem-body">$f$ 가 $x=a$ 에서 연속이면 $\displaystyle\lim_{x\to a}f(x)=f(a)$. 복잡한 계산 없이 대입으로 끝.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to2}(x^3-x)$ 는 다항이라 연속 → $2^3-2=6$ 대입 끝.</div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">효율 2 — 구간별 함수는 "경계"만 본다</div>
+      <div class="problem-body">조각함수의 연속은 <strong>이어 붙인 경계점</strong>에서만 문제. 그 점에서 <strong>좌극한 = 우극한 = 함숫값</strong>이면 연속.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f(x)=\begin{cases}x+1&(x\le1)\\ 3-x&(x>1)\end{cases}$ 경계 $x=1$: 좌 $2$, 우 $2$, $f(1)=2$ → 연속.</div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">효율 3 — 연속 조건으로 미정계수 결정</div>
+      <div class="problem-body">"$x=a$ 에서 연속"이 주어지면 → <strong>좌극한=우극한=함숫값</strong> 방정식으로 미지수를 찾는다.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f(x)=\begin{cases}\frac{x^2-1}{x-1}&(x\neq1)\\ k&(x=1)\end{cases}$ 연속 → $k=\lim_{x\to1}(x+1)=2$.</div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">효율 4 — 두 정리는 "닫힌구간 + 연속"이 열쇠</div>
+      <div class="problem-body"><strong>최대·최소 정리</strong>: 닫힌구간 $[a,b]$ 연속 → 최댓값·최솟값 존재. <strong>사잇값 정리</strong>: 닫힌구간 연속 + $f(a),f(b)$ 부호 다름 → 사이에 근 존재.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f(x)=x^3+x-1$ 은 $[0,1]$ 연속, $f(0)=-1<0$, $f(1)=1>0$ → 그 사이 실근 존재.</div>
+    </div>
+
+    <div class="section-title">⚠️ 오개념 유의점 — ❌틀린 판단 vs ✅맞는 판단</div>
+
+    <div class="card">
+      <div class="problem-num">오개념 1 — 연속이면 미분가능?</div>
+      <div class="problem-body"><strong>미분가능 ⟹ 연속</strong>은 참, 역은 거짓.</div>
+      <div class="cmp">
+        <div class="bad">❌ $y=|x|$ 는 $x=0$ 에서 연속이니 미분가능.</div>
+        <div class="good">✅ 좌미분 $-1$, 우미분 $+1$ 로 달라 <strong>미분 불가</strong>(뾰족점). 연속이라고 미분가능은 아니다.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">오개념 2 — 사잇값 정리를 "근의 개수"로 오해</div>
+      <div class="problem-body">부호 다름 → 근 <strong>적어도 1개</strong>. 개수·위치는 말 안 함. 부호 같아도 근 있을 수 있음(충분조건).</div>
+      <div class="cmp">
+        <div class="bad">❌ $f(x)=x^2-1$, $f(-2)=3>0$, $f(2)=3>0$ 부호 같으니 "$[-2,2]$ 에 근 없다".</div>
+        <div class="good">✅ 실제 $x=\pm1$ 두 근 존재. 사잇값 정리는 부호 같을 때 <strong>아무 말도 안 함</strong>.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">오개념 3 — 최대·최소 정리를 "열린구간"에 적용</div>
+      <div class="problem-body">최대·최소 정리는 <strong>닫힌구간</strong> $[a,b]$ 에서만 보장. 열린구간이면 최댓값이 없을 수 있다.</div>
+      <div class="cmp">
+        <div class="bad">❌ $f(x)=x$ 는 연속이니 $(0,1)$ 에서 최댓값이 있다.</div>
+        <div class="good">✅ $(0,1)$ 에서 $x$ 는 $1$ 에 한없이 가까워지지만 $1$ 에 도달 못 함 → <strong>최댓값 없음</strong>. 닫힌구간 $[0,1]$ 이라야 최댓값 $1$.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">오개념 4 — 정의역 밖의 점을 "불연속"이라 함</div>
+      <div class="problem-body">연속·불연속은 <strong>정의역 안의 점</strong>에서만 따진다. 정의역에 없는 점은 논의 대상이 아니다.</div>
+      <div class="cmp">
+        <div class="bad">❌ $\sqrt{x-1}$ 은 $x=0$ 에서 "불연속이다".</div>
+        <div class="good">✅ $x=0$ 은 정의역($x\ge1$) 밖이라 연속을 <strong>논하지 않는다</strong>. 정의역 안에서는 연속.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">오개념 5 — 좌우극한만 같으면 연속?</div>
+      <div class="problem-body">좌극한=우극한이라 <strong>극한이 존재</strong>해도, 그 값이 <strong>함숫값과 다르면</strong> 불연속(제거가능 불연속).</div>
+      <div class="cmp">
+        <div class="bad">❌ $f(x)=\dfrac{x^2-1}{x-1}\,(x\neq1),\ f(1)=5$ 는 극한 $2$ 가 존재하니 "연속".</div>
+        <div class="good">✅ 극한 $2\neq f(1)=5$ → 세 번째 조건 깨짐 → <strong>불연속</strong>(구멍).</div>
+      </div>
+    </div>
+
+    <div class="section-title">📝 확인 문항 (6개 — 스스로 점검)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 연속이면 대입</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^2-3x+1$ 일 때 $\displaystyle\lim_{x\to2}f(x)$.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>다항 → 연속 → 대입. $4-6+1=-1$.</p>
+          <p><strong>정답:</strong> $-1$</p>
+        </div></details>
+      </div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 불연속점 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\dfrac{x+2}{x^2-x-6}$ 이 불연속이 되는 $x$ 를 모두 구하시오.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>분모 $x^2-x-6=(x-3)(x+2)=0$ → $x=3,\ -2$ 에서 분모 $0$.</p>
+          <p><strong>정답:</strong> $x=3,\ x=-2$ ($x=-2$ 는 약분되는 구멍, $x=3$ 은 무한 불연속)</p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 구간별 함수 연속 (미정계수)</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\begin{cases}2x+a&(x\le1)\\ x^2+3&(x>1)\end{cases}$ 가 $x=1$ 에서 연속이 되도록 $a$ 를 구하시오.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>경계 $x=1$: 좌 $2+a$, 우 $1+3=4$, 함숫값 $f(1)=2+a$. 연속 → $2+a=4$ → $a=2$.</p>
+          <p><strong>정답:</strong> $a=2$ (효율 2·3)</p>
+        </div></details>
+      </div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 연속 판정</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\dfrac{x^2-4}{x-2}\,(x\neq2),\ f(2)=4$ 는 $x=2$ 에서 연속인가?</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>$\displaystyle\lim_{x\to2}\dfrac{(x-2)(x+2)}{x-2}=\lim_{x\to2}(x+2)=4$. 함숫값 $f(2)=4$. 극한=함숫값 → <strong>연속</strong>.</p>
+          <p><strong>정답:</strong> 연속 (극한 $4$ = 함숫값 $4$)</p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 모든 실수에서 연속 (곱 조건)</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\begin{cases}\dfrac{x^2+ax+b}{x-1}&(x\neq1)\\ 5&(x=1)\end{cases}$ 가 모든 실수에서 연속일 때 $a,b$.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>$x=1$ 연속 필요 → 극한 존재해야. 분모 $\to0$·극한 유한($=5$) → 분자 $\to0$: $1+a+b=0$.</p>
+          <p>분자 $=(x-1)(x+(a+1))$, $\lim_{x\to1}(x+(a+1))=a+2=5$ → $a=3$, $b=-4$.</p>
+          <p><strong>검산:</strong> $x^2+3x-4=(x-1)(x+4)$, $\lim(x+4)=5=f(1)$ ✓. <strong>정답:</strong> $a=3,b=-4$</p>
+        </div></details>
+      </div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 사잇값 정리 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 방정식 $x^3-3x+1=0$ 이 $0<x<1$ 에서 적어도 하나의 실근을 가짐을 보이시오.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>$f(x)=x^3-3x+1$ 은 다항 → $[0,1]$ 에서 연속.</p>
+          <p>$f(0)=1>0$, $f(1)=1-3+1=-1<0$ → 부호 다름.</p>
+          <p>사잇값 정리에 의해 $0<x<1$ 에 $f(x)=0$ 인 근이 <strong>적어도 하나</strong> 존재. ∎</p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 — 연속 + 인수 공유 종합</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=\begin{cases}\dfrac{\sqrt{x+3}-2}{x-1}&(x\neq1)\\ k&(x=1)\end{cases}$ 가 $x=1$ 에서 연속일 때 상수 $k$ 를 구하시오.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p><strong>STEP 1:</strong> $x\to1$ 에서 $\dfrac00$ (분자 $\sqrt4-2=0$). 무리식 유리화.</p>
+          <p><strong>STEP 2:</strong> $\dfrac{(\sqrt{x+3}-2)(\sqrt{x+3}+2)}{(x-1)(\sqrt{x+3}+2)}=\dfrac{(x+3)-4}{(x-1)(\sqrt{x+3}+2)}=\dfrac{x-1}{(x-1)(\sqrt{x+3}+2)}$.</p>
+          <p><strong>STEP 3:</strong> 약분 $\dfrac{1}{\sqrt{x+3}+2}\to\dfrac{1}{2+2}=\dfrac14$.</p>
+          <p><strong>연속 조건:</strong> $k=\displaystyle\lim_{x\to1}f(x)=\dfrac14$.</p>
+          <p><strong>정답:</strong> $k=\dfrac14$</p>
+        </div></details>
+      </div>
+
+    </div>
+
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) (NCqmA7ui)</a> · <a href="../수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-07-08 · <strong>개념노트(팁 중심)</strong>(영상 없음 · 단원 큐레이션) · 미적분Ⅰ(수학Ⅱ) 함수의 연속<br>
+    AI가 정리한 팁 노트입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
