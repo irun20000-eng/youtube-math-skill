@@ -84,6 +84,13 @@
     #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
     @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
     @media print { .toolbar, #scrollTopBtn { display: none !important; } body { background: #fff; color: #000; } .hero { background: #6a1b9a !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+
+    /* 미니 계산 예시 (팁노트 확장) */
+    .mini-ex { margin-top: 9px; padding: 8px 12px; background: var(--summary-bg); border-radius: 6px; font-size: .93em; border-left: 3px solid var(--standard); }
+    .mini-ex .lbl { font-weight: 700; color: var(--standard); }
+    .cmp { margin-top: 9px; font-size: .93em; }
+    .cmp .bad { padding: 6px 11px; background: rgba(244,67,54,.12); border-radius: 5px; margin-bottom: 5px; border-left: 3px solid #f44336; }
+    .cmp .good { padding: 6px 11px; background: rgba(76,175,80,.15); border-radius: 5px; border-left: 3px solid #4caf50; }
   </style>
   <link rel="stylesheet" href="../../pdf-mode.css">
 </head>
@@ -103,7 +110,7 @@
   <div class="hero">
     <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — 함수의 극한과 연속</div>
     <h1>함수의 극한과 연속 — 계산 꿀팁 · 오개념 정리</h1>
-    <p class="sub">교과서의 뻔한 정의는 걷어내고 <strong>이해 꿀팁 · 계산 효율 · 자주 틀리는 오개념</strong> 세 가지에 집중한 <strong>단원 팁 노트</strong>.</p>
+    <p class="sub">교과서의 뻔한 정의는 걷어내고 <strong>이해 꿀팁 · 계산 효율 · 자주 틀리는 오개념</strong> 세 가지에 집중한 <strong>단원 팁 노트</strong>. 각 팁마다 <strong>간단한 계산 예시</strong>로 바로 확인.</p>
     <div class="src-badge">📘 개념노트 · 팁 중심 (영상 없음 · 단원 큐레이션)</div>
     <p class="learn">🎯 <strong>대상</strong>: 미적분Ⅰ(구 수학Ⅱ) 첫 수업 · 중하위권도 따라오는 호흡. <strong>범위</strong>: 다항·유리·무리함수의 극한과 연속(삼각·지수로그 극한은 선택 미적분이라 제외).</p>
   </div>
@@ -112,81 +119,106 @@
 
     <div class="section-title">🧭 이 노트의 사용법</div>
     <div class="card">
-      <p>세 색으로 팁을 구분했습니다. <strong>💡 이해 꿀팁</strong>(개념을 오래 기억하는 직관) · <strong>⚡ 계산 효율</strong>(시험장 시간 단축) · <strong>⚠️ 오개념</strong>(자주 틀리는 지점). 맨 아래 <strong>확인 문항 4개</strong>로 스스로 점검하세요.</p>
+      <p>세 색으로 팁을 구분했습니다. <strong>💡 이해 꿀팁</strong>(직관) · <strong>⚡ 계산 효율</strong>(시간 단축) · <strong>⚠️ 오개념</strong>(자주 틀림). 각 카드의 <span class="lbl" style="color:var(--standard);font-weight:700;">예:</span> 박스에서 <strong>직접 계산</strong>해 보고, 오개념은 <strong>❌틀린 계산 vs ✅맞는 계산</strong>을 비교하세요. 맨 아래 <strong>확인 문항 4개</strong>로 종합 점검.</p>
     </div>
 
     <div class="section-title">💡 이해 꿀팁 — 개념을 직관으로</div>
 
     <div class="card">
       <div class="problem-num">꿀팁 1 — 극한은 "목적지", 함숫값은 "실제 그 점"</div>
-      <div class="problem-body">$\displaystyle\lim_{x\to a} f(x)$ 는 $x$ 가 $a$ 로 <strong>다가갈 때</strong> $f$ 가 향하는 값이고, $f(a)$ 는 <strong>정확히 그 점</strong>의 값. 둘은 <strong>다를 수 있다</strong>. 그래서 "둘이 같다"는 조건(연속)이 특별한 것.</div>
+      <div class="problem-body">$\displaystyle\lim_{x\to a} f(x)$ 는 $x$ 가 $a$ 로 <strong>다가갈 때</strong> 향하는 값이고, $f(a)$ 는 <strong>정확히 그 점</strong>. 둘은 <strong>다를 수 있다</strong>.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f(x)=\dfrac{x^2-1}{x-1}$ 에서 $\displaystyle\lim_{x\to1}f(x)=\lim_{x\to1}(x+1)=2$ 이지만, $f(1)$ 은 분모가 $0$ 이라 <strong>정의되지 않음</strong>. → 극한은 있어도 함숫값은 없을 수 있다.</div>
     </div>
 
     <div class="card">
       <div class="problem-num">꿀팁 2 — $\dfrac{0}{0}$ 은 "아직 미정"이라는 신호</div>
-      <div class="problem-body">$\dfrac00$ 은 답이 $0$ 도 $\infty$ 도 아니다. <strong>숨은 공통인수 $(x-a)$ 가 있다</strong>는 뜻 → 약분(다항)·유리화(무리)로 그 인수를 없애면 정체가 드러난다.</div>
+      <div class="problem-body">$\dfrac00$ 은 $0$ 도 $\infty$ 도 아니다. <strong>숨은 공통인수 $(x-a)$ 가 있다</strong>는 뜻 → 약분·유리화로 없애면 정체가 드러난다.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to3}\dfrac{x^2-9}{x-3}$ → 대입하면 $\dfrac00$. 인수분해 $\dfrac{(x-3)(x+3)}{x-3}=x+3$ → $\displaystyle\lim_{x\to3}(x+3)=6$.</div>
     </div>
 
     <div class="card">
       <div class="problem-num">꿀팁 3 — $\infty$ 계산은 "누가 더 센가" 싸움</div>
-      <div class="problem-body">다항식에서는 <strong>최고차항이 지배</strong>한다. $x\to\infty$ 유리식은 분자·분모의 최고차항끼리만 비교하면 결론이 난다. 낮은 차수 항은 "잔챙이".</div>
+      <div class="problem-body">다항식은 <strong>최고차항이 지배</strong>. $x\to\infty$ 유리식은 최고차항끼리만 비교하면 끝. 낮은 차수는 "잔챙이".</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to\infty}\dfrac{2x^2+1}{5x^2-x}$ → 최고차 $2x^2$ vs $5x^2$ 만 보면 $\dfrac{2}{5}$. ($+1$, $-x$ 는 무시.)</div>
     </div>
 
     <div class="card">
       <div class="problem-num">꿀팁 4 — 연속의 세 조건을 한 문장으로</div>
-      <div class="problem-body">$x=a$ 에서 연속 ⟺ <strong>"함숫값 존재 + 극한 존재 + 둘이 같음"</strong>. 이 세 개 중 하나라도 깨지면 불연속. ($f(a)$ 정의 안 됨 / 좌우극한 다름 / 극한값≠함숫값)</div>
+      <div class="problem-body">$x=a$ 에서 연속 ⟺ <strong>"함숫값 존재 + 극한 존재 + 둘이 같음"</strong>. 셋 중 하나라도 깨지면 불연속.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $f(x)=\dfrac{|x|}{x}$ 는 $x=0$ 에서 좌극한 $-1$, 우극한 $+1$ → <strong>극한 없음</strong> → (둘째 조건 깨짐) 불연속.</div>
     </div>
 
     <div class="section-title">⚡ 계산 효율 — 시험장 시간 단축</div>
 
     <div class="card">
       <div class="problem-num">효율 1 — $\dfrac{\infty}{\infty}$ 유리식 3초 판정</div>
-      <div class="problem-body">분자·분모 차수만 비교:
-      <br>• 차수 <strong>같음</strong> → 최고차항 <strong>계수의 비</strong>
-      <br>• 분자 차수 <strong>&lt;</strong> 분모 → $0$
-      <br>• 분자 차수 <strong>&gt;</strong> 분모 → $\pm\infty$ (부호는 최고차항 계수 부호)</div>
+      <div class="problem-body">차수만 비교: <strong>같음</strong>→최고차 <strong>계수비</strong> / 분자<분모→$0$ / 분자>분모→$\pm\infty$.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to\infty}\dfrac{2x+3}{x^2+1}=0$ (분자차수 1<2) · $\displaystyle\lim_{x\to\infty}\dfrac{x^2}{2x+1}=\infty$ (2>1) · $\displaystyle\lim_{x\to\infty}\dfrac{3x^2}{2x^2}=\dfrac32$ (차수 같음).</div>
     </div>
 
     <div class="card">
       <div class="problem-num">효율 2 — $\dfrac00$ 다항은 인수정리로 즉시</div>
-      <div class="problem-body">$x=a$ 대입해 $0$ 이면 $(x-a)$ 가 인수. 조립제법으로 바로 뽑아 약분. 굳이 전개하지 말 것.</div>
+      <div class="problem-body">$x=a$ 대입 $0$ 이면 $(x-a)$ 가 인수. 조립제법으로 바로 뽑아 약분 (전개 금지).</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to2}\dfrac{x^3-8}{x-2}$ → $x=2$ 가 근 → $x^3-8=(x-2)(x^2+2x+4)$ → $\displaystyle\lim_{x\to2}(x^2+2x+4)=12$.</div>
     </div>
 
     <div class="card">
       <div class="problem-num">효율 3 — 미정계수 황금률 ★</div>
-      <div class="problem-body">$\displaystyle\lim_{x\to a}\dfrac{(분자)}{(분모)} = (유한값)$ 인데 <strong>분모 $\to 0$</strong> 이면 → <strong>분자도 반드시 $\to 0$</strong>. 이 한 줄로 미지수 하나를 즉시 결정한다. (분자에 $x=a$ 대입 $=0$)</div>
+      <div class="problem-body">$\displaystyle\lim_{x\to a}\dfrac{(분자)}{(분모)}=(유한값)$ 인데 <strong>분모 $\to0$</strong> 이면 → <strong>분자도 $\to0$</strong>. 미지수 하나 즉시 결정.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to2}\dfrac{x^2+ax-6}{x-2}$ 가 존재 → 분모 $\to0$ 이니 분자도 $x=2$ 서 $0$: $4+2a-6=0$ → $a=1$. (그러면 극한값은 $\lim(x+3)=5$.)</div>
     </div>
 
     <div class="card">
       <div class="problem-num">효율 4 — 무리식은 유리화, $x\to-\infty$ 는 부호 주의</div>
-      <div class="problem-body">$\dfrac00$·$\infty-\infty$ 무리식은 <strong>켤레 곱(유리화)</strong>. 단 $\sqrt{x^2}=|x|$ 이므로 $x\to-\infty$ 면 $|x|=-x$ — 부호 뒤집힘을 놓치면 답이 반대로.</div>
+      <div class="problem-body">$\dfrac00$·$\infty-\infty$ 무리식은 <strong>켤레 곱</strong>. 단 $\sqrt{x^2}=|x|$ 이므로 $x\to-\infty$ 면 $|x|=-x$.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\lim_{x\to-\infty}\dfrac{\sqrt{x^2+1}}{x}$. $\sqrt{x^2+1}=|x|\sqrt{1+\tfrac1{x^2}}=-x\sqrt{1+\tfrac1{x^2}}$ ($x<0$) → $\dfrac{-x\sqrt{\cdots}}{x}\to-1$. (부호 놓치면 $+1$ 오답.)</div>
     </div>
 
-    <div class="section-title">⚠️ 오개념 유의점 — 자주 틀리는 지점</div>
+    <div class="section-title">⚠️ 오개념 유의점 — ❌틀린 계산 vs ✅맞는 계산</div>
 
     <div class="card">
-      <div class="problem-num">오개념 1 — $\lim f(x) = f(a)$ 를 당연시 ❌</div>
-      <div class="problem-body">이건 <strong>연속일 때만</strong> 성립. 조각함수·유리식의 "구멍"(정의 안 된 점)에서는 극한은 있어도 함숫값이 다르거나 없다.</div>
-    </div>
-
-    <div class="card">
-      <div class="problem-num">오개념 2 — 연속이면 미분가능? ❌</div>
-      <div class="problem-body">$y=|x|$ 는 $x=0$ 에서 <strong>연속이지만 뾰족해서 미분 불가</strong>. 방향은 한쪽만 참: <strong>미분가능 ⟹ 연속</strong> (역은 거짓).</div>
-    </div>
-
-    <div class="card">
-      <div class="problem-num">오개념 3 — 한쪽 극한만 보고 "극한 존재" 단정 ❌</div>
-      <div class="problem-body">극한 존재 ⟺ <strong>좌극한 = 우극한</strong>. 절댓값·가우스($[x]$)·조각함수는 좌우를 <strong>따로</strong> 확인해야 한다.</div>
+      <div class="problem-num">오개념 1 — $\lim f(x)=f(a)$ 를 당연시</div>
+      <div class="problem-body">이건 <strong>연속일 때만</strong> 성립. "구멍"에서는 극한값과 함숫값이 다를 수 있다.</div>
+      <div class="cmp">
+        <div class="bad">❌ $f(x)=\dfrac{x^2-1}{x-1}\,(x\neq1),\ f(1)=5$ 에서 "$\lim_{x\to1}f=f(1)=5$".</div>
+        <div class="good">✅ $\lim_{x\to1}f=\lim(x+1)=2$. 그런데 $f(1)=5$. <strong>$2\neq5$ 이므로 $x=1$ 에서 불연속</strong>.</div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 4 — $\infty$ 를 수처럼 계산 ❌</div>
-      <div class="problem-body">$\infty-\infty=0$ ❌, $\dfrac{\infty}{\infty}=1$ ❌. 이들은 <strong>부정형</strong>이라 값을 모른다 → 반드시 식 변형 후 판단.</div>
+      <div class="problem-num">오개념 2 — 연속이면 미분가능?</div>
+      <div class="problem-body">방향은 한쪽만 참: <strong>미분가능 ⟹ 연속</strong> (역은 거짓).</div>
+      <div class="cmp">
+        <div class="bad">❌ $y=|x|$ 는 $x=0$ 에서 연속이니까 "미분가능하다".</div>
+        <div class="good">✅ 좌미분계수 $-1$, 우미분계수 $+1$ 로 <strong>다름</strong> → $x=0$ 에서 <strong>미분 불가</strong>(뾰족점). 연속이라고 미분가능은 아니다.</div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 5 — 사잇값 정리를 "근의 개수"로 오해 ❌</div>
-      <div class="problem-body">사잇값 정리: 연속 + 양 끝 <strong>부호 다름</strong> → 그 사이 근이 <strong>적어도 1개</strong>. 개수·위치는 말하지 않는다. 또 부호가 같아도 근이 있을 수 있다(정리는 <strong>충분조건</strong>).</div>
+      <div class="problem-num">오개념 3 — 한쪽만 보고 "극한 존재" 단정</div>
+      <div class="problem-body">극한 존재 ⟺ <strong>좌극한 = 우극한</strong>. 절댓값·가우스·조각함수는 좌우 따로.</div>
+      <div class="cmp">
+        <div class="bad">❌ $\displaystyle\lim_{x\to0}\dfrac{|x|}{x}$ 를 "$0$" 이라고 답.</div>
+        <div class="good">✅ 좌: $\dfrac{-x}{x}=-1$, 우: $\dfrac{x}{x}=+1$. <strong>좌$\neq$우 → 극한 없음(발산)</strong>.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">오개념 4 — $\infty$ 를 수처럼 계산</div>
+      <div class="problem-body">$\infty-\infty=0$ ❌, $\dfrac\infty\infty=1$ ❌. 부정형이라 <strong>변형 후</strong> 판단.</div>
+      <div class="cmp">
+        <div class="bad">❌ $\displaystyle\lim_{x\to\infty}(\sqrt{x^2+x}-x)$ 를 "$\infty-\infty=0$".</div>
+        <div class="good">✅ 유리화: $\dfrac{(x^2+x)-x^2}{\sqrt{x^2+x}+x}=\dfrac{x}{\sqrt{x^2+x}+x}\to\dfrac{1}{1+1}=\dfrac12$.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="problem-num">오개념 5 — 사잇값 정리를 "근의 개수"로 오해</div>
+      <div class="problem-body">사잇값 정리: 연속 + 양 끝 <strong>부호 다름</strong> → 근 <strong>적어도 1개</strong>. 개수·위치는 말 안 함. 부호가 <strong>같아도</strong> 근이 있을 수 있다(정리는 충분조건).</div>
+      <div class="cmp">
+        <div class="bad">❌ $f(x)=x^2-1$, $f(-2)=3>0$, $f(2)=3>0$ 로 부호 같으니 "$[-2,2]$ 에 근 없다".</div>
+        <div class="good">✅ 실제로 $x=\pm1$ 두 근 존재. 사잇값 정리는 부호 다를 때 <strong>존재만</strong> 보장할 뿐, 부호 같다고 근이 없는 건 <strong>아니다</strong>.</div>
+      </div>
     </div>
 
     <div class="section-title">📝 확인 문항 (4개 — 스스로 점검)</div>
@@ -219,8 +251,8 @@
         <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to 1}\dfrac{x^2+ax+b}{x-1}=3$ 일 때 상수 $a,b$ 를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
           <p><strong>STEP 1 (효율 3):</strong> 분모 $\to0$, 극한 유한 → 분자 $\to0$. $x=1$ 대입: $1+a+b=0$.</p>
-          <p><strong>STEP 2:</strong> 분자에 $(x-1)$ 인수 → $x^2+ax+b=(x-1)(x-\beta)$. 나눗셈으로 $x^2+ax+(-1-a)=(x-1)(x+(a+1))$.</p>
-          <p><strong>STEP 3:</strong> $\lim_{x\to1}(x+(a+1))=1+(a+1)=a+2=3$ → $a=1$, $b=-1-a=-2$.</p>
+          <p><strong>STEP 2:</strong> 분자 $x^2+ax+b=(x-1)(x+(a+1))$ (나눗셈).</p>
+          <p><strong>STEP 3:</strong> $\lim_{x\to1}(x+(a+1))=a+2=3$ → $a=1$, $b=-1-a=-2$.</p>
           <p><strong>검산:</strong> $x^2+x-2=(x-1)(x+2)$, $\lim_{x\to1}(x+2)=3$ ✓.</p>
           <p><strong>정답:</strong> $a=1,\ b=-2$</p>
         </div></details>
@@ -232,8 +264,8 @@
         <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=\begin{cases}\dfrac{x^2-1}{x-1} & (x\neq 1)\\ k & (x=1)\end{cases}$ 가 $x=1$ 에서 연속이 되도록 하는 상수 $k$ 를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
           <p><strong>연속 조건(꿀팁 4):</strong> $k=f(1)=\lim_{x\to1}f(x)$ 여야 함.</p>
-          <p>$\lim_{x\to1}\dfrac{x^2-1}{x-1}=\lim_{x\to1}\dfrac{(x-1)(x+1)}{x-1}=\lim_{x\to1}(x+1)=2$.</p>
-          <p><strong>오개념 1 주의:</strong> $x=1$ 은 원래 정의역 구멍이라 극한값 $2$ 로 "메꿔야" 연속.</p>
+          <p>$\lim_{x\to1}\dfrac{x^2-1}{x-1}=\lim_{x\to1}(x+1)=2$.</p>
+          <p><strong>오개념 1 주의:</strong> $x=1$ 은 원래 정의역 구멍이라 극한값 $2$ 로 메꿔야 연속.</p>
           <p><strong>정답:</strong> $k=2$</p>
         </div></details>
       </div>
