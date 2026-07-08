@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) | 학습자료</title>
+  <title>부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) | 학습자료</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
@@ -108,11 +108,11 @@
   </div>
 
   <div class="hero">
-    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — Ⅱ. 미분 › 2. 도함수의 활용</div>
-    <h1>도함수의 활용 — 계산 꿀팁 · 오개념 정리</h1>
-    <p class="sub">도함수 부호로 <strong>증감·극값·그래프</strong>를 읽고, 최대최소·실근 개수·속도까지. 각 팁마다 <strong>계산 예시</strong>, 오개념은 <strong>❌vs✅</strong>.</p>
+    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — Ⅲ. 적분 › 1. 부정적분과 정적분</div>
+    <h1>부정적분과 정적분 — 계산 꿀팁 · 오개념 정리</h1>
+    <p class="sub">적분은 <strong>미분의 역</strong>, 정적분은 <strong>부호 있는 넓이</strong>. 미적분의 기본정리로 잇는다. 각 팁마다 <strong>계산 예시</strong>, 오개념은 <strong>❌vs✅</strong>.</p>
     <div class="src-badge">📘 개념노트 · 팁 중심 (영상 없음 · 단원 큐레이션)</div>
-    <p class="learn">🎯 <strong>대상</strong>: 미적분Ⅰ(구 수학Ⅱ) · 중하위권도 따라오는 호흡. <strong>범위</strong>: 다항함수의 증감·극값·최대최소·방정식과 부등식·속도와 가속도.</p>
+    <p class="learn">🎯 <strong>대상</strong>: 미적분Ⅰ(구 수학Ⅱ) · 중하위권도 따라오는 호흡. <strong>범위</strong>: 다항함수의 부정적분·정적분·미적분의 기본정리. 치환·부분적분은 선택 미적분이라 제외.</p>
   </div>
 
   <div class="container">
@@ -125,105 +125,105 @@
     <div class="section-title">💡 이해 꿀팁 — 개념을 직관으로</div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 1 — 도함수의 부호 = 증가/감소</div>
-      <div class="problem-body">$f'(x)>0$ 인 구간에서 <strong>증가</strong>, $f'(x)<0$ 이면 <strong>감소</strong>. 도함수는 "오르막/내리막" 판별기.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $f=x^2-4x$ → $f'=2x-4$. $x<2$ 면 $f'<0$(감소), $x>2$ 면 $f'>0$(증가).</div>
+      <div class="problem-num">꿀팁 1 — 적분은 미분의 "되돌리기"</div>
+      <div class="problem-body">$F'(x)=f(x)$ 이면 $\displaystyle\int f(x)\,dx=F(x)+C$. 미분해서 $f$ 가 되는 함수를 찾는 일.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\int 3x^2\,dx=x^3+C$ ← $x^3$ 을 미분하면 $3x^2$ 이니까.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 2 — 극값 = 증감이 바뀌는 곳</div>
-      <div class="problem-body">$f'(a)=0$ <strong>이고 그 좌우로 부호가 바뀌면</strong> 극값. $+\to-$ 면 극대, $-\to+$ 면 극소.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $f=x^3-3x$ → $f'=3(x-1)(x+1)$. $x=-1$ 서 $+\to-$(극대 $2$), $x=1$ 서 $-\to+$(극소 $-2$).</div>
+      <div class="problem-num">꿀팁 2 — 정적분은 "부호 있는 넓이"</div>
+      <div class="problem-body">$\displaystyle\int_a^b f\,dx$ 는 $x$축 <strong>위는 +, 아래는 −</strong> 로 센 넓이의 합. 그래서 음수도 될 수 있다.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\int_0^1 (x-1)\,dx=\Big[\tfrac{x^2}{2}-x\Big]_0^1=-\tfrac12$ (그래프가 $x$축 아래라 음수).</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 3 — 증감표가 그래프의 설계도</div>
-      <div class="problem-body">$f'=0$ 인 점으로 구간을 나눠 <strong>부호표</strong>를 만들면, 오르내림·극값·개형이 한눈에.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $f'$ 부호 $+,-,+$ 로 바뀌면 그래프는 올라갔다 내려갔다 다시 오르는 $\mathrm{N}$자형(삼차) 개형.</div>
+      <div class="problem-num">꿀팁 3 — 미적분의 기본정리가 둘을 잇는다</div>
+      <div class="problem-body">$f$ 의 부정적분 $F$ 로 $\displaystyle\int_a^b f\,dx=F(b)-F(a)$. "부정적분 구해서 위–아래 대입".</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\int_0^2 x^2\,dx=\Big[\tfrac{x^3}{3}\Big]_0^2=\tfrac83$.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 4 — $f'(a)=0$ 이라고 다 극값은 아니다</div>
-      <div class="problem-body">부호가 <strong>안 바뀌면</strong> 극값이 아니다. 접선만 수평이고 계속 증가할 수도.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $f=x^3$ → $f'=3x^2\ge0$. $f'(0)=0$ 이지만 좌우 모두 증가 → $x=0$ 은 극값 <strong>아님</strong>.</div>
+      <div class="problem-num">꿀팁 4 — 부정적분은 "함수 가족" (상수 $C$)</div>
+      <div class="problem-body">미분하면 상수가 사라지므로, 되돌릴 때 $+C$ 가 따라온다. 부정적분은 하나가 아니라 가족.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $x^2+1,\ x^2+7,\ x^2-3$ 모두 미분하면 $2x$ → $\displaystyle\int 2x\,dx=x^2+C$.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">꿀팁 5 — 위치를 미분하면 속도, 속도를 미분하면 가속도</div>
-      <div class="problem-body">$x(t)$ 위치 → $v(t)=x'(t)$ 속도 → $a(t)=v'(t)$ 가속도. 미분계수의 "변화율" 의미가 물리로.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $x(t)=t^2-4t$ → $v=2t-4$. $t=2$ 서 $v=0$ (순간 정지·방향 전환).</div>
+      <div class="problem-num">꿀팁 5 — 정적분의 기본 성질</div>
+      <div class="problem-body">$\displaystyle\int_a^a f=0$, $\displaystyle\int_a^b f=-\int_b^a f$ (위아래 바꾸면 부호), $\displaystyle\int_a^b=\int_a^c+\int_c^b$ (구간 이어붙이기).</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\int_0^3 f=\int_0^1 f+\int_1^3 f$ 로 쪼개 계산 가능.</div>
     </div>
 
     <div class="section-title">⚡ 계산 효율 — 시험장 시간 단축</div>
 
     <div class="card">
-      <div class="problem-num">효율 1 — 극값: $f'=0$ 풀고 부호표</div>
-      <div class="problem-body">$f'(x)=0$ 의 해로 구간 나눔 → 각 구간 $f'$ 부호 → 극대·극소.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $f=x^3-3x$ → $f'=3(x-1)(x+1)=0$ → $x=\pm1$ → 극대 $f(-1)=2$, 극소 $f(1)=-2$.</div>
+      <div class="problem-num">효율 1 — 다항 적분은 "차수 올려 나누기"</div>
+      <div class="problem-body">$\displaystyle\int x^n\,dx=\dfrac{x^{n+1}}{n+1}+C$ ($n\neq-1$). 미분의 정반대.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\int(3x^2-2x+1)\,dx=x^3-x^2+x+C$.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">효율 2 — 최대·최소는 "극값 + 양 끝값" 비교</div>
-      <div class="problem-body">닫힌구간 $[a,b]$ 에서 최대최소는 <strong>극값 후보와 양 끝 $f(a),f(b)$</strong> 를 모두 비교.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $f=x^3-3x$, $[0,3]$: $f(1)=-2$(극소), $f(0)=0$, $f(3)=18$ → 최대 $18$, 최소 $-2$.</div>
+      <div class="problem-num">효율 2 — 정적분은 $C$ 신경 안 써도 된다</div>
+      <div class="problem-body">$F(b)-F(a)$ 에서 $C$ 는 서로 소거. 정적분 계산엔 $+C$ 안 붙여도 됨.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $(F(b)+C)-(F(a)+C)=F(b)-F(a)$.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">효율 3 — 실근 개수는 "$y=k$ 수평선과 교점"</div>
-      <div class="problem-body">$f(x)=k$ 실근 개수 = 그래프와 $y=k$ 의 교점 수. <strong>극대·극소값과 $k$ 를 비교</strong>.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $x^3-3x=k$: 극대 $2$·극소 $-2$. $-2<k<2$ 면 3개, $k=\pm2$ 면 2개, 그 밖 1개.</div>
+      <div class="problem-num">효율 3 — 대칭(우함수·기함수)으로 반만 계산</div>
+      <div class="problem-body">$\displaystyle\int_{-a}^{a}$ 에서 <strong>기함수(홀수차)</strong>는 $0$, <strong>우함수(짝수차)</strong>는 $2\displaystyle\int_0^a$.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\displaystyle\int_{-1}^{1}x^3\,dx=0$ (기함수), $\displaystyle\int_{-1}^{1}x^2\,dx=2\int_0^1 x^2=\tfrac23$.</div>
     </div>
 
     <div class="card">
-      <div class="problem-num">효율 4 — 부등식 증명은 "최솟값 ≥ 0"</div>
-      <div class="problem-body">$f(x)\ge0$ 를 보이려면 $f$ 의 <strong>최솟값이 $0$ 이상</strong>임을 도함수로 확인.</div>
-      <div class="mini-ex"><span class="lbl">예:</span> $x\ge0$ 에서 $x^3-3x+2\ge0$? $f'=3x^2-3=0$→$x=1$, $f(1)=0$ 이 최소 → $\ge0$ 성립.</div>
+      <div class="problem-num">효율 4 — $\dfrac{d}{dx}\displaystyle\int_a^x f(t)\,dt=f(x)$</div>
+      <div class="problem-body">위끝이 $x$ 인 정적분을 $x$ 로 미분하면 <strong>피적분함수에 $x$ 대입</strong>. 아래끝 상수는 무관.</div>
+      <div class="mini-ex"><span class="lbl">예:</span> $\dfrac{d}{dx}\displaystyle\int_1^x (t^2-t)\,dt=x^2-x$.</div>
     </div>
 
-    <div class="section-title">⚠️ 오개념 유의점 — ❌틀린 판단 vs ✅맞는 판단</div>
+    <div class="section-title">⚠️ 오개념 유의점 — ❌틀린 계산 vs ✅맞는 계산</div>
 
     <div class="card">
-      <div class="problem-num">오개념 1 — $f'(a)=0$ 이면 무조건 극값?</div>
-      <div class="problem-body">부호가 <strong>바뀌어야</strong> 극값. 안 바뀌면 극값이 아니다.</div>
+      <div class="problem-num">오개념 1 — 부정적분에서 $+C$ 빼먹기</div>
+      <div class="problem-body">부정적분은 반드시 <strong>$+C$</strong>. 조건(한 점 값)으로 $C$ 를 정할 수 있다.</div>
       <div class="cmp">
-        <div class="bad">❌ $f=x^3$ 은 $f'(0)=0$ 이니 "$x=0$ 에서 극값".</div>
-        <div class="good">✅ $f'=3x^2\ge0$ 로 좌우 모두 증가 → 부호 안 바뀜 → 극값 아님.</div>
+        <div class="bad">❌ $\displaystyle\int 2x\,dx=x^2$.</div>
+        <div class="good">✅ $\displaystyle\int 2x\,dx=x^2+C$. ($f(0)=3$ 같은 조건 있으면 $C=3$.)</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 2 — 극댓값은 항상 극솟값보다 크다?</div>
-      <div class="problem-body">국소적 개념이라 <strong>그래프 전체</strong>에서는 극댓값 < 극솟값일 수도 있다(멀리 떨어진 봉우리·골).</div>
+      <div class="problem-num">오개념 2 — 정적분 = 넓이라 항상 양수?</div>
+      <div class="problem-body">정적분은 <strong>부호 있는</strong> 값. $x$축 아래면 음수. 넓이(항상 양수)와 다르다.</div>
       <div class="cmp">
-        <div class="bad">❌ "극댓값이니 무조건 극솟값보다 크다".</div>
-        <div class="good">✅ 극값은 <strong>주변에서만</strong> 최대/최소. 예로 왼쪽 극대가 오른쪽 극소보다 낮은 그래프도 있다.</div>
+        <div class="bad">❌ $\displaystyle\int_0^1(x-1)\,dx$ 는 넓이니까 양수.</div>
+        <div class="good">✅ $=-\tfrac12$ (그래프가 $x$축 아래). 넓이를 원하면 $\big|{-}\tfrac12\big|=\tfrac12$.</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 3 — 최대·최소는 극값 중에서만?</div>
-      <div class="problem-body">닫힌구간에서는 <strong>양 끝점</strong>도 최대·최소 후보. 극값만 보면 틀린다.</div>
+      <div class="problem-num">오개념 3 — 위끝·아래끝 순서 무시</div>
+      <div class="problem-body">$\displaystyle\int_a^b=-\int_b^a$. 위아래를 바꾸면 부호가 뒤집힌다.</div>
       <div class="cmp">
-        <div class="bad">❌ $f=x^3-3x$, $[0,3]$ 의 최대를 "극대 $f(-1)=2$".</div>
-        <div class="good">✅ $x=-1$ 은 구간 밖. 후보는 $f(1)=-2$, $f(0)=0$, $f(3)=18$ → 최대 $18$(끝점).</div>
+        <div class="bad">❌ $\displaystyle\int_2^0 x\,dx$ 를 $\int_0^2 x\,dx=2$ 와 같다고.</div>
+        <div class="good">✅ $\displaystyle\int_2^0 x\,dx=-\int_0^2 x\,dx=-2$.</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 4 — 증가함수면 $f'>0$?</div>
-      <div class="problem-body">증가함수는 $f'\ge0$ (등호 허용). 한 점에서 $f'=0$ 이어도 증가일 수 있다.</div>
+      <div class="problem-num">오개념 4 — $\displaystyle\int_a^x f(t)\,dt$ 를 상수로 취급</div>
+      <div class="problem-body">위끝이 $x$ 이면 결과는 <strong>$x$ 의 함수</strong>. 적분변수 $t$ 와 위끝 $x$ 를 구분해야.</div>
       <div class="cmp">
-        <div class="bad">❌ $f=x^3$ 은 증가함수니까 "모든 $x$ 에서 $f'>0$".</div>
-        <div class="good">✅ $f'=3x^2$ 은 $x=0$ 에서 $0$. $f'\ge0$ 이고 $f'=0$ 인 점이 고립되어 있어 여전히 증가.</div>
+        <div class="bad">❌ $g(x)=\displaystyle\int_0^x(2t-1)\,dt$ 를 "상수라 $g'(x)=0$".</div>
+        <div class="good">✅ 기본정리로 $g'(x)=2x-1$. ($g(x)=x^2-x$ 라는 $x$ 의 함수.)</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="problem-num">오개념 5 — 속도 $0$ = "정지(멈춤)"?</div>
-      <div class="problem-body">$v=0$ 은 <strong>순간 속도</strong>가 $0$ 인 시점. 대개 <strong>방향 전환</strong>점이지 영구히 멈춘 게 아니다.</div>
+      <div class="problem-num">오개념 5 — $\displaystyle\int f'(x)\,dx$ 를 헷갈림</div>
+      <div class="problem-body">미분과 적분은 역연산: $\displaystyle\int f'(x)\,dx=f(x)+C$.</div>
       <div class="cmp">
-        <div class="bad">❌ $x(t)=t^2-4t$ 에서 $v(2)=0$ 이니 "$t=2$ 이후 정지".</div>
-        <div class="good">✅ $v=2t-4$ 는 $t=2$ 전 음수(왼쪽)·후 양수(오른쪽) → $t=2$ 는 <strong>방향 전환</strong>, 이후 계속 운동.</div>
+        <div class="bad">❌ $\displaystyle\int (x^2)'\,dx=\int 2x\,dx$ 를 다시 계산하려 우왕좌왕.</div>
+        <div class="good">✅ $\displaystyle\int (x^2)'\,dx=x^2+C$ (되돌리기이므로 바로).</div>
       </div>
     </div>
 
@@ -232,80 +232,77 @@
 
       <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
       <div class="problem-card filterable basic">
-        <div class="problem-num">기초 1 — 증가·감소 구간</div>
-        <div class="problem-body"><strong>문제:</strong> $f(x)=x^2-6x+1$ 의 증가·감소 구간을 구하시오.</div>
+        <div class="problem-num">기초 1 — 부정적분</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\int(6x^2-4x+1)\,dx$ 를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>$f'=2x-6=0$ → $x=3$. $x<3$ 면 $f'<0$(감소), $x>3$ 면 $f'>0$(증가).</p>
-          <p><strong>정답:</strong> $x\le3$ 감소, $x\ge3$ 증가</p>
+          <p>$\displaystyle\int 6x^2=2x^3$, $\int(-4x)=-2x^2$, $\int1=x$.</p>
+          <p><strong>정답:</strong> $2x^3-2x^2+x+C$ (오개념 1 — $C$ 필수)</p>
         </div></details>
       </div>
       <div class="problem-card filterable basic">
-        <div class="problem-num">기초 2 — 극값</div>
-        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3-12x$ 의 극댓값과 극솟값을 구하시오.</div>
+        <div class="problem-num">기초 2 — 정적분</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\int_1^3 (2x)\,dx$ 를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>$f'=3x^2-12=3(x-2)(x+2)=0$ → $x=\pm2$.</p>
-          <p>$x=-2$: $+\to-$ 극대 $f(-2)=-8+24=16$. $x=2$: $-\to+$ 극소 $f(2)=8-24=-16$.</p>
-          <p><strong>정답:</strong> 극댓값 $16$, 극솟값 $-16$</p>
+          <p>$\big[x^2\big]_1^3=9-1=8$.</p>
+          <p><strong>정답:</strong> $8$ (효율 2 — $C$ 생략)</p>
         </div></details>
       </div>
 
       <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
       <div class="problem-card filterable standard">
-        <div class="problem-num">기본 1 — 닫힌구간 최대·최소</div>
-        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3-3x+1$ 의 $[-2,2]$ 에서 최댓값과 최솟값을 구하시오.</div>
+        <div class="problem-num">기본 1 — 대칭 활용</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\int_{-2}^{2}(x^3+3x^2)\,dx$ 를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>$f'=3x^2-3=0$ → $x=\pm1$. 후보: $f(-2)=-1$, $f(-1)=3$, $f(1)=-1$, $f(2)=3$.</p>
-          <p><strong>정답:</strong> 최댓값 $3$ ($x=-1,2$), 최솟값 $-1$ ($x=-2,1$) — 끝점·극값 모두 비교(오개념 3)</p>
+          <p>$x^3$ 은 기함수 → $\displaystyle\int_{-2}^2 x^3=0$. $3x^2$ 은 우함수 → $2\displaystyle\int_0^2 3x^2=2\big[x^3\big]_0^2=2\cdot8=16$.</p>
+          <p><strong>정답:</strong> $16$ (효율 3)</p>
         </div></details>
       </div>
       <div class="problem-card filterable standard">
-        <div class="problem-num">기본 2 — 실근의 개수</div>
-        <div class="problem-body"><strong>문제:</strong> 방정식 $x^3-3x-k=0$ 이 서로 다른 세 실근을 갖도록 하는 $k$ 의 범위를 구하시오.</div>
+        <div class="problem-num">기본 2 — 정적분과 넓이의 차이</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\int_0^2 (x-1)\,dx$ 를 구하고, 그 값이 넓이와 왜 다른지 설명하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>$x^3-3x=k$ 로 보면 $f=x^3-3x$ 의 극대 $2$·극소 $-2$. 세 교점 조건은 극소<$k$<극대.</p>
-          <p><strong>정답:</strong> $-2<k<2$ (효율 3)</p>
+          <p>$\Big[\tfrac{x^2}{2}-x\Big]_0^2=(2-2)-(0)=0$.</p>
+          <p>$[0,1]$ 은 $x$축 아래(−), $[1,2]$ 는 위(+)로 상쇄되어 정적분 $0$. 실제 넓이는 두 삼각형 $\tfrac12+\tfrac12=1$.</p>
+          <p><strong>정답:</strong> 정적분 $0$, 넓이 $1$ (오개념 2)</p>
         </div></details>
       </div>
 
       <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
       <div class="problem-card filterable advanced">
-        <div class="problem-num">심화 1 — 극값 조건으로 미정계수</div>
-        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3+ax^2+bx$ 가 $x=1$ 에서 극댓값 $2$ 를 가질 때 상수 $a,b$ 를 구하시오.</div>
+        <div class="problem-num">심화 1 — 정적분으로 정의된 함수의 미분</div>
+        <div class="problem-body"><strong>문제:</strong> $g(x)=\displaystyle\int_1^x (t^2-2t)\,dt$ 일 때 $g'(x)$ 와 $g'(3)$ 을 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p><strong>조건 1:</strong> $f'(1)=0$. $f'=3x^2+2ax+b$ → $3+2a+b=0$.</p>
-          <p><strong>조건 2:</strong> $f(1)=2$ → $1+a+b=2$ → $a+b=1$.</p>
-          <p>두 식: $2a+b=-3$, $a+b=1$ → $a=-4$, $b=5$.</p>
-          <p><strong>검산:</strong> $f'=3x^2-8x+5=(3x-5)(x-1)$, $x=1$ 서 $+\to-$ 극대 ✓. <strong>정답:</strong> $a=-4,b=5$</p>
+          <p>기본정리(효율 4): $g'(x)=x^2-2x$. $g'(3)=9-6=3$.</p>
+          <p><strong>정답:</strong> $g'(x)=x^2-2x$, $g'(3)=3$ (오개념 4 — $x$ 의 함수)</p>
         </div></details>
       </div>
       <div class="problem-card filterable advanced">
-        <div class="problem-num">심화 2 — 부등식 증명</div>
-        <div class="problem-body"><strong>문제:</strong> $x\ge0$ 일 때 $x^3+4\ge3x^2$ 임을 도함수로 보이시오.</div>
+        <div class="problem-num">심화 2 — 부정적분 + 조건으로 $C$ 결정</div>
+        <div class="problem-body"><strong>문제:</strong> $f'(x)=3x^2-4x$ 이고 $f(1)=2$ 일 때 $f(x)$ 를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p>$g(x)=x^3-3x^2+4$ 로 두고 $x\ge0$ 에서 $g\ge0$ 을 보이면 됨.</p>
-          <p>$g'=3x^2-6x=3x(x-2)=0$ → $x=0,2$. $x\ge0$ 에서 최소는 $g(2)=8-12+4=0$.</p>
-          <p>최솟값 $0\ge0$ 이므로 $g(x)\ge0$, 즉 $x^3+4\ge3x^2$. ∎ (효율 4)</p>
+          <p>$f(x)=\displaystyle\int(3x^2-4x)\,dx=x^3-2x^2+C$.</p>
+          <p>$f(1)=1-2+C=2$ → $C=3$.</p>
+          <p><strong>정답:</strong> $f(x)=x^3-2x^2+3$</p>
         </div></details>
       </div>
 
       <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
       <div class="problem-card filterable csat">
-        <div class="problem-num">수능 대비 — 속도·가속도</div>
-        <div class="problem-body"><strong>문제:</strong> 수직선 위를 움직이는 점 P의 위치가 $x(t)=t^3-6t^2+9t$ 이다. ⑴ P가 운동 방향을 바꾸는 시각, ⑵ 그때의 가속도를 구하시오. (단 $t>0$)</div>
+        <div class="problem-num">수능 대비 — 적분방정식</div>
+        <div class="problem-body"><strong>문제:</strong> 모든 실수 $x$ 에서 $\displaystyle\int_1^x f(t)\,dt=x^2+ax-3$ 을 만족하는 함수 $f(x)$ 와 상수 $a$ 를 구하시오.</div>
         <details><summary>📖 풀이</summary><div class="solution">
-          <p><strong>속도:</strong> $v(t)=x'(t)=3t^2-12t+9=3(t-1)(t-3)$.</p>
-          <p><strong>⑴ 방향 전환:</strong> $v=0$ 이고 부호 바뀌는 $t=1,\ 3$. ($t=1$ 전후 $+\to-$, $t=3$ 전후 $-\to+$ 모두 전환.)</p>
-          <p><strong>가속도:</strong> $a(t)=v'(t)=6t-12$. $a(1)=-6$, $a(3)=6$.</p>
-          <p><strong>정답:</strong> ⑴ $t=1,\ t=3$ ⑵ 각각 $-6,\ 6$ (오개념 5 — $v=0$ 은 방향 전환)</p>
+          <p><strong>STEP 1 — 양변 미분:</strong> 좌변은 기본정리로 $f(x)$, 우변 $2x+a$ → $f(x)=2x+a$.</p>
+          <p><strong>STEP 2 — $x=1$ 대입:</strong> 좌변 $\displaystyle\int_1^1 f=0$, 우변 $1+a-3=a-2$ → $a-2=0$ → $a=2$.</p>
+          <p><strong>정답:</strong> $f(x)=2x+2$, $a=2$ (아래끝 $x=1$ 대입 = 0 이 핵심)</p>
         </div></details>
       </div>
 
     </div>
 
 
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html">미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html">미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../수학II-도함수의활용/20260708_도함수의활용꿀팁과오개념_개념.html">도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
 <footer>
-    생성일 2026-07-08 · <strong>개념노트(팁 중심)</strong>(영상 없음 · 단원 큐레이션) · 미적분Ⅰ(수학Ⅱ) 도함수의 활용<br>
+    생성일 2026-07-08 · <strong>개념노트(팁 중심)</strong>(영상 없음 · 단원 큐레이션) · 미적분Ⅰ(수학Ⅱ) 부정적분과 정적분<br>
     AI가 정리한 팁 노트입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
   </footer>
 
