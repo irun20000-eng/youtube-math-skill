@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-미분] · 함수의 극한과 미분계수</div><h1>절댓값 극한과 미분계수 — <strong>"근과 차수"로 접선 해석</strong></h1><p class="sub">🎯 $|f|$ 가 낀 극한은 <strong>부호 구간별로</strong> 절댓값을 벗긴다. $f=0$ 인 근에서는 좌우극한 일치 조건으로 <strong>$|f'(\text{근})|=1$</strong>. 방정식의 상수는 "특정 점의 함숫값"으로 보고 <strong>접선 문제</strong>로 치환.</p><div class="video-card"><a class="thumb" href="https://youtu.be/1D2zCNqf8DE" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/1D2zCNqf8DE/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 극한 허수 판독기 문제</div><div class="v-meta">📺 시대수학 김성호, 9분 31초 · 2026-07-17</div><a class="v-link" href="https://youtu.be/1D2zCNqf8DE" target="_blank" rel="noopener">https://youtu.be/1D2zCNqf8DE</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 문제</h2>
+      <article class="problem basic">
+        <h3>예시 — 절댓값 극한이 "실수 전체에서 존재"할 조건</h3>
+        <p class="problem-body"><strong>문제(핵심):</strong> 최고차항 계수가 양수이고 최솟값이 $-1$ 인 이차함수 $f(x)$ 에 대해, 극한 $\displaystyle\lim_{h\to0}\dfrac{|f(x+h)|-|f(x)+h|}{h}$ 이 <strong>모든 실수 $x$ 에서 존재</strong>한다. 이때 $f$ 의 근에서 성립하는 조건을 구하시오.</p>
+        <details open>
+          <summary>📖 풀이 보기 (영상의 핵심 논리)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 근과 차수:</strong> 최솟값 $-1<0$, 아래로 볼록 → $x$축과 서로 다른 두 점 $\alpha,\beta$ 에서 교차. 문제의 출발은 항상 <strong>근과 차수</strong>.</p>
+            <p><strong>STEP 2 — 부호 구간(절댓값 벗기기):</strong> $f(x)\neq0$ 이면 $h$ 가 충분히 작을 때 부호가 유지되어 절댓값이 그냥 벗겨진다.</p>
+            <p>· $f(x)>0$: $\dfrac{f(x+h)-(f(x)+h)}{h}\to f'(x)-1$ (존재).</p>
+            <p>· $f(x)<0$: $\dfrac{-f(x+h)+(f(x)+h)}{h}\to -f'(x)+1$ (존재).</p>
+            <p><strong>STEP 3 — 근에서(핵심):</strong> $f(\alpha)=0$ 이면 $f(\alpha+h)\approx f'(\alpha)h$, $f(\alpha)+h=h$. 식 $=\dfrac{|f'(\alpha)h|-|h|}{h}=(|f'(\alpha)|-1)\dfrac{|h|}{h}$.</p>
+            <p>우극한 $|f'(\alpha)|-1$, 좌극한 $-(|f'(\alpha)|-1)$. <strong>둘이 일치하려면 $|f'(\alpha)|=1$</strong>.</p>
+            <p class="answer"><strong>정답:</strong> 두 근 모두에서 $|f'(\text{근})|=1$. 아래로 볼록이므로 왼쪽 근 $\alpha$ 에서 $f'(\alpha)=-1$, 오른쪽 근 $\beta$ 에서 $f'(\beta)=1$.</p>
+            <p class="key-point"><strong>핵심:</strong> 절댓값이 무서운 게 아니라, $f=0$ 되는 점에서만 좌우극한을 따져 $|f'|=1$ 을 뽑아내면 된다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (비교급 극한 · 절댓값 · 급 맞추기)</h2>
+
+      <div class="concept-block">
+        <h3>① 큰 그림 — 극한은 "이해"보다 "표현"</h3>
+        <p>강사 메시지: 극한의 $\infty$·좌우극한을 막연한 "상태"가 아니라 <strong>비교급</strong>("더 큰 수", "더 가까운 수")으로 보고, 표현 방식을 익혀 <strong>문제에 적용</strong>하라.</p>
+        <div class="insight">
+          그리고 모든 함수 문제의 출발점은 <strong>"근과 차수"</strong> — $x$축과의 교점(근) 개수·교차 형태와 최고차 차수를 먼저 파악한다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 선수 지식 — 미분계수의 정의</h3>
+        <div class="prereq">
+          <p>$f'(a)=\displaystyle\lim_{h\to0}\dfrac{f(a+h)-f(a)}{h}$. 낯선 극한식은 이 정의 꼴로 맞추면 $f'$ 이 보인다.</p>
+          <p>절댓값 $|g|$ 는 $g$ 의 부호로 갈린다: $g>0$ 이면 $|g|=g$, $g<0$ 이면 $|g|=-g$.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 핵심 — 부호 구간별로 절댓값 벗기기</h3>
+        <div class="step-derive">
+          <p>$f(x)>0$ 인 점: $h$ 작으면 $f(x+h)>0$, $f(x)+h>0$ → 극한 $=f'(x)-1$.</p>
+          <p>$f(x)<0$ 인 점: $f(x+h)<0$, $f(x)+h<0$ → 극한 $=-f'(x)+1$.</p>
+          <p>즉 $f\neq0$ 인 모든 점에서 극한은 <strong>항상 존재</strong>. 문제는 $f=0$ 되는 근에서만 발생.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 — 근에서 좌우극한 일치 → $|f'(\text{근})|=1$</h3>
+        <div class="step-derive">
+          <p>$f(\alpha)=0$: $|f(\alpha+h)|\approx|f'(\alpha)|\,|h|$, $|f(\alpha)+h|=|h|$.</p>
+          <p>식 $=(|f'(\alpha)|-1)\cdot\dfrac{|h|}{h}$. $\dfrac{|h|}{h}$ 는 $h\to0^+$ 에서 $+1$, $h\to0^-$ 에서 $-1$.</p>
+          <p>좌우극한이 일치(극한 존재)하려면 계수 $|f'(\alpha)|-1=0$ → $\boxed{|f'(\alpha)|=1}$.</p>
+        </div>
+        <div class="formula-box">
+          $f(\text{근})=0$ 에서 극한 존재 $\iff |f'(\text{근})|=1$
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 핵심 — "같은 급" 비교 & 상수를 함숫값으로</h3>
+        <p>등호·부등호로 두 식을 비교할 땐 <strong>같은 급</strong>(함숫값↔함숫값, 도함수↔도함수)으로 맞춘다.</p>
+        <div class="callout">
+          <p>방정식 $2x+2f(x)=-1$ 에서 우변 $-1$ 을 <strong>단순 숫자로 보지 말고</strong> 정리: $f(x)=-x-\tfrac12$. 이는 <strong>직선 $y=-x-\tfrac12$ 와 $f$ 의 교점</strong> 문제.</p>
+          <p>실근 1개 = 직선이 이차함수에 <strong>접함</strong>. 접선 기울기 $-1$ 이므로 접점은 $f'=-1$ 인 곳(왼쪽 근 $\alpha$).</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 함정 — 흔히 놓치는 3가지</h3>
+        <div class="callout">
+          <p>① <strong>절댓값을 통째로 두려워함</strong>: 부호 구간별로 벗기면 사라진다. 문제는 $f=0$ 인 점뿐.</p>
+          <p>② <strong>$\dfrac{|h|}{h}$ 의 좌우 부호</strong>: $h\to0^+$ 는 $+1$, $h\to0^-$ 는 $-1$. 이게 $|f'|=1$ 조건의 근원.</p>
+          <p>③ <strong>상수를 숫자로만 봄</strong>: $-1$ 을 "$y$ 절편·함숫값"으로 재해석하면 교점·접선 문제로 열린다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 절댓값 함수의 미분가능성</h3>
+        <p class="problem-body"><strong>문제:</strong> $y=|x|$ 가 $x=0$ 에서 미분가능하지 않은 이유를, $\displaystyle\lim_{h\to0}\dfrac{|0+h|-|0|}{h}$ 의 좌우극한으로 설명하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>식 $=\dfrac{|h|}{h}$. $h\to0^+$: $+1$, $h\to0^-$: $-1$.</p>
+            <p>좌우극한이 달라 극한이 없음 → $x=0$ 에서 미분 불가.</p>
+            <p class="answer"><strong>정답:</strong> $\dfrac{|h|}{h}$ 의 좌 $-1$·우 $+1$ 불일치. (개념 ④의 원형)</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 미분계수 정의로 극한</h3>
+        <p class="problem-body"><strong>문제:</strong> 미분가능한 $f$ 에 대해 $\displaystyle\lim_{h\to0}\dfrac{f(a+h)-f(a)}{h}=f'(a)$ 임을 이용해, $f(x)=x^2$ 일 때 $\displaystyle\lim_{h\to0}\dfrac{f(2+h)-f(2)}{h}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>정의에 의해 $=f'(2)$. $f'(x)=2x$ → $f'(2)=4$.</p>
+            <p class="answer"><strong>정답:</strong> $4$</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 부호가 일정한 곳의 절댓값 극한</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^2+1$ (항상 양수)일 때 $\displaystyle\lim_{h\to0}\dfrac{|f(x+h)|-|f(x)+h|}{h}$ 를 $x$ 의 식으로 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$f>0$ 이고 $h$ 작으면 $f(x+h)>0$, $f(x)+h>0$ → 절댓값 벗김.</p>
+            <p>$\dfrac{f(x+h)-(f(x)+h)}{h}=\dfrac{f(x+h)-f(x)}{h}-1\to f'(x)-1=2x-1$.</p>
+            <p class="answer"><strong>정답:</strong> $2x-1$ (개념 ③)</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 근에서 $|f'|=1$ 조건</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(\alpha)=0$ 인 점에서 $\displaystyle\lim_{h\to0}\dfrac{|f(\alpha+h)|-|f(\alpha)+h|}{h}$ 이 존재할 조건을 $f'(\alpha)$ 로 나타내시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$f(\alpha)=0$ → $f(\alpha+h)\approx f'(\alpha)h$, $f(\alpha)+h=h$.</p>
+            <p>식 $=\dfrac{|f'(\alpha)h|-|h|}{h}=(|f'(\alpha)|-1)\dfrac{|h|}{h}$.</p>
+            <p>$\dfrac{|h|}{h}$ 좌우 부호가 다르므로 극한 존재 $\iff |f'(\alpha)|-1=0$.</p>
+            <p class="answer"><strong>정답:</strong> $|f'(\alpha)|=1$ (개념 ④)</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 이차함수와 직선의 접함</h3>
+        <p class="problem-body"><strong>문제:</strong> 직선 $y=-x-\tfrac12$ 가 이차함수 $y=\tfrac14 x(x-4)$ 에 접하는지 판정하고, 접하면 접점의 $x$좌표를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>연립:</strong> $\tfrac14 x(x-4)=-x-\tfrac12$ → $\tfrac14 x^2-x=-x-\tfrac12$ → $\tfrac14 x^2=-\tfrac12$ → $x^2=-2$.</p>
+            <p>실근 없음 → <strong>접하지 않고 만나지도 않음</strong>(판별식 음수).</p>
+            <p class="answer"><strong>정답:</strong> 접하지 않음 ($x^2=-2$, 실근 없음). "접함=중근"을 판별식으로 확인하는 연습.</p>
+            <p class="key-point"><strong>포인트:</strong> 접함 조건은 연립 후 <strong>중근(판별식 0)</strong>. 여기선 실근이 없어 접선이 아님을 확인.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 극한 존재 조건을 만족하는 이차함수 찾기</h3>
+        <p class="problem-body"><strong>문제:</strong> 최고차항 계수가 양수, 최솟값 $-1$ 이고 두 근에서 $|f'|=1$ 인 이차함수 $f(x)$ 를 하나 구하시오. (근을 $0,\ 4$ 로 두어도 좋다)</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1:</strong> 근을 $0,4$ 로: $f(x)=p\,x(x-4)$ ($p>0$).</p>
+            <p><strong>STEP 2 — 최솟값:</strong> 꼭짓점 $x=2$, $f(2)=p(2)(-2)=-4p=-1$ → $p=\tfrac14$.</p>
+            <p><strong>STEP 3 — 근 미분계수:</strong> $f(x)=\tfrac14(x^2-4x)$, $f'(x)=\tfrac12 x-1$. $f'(0)=-1$, $f'(4)=1$ → $|f'(\text{근})|=1$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> $f(x)=\tfrac14 x(x-4)$ (근 $0,4$ / 최솟값 $-1$ / 근에서 $|f'|=1$ 모두 충족)</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 영상의 논리 흐름 (조건 종합)</h3>
+        <p class="problem-body"><strong>문제:</strong> 최고차 계수 양수, 최솟값 $-1$ 인 이차함수 $f$ 에 대해 위 극한이 실수 전체에서 존재하고, 방정식 $2x+2f(x)=-1$ 의 실근이 1개이다. 풀이의 논리 단계를 순서대로 서술하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>①</strong> 근과 차수: 최솟값 $-1<0$ → 서로 다른 두 근 $\alpha<\beta$, 아래로 볼록.</p>
+            <p><strong>②</strong> 극한 존재 조건(개념 ④): 두 근에서 $|f'|=1$ → $f'(\alpha)=-1$, $f'(\beta)=1$.</p>
+            <p><strong>③</strong> 상수를 함숫값으로(개념 ⑤): $2x+2f(x)=-1$ → $f(x)=-x-\tfrac12$, 직선과의 교점.</p>
+            <p><strong>④</strong> 실근 1개 = 접함, 접선 기울기 $-1$ → 접점은 $f'=-1$ 인 $x=\alpha$.</p>
+            <p><strong>⑤</strong> $f'(\alpha)=-1$·접점 조건·최솟값 $-1$ 을 연립해 미정계수 결정 ($f(x)=p(x-\alpha)(x-3\alpha)$ 꼴로 두고 풀이).</p>
+            <p class="answer"><strong>정답:</strong> 근과 차수 → $|f'(\text{근})|=1$ → 상수 재해석 → 접함 → 연립. (영상은 이 연립식 세우기까지 전개)</p>
+            <p class="key-point"><strong>주의:</strong> 원문제 지문·최종 수치는 영상에서 완전히 제시되지 않아(연립식까지만), 여기서는 <strong>논리 흐름</strong>을 정리했습니다. 완전한 수치 풀이는 심화 2 의 구체 $f$ 로 연습하세요.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 구체 이차함수로 극한 계산</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=\tfrac14 x(x-4)$ 에 대해 $\displaystyle\lim_{h\to0}\dfrac{|f(x+h)|-|f(x)+h|}{h}$ 를 ⑴ $x=1$ (여기서 $f<0$) ⑵ $x=0$ (근) 에서 각각 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$f'(x)=\tfrac12 x-1$.</p>
+            <p><strong>⑴ $x=1$:</strong> $f(1)=\tfrac14(1)(-3)=-\tfrac34<0$ → 극한 $=-f'(1)+1=-(-\tfrac12)+1=\tfrac32$.</p>
+            <p><strong>⑵ $x=0$ (근, $f(0)=0$):</strong> $f'(0)=-1$ 이라 $|f'(0)|=1$ → 극한 존재. 값 $=|f'(0)|-1$ 의 부호처리 → $\dfrac{|h|(|f'(0)|-1)}{h}$ 에서 $|f'(0)|-1=0$ → 극한 $=0$.</p>
+            <p class="answer"><strong>정답:</strong> ⑴ $\tfrac32$ ⑵ $0$</p>
+            <p class="key-point"><strong>검산:</strong> ⑵ 는 $|f'(0)|=1$ 이라 좌우극한 모두 $0$ 으로 일치 — 극한 존재 조건과 정합.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(시대수학 김성호)의 압축된 논리를 중수준(하위 40%)도 따라오게 풀어 작성:</p>
+    <ul>
+      <li><strong>절댓값 극한의 부호 처리</strong> → $f>0$/$f<0$/$f=0$ 세 경우로 분리 (개념 ③④). 수학적으로 검산 완료.</li>
+      <li><strong>근에서 $|f'|=1$ 조건</strong> → $\dfrac{|h|}{h}$ 의 좌우 부호로 유도. 구체 $f=\tfrac14 x(x-4)$ 로 확인(근 $0,4$, 최솟값 $-1$, $|f'(\text{근})|=1$).</li>
+      <li><strong>상수를 함숫값으로 → 접선</strong> → $2x+2f=-1$ 을 직선 교점·접함 문제로 (개념 ⑤).</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>수능 대비 1</strong> — 원영상이 <strong>미정계수 연립식 세우기까지만</strong> 전개하고 최종 수치를 완결하지 않았습니다(보고서 명시). 본 자료는 <strong>논리 흐름</strong>을 정리하고, 완결된 수치 계산은 심화 2·수능 대비 2 의 구체 $f$ 로 대체했습니다. (확신도: 개념·부호처리 ★★★, 원문제 완전복원 ★★)</li>
+      <li>"수능 대비"는 출제 패턴 라벨일 뿐 실재 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="20260507_거리곱완전정복도함수까지_M3TGprau.html">거리곱 완전정복 1탄 (M3TGprau)</a> · <a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a> · <a href="20260515_항등식근차수인수정리태도_XT-SSrkl.html">항등식의 본질 (XT-SSrkl)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-07-17 | 영상 출처: <a href="https://youtu.be/1D2zCNqf8DE">https://youtu.be/1D2zCNqf8DE</a> (시대수학 김성호, 게시 2026-07-17)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
