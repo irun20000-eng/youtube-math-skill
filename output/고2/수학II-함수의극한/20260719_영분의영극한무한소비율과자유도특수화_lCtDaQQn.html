@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-함수의 극한]</div><h1>0/0꼴 극한 치트키 — <strong>무한소 비율</strong>과 자유도·특수화</h1><p class="sub">🎯 $\frac00$ 꼴은 "찐 $0$"이 아니라 <strong>무한소 함수끼리의 비율</strong>. 그래서 대충 값 대입하면 틀린다. 정석은 <strong>강제로 항 더하고 빼서 주어진 형태 만들기</strong>, 치트키는 <strong>자유도</strong>를 이용한 <strong>함수 특수화</strong>.</p><div class="video-card"><a class="thumb" href="https://youtu.be/lCtDaQQnBYc" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/lCtDaQQnBYc/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 고2 함수의 극한 치트키</div><div class="v-meta">📺 NJC 수학 내신 1타, 5분 34초 · 2026-07-19</div><a class="v-link" href="https://youtu.be/lCtDaQQnBYc" target="_blank" rel="noopener">https://youtu.be/lCtDaQQnBYc</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 문제</h2>
+      <article class="problem basic">
+        <h3>예시 — "형태가 비슷하다"고 짜맞추면 틀리는 극한</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to3}\dfrac{f(x)-3x}{x-3}=4$ 일 때, $\displaystyle\lim_{x\to3}\left\{\dfrac{f(x)-9}{x-3}\right\}^2$ 의 값은?</p>
+        <details open>
+          <summary>📖 풀이 보기 (정석 + 치트키)</summary>
+          <div class="solution">
+            <p><strong>❌ 흔한 오답:</strong> 주어진 식과 구하는 식이 비슷해 보인다고 "$=4$, 제곱 $16$"? 틀림.</p>
+            <p><strong>✅ 정석 — 강제로 항 더하고 빼기:</strong> 분자에 $-3x+3x$ 를 넣어 주어진 형태를 만든다.</p>
+            <p>$\dfrac{f(x)-9}{x-3}=\dfrac{f(x)-3x+3x-9}{x-3}=\dfrac{f(x)-3x}{x-3}+\dfrac{3x-9}{x-3}$.</p>
+            <p>앞 항 $\to4$ (주어짐), 뒤 항 $\dfrac{3(x-3)}{x-3}=3$. 합 $=4+3=7$. 제곱 $\boxed{49}$.</p>
+            <p><strong>✅ 치트키 — 특수화:</strong> $\dfrac{f(x)-3x}{x-3}\to4$ 이려면 $f(x)-3x=4(x-3)$ 인 <strong>가장 쉬운 함수</strong>를 잡는다 → $f(x)=7x-12$.</p>
+            <p>$\dfrac{(7x-12)-9}{x-3}=\dfrac{7x-21}{x-3}=\dfrac{7(x-3)}{x-3}=7$. 제곱 $49$.</p>
+            <p class="answer"><strong>정답:</strong> $49$ (두 풀이 일치)</p>
+            <p class="key-point"><strong>핵심:</strong> $\frac00$ 꼴은 <strong>무한소 함수끼리의 비율</strong>. 값만 대입하면 그 비율을 잃는다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (무한소 비율 · 자유도 · 특수화)</h2>
+
+      <div class="concept-block">
+        <h3>① 큰 그림 — $\frac00$ 은 "찐 0"이 아니라 무한소 비율</h3>
+        <p>분모·분자가 $0$ 으로 <strong>가는 중</strong>일 뿐 실제 $0$ 이 아니다. 두 무한소의 <strong>비율</strong>이 극한값.</p>
+        <div class="insight">
+          강사 메시지: "$\frac00$ 꼴의 극한은 함수끼리의 비율을 찾는 것." 값을 대입해 분자를 $0$ 으로 만들면, 함수를 <strong>상수 "찐 0"</strong> 으로 다루는 치명적 실수.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 무한소 비율을 인수분해로 체감</h3>
+        <div class="prereq">
+          <p>$\displaystyle\lim_{x\to1}\dfrac{3(x^2-x)}{x-1}=\lim_{x\to1}\dfrac{3x(x-1)}{x-1}=\lim_{x\to1}3x=3$.</p>
+          <p>$\displaystyle\lim_{x\to1}\dfrac{3(x^2-1)}{x-1}=\lim_{x\to1}\dfrac{3(x-1)(x+1)}{x-1}=\lim_{x\to1}3(x+1)=6$.</p>
+        </div>
+        <p>분자·분모 모두 $x=1$ 에서 $0$ 이지만, 공통인수 $(x-1)$ 를 약분한 <strong>비율</strong>이 각각 $3$, $6$ 으로 다르다. "둘 다 0이니까 같다"가 아니다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 대입하면 안 되는 이유 (찐 0 함정)</h3>
+        <div class="callout">
+          <p>$\displaystyle\lim_{x\to1}\dfrac{3x-3}{x-1}=\lim_{x\to1}\dfrac{3(x-1)}{x-1}=3$ (분자를 함수로 다룸, 올바름).</p>
+          <p>$\displaystyle\lim_{x\to1}\dfrac{3-3}{x-1}=\lim_{x\to1}\dfrac{0}{x-1}=0$ (분자에 $x=1$ 대입해 찐 0으로 만듦, <strong>틀림</strong>).</p>
+        </div>
+        <p>같은 식인데 분자를 "함수로" 두면 $3$, "대입한 찐 0"으로 두면 $0$. 대입이 극한의 본질을 파괴한다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 정석 — 강제로 항 더하고 빼서 형태 맞추기</h3>
+        <div class="step-derive">
+          <p>구하는 분자에 <strong>주어진 형태</strong>가 나오도록 $-3x+3x$ 처럼 $0$ 을 더한다(값 불변).</p>
+          <p>$\dfrac{f(x)-9}{x-3}=\dfrac{\{f(x)-3x\}+\{3x-9\}}{x-3}$ 로 <strong>두 분수로 분리</strong>.</p>
+          <p>주어진 극한 $+$ 계산되는 극한 $=4+3=7$.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 자유도와 특수화 (치트키)</h3>
+        <p>극한값 하나를 만족하는 함수 $f$ 는 <strong>무수히 많다</strong>(자유도). 답이 그 선택에 무관하다면, <strong>가장 쉬운 하나</strong>를 골라도 된다.</p>
+        <div class="callout">
+          <p>비유: $a+b=7$ 이면 $2a+2b=14$ 는 $a,b$ 를 뭘 넣든 동일. $a=0,b=7$ 로 특수화해도 답 같음.</p>
+          <p>본 문제: $f(x)-3x=4(x-3)$ 인 가장 쉬운 $f(x)=7x-12$ 로 특수화 → 곧장 $49$.</p>
+        </div>
+        <div class="insight">
+          ⚠️ 특수화는 <strong>정석 원리를 이해한 뒤</strong> 객관식·검토용으로. 서술형에선 자유도 정당화가 필요할 수 있어 정석 권장.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 미분계수 관점 (한 번 더 확인)</h3>
+        <p>극한 유한 & 분모 $\to0$ → 분자 $\to0$: $f(3)-9=0$ → $f(3)=9$. 또 $\dfrac{f(x)-3x}{x-3}\to f'(3)-3=4$ → $f'(3)=7$.</p>
+        <div class="formula-box">
+          $\displaystyle\lim_{x\to3}\dfrac{f(x)-9}{x-3}=\lim_{x\to3}\dfrac{f(x)-f(3)}{x-3}=f'(3)=7$ → 제곱 $49$
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 0/0 인수분해 (무한소 비율)</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to1}\dfrac{x^2-1}{x-1}$ 을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$\dfrac{(x-1)(x+1)}{x-1}=x+1\to2$.</p>
+            <p class="answer"><strong>정답:</strong> $2$ (공통인수 약분 = 무한소 비율)</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 대입하면 안 되는 이유</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to1}\dfrac{3x-3}{x-1}$ 을 구하고, 분자에 $x=1$ 을 대입해 "$0$" 이라 답하면 왜 틀리는지 설명하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$\dfrac{3(x-1)}{x-1}=3$. 분자 $3x-3$ 은 $x\to1$ 에서 <strong>0으로 가는 무한소</strong>(찐 0 아님).</p>
+            <p>$x=1$ 을 대입해 $3-3=0$ 으로 만들면 분자를 상수 "찐 0"으로 다뤄 극한이 $0$ 으로 왜곡된다.</p>
+            <p class="answer"><strong>정답:</strong> $3$. 대입 오류의 전형(개념 ③).</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 강제로 항 더하고 빼기</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to2}\dfrac{f(x)-2x}{x-2}=5$ 일 때 $\displaystyle\lim_{x\to2}\dfrac{f(x)-4}{x-2}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$\dfrac{f(x)-4}{x-2}=\dfrac{\{f(x)-2x\}+\{2x-4\}}{x-2}=\dfrac{f(x)-2x}{x-2}+\dfrac{2(x-2)}{x-2}$.</p>
+            <p>$=5+2=7$.</p>
+            <p class="answer"><strong>정답:</strong> $7$ (정석, 개념 ④)</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 미분계수 관점</h3>
+        <p class="problem-body"><strong>문제:</strong> 미분가능한 $f$ 가 $f(2)=4$, $f'(2)=5$ 일 때 $\displaystyle\lim_{x\to2}\dfrac{f(x)-4}{x-2}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$f(2)=4$ 이므로 $\dfrac{f(x)-4}{x-2}=\dfrac{f(x)-f(2)}{x-2}$ → 미분계수 정의 → $f'(2)=5$.</p>
+            <p class="answer"><strong>정답:</strong> $5$ (개념 ⑥과 같은 관점)</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 영상의 예제 (정석)</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to3}\dfrac{f(x)-3x}{x-3}=4$ 일 때 $\displaystyle\lim_{x\to3}\left\{\dfrac{f(x)-9}{x-3}\right\}^2$ 을 정석으로 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$\dfrac{f(x)-9}{x-3}=\dfrac{f(x)-3x}{x-3}+\dfrac{3x-9}{x-3}\to4+3=7$.</p>
+            <p>제곱 → $49$.</p>
+            <p class="answer"><strong>정답:</strong> $49$</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 특수화(치트키)로 같은 답 확인</h3>
+        <p class="problem-body"><strong>문제:</strong> 심화 1 을 함수 특수화로 다시 풀어 같은 답임을 확인하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$\dfrac{f(x)-3x}{x-3}\to4$ ⟺ $f(x)-3x=4(x-3)$ 인 가장 쉬운 함수 → $f(x)=7x-12$.</p>
+            <p>$\dfrac{(7x-12)-9}{x-3}=\dfrac{7x-21}{x-3}=\dfrac{7(x-3)}{x-3}=7$ → 제곱 $49$.</p>
+            <p class="answer"><strong>정답:</strong> $49$ (정석과 일치)</p>
+            <p class="key-point"><strong>주의:</strong> 자유도가 있어 어떤 $f$ 를 골라도 답 동일. 단 서술형에선 정석 권장(개념 ⑤).</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 두 조건 결합</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to1}\dfrac{f(x)-2}{x-1}=3$ 일 때 $\displaystyle\lim_{x\to1}\dfrac{f(x)-2x}{x-1}$ 을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>먼저 $f(1)=2$ (분자 $\to0$ 조건), $f'(1)=3$ (주어진 극한 = $f'(1)$).</p>
+            <p>$\dfrac{f(x)-2x}{x-1}=\dfrac{\{f(x)-2\}-\{2x-2\}}{x-1}=\dfrac{f(x)-2}{x-1}-\dfrac{2(x-1)}{x-1}=3-2=1$.</p>
+            <p><strong>특수화 검산:</strong> $f(x)-2=3(x-1)$ → $f=3x-1$. $\dfrac{(3x-1)-2x}{x-1}=\dfrac{x-1}{x-1}=1$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> $1$</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 곱의 극한 + 특수화</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to0}\dfrac{f(x)}{x}=2$ 이고 $f(0)=0$ 일 때 $\displaystyle\lim_{x\to0}\dfrac{f(x)\,(x+3)}{x}$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$\dfrac{f(x)(x+3)}{x}=\dfrac{f(x)}{x}\cdot(x+3)$. 각각 수렴: $\dfrac{f(x)}{x}\to2$, $(x+3)\to3$.</p>
+            <p>곱의 극한 $=2\times3=6$.</p>
+            <p><strong>특수화 검산:</strong> $\frac{f(x)}{x}\to2$ 인 쉬운 $f(x)=2x$. $\dfrac{2x(x+3)}{x}=2(x+3)\to6$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> $6$</p>
+            <p class="key-point"><strong>주의:</strong> 곱을 쪼갤 땐 <strong>각 인수가 수렴</strong>해야 한다($2$ 와 $3$ 모두 유한). 무한소 비율 $\frac{f(x)}{x}$ 는 통째로 $2$ 로 다룸.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(NJC 수학)의 "치트키"를 중수준(하위 40%)도 따라오게 풀어 작성:</p>
+    <ul>
+      <li><strong>$\frac00$ = 무한소 비율</strong> → 인수분해 예시로 "둘 다 0이어도 비율은 다름" 체감 (개념 ①②).</li>
+      <li><strong>대입 함정</strong> → 같은 식을 함수/찐0 으로 다룰 때 답이 갈림 (개념 ③, 기초 2).</li>
+      <li><strong>정석(항 더하고 빼기) & 미분계수 관점</strong> → 영상 예제 $49$ 를 두 관점으로 (심화 1, 개념 ⑥).</li>
+      <li><strong>자유도·특수화</strong> → $f=7x-12$ 로 같은 답 확인, 서술형 주의도 명시 (심화 2, 수능 대비 1·2 모두 특수화 검산 병기).</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>특수화의 서술형 인정 여부</strong> — 영상도 지적하듯, 학교 서술형에서는 자유도 정당화 없이 특수 함수 대입이 감점될 수 있습니다. 검토·객관식용으로 안내했고, 모든 특수화 문항에 <strong>정석 풀이를 병기</strong>했습니다. (수학 정확도 ★★★)</li>
+      <li>"수능 대비"는 출제 패턴 라벨일 뿐 실재 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) (NCqmA7ui)</a> · <a href="20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260708_함수의연속꿀팁과오개념_개념.html">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-07-19 | 영상 출처: <a href="https://youtu.be/lCtDaQQnBYc">https://youtu.be/lCtDaQQnBYc</a> (NJC 수학 내신 1타, 게시 2026-07-19)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
