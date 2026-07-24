@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) | 학습자료</title>
+  <title>정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분) | 학습자료</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -198,7 +198,7 @@
   </div>
 
 
-  <div class="hero" style="background:linear-gradient(135deg,#0d47a1 0%,#1565c0 55%,#1976d2 100%);"><div class="tag" style="background:rgba(255,193,7,.25);">🎓 고3 선택 미적분 — 적분법 (현 고2 미적분Ⅰ 범위 밖)</div><h1>역함수 적분과 치환적분 — <strong>"역함수의 도함수"를 눈치채라</strong></h1><p class="sub">🎯 적분이 안 되는 함수는 <strong>원함수를 치환</strong>($x=f(t)$)해 아는 꼴로. 역함수 미분 $g'(f(x))=\dfrac{1}{f'(x)}$, $\int\dfrac{f'}{f}=\ln|f|$. 평가원은 "연산"이 아니라 <strong>"이게 역함수인 걸 아느냐"</strong>를 묻는다. <strong>※ 고3 선택 미적분 — 치환·부분적분·지수로그 적분 포함.</strong></p><div class="video-card"><a class="thumb" href="https://youtu.be/mBc94D-3Zo4" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/mBc94D-3Zo4/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 올해 1등급이 목표면 반드시 봐야 할 영상</div><div class="v-meta">📺 시대수학 김성호, 8분 15초 · 2026-07-10</div><a class="v-link" href="https://youtu.be/mBc94D-3Zo4" target="_blank" rel="noopener">https://youtu.be/mBc94D-3Zo4</a></div></div></div>
+  <div class="hero" style="background:linear-gradient(135deg,#0d47a1 0%,#1565c0 55%,#1976d2 100%);"><div class="tag" style="background:rgba(255,193,7,.25);">🎓 고3 선택 미적분 — 정적분의 활용 (현 고2 미적분Ⅰ 범위 밖)</div><h1>정적분으로 정의된 함수의 미분 — <strong>넓이 최적화는 "두 높이가 같아지는 지점"</strong></h1><p class="sub">🎯 넓이 합 $h(k)=\int_0^k g+\int_k^{e^2}(e-g)$ 를 $k$ 로 미분하면 $h'(k)=2g(k)-e$. 최적화 조건 $g(k)=\dfrac{e}{2}$ — 기하로는 <strong>두 높이가 같아지는 지점</strong> → $k=f\!\left(\dfrac{e}{2}\right)$. 계산 말고 <strong>직관</strong>으로.</p><div class="video-card"><a class="thumb" href="https://youtube.com/shorts/xoaRbvzQUNI" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/xoaRbvzQUNI/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 넓이 최대인 k 구하기 (Shorts)</div><div class="v-meta">📺 정병훈T 요리조리 수학, 39초 · 2026-07-23</div><a class="v-link" href="https://youtube.com/shorts/xoaRbvzQUNI" target="_blank" rel="noopener">https://youtube.com/shorts/xoaRbvzQUNI</a></div></div></div>
 
   
 
@@ -207,80 +207,74 @@
     <section id="example">
       <h2>📌 도입: 영상이 던진 문제</h2>
       <article class="problem basic">
-        <h3>예시 — "이게 역함수의 도함수구나"를 알아채기</h3>
-        <p class="problem-body"><strong>문제:</strong> 함수 $f(x)$ 의 역함수 $g(x)$ 에 대하여 $g'(t)=3t^2+2t+1$ 이고 $f(0)=0$ 이다. $\displaystyle\int_0^3 x\,f'(x)\,dx$ 의 값을 구하시오.</p>
+        <h3>예시 — 넓이 합을 최적화하는 $k$</h3>
+        <p class="problem-body"><strong>문제(칠판식):</strong> $g$ 의 역함수를 $f$ 라 할 때, $\displaystyle h(k)=\int_0^k g(x)\,dx+\int_k^{e^2}\{e-g(x)\}\,dx$ 를 최적화하는 $k$ 를 구하시오.</p>
         <details open>
-          <summary>📖 풀이 보기 (영상의 핵심 스킬)</summary>
+          <summary>📖 풀이 보기 (미적분 기본정리 + 기하 직관)</summary>
           <div class="solution">
-            <p><strong>STEP 1 — 역함수 복원:</strong> $g'(t)=3t^2+2t+1$ 을 적분 → $g(t)=t^3+t^2+t+C$. $f(0)=0$ 이니 $g(0)=0$ → $C=0$. 즉 $g(t)=t^3+t^2+t$.</p>
-            <p><strong>STEP 2 — 치환:</strong> $t=f(x)$ 로 두면 $x=g(t)$, 양변 미분 $f'(x)\,dx=dt$.</p>
-            <p><strong>STEP 3 — 구간 변환:</strong> $x=0$ → $t=f(0)=0$. $x=3$ → $g(1)=3$ 이므로 $t=f(3)=1$.</p>
-            <p><strong>STEP 4 — 변환된 적분:</strong> $\displaystyle\int_0^3 x\,f'(x)\,dx=\int_0^1 g(t)\,dt=\int_0^1(t^3+t^2+t)\,dt=\tfrac14+\tfrac13+\tfrac12=\tfrac{13}{12}$.</p>
-            <p class="answer"><strong>정답:</strong> $\dfrac{13}{12}$</p>
-            <p class="key-point"><strong>검산 (부분적분):</strong> $\int_0^3 xf'\,dx=[xf(x)]_0^3-\int_0^3 f\,dx=3f(3)-\int_0^3 f\,dx=3-\int_0^3 f\,dx$. 역함수 넓이 관계 $\int_0^3 f\,dx+\int_0^1 g\,dt=3\cdot1$ 에서 $\int_0^3 f\,dx=3-\tfrac{13}{12}=\tfrac{23}{12}$. 따라서 $3-\tfrac{23}{12}=\tfrac{13}{12}$ ✓.</p>
-            <p class="key-point"><strong>핵심:</strong> 복잡한 식이 사실 <strong>역함수의 도함수</strong>임을 간파하는 것. 알아채면 나머지 적분은 짧다.</p>
+            <p><strong>STEP 1 — $k$ 로 미분:</strong> 위끝이 $k$ 인 적분은 $g(k)$, 아래끝이 $k$ 인 적분은 부호가 음. $h'(k)=g(k)-\{e-g(k)\}=2g(k)-e$.</p>
+            <p><strong>STEP 2 — 극값 조건:</strong> $h'(k)=0$ → $2g(k)=e$ → $g(k)=\dfrac{e}{2}$.</p>
+            <p><strong>STEP 3 — 역함수:</strong> $g(k)=\dfrac{e}{2}$ 를 $k$ 에 대해 풀면 $k=g^{-1}\!\left(\dfrac{e}{2}\right)=f\!\left(\dfrac{e}{2}\right)$.</p>
+            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)$</p>
+            <p class="key-point"><strong>기하 직관(치트키):</strong> 조건 $g(k)=e-g(k)$ 는 두 적분의 <strong>높이(세로 길이)가 같아지는 지점</strong>. 다음엔 계산 없이 "두 높이 같아지는 $k$" 를 바로 찾아 $f(e/2)$.</p>
           </div>
         </details>
       </article>
     </section>
 
     <section id="concept">
-      <h2>💡 개념 설명 (치환 · 역함수 미분 · 역함수 적분)</h2>
+      <h2>💡 개념 설명 (정적분 정의 함수의 미분 · 넓이 최적화)</h2>
 
       <div class="concept-block">
-        <h3>① 큰 그림 — 적분이 안 되면 "아는 함수"로 치환</h3>
-        <p>$\ln x$, $f^{-1}(x)$ 처럼 바로 적분이 어려운 함수는, 관련된 <strong>아는 함수(원함수·역함수)</strong>로 치환해 익숙한 꼴로 바꾼다.</p>
-        <div class="insight">
-          강사 메시지 — "적분이 잘 안 되는데 적분할 수 있는 함수가 있어. 그게 바로 <strong>역함수</strong>." 평가원은 연산이 아니라 <strong>"이게 역함수임을 아느냐"</strong>를 묻는다.
-        </div>
-      </div>
-
-      <div class="concept-block">
-        <h3>② 선수 지식 — 치환적분</h3>
+        <h3>① 선수 지식 — 정적분으로 정의된 함수의 미분</h3>
         <div class="prereq">
-          <p>$t=g(x)$ 로 치환하면 $dt=g'(x)\,dx$. 적분 변수와 <strong>구간</strong>을 $t$ 에 맞춰 바꾼다.</p>
-          <p>$\displaystyle\int_a^b f(g(x))g'(x)\,dx=\int_{g(a)}^{g(b)} f(t)\,dt$.</p>
+          <p>위끝이 변수: $\dfrac{d}{dk}\displaystyle\int_a^k g(x)\,dx=g(k)$ (미적분의 기본정리).</p>
+          <p>아래끝이 변수: $\dfrac{d}{dk}\displaystyle\int_k^b \varphi(x)\,dx=-\varphi(k)$ (부호 음).</p>
         </div>
-        <p>예: $\displaystyle\int_1^2 \ln x\,dx$ 에서 $x=e^t$ 치환 → $dx=e^t\,dt$ → $\displaystyle\int_0^{\ln2} t\,e^t\,dt$ (지수×다항, 부분적분 가능한 꼴).</p>
+        <p>$k$ 가 <strong>적분 구간의 경계</strong>로 들어가면, 미분은 그 경계에서의 피적분함수 값(부호 주의)으로 나온다.</p>
       </div>
 
       <div class="concept-block">
-        <h3>③ 핵심 정리 1 — 역함수의 미분 (역수 관계)</h3>
+        <h3>② 넓이 합을 $k$ 의 함수로</h3>
+        <p>$k$ 를 기준으로 자른 두 넓이의 합 $h(k)=\displaystyle\int_0^k g\,dx+\int_k^{e^2}(e-g)\,dx$. 앞은 곡선 $y=g$ 아래, 뒤는 $y=e-g$ 아래 넓이.</p>
         <div class="step-derive">
-          <p>역함수 정의: $g(f(x))=x$ (원함수·역함수 합성 = 항등).</p>
-          <p>양변 미분(합성함수 미분): $g'(f(x))\cdot f'(x)=1$.</p>
-          <p>따라서 $g'(f(x))=\dfrac{1}{f'(x)}$ — <strong>미분계수가 역수 관계</strong>. ($b=f(a)$ 면 $(f^{-1})'(b)=\dfrac{1}{f'(a)}$.)</p>
+          <p>$h'(k)=g(k)-\{e-g(k)\}$ (앞 항 $+g(k)$, 뒤 항 아래끝이라 $-(e-g(k))$).</p>
+          <p>$=2g(k)-e$.</p>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 핵심 — 최적화 조건과 기하 해석</h3>
         <div class="formula-box">
-          $(f^{-1})'(b)=\dfrac{1}{f'(a)}\quad(b=f(a))$
+          $h'(k)=2g(k)-e=0 \iff g(k)=\dfrac{e}{2} \iff g(k)=e-g(k)$
         </div>
+        <p>$g(k)=e-g(k)$ 는 <strong>두 곡선의 세로 높이가 같아지는 순간</strong>. 넓이 합의 극값은 그 지점에서 발생.</p>
       </div>
 
       <div class="concept-block">
-        <h3>④ 핵심 정리 2 — 역함수의 정적분 (치환)</h3>
-        <p>$\displaystyle\int_{f(a)}^{f(b)} f^{-1}(x)\,dx$ 에서 $x=f(t)$ 치환:</p>
+        <h3>④ 최대인가 최소인가 — 2차 판정</h3>
         <div class="step-derive">
-          <p>$dx=f'(t)\,dt$, $f^{-1}(x)=f^{-1}(f(t))=t$.</p>
-          <p>구간: $x=f(a)$→$t=a$, $x=f(b)$→$t=b$.</p>
-          <p>$\displaystyle\int_{f(a)}^{f(b)} f^{-1}(x)\,dx=\int_a^b t\,f'(t)\,dt$ — 아는 함수 $f$ 로 바뀜.</p>
+          <p>$h''(k)=2g'(k)$.</p>
+          <p>$g$ 가 <strong>증가함수</strong>($g'>0$) → $h''>0$ → 넓이 합 <strong>최소</strong>.</p>
+          <p>$g$ 가 <strong>감소함수</strong>($g'<0$) → $h''<0$ → 넓이 합 <strong>최대</strong>.</p>
         </div>
-        <div class="callout">
-          <p><strong>넓이로도 보기:</strong> $\displaystyle\int_a^b f(x)\,dx+\int_{f(a)}^{f(b)} f^{-1}(y)\,dy=b\,f(b)-a\,f(a)$ (직사각형에서 두 넓이가 상보).</p>
+        <div class="insight">
+          극값 위치 $k=f(e/2)$ 는 $g$ 의 증감과 무관하게 동일. 최대/최소 여부만 $g'$ 부호로 갈린다. (영상 제목 "최대"는 $g$ 가 감소인 맥락.)
         </div>
       </div>
 
       <div class="concept-block">
-        <h3>⑤ 핵심 정리 3 — $\displaystyle\int\dfrac{f'(x)}{f(x)}\,dx=\ln|f(x)|+C$</h3>
-        <p>분자가 <strong>분모의 도함수</strong> 꼴이면 로그로 적분된다. 역함수·복잡한 유리식에서 이 형태를 만들어내면 끝.</p>
-        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">예:</strong> $\displaystyle\int\dfrac{2x}{x^2+1}\,dx=\ln(x^2+1)+C$ (분자 $2x$ 가 분모 $x^2+1$ 의 도함수).</div>
+        <h3>⑤ 역함수로 $k$ 표현</h3>
+        <p>$g(k)=\dfrac{e}{2}$ 를 $k$ 에 대해 직접 못 풀어도, 역함수 $f=g^{-1}$ 로 $k=f\!\left(\dfrac{e}{2}\right)$ 로 즉시 표현.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">예:</strong> $g(x)=\ln x$ 이면 $f(x)=e^x$. $g(k)=\tfrac{e}{2}$ → $k=e^{e/2}=f(e/2)$.</div>
       </div>
 
       <div class="concept-block">
         <h3>⑥ 함정 — 흔히 놓치는 3가지</h3>
         <div class="callout">
-          <p>① <strong>구간 변환 누락</strong>: 치환하면 적분 구간의 아래끝·위끝도 반드시 새 변수로 바꾼다.</p>
-          <p>② <strong>$dx$ 변환 누락</strong>: $x=f(t)$ 면 $dx=f'(t)\,dt$. $dt$ 로만 바꾸고 $f'(t)$ 빠뜨리면 오답.</p>
-          <p>③ <strong>역함수 도함수 못 알아챔</strong>: 복잡한 관계식이 $g'$ 을 숨겨둔 것임을 간파 못 하면 연산 늪. "이게 역함수?"를 먼저 의심.</p>
+          <p>① <strong>아래끝 미분 부호</strong>: $\dfrac{d}{dk}\int_k^b=-\varphi(k)$. 부호 빠뜨리면 조건이 틀림.</p>
+          <p>② <strong>최대/최소 단정</strong>: $h''=2g'$ 로 $g$ 증감을 확인해야. 조건만으로 최대라 단정 ❌.</p>
+          <p>③ <strong>계산에 매몰</strong>: 원리 이해 후엔 "두 높이 같아지는 지점"으로 직관 처리(강사 강조).</p>
         </div>
       </div>
     </section>
@@ -291,26 +285,25 @@
       <h3 class="level-header">🟢 기초</h3>
 
       <article class="problem basic">
-        <h3>기초 1 — 역함수의 미분계수</h3>
-        <p class="problem-body"><strong>문제:</strong> $f(x)=x^3+1$ 의 역함수를 $g$ 라 할 때 $g'(2)$ 를 구하시오.</p>
+        <h3>기초 1 — 위끝 변수 미분</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle F(k)=\int_1^k (t^2+1)\,dt$ 일 때 $F'(k)$ 를 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1:</strong> $g'(2)=\dfrac{1}{f'(a)}$, 단 $f(a)=2$. $x^3+1=2$ → $x=1$ → $a=1$.</p>
-            <p><strong>STEP 2:</strong> $f'(x)=3x^2$ → $f'(1)=3$. 따라서 $g'(2)=\dfrac13$.</p>
-            <p class="answer"><strong>정답:</strong> $\dfrac13$ (역수 관계, 정리 1)</p>
+            <p>미적분 기본정리: $F'(k)=k^2+1$.</p>
+            <p class="answer"><strong>정답:</strong> $k^2+1$</p>
           </div>
         </details>
       </article>
 
       <article class="problem basic">
-        <h3>기초 2 — $\ln|f|$ 적분</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle\int \dfrac{3x^2}{x^3+1}\,dx$ 를 구하시오.</p>
+        <h3>기초 2 — 아래끝 변수 미분 (부호)</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle G(k)=\int_k^{5} (3x)\,dx$ 일 때 $G'(k)$ 를 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>분자 $3x^2$ 는 분모 $x^3+1$ 의 도함수 → $\displaystyle\int\dfrac{f'}{f}=\ln|f|$.</p>
-            <p class="answer"><strong>정답:</strong> $\ln|x^3+1|+C$ (정리 3)</p>
+            <p>아래끝이 변수 → $G'(k)=-(3k)=-3k$ (부호 음).</p>
+            <p class="answer"><strong>정답:</strong> $-3k$ (개념 ①)</p>
           </div>
         </details>
       </article>
@@ -318,28 +311,25 @@
       <h3 class="level-header">🔵 기본</h3>
 
       <article class="problem standard">
-        <h3>기본 1 — 치환적분 (지수)</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle\int_0^1 2x\,e^{x^2}\,dx$ 를 구하시오.</p>
+        <h3>기본 1 — 넓이 합의 미분</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle h(k)=\int_0^k g(x)\,dx+\int_k^{b}\{c-g(x)\}\,dx$ 일 때 $h'(k)$ 를 $g(k)$ 로 나타내시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>치환:</strong> $t=x^2$, $dt=2x\,dx$. 구간 $x:0\to1$ → $t:0\to1$.</p>
-            <p>$\displaystyle\int_0^1 e^t\,dt=[e^t]_0^1=e-1$.</p>
-            <p class="answer"><strong>정답:</strong> $e-1$ (구간 변환 확인 — 함정 ①)</p>
+            <p>$h'(k)=g(k)-\{c-g(k)\}=2g(k)-c$.</p>
+            <p class="answer"><strong>정답:</strong> $h'(k)=2g(k)-c$ (개념 ②)</p>
           </div>
         </details>
       </article>
 
       <article class="problem standard">
-        <h3>기본 2 — 역함수 정적분을 원함수로</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle\int_1^2 \ln x\,dx$ 를 부분적분으로 구하시오.</p>
+        <h3>기본 2 — 역함수로 $k$ 표현</h3>
+        <p class="problem-body"><strong>문제:</strong> $g$ 의 역함수를 $f$ 라 할 때 $g(k)=\dfrac{c}{2}$ 를 $k$ 에 대해 나타내시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$\displaystyle\int \ln x\,dx=x\ln x-\int x\cdot\dfrac1x\,dx=x\ln x-x+C$.</p>
-            <p>$[x\ln x-x]_1^2=(2\ln2-2)-(0-1)=2\ln2-1$.</p>
-            <p class="answer"><strong>정답:</strong> $2\ln2-1$</p>
-            <p class="key-point"><strong>참고:</strong> $\ln x$ 는 $e^x$ 의 역함수. $x=e^t$ 치환으로도 같은 값 ($\int_0^{\ln2} t e^t dt$).</p>
+            <p>$k=g^{-1}\!\left(\dfrac{c}{2}\right)=f\!\left(\dfrac{c}{2}\right)$.</p>
+            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{c}{2}\right)$ (개념 ⑤)</p>
           </div>
         </details>
       </article>
@@ -347,30 +337,26 @@
       <h3 class="level-header">🟠 심화</h3>
 
       <article class="problem advanced">
-        <h3>심화 1 — 역함수 넓이 관계</h3>
-        <p class="problem-body"><strong>문제:</strong> $f(x)=x^3$ ($x\ge0$) 의 역함수를 $g$ 라 할 때 $\displaystyle\int_0^8 g(x)\,dx$ 를 넓이 관계로 구하시오.</p>
+        <h3>심화 1 — 영상의 완결 (극값 조건)</h3>
+        <p class="problem-body"><strong>문제:</strong> $g$ 의 역함수 $f$, $\displaystyle h(k)=\int_0^k g+\int_k^{e^2}(e-g)$ 의 극값을 주는 $k$ 를 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>넓이 관계:</strong> $\displaystyle\int_0^2 f(x)\,dx+\int_0^8 g(y)\,dy=2\cdot f(2)=2\cdot8=16$ (단 $f(2)=8$, $g(8)=2$).</p>
-            <p>$\displaystyle\int_0^2 x^3\,dx=\Big[\tfrac{x^4}{4}\Big]_0^2=4$.</p>
-            <p>$\displaystyle\int_0^8 g\,dy=16-4=12$.</p>
-            <p class="answer"><strong>정답:</strong> $12$</p>
-            <p class="key-point"><strong>검산:</strong> $g(y)=y^{1/3}$, $\int_0^8 y^{1/3}dy=\big[\tfrac34 y^{4/3}\big]_0^8=\tfrac34\cdot16=12$ ✓.</p>
+            <p>$h'(k)=2g(k)-e=0$ → $g(k)=\dfrac{e}{2}$ → $k=f\!\left(\dfrac{e}{2}\right)$.</p>
+            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)$</p>
           </div>
         </details>
       </article>
 
       <article class="problem advanced">
-        <h3>심화 2 — 역함수 도함수 간파 + 치환</h3>
-        <p class="problem-body"><strong>문제:</strong> $f(x)$ 의 역함수 $g$ 에 대해 $g'(t)=2t+1$, $f(0)=0$ 이다. $\displaystyle\int_0^2 x\,f'(x)\,dx$ 를 구하시오.</p>
+        <h3>심화 2 — 최대/최소 판정</h3>
+        <p class="problem-body"><strong>문제:</strong> 위 $h(k)$ 에서 $g$ 가 증가함수일 때와 감소함수일 때 $k=f(e/2)$ 가 각각 넓이 합의 최대인지 최소인지 판정하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1:</strong> $g(t)=t^2+t+C$, $g(0)=0$ → $C=0$. $g(t)=t^2+t$.</p>
-            <p><strong>STEP 2 — 치환:</strong> $t=f(x)$, $x=g(t)$, $f'(x)dx=dt$. 구간: $x=0$→$t=0$, $x=2$→$g(1)=2$ 이니 $t=1$.</p>
-            <p><strong>STEP 3:</strong> $\displaystyle\int_0^2 xf'\,dx=\int_0^1 g(t)\,dt=\int_0^1(t^2+t)\,dt=\tfrac13+\tfrac12=\tfrac56$.</p>
-            <p class="answer"><strong>정답:</strong> $\dfrac56$</p>
+            <p>$h''(k)=2g'(k)$. $g$ 증가 → $h''>0$ → <strong>최소</strong>. $g$ 감소 → $h''<0$ → <strong>최대</strong>.</p>
+            <p class="answer"><strong>정답:</strong> $g$ 증가면 최소, $g$ 감소면 최대 (개념 ④)</p>
+            <p class="key-point"><strong>핵심:</strong> 극값 위치는 같고, 최대/최소는 $g'$ 부호가 결정.</p>
           </div>
         </details>
       </article>
@@ -378,33 +364,30 @@
       <h3 class="level-header">🔴 수능 대비</h3>
 
       <article class="problem exam-style">
-        <h3>수능 대비 1 — 영상의 핵심 문제 (준킬러 28번 유형)</h3>
-        <p class="problem-body"><strong>문제:</strong> $f(x)$ 의 역함수 $g$ 에 대해 $g'(t)=3t^2+2t+1$, $f(0)=0$ 일 때 $\displaystyle\int_0^3 x\,f'(x)\,dx$ 를 구하시오.</p>
+        <h3>수능 대비 1 — 구체 함수로 완결</h3>
+        <p class="problem-body"><strong>문제:</strong> $g(x)=x$ 일 때 $\displaystyle h(k)=\int_0^k x\,dx+\int_k^{e^2}(e-x)\,dx$ 의 최솟값을 주는 $k$ 를 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1:</strong> $g(t)=t^3+t^2+t$ ($g(0)=0$ → $C=0$).</p>
-            <p><strong>STEP 2 — 치환:</strong> $t=f(x)$, $x=g(t)$, $f'(x)dx=dt$.</p>
-            <p><strong>STEP 3 — 구간:</strong> $x=0$→$t=0$, $x=3$→$g(1)=3$ 이니 $t=1$.</p>
-            <p><strong>STEP 4:</strong> $\displaystyle\int_0^1 g(t)\,dt=\int_0^1(t^3+t^2+t)\,dt=\tfrac14+\tfrac13+\tfrac12=\tfrac{13}{12}$.</p>
-            <p class="answer"><strong>정답:</strong> $\dfrac{13}{12}$</p>
-            <p class="key-point"><strong>핵심:</strong> $\int xf'dx$ 를 부분적분하지 말고, "역함수 도함수 $g'$ 가 주어졌다"를 알아채 $t=f(x)$ 치환. 알아채면 계산은 짧다(강사).</p>
+            <p>$h'(k)=2g(k)-e=2k-e=0$ → $k=\dfrac{e}{2}$.</p>
+            <p>$h''(k)=2>0$ → 최소 확인. ($g(x)=x$ 는 증가함수.)</p>
+            <p><strong>검산:</strong> $g(k)=k=\tfrac{e}{2}$, 역함수도 $f(x)=x$ 라 $f(e/2)=\tfrac{e}{2}$ 일치.</p>
+            <p class="answer"><strong>정답:</strong> $k=\dfrac{e}{2}$ (최소)</p>
           </div>
         </details>
       </article>
 
       <article class="problem exam-style">
-        <h3>수능 대비 2 — 부분적분 vs 치환 교차 검증</h3>
-        <p class="problem-body"><strong>문제:</strong> 수능 대비 1 을 <strong>부분적분</strong>으로 다시 풀어 답이 같음을 확인하시오. (역함수 넓이 관계 이용)</p>
+        <h3>수능 대비 2 — 로그함수 역함수 결합</h3>
+        <p class="problem-body"><strong>문제:</strong> $g(x)=\ln x$ 의 역함수를 $f$ 라 할 때, $\displaystyle h(k)=\int_1^k \ln x\,dx+\int_k^{b}(e-\ln x)\,dx$ 의 극값을 주는 $k$ 를 $f$ 를 이용해 구하고, 구체값도 쓰시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1 — 부분적분:</strong> $\displaystyle\int_0^3 xf'\,dx=[xf(x)]_0^3-\int_0^3 f(x)\,dx=3f(3)-\int_0^3 f\,dx$. $f(3)=1$ 이니 $=3-\int_0^3 f\,dx$.</p>
-            <p><strong>STEP 2 — 역함수 넓이 관계:</strong> $\displaystyle\int_0^3 f(x)\,dx+\int_0^1 g(y)\,dy=3\cdot f(3)=3\cdot1=3$.</p>
-            <p><strong>STEP 3:</strong> $\displaystyle\int_0^1 g\,dy=\tfrac{13}{12}$ 이므로 $\displaystyle\int_0^3 f\,dx=3-\tfrac{13}{12}=\tfrac{23}{12}$.</p>
-            <p><strong>STEP 4:</strong> $\displaystyle\int_0^3 xf'\,dx=3-\tfrac{23}{12}=\tfrac{13}{12}$ — 치환 결과와 <strong>일치</strong>.</p>
-            <p class="answer"><strong>정답:</strong> $\dfrac{13}{12}$ (두 방법 일치 ✓)</p>
-            <p class="key-point"><strong>교훈:</strong> 치환($t=f(x)$)이 훨씬 빠르지만, 부분적분+넓이 관계로도 같은 답. 어느 쪽이든 "역함수 구조"를 봐야 열린다.</p>
+            <p><strong>STEP 1:</strong> $h'(k)=\ln k-(e-\ln k)=2\ln k-e=0$ → $\ln k=\dfrac{e}{2}$.</p>
+            <p><strong>STEP 2 — 역함수:</strong> $g(k)=\ln k=\dfrac{e}{2}$, $f=g^{-1}=e^x$ → $k=f\!\left(\dfrac{e}{2}\right)=e^{e/2}$.</p>
+            <p><strong>STEP 3 — 판정:</strong> $g(x)=\ln x$ 증가 → $h''=2g'(k)=\dfrac{2}{k}>0$ → 최소.</p>
+            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)=e^{e/2}$ (최소)</p>
+            <p class="key-point"><strong>핵심:</strong> $g(k)=e/2$ 를 직접 못 풀 때 역함수로 $k=f(e/2)$, 여기선 $f=e^x$ 라 $e^{e/2}$ 로 명시.</p>
           </div>
         </details>
       </article>
@@ -415,24 +398,24 @@
 
   <div class="review-box">
     <h3>✅ 학습자 가이드라인 · 범위 안내</h3>
-    <p><strong>범위 주의:</strong> 본 자료(역함수 적분·치환적분·역함수 미분·지수로그 적분)는 <strong>고3 선택 미적분</strong>입니다. 현 고2 미적분Ⅰ(다항함수 적분, 치환·부분적분 제외) 범위 밖이며, 갤러리에서 <em>고3 · 미적분</em> 으로 분류됩니다.</p>
-    <p>영상(시대수학 김성호)의 압축된 스킬을 다음과 같이 풀어 작성:</p>
+    <p><strong>범위 주의:</strong> 본 자료(정적분으로 정의된 함수의 미분·역함수·지수로그)는 <strong>고3 선택 미적분</strong>입니다. 현 고2 미적분Ⅰ(다항함수 적분) 범위 밖이며 갤러리에서 <em>고3 · 미적분</em> 으로 분류됩니다.</p>
+    <p>영상(정병훈T, 39초 쇼츠)의 압축된 결론을 다음과 같이 풀어 작성:</p>
     <ul>
-      <li><strong>역함수 도함수 간파</strong> → $g'$ 이 주어지면 $g$ 복원 → $t=f(x)$ 치환 (도입·수능 대비 1).</li>
-      <li><strong>역함수 미분 역수 관계</strong> → $g(f(x))=x$ 미분으로 $g'(f(x))=1/f'(x)$ 유도 (개념 ③).</li>
-      <li><strong>역함수 정적분·넓이 관계</strong> → $x=f(t)$ 치환과 상보 넓이 공식, 두 방법 교차 검산 (개념 ④, 수능 대비 2).</li>
-      <li><strong>모든 정적분 답 이중 검산</strong> — 치환 vs 부분적분/넓이로 $\tfrac{13}{12}$ 확인.</li>
+      <li><strong>정적분 정의 함수의 미분</strong> → 위끝/아래끝 변수의 부호를 분리 (개념 ①, 기초 1·2).</li>
+      <li><strong>넓이 합 최적화 = $2g(k)-e=0$</strong> → $g(k)=e/2$ 유도, 기하로 "두 높이 같아짐" (개념 ②③).</li>
+      <li><strong>최대/최소 판정</strong> → $h''=2g'$ 로 $g$ 증감이 결정 (개념 ④, 심화 2). 영상 제목 "최대"와 정합.</li>
+      <li><strong>역함수로 $k=f(e/2)$</strong> → $g=\ln x$ 구체 예로 $e^{e/2}$ 까지 (개념 ⑤, 수능 대비 2). 순수 검산 완료.</li>
     </ul>
     <p>다만 다음은 교사 검토 권장:</p>
     <ul>
-      <li>영상 자막이 부분적으로 엉켜 있어(음성→수식 변환), 원문제 세부 수치는 보고서 기준으로 재구성했습니다. (핵심 스킬·정답 $\tfrac{13}{12}$ 은 이중 검산 완료 ★★★)</li>
+      <li>원영상은 39초 쇼츠로 <strong>전체 발문·$g,f$ 의 구체식이 생략</strong>되었습니다(보고서 명시). 본 자료는 칠판식 $h'(k)=2g(k)-e$·$k=f(e/2)$ 를 <strong>재구성·검산</strong>하고, 완결 수치는 구체 함수($g=x$, $g=\ln x$)로 대체했습니다. (원리·조건 ★★★, 원문제 완전복원 ★★)</li>
       <li>"수능 대비"는 출제 패턴 라벨일 뿐 실재 기출이 아닙니다.</li>
     </ul>
   </div>
 
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260723_정적분정의함수미분과넓이최적화_xoaRbvzQ.html">정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분) (xoaRbvzQ)</a> · <a href="../../고2/수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a> · <a href="../../고2/수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html">미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../../고2/수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260710_역함수적분과치환적분역함수미분_mBc94D-3.html">역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) (mBc94D-3)</a> · <a href="../../고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../../고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../../고2/수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
 <footer>
-    <p>생성일: 2026-07-10 | 영상 출처: <a href="https://youtu.be/mBc94D-3Zo4">https://youtu.be/mBc94D-3Zo4</a> (시대수학 김성호, 게시 2026-07-10) · 🎓 고3 선택 미적분</p>
+    <p>생성일: 2026-07-23 | 영상 출처: <a href="https://youtube.com/shorts/xoaRbvzQUNI">https://youtube.com/shorts/xoaRbvzQUNI</a> (정병훈T 요리조리 수학, 게시 2026-07-23) · 🎓 고3 선택 미적분</p>
     <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
     <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
   </footer>
