@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분) | 학습자료</title>
+  <title>등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학Ⅰ) | 학습자료</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -198,7 +198,7 @@
   </div>
 
 
-  <div class="hero" style="background:linear-gradient(135deg,#0d47a1 0%,#1565c0 55%,#1976d2 100%);"><div class="tag" style="background:rgba(255,193,7,.25);">🎓 고3 선택 미적분 — 정적분의 활용 (현 고2 미적분Ⅰ 범위 밖)</div><h1>정적분으로 정의된 함수의 미분 — <strong>넓이 최적화는 "두 높이가 같아지는 지점"</strong></h1><p class="sub">🎯 넓이 합 $h(k)=\int_0^k g+\int_k^{e^2}(e-g)$ 를 $k$ 로 미분하면 $h'(k)=2g(k)-e$. 최적화 조건 $g(k)=\dfrac{e}{2}$ — 기하로는 <strong>두 높이가 같아지는 지점</strong> → $k=f\!\left(\dfrac{e}{2}\right)$. 계산 말고 <strong>직관</strong>으로.</p><div class="video-card"><a class="thumb" href="https://youtube.com/shorts/xoaRbvzQUNI" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/xoaRbvzQUNI/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 넓이 최대인 k 구하기 (Shorts)</div><div class="v-meta">📺 정병훈T 요리조리 수학, 39초 · 2026-07-23</div><a class="v-link" href="https://youtube.com/shorts/xoaRbvzQUNI" target="_blank" rel="noopener">https://youtube.com/shorts/xoaRbvzQUNI</a></div></div></div>
+  <div class="hero"><div class="tag">[고2-수학Ⅰ-수열] · 등차·등비 혼합</div><h1>등차·등비 절댓값 부등식 — <strong>여집합 해석 · 인수분해 식세우기 · 등호 우선</strong></h1><p class="sub">🎯 "$n$이 1,2,5 뿐"은 <strong>나머지에선 반대 부등식(등호 포함)</strong>이라는 힌트. 등차 일반항을 $a_n=d(n-k)$ 로 <strong>공차 인수분해</strong>해 $d$ 를 약분, <strong>등호 있는 부등식 먼저</strong> 풀어 상수 $k$ 를 특정.</p><div class="video-card"><a class="thumb" href="https://youtu.be/hmR7jQjL5oQ" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/hmR7jQjL5oQ/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 등비수열까지 할 수 있어야 1등급</div><div class="v-meta">📺 권현석, 6분 10초 · 2026-07-23</div><a class="v-link" href="https://youtu.be/hmR7jQjL5oQ" target="_blank" rel="noopener">https://youtu.be/hmR7jQjL5oQ</a></div></div></div>
 
   
 
@@ -207,75 +207,65 @@
     <section id="example">
       <h2>📌 도입: 영상이 던진 문제</h2>
       <article class="problem basic">
-        <h3>예시 — 넓이 합을 최적화하는 $k$</h3>
-        <p class="problem-body"><strong>문제(칠판식):</strong> $g$ 의 역함수를 $f$ 라 할 때, $\displaystyle h(k)=\int_0^k g(x)\,dx+\int_k^{e^2}\{e-g(x)\}\,dx$ 를 최적화하는 $k$ 를 구하시오.</p>
+        <h3>예시 — "n이 1,2,5 뿐"의 진짜 의미</h3>
+        <p class="problem-body"><strong>문제:</strong> 공차 $d>0$ 인 등차수열 $\{a_n\}$, 공비 $2$ 인 등비수열 $\{b_n\}$ 이 $b_3=\tfrac13 d$ 를 만족한다. $|a_n|>b_n$ 을 만족하는 자연수 $n$ 이 $1,2,5$ 뿐일 때, $a_n$ 을 (미지수를 이용해) 결정하시오.</p>
         <details open>
-          <summary>📖 풀이 보기 (미적분 기본정리 + 기하 직관)</summary>
+          <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1 — $k$ 로 미분:</strong> 위끝이 $k$ 인 적분은 $g(k)$, 아래끝이 $k$ 인 적분은 부호가 음. $h'(k)=g(k)-\{e-g(k)\}=2g(k)-e$.</p>
-            <p><strong>STEP 2 — 극값 조건:</strong> $h'(k)=0$ → $2g(k)=e$ → $g(k)=\dfrac{e}{2}$.</p>
-            <p><strong>STEP 3 — 역함수:</strong> $g(k)=\dfrac{e}{2}$ 를 $k$ 에 대해 풀면 $k=g^{-1}\!\left(\dfrac{e}{2}\right)=f\!\left(\dfrac{e}{2}\right)$.</p>
-            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)$</p>
-            <p class="key-point"><strong>기하 직관(치트키):</strong> 조건 $g(k)=e-g(k)$ 는 두 적분의 <strong>높이(세로 길이)가 같아지는 지점</strong>. 다음엔 계산 없이 "두 높이 같아지는 $k$" 를 바로 찾아 $f(e/2)$.</p>
+            <p><strong>STEP 1 — 여집합 해석:</strong> "$1,2,5$ 뿐" = 나머지 자연수($3,4,6,\dots$)에선 <strong>$|a_n|\le b_n$</strong> (등호 포함 반대 부등식). 경계 $3,4,6$ 을 먼저 본다.</p>
+            <p><strong>STEP 2 — 등비 세우기:</strong> $b_n=b_3\cdot2^{\,n-3}=\tfrac13 d\cdot2^{\,n-3}$. ($b_3=\tfrac13 d$, $b_4=\tfrac23 d$, $b_6=\tfrac83 d$ …)</p>
+            <p><strong>STEP 3 — 인수분해 식세우기:</strong> $a_n=dn+\alpha$ 로 두면 문자 둘. 대신 <strong>$a_n=d(n-k)$</strong> 로 공차를 인수로 빼면 $|a_n|=d|n-k|$.</p>
+            <p><strong>STEP 4 — $d$ 약분 + 등호 우선:</strong> $|a_n|\le b_n$ 에 $n=3,4$ 대입, 양변 $d>0$ 약분.</p>
+            <p>$n=3$: $|3-k|\le\tfrac13$ → $\tfrac83\le k\le\tfrac{10}{3}$. $n=4$: $|4-k|\le\tfrac23$ → $\tfrac{10}{3}\le k\le\tfrac{14}{3}$.</p>
+            <p>교집합 → $k=\dfrac{10}{3}$ (등호가 상수를 <strong>딱 하나로</strong> 확정).</p>
+            <p class="answer"><strong>정답:</strong> $a_n=d\left(n-\dfrac{10}{3}\right)$ (즉 $a_n=\tfrac{d}{3}(3n-10)$).</p>
+            <p class="key-point"><strong>검증:</strong> $|a_n|>b_n$ 인 $n$ 을 실제로 세어보면 $1,2,5$ 뿐(아래 심화 2). $3,4,6$ 은 정확히 <strong>교점(등호)</strong>.</p>
           </div>
         </details>
       </article>
     </section>
 
     <section id="concept">
-      <h2>💡 개념 설명 (정적분 정의 함수의 미분 · 넓이 최적화)</h2>
+      <h2>💡 개념 설명 (여집합 · 인수분해 · 등호 우선)</h2>
 
       <div class="concept-block">
-        <h3>① 선수 지식 — 정적분으로 정의된 함수의 미분</h3>
-        <div class="prereq">
-          <p>위끝이 변수: $\dfrac{d}{dk}\displaystyle\int_a^k g(x)\,dx=g(k)$ (미적분의 기본정리).</p>
-          <p>아래끝이 변수: $\dfrac{d}{dk}\displaystyle\int_k^b \varphi(x)\,dx=-\varphi(k)$ (부호 음).</p>
-        </div>
-        <p>$k$ 가 <strong>적분 구간의 경계</strong>로 들어가면, 미분은 그 경계에서의 피적분함수 값(부호 주의)으로 나온다.</p>
-      </div>
-
-      <div class="concept-block">
-        <h3>② 넓이 합을 $k$ 의 함수로</h3>
-        <p>$k$ 를 기준으로 자른 두 넓이의 합 $h(k)=\displaystyle\int_0^k g\,dx+\int_k^{e^2}(e-g)\,dx$. 앞은 곡선 $y=g$ 아래, 뒤는 $y=e-g$ 아래 넓이.</p>
-        <div class="step-derive">
-          <p>$h'(k)=g(k)-\{e-g(k)\}$ (앞 항 $+g(k)$, 뒤 항 아래끝이라 $-(e-g(k))$).</p>
-          <p>$=2g(k)-e$.</p>
-        </div>
-      </div>
-
-      <div class="concept-block">
-        <h3>③ 핵심 — 최적화 조건과 기하 해석</h3>
-        <div class="formula-box">
-          $h'(k)=2g(k)-e=0 \iff g(k)=\dfrac{e}{2} \iff g(k)=e-g(k)$
-        </div>
-        <p>$g(k)=e-g(k)$ 는 <strong>두 곡선의 세로 높이가 같아지는 순간</strong>. 넓이 합의 극값은 그 지점에서 발생.</p>
-      </div>
-
-      <div class="concept-block">
-        <h3>④ 최대인가 최소인가 — 2차 판정</h3>
-        <div class="step-derive">
-          <p>$h''(k)=2g'(k)$.</p>
-          <p>$g$ 가 <strong>증가함수</strong>($g'>0$) → $h''>0$ → 넓이 합 <strong>최소</strong>.</p>
-          <p>$g$ 가 <strong>감소함수</strong>($g'<0$) → $h''<0$ → 넓이 합 <strong>최대</strong>.</p>
-        </div>
+        <h3>① 큰 그림 — "~뿐이다"는 여집합 힌트</h3>
+        <p>"부등식을 만족하는 $n$ 이 $\bigcirc,\bigcirc$ 뿐" 이라는 조건은, <strong>그 외 모든 자연수에서 반대 부등식(등호 포함)이 성립</strong>한다는 강력한 힌트.</p>
         <div class="insight">
-          극값 위치 $k=f(e/2)$ 는 $g$ 의 증감과 무관하게 동일. 최대/최소 여부만 $g'$ 부호로 갈린다. (영상 제목 "최대"는 $g$ 가 감소인 맥락.)
+          무수히 많은 나머지 중 <strong>경계</strong>가 되는 값(여기선 $3,4,6$)부터 따진다. $|a_n|$ 은 V자, $b_n$ 은 지수 곡선이라 교차가 여러 번.
         </div>
       </div>
 
       <div class="concept-block">
-        <h3>⑤ 역함수로 $k$ 표현</h3>
-        <p>$g(k)=\dfrac{e}{2}$ 를 $k$ 에 대해 직접 못 풀어도, 역함수 $f=g^{-1}$ 로 $k=f\!\left(\dfrac{e}{2}\right)$ 로 즉시 표현.</p>
-        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">예:</strong> $g(x)=\ln x$ 이면 $f(x)=e^x$. $g(k)=\tfrac{e}{2}$ → $k=e^{e/2}=f(e/2)$.</div>
+        <h3>② 선수 지식 — 등비수열 일반항</h3>
+        <div class="prereq">
+          <p>공비 $r$ 인 등비수열: $b_n=b_m\cdot r^{\,n-m}$. 한 항과 공비만 알면 전체가 결정.</p>
+          <p>여기선 $b_3=\tfrac13 d$, $r=2$ → $b_n=\tfrac13 d\cdot2^{\,n-3}$.</p>
+        </div>
       </div>
 
       <div class="concept-block">
-        <h3>⑥ 함정 — 흔히 놓치는 3가지</h3>
+        <h3>③ 핵심 — 공차를 인수로 빼는 식세우기</h3>
+        <p>등차 일반항을 $a_n=dn+\alpha$ 로 두면 절댓값 부등식에 문자 $d,\alpha$ 둘이 남아 꼬인다.</p>
         <div class="callout">
-          <p>① <strong>아래끝 미분 부호</strong>: $\dfrac{d}{dk}\int_k^b=-\varphi(k)$. 부호 빠뜨리면 조건이 틀림.</p>
-          <p>② <strong>최대/최소 단정</strong>: $h''=2g'$ 로 $g$ 증감을 확인해야. 조건만으로 최대라 단정 ❌.</p>
-          <p>③ <strong>계산에 매몰</strong>: 원리 이해 후엔 "두 높이 같아지는 지점"으로 직관 처리(강사 강조).</p>
+          <p>등비 쪽에 $d$ 가 상수로 곱해져 있음($b_n=\tfrac{d}{3}\cdot2^{n-3}$)에 착안 → 등차도 <strong>$a_n=d(n-k)$</strong> 로 공차를 밖으로.</p>
+          <p>그러면 $|a_n|=d|n-k|$ 이고 부등식 양변에서 <strong>양수 $d$ 가 약분</strong>되어 미지수가 $k$ 하나만 남는다.</p>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 — 등호 있는 부등식을 먼저</h3>
+        <div class="step-derive">
+          <p>$k$ 에 정수·자연수 조건이 없다 → 상수로 확정하려면 <strong>상한과 하한이 맞물려야</strong> 함.</p>
+          <p>등호 없는 부등식($>$)은 열린 범위만 줄 뿐. <strong>등호 있는 부등식($\le$)</strong> 이라야 경계값에서 $k$ 를 특정할 여지.</p>
+          <p>$n=3$ 이 상한($k\le\tfrac{10}{3}$), $n=4$ 가 하한($k\ge\tfrac{10}{3}$) → 교집합이 한 점 $\tfrac{10}{3}$.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 대수 결과 ↔ 그래프 교점 상호 검증</h3>
+        <p>$k=\tfrac{10}{3}$ 을 넣으면 $3,4,6$ 에서 $|a_n|=b_n$ (정확히 교점). 처음 스케치한 위치 관계와 일치함을 확인.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">확인:</strong> $|a_6|=d\cdot\tfrac83$, $b_6=\tfrac83 d$ → 같음(교점). $|a_5|=\tfrac53 d>b_5=\tfrac43 d$ → $5$ 는 성립.</div>
       </div>
     </section>
 
@@ -285,25 +275,25 @@
       <h3 class="level-header">🟢 기초</h3>
 
       <article class="problem basic">
-        <h3>기초 1 — 위끝 변수 미분</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle F(k)=\int_1^k (t^2+1)\,dt$ 일 때 $F'(k)$ 를 구하시오.</p>
+        <h3>기초 1 — 여집합 해석</h3>
+        <p class="problem-body"><strong>문제:</strong> "부등식 $|a_n|>b_n$ 을 만족하는 자연수 $n$ 은 $1,2,5$ 뿐"이라는 조건을, $n=3,4,6$ 에 대한 부등식으로 바꿔 쓰시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>미적분 기본정리: $F'(k)=k^2+1$.</p>
-            <p class="answer"><strong>정답:</strong> $k^2+1$</p>
+            <p>"$1,2,5$ 뿐" → 그 외 자연수에선 반대 부등식(등호 포함): $|a_n|\le b_n$.</p>
+            <p class="answer"><strong>정답:</strong> $n=3,4,6$ 에서 $|a_n|\le b_n$ (개념 ①)</p>
           </div>
         </details>
       </article>
 
       <article class="problem basic">
-        <h3>기초 2 — 아래끝 변수 미분 (부호)</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle G(k)=\int_k^{5} (3x)\,dx$ 일 때 $G'(k)$ 를 구하시오.</p>
+        <h3>기초 2 — 등비수열 일반항</h3>
+        <p class="problem-body"><strong>문제:</strong> 공비 $2$, $b_3=\tfrac13 d$ 인 등비수열 $\{b_n\}$ 의 $b_4$ 와 $b_6$ 을 $d$ 로 나타내시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>아래끝이 변수 → $G'(k)=-(3k)=-3k$ (부호 음).</p>
-            <p class="answer"><strong>정답:</strong> $-3k$ (개념 ①)</p>
+            <p>$b_n=\tfrac13 d\cdot2^{\,n-3}$. $b_4=\tfrac13 d\cdot2=\tfrac23 d$, $b_6=\tfrac13 d\cdot2^3=\tfrac83 d$.</p>
+            <p class="answer"><strong>정답:</strong> $b_4=\tfrac23 d$, $b_6=\tfrac83 d$</p>
           </div>
         </details>
       </article>
@@ -311,25 +301,26 @@
       <h3 class="level-header">🔵 기본</h3>
 
       <article class="problem standard">
-        <h3>기본 1 — 넓이 합의 미분</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle h(k)=\int_0^k g(x)\,dx+\int_k^{b}\{c-g(x)\}\,dx$ 일 때 $h'(k)$ 를 $g(k)$ 로 나타내시오.</p>
+        <h3>기본 1 — 인수분해 식세우기의 이점</h3>
+        <p class="problem-body"><strong>문제:</strong> 등차수열을 $a_n=d(n-k)$ 로 둘 때 $|a_n|$ 을 쓰고, $|a_n|\le b_n$ 에서 $d$ 가 약분되는 과정을 보이시오. ($d>0$)</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$h'(k)=g(k)-\{c-g(k)\}=2g(k)-c$.</p>
-            <p class="answer"><strong>정답:</strong> $h'(k)=2g(k)-c$ (개념 ②)</p>
+            <p>$|a_n|=|d(n-k)|=d|n-k|$ ($d>0$).</p>
+            <p>$d|n-k|\le \tfrac{d}{3}\cdot2^{\,n-3}$ → 양변 $\div d$ → $|n-k|\le\tfrac13\cdot2^{\,n-3}$.</p>
+            <p class="answer"><strong>정답:</strong> $d$ 약분 후 $|n-k|\le\tfrac13\cdot2^{\,n-3}$ — 미지수 $k$ 만 남음 (개념 ③)</p>
           </div>
         </details>
       </article>
 
       <article class="problem standard">
-        <h3>기본 2 — 역함수로 $k$ 표현</h3>
-        <p class="problem-body"><strong>문제:</strong> $g$ 의 역함수를 $f$ 라 할 때 $g(k)=\dfrac{c}{2}$ 를 $k$ 에 대해 나타내시오.</p>
+        <h3>기본 2 — 절댓값 부등식 (한 값 대입)</h3>
+        <p class="problem-body"><strong>문제:</strong> $|n-k|\le\tfrac13\cdot2^{\,n-3}$ 에 $n=3$ 을 대입해 $k$ 의 범위를 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$k=g^{-1}\!\left(\dfrac{c}{2}\right)=f\!\left(\dfrac{c}{2}\right)$.</p>
-            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{c}{2}\right)$ (개념 ⑤)</p>
+            <p>$n=3$: $|3-k|\le\tfrac13\cdot2^0=\tfrac13$ → $-\tfrac13\le 3-k\le\tfrac13$ → $\tfrac83\le k\le\tfrac{10}{3}$.</p>
+            <p class="answer"><strong>정답:</strong> $\tfrac83\le k\le\tfrac{10}{3}$</p>
           </div>
         </details>
       </article>
@@ -337,26 +328,30 @@
       <h3 class="level-header">🟠 심화</h3>
 
       <article class="problem advanced">
-        <h3>심화 1 — 영상의 완결 (극값 조건)</h3>
-        <p class="problem-body"><strong>문제:</strong> $g$ 의 역함수 $f$, $\displaystyle h(k)=\int_0^k g+\int_k^{e^2}(e-g)$ 의 극값을 주는 $k$ 를 구하시오.</p>
+        <h3>심화 1 — 등호 부등식으로 $k$ 확정</h3>
+        <p class="problem-body"><strong>문제:</strong> $|n-k|\le\tfrac13\cdot2^{\,n-3}$ 에 $n=3$ 과 $n=4$ 를 대입해 $k$ 를 확정하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$h'(k)=2g(k)-e=0$ → $g(k)=\dfrac{e}{2}$ → $k=f\!\left(\dfrac{e}{2}\right)$.</p>
-            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)$</p>
+            <p>$n=3$: $\tfrac83\le k\le\tfrac{10}{3}$ (상한 $\tfrac{10}{3}$).</p>
+            <p>$n=4$: $|4-k|\le\tfrac13\cdot2=\tfrac23$ → $\tfrac{10}{3}\le k\le\tfrac{14}{3}$ (하한 $\tfrac{10}{3}$).</p>
+            <p>교집합: $k=\dfrac{10}{3}$.</p>
+            <p class="answer"><strong>정답:</strong> $k=\dfrac{10}{3}$ (개념 ④ — 등호가 상수 특정)</p>
           </div>
         </details>
       </article>
 
       <article class="problem advanced">
-        <h3>심화 2 — 최대/최소 판정</h3>
-        <p class="problem-body"><strong>문제:</strong> 위 $h(k)$ 에서 $g$ 가 증가함수일 때와 감소함수일 때 $k=f(e/2)$ 가 각각 넓이 합의 최대인지 최소인지 판정하시오.</p>
+        <h3>심화 2 — 1,2,5만 성립함을 검증</h3>
+        <p class="problem-body"><strong>문제:</strong> $k=\tfrac{10}{3}$ 일 때 $|a_n|>b_n$, 즉 $|n-\tfrac{10}{3}|>\tfrac13\cdot2^{\,n-3}$ 이 $n=1,2,5$ 에서만 성립함을 $n=1\sim6$ 에 대해 확인하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$h''(k)=2g'(k)$. $g$ 증가 → $h''>0$ → <strong>최소</strong>. $g$ 감소 → $h''<0$ → <strong>최대</strong>.</p>
-            <p class="answer"><strong>정답:</strong> $g$ 증가면 최소, $g$ 감소면 최대 (개념 ④)</p>
-            <p class="key-point"><strong>핵심:</strong> 극값 위치는 같고, 최대/최소는 $g'$ 부호가 결정.</p>
+            <p>좌변 $|n-\tfrac{10}{3}|$ vs 우변 $\tfrac13\cdot2^{\,n-3}$:</p>
+            <p>$n=1$: $\tfrac73$ vs $\tfrac1{12}$ → $>$ ✓ / $n=2$: $\tfrac43$ vs $\tfrac16$ → $>$ ✓</p>
+            <p>$n=3$: $\tfrac13$ vs $\tfrac13$ → $=$ (성립 X) / $n=4$: $\tfrac23$ vs $\tfrac23$ → $=$ (X)</p>
+            <p>$n=5$: $\tfrac53$ vs $\tfrac43$ → $>$ ✓ / $n=6$: $\tfrac83$ vs $\tfrac83$ → $=$ (X)</p>
+            <p class="answer"><strong>정답:</strong> $>$ 성립은 $n=1,2,5$ 뿐 → 조건과 일치. $3,4,6$ 은 교점.</p>
           </div>
         </details>
       </article>
@@ -364,30 +359,33 @@
       <h3 class="level-header">🔴 수능 대비</h3>
 
       <article class="problem exam-style">
-        <h3>수능 대비 1 — 구체 함수로 완결</h3>
-        <p class="problem-body"><strong>문제:</strong> $g(x)=x$ 일 때 $\displaystyle h(k)=\int_0^k x\,dx+\int_k^{e^2}(e-x)\,dx$ 의 최솟값을 주는 $k$ 를 구하시오.</p>
+        <h3>수능 대비 1 — $d$ 까지 결정 (완결)</h3>
+        <p class="problem-body"><strong>문제:</strong> 위 조건에 더해 $a_5-b_5=1$ 일 때 공차 $d$ 와 $a_n,\ b_n$ 을 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$h'(k)=2g(k)-e=2k-e=0$ → $k=\dfrac{e}{2}$.</p>
-            <p>$h''(k)=2>0$ → 최소 확인. ($g(x)=x$ 는 증가함수.)</p>
-            <p><strong>검산:</strong> $g(k)=k=\tfrac{e}{2}$, 역함수도 $f(x)=x$ 라 $f(e/2)=\tfrac{e}{2}$ 일치.</p>
-            <p class="answer"><strong>정답:</strong> $k=\dfrac{e}{2}$ (최소)</p>
+            <p>$a_5=d(5-\tfrac{10}{3})=\tfrac53 d$, $b_5=\tfrac13 d\cdot2^2=\tfrac43 d$.</p>
+            <p>$a_5-b_5=\tfrac53 d-\tfrac43 d=\tfrac13 d=1$ → $d=3$.</p>
+            <p>$a_n=3(n-\tfrac{10}{3})=3n-10$, $b_n=\tfrac13\cdot3\cdot2^{\,n-3}=2^{\,n-3}$.</p>
+            <p><strong>검산:</strong> $a_5=5$, $b_5=4$, $a_5-b_5=1$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> $d=3$, $a_n=3n-10$, $b_n=2^{\,n-3}$</p>
           </div>
         </details>
       </article>
 
       <article class="problem exam-style">
-        <h3>수능 대비 2 — 로그함수 역함수 결합</h3>
-        <p class="problem-body"><strong>문제:</strong> $g(x)=\ln x$ 의 역함수를 $f$ 라 할 때, $\displaystyle h(k)=\int_1^k \ln x\,dx+\int_k^{b}(e-\ln x)\,dx$ 의 극값을 주는 $k$ 를 $f$ 를 이용해 구하고, 구체값도 쓰시오.</p>
+        <h3>수능 대비 2 — 같은 논리, 다른 조건</h3>
+        <p class="problem-body"><strong>문제:</strong> $d>0$ 등차 $\{a_n\}$, 공비 $2$ 등비 $\{b_n\}$, $b_2=\tfrac12 d$. $|a_n|>b_n$ 인 $n$ 이 $1,4$ 뿐일 때, $a_n=d(n-k)$ 의 $k$ 를 구하시오. (경계 $2,3$ 에서 등호)</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1:</strong> $h'(k)=\ln k-(e-\ln k)=2\ln k-e=0$ → $\ln k=\dfrac{e}{2}$.</p>
-            <p><strong>STEP 2 — 역함수:</strong> $g(k)=\ln k=\dfrac{e}{2}$, $f=g^{-1}=e^x$ → $k=f\!\left(\dfrac{e}{2}\right)=e^{e/2}$.</p>
-            <p><strong>STEP 3 — 판정:</strong> $g(x)=\ln x$ 증가 → $h''=2g'(k)=\dfrac{2}{k}>0$ → 최소.</p>
-            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)=e^{e/2}$ (최소)</p>
-            <p class="key-point"><strong>핵심:</strong> $g(k)=e/2$ 를 직접 못 풀 때 역함수로 $k=f(e/2)$, 여기선 $f=e^x$ 라 $e^{e/2}$ 로 명시.</p>
+            <p>$b_n=\tfrac12 d\cdot2^{\,n-2}=\tfrac{d}{2}\cdot2^{\,n-2}=d\cdot2^{\,n-3}$. $b_2=\tfrac12 d$, $b_3=d$.</p>
+            <p>여집합 $n=2,3$ 에서 $|a_n|\le b_n$ → $|n-k|\le2^{\,n-3}$.</p>
+            <p>$n=2$: $|2-k|\le2^{-1}=\tfrac12$ → $\tfrac32\le k\le\tfrac52$ (상한 $\tfrac52$).</p>
+            <p>$n=3$: $|3-k|\le2^0=1$ → $2\le k\le4$ (하한 $2$).</p>
+            <p>교집합 $2\le k\le\tfrac52$ … 한 점이 아님. 추가 경계 필요? $n=4$ 는 $>$(성립)이라 여집합 아님. 상한·하한이 겹치는 유일점을 주려면 문제 설계상 $n=2$ 상한과 $n=3$ 하한이 만나야 → 이 설정은 구간 $[2,\tfrac52]$.</p>
+            <p class="answer"><strong>정답:</strong> $2\le k\le\dfrac52$ (등호만으로 구간까지. 유일 확정은 추가 등호 조건 필요 — 함정: 항상 한 점은 아님).</p>
+            <p class="key-point"><strong>교훈:</strong> 등호 부등식이 상수를 특정할 <strong>가능성</strong>을 열지만, 상·하한이 정확히 만나야 유일. 아니면 구간으로 남고 추가 조건이 필요하다.</p>
           </div>
         </details>
       </article>
@@ -397,25 +395,24 @@
   </main>
 
   <div class="review-box">
-    <h3>✅ 학습자 가이드라인 · 범위 안내</h3>
-    <p><strong>범위 주의:</strong> 본 자료(정적분으로 정의된 함수의 미분·역함수·지수로그)는 <strong>고3 선택 미적분</strong>입니다. 현 고2 미적분Ⅰ(다항함수 적분) 범위 밖이며 갤러리에서 <em>고3 · 미적분</em> 으로 분류됩니다.</p>
-    <p>영상(정병훈T, 39초 쇼츠)의 압축된 결론을 다음과 같이 풀어 작성:</p>
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(권현석)의 논리를 중수준(하위 40%)도 따라오게 풀어 작성:</p>
     <ul>
-      <li><strong>정적분 정의 함수의 미분</strong> → 위끝/아래끝 변수의 부호를 분리 (개념 ①, 기초 1·2).</li>
-      <li><strong>넓이 합 최적화 = $2g(k)-e=0$</strong> → $g(k)=e/2$ 유도, 기하로 "두 높이 같아짐" (개념 ②③).</li>
-      <li><strong>최대/최소 판정</strong> → $h''=2g'$ 로 $g$ 증감이 결정 (개념 ④, 심화 2). 영상 제목 "최대"와 정합.</li>
-      <li><strong>역함수로 $k=f(e/2)$</strong> → $g=\ln x$ 구체 예로 $e^{e/2}$ 까지 (개념 ⑤, 수능 대비 2). 순수 검산 완료.</li>
+      <li><strong>여집합 해석</strong> → "~뿐"을 반대 부등식(등호 포함)으로 (개념 ①, 기초 1).</li>
+      <li><strong>공차 인수분해 식세우기</strong> → $a_n=d(n-k)$ 로 $d$ 약분, 미지수 $k$ 하나만 (개념 ③, 기본 1).</li>
+      <li><strong>등호 우선 → $k=\tfrac{10}{3}$</strong> → $n=3,4$ 상·하한 교집합. 순수 파이썬으로 $|a_n|>b_n$ 이 $1,2,5$ 뿐임을 검산 (심화 1·2).</li>
+      <li><strong>대수 ↔ 그래프 교점 상호 검증</strong> → $3,4,6$ 이 정확히 교점 (개념 ⑤).</li>
     </ul>
     <p>다만 다음은 교사 검토 권장:</p>
     <ul>
-      <li>원영상은 39초 쇼츠로 <strong>전체 발문·$g,f$ 의 구체식이 생략</strong>되었습니다(보고서 명시). 본 자료는 칠판식 $h'(k)=2g(k)-e$·$k=f(e/2)$ 를 <strong>재구성·검산</strong>하고, 완결 수치는 구체 함수($g=x$, $g=\ln x$)로 대체했습니다. (원리·조건 ★★★, 원문제 완전복원 ★★)</li>
+      <li><strong>$d$ 결정 조건</strong> — 원영상은 마지막 조건($a_?-b_?=1$)이 명확히 판서되지 않았습니다(보고서 "추정"). 본 자료는 <strong>$a_5-b_5=1$</strong> 로 명시해 $d=3$ 으로 완결했습니다. 핵심($k=\tfrac{10}{3}$)은 <strong>완전 검산</strong> 완료. (핵심 ★★★, $d$ 조건 재구성 ★★)</li>
       <li>"수능 대비"는 출제 패턴 라벨일 뿐 실재 기출이 아닙니다.</li>
     </ul>
   </div>
 
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260710_역함수적분과치환적분역함수미분_mBc94D-3.html">역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) (mBc94D-3)</a> · <a href="20260725_대칭성이용한정적분치환과기하풀이_rqxFJ4J8.html">대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분) (rqxFJ4J8)</a> · <a href="../../고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../../고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260510_등차수열일등급풀이팁_b2XZHgdA.html">등차수열 1등급 풀이법 (b2XZHgdA)</a> · <a href="20260520_등차수열시그마변형과합공식회피_b2XZHgdA_v2.html">등차수열 실전 풀이 v2 (v2)</a> · <a href="20260616_등차수열의합이차함수관련성과함정_개념.html">등차수열의 합과 이차함수 관련성과 함정 (개념)</a> · <a href="../수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a></div><!--REL_END-->
 <footer>
-    <p>생성일: 2026-07-23 | 영상 출처: <a href="https://youtube.com/shorts/xoaRbvzQUNI">https://youtube.com/shorts/xoaRbvzQUNI</a> (정병훈T 요리조리 수학, 게시 2026-07-23) · 🎓 고3 선택 미적분</p>
+    <p>생성일: 2026-07-23 | 영상 출처: <a href="https://youtu.be/hmR7jQjL5oQ">https://youtu.be/hmR7jQjL5oQ</a> (권현석, 게시 2026-07-23)</p>
     <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
     <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
   </footer>

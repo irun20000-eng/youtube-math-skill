@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분) | 학습자료</title>
+  <title>대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분) | 학습자료</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -198,7 +198,7 @@
   </div>
 
 
-  <div class="hero" style="background:linear-gradient(135deg,#0d47a1 0%,#1565c0 55%,#1976d2 100%);"><div class="tag" style="background:rgba(255,193,7,.25);">🎓 고3 선택 미적분 — 정적분의 활용 (현 고2 미적분Ⅰ 범위 밖)</div><h1>정적분으로 정의된 함수의 미분 — <strong>넓이 최적화는 "두 높이가 같아지는 지점"</strong></h1><p class="sub">🎯 넓이 합 $h(k)=\int_0^k g+\int_k^{e^2}(e-g)$ 를 $k$ 로 미분하면 $h'(k)=2g(k)-e$. 최적화 조건 $g(k)=\dfrac{e}{2}$ — 기하로는 <strong>두 높이가 같아지는 지점</strong> → $k=f\!\left(\dfrac{e}{2}\right)$. 계산 말고 <strong>직관</strong>으로.</p><div class="video-card"><a class="thumb" href="https://youtube.com/shorts/xoaRbvzQUNI" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/xoaRbvzQUNI/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 넓이 최대인 k 구하기 (Shorts)</div><div class="v-meta">📺 정병훈T 요리조리 수학, 39초 · 2026-07-23</div><a class="v-link" href="https://youtube.com/shorts/xoaRbvzQUNI" target="_blank" rel="noopener">https://youtube.com/shorts/xoaRbvzQUNI</a></div></div></div>
+  <div class="hero" style="background:linear-gradient(135deg,#0d47a1 0%,#1565c0 55%,#1976d2 100%);"><div class="tag" style="background:rgba(255,193,7,.25);">🎓 고3 선택 미적분 — 적분법 (현 고2 미적분Ⅰ 범위 밖)</div><h1>대칭성을 이용한 정적분 — <strong>치환으로 더하거나, 잘라 붙이거나</strong></h1><p class="sub">🎯 분모 미분해도 분자 안 나오고, 치환·부분적분·직접적분 다 막힐 때 마지막 카드는 <strong>대칭성</strong>. $x=\pi-t$ 치환한 식과 원식을 <strong>더하면 피적분함수가 상수</strong>가 되어 $2S=\int 1\,dx$. 점대칭에 확신 있으면 <strong>잘라 붙여 직사각형</strong>으로 즉시. <strong>※ 고3 선택 미적분(지수 적분).</strong></p><div class="video-card"><a class="thumb" href="https://youtube.com/shorts/rqxFJ4J84P0" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/rqxFJ4J84P0/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 치환, 부분, 그냥 적분도 못하겠으면 (Shorts)</div><div class="v-meta">📺 정병훈T 요리조리 수학, 1분 24초 · 2026-07-25</div><a class="v-link" href="https://youtube.com/shorts/rqxFJ4J84P0" target="_blank" rel="noopener">https://youtube.com/shorts/rqxFJ4J84P0</a></div></div></div>
 
   
 
@@ -207,74 +207,75 @@
     <section id="example">
       <h2>📌 도입: 영상이 던진 문제</h2>
       <article class="problem basic">
-        <h3>예시 — 넓이 합을 최적화하는 $k$</h3>
-        <p class="problem-body"><strong>문제(칠판식):</strong> $g$ 의 역함수를 $f$ 라 할 때, $\displaystyle h(k)=\int_0^k g(x)\,dx+\int_k^{e^2}\{e-g(x)\}\,dx$ 를 최적화하는 $k$ 를 구하시오.</p>
+        <h3>예시 — 세 적분법이 다 막힐 때</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle S=\int_0^\pi \dfrac{2^{\cos x}}{1+2^{\cos x}}\,dx$ 를 구하시오. (부피 식 $V=\tfrac18\pi\,S$ 의 일부)</p>
         <details open>
-          <summary>📖 풀이 보기 (미적분 기본정리 + 기하 직관)</summary>
+          <summary>📖 풀이 보기 (대칭 치환 + 기하)</summary>
           <div class="solution">
-            <p><strong>STEP 1 — $k$ 로 미분:</strong> 위끝이 $k$ 인 적분은 $g(k)$, 아래끝이 $k$ 인 적분은 부호가 음. $h'(k)=g(k)-\{e-g(k)\}=2g(k)-e$.</p>
-            <p><strong>STEP 2 — 극값 조건:</strong> $h'(k)=0$ → $2g(k)=e$ → $g(k)=\dfrac{e}{2}$.</p>
-            <p><strong>STEP 3 — 역함수:</strong> $g(k)=\dfrac{e}{2}$ 를 $k$ 에 대해 풀면 $k=g^{-1}\!\left(\dfrac{e}{2}\right)=f\!\left(\dfrac{e}{2}\right)$.</p>
-            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)$</p>
-            <p class="key-point"><strong>기하 직관(치트키):</strong> 조건 $g(k)=e-g(k)$ 는 두 적분의 <strong>높이(세로 길이)가 같아지는 지점</strong>. 다음엔 계산 없이 "두 높이 같아지는 $k$" 를 바로 찾아 $f(e/2)$.</p>
+            <p><strong>STEP 0 — 막힘 확인:</strong> 분모 미분해도 분자 안 나옴, 치환·부분적분·직접적분 모두 막막 → <strong>대칭성</strong> 카드.</p>
+            <p><strong>STEP 1 — $x=\pi-t$ 치환:</strong> $dx=-dt$, 구간 $0\to\pi$ 가 $\pi\to0$. $\cos(\pi-t)=-\cos t$.</p>
+            <p>$S=\displaystyle\int_0^\pi \dfrac{2^{-\cos t}}{1+2^{-\cos t}}\,dt$. 분모·분자에 $2^{\cos t}$ 곱 → $S=\displaystyle\int_0^\pi \dfrac{1}{2^{\cos t}+1}\,dt$.</p>
+            <p><strong>STEP 2 — 원식과 더하기:</strong> $2S=\displaystyle\int_0^\pi\!\left(\dfrac{2^{\cos x}}{1+2^{\cos x}}+\dfrac{1}{1+2^{\cos x}}\right)dx=\int_0^\pi 1\,dx=\pi$.</p>
+            <p><strong>STEP 3:</strong> $S=\dfrac{\pi}{2}$. 따라서 $V=\tfrac18\pi\cdot\tfrac{\pi}{2}=\dfrac{\pi^2}{16}$.</p>
+            <p class="answer"><strong>정답:</strong> $S=\dfrac{\pi}{2}$ (부피 $V=\dfrac{\pi^2}{16}$)</p>
+            <p class="key-point"><strong>기하 별해:</strong> 피적분함수가 점 $\left(\tfrac\pi2,\tfrac12\right)$ 에 점대칭 → 위 곡선을 잘라 빈 곳에 붙이면 가로 $\pi$·세로 $\tfrac12$ 직사각형 → $S=\pi\cdot\tfrac12=\tfrac\pi2$ 를 계산 없이.</p>
           </div>
         </details>
       </article>
     </section>
 
     <section id="concept">
-      <h2>💡 개념 설명 (정적분 정의 함수의 미분 · 넓이 최적화)</h2>
+      <h2>💡 개념 설명 (대칭 치환 · 더해서 상수 · 기하)</h2>
 
       <div class="concept-block">
-        <h3>① 선수 지식 — 정적분으로 정의된 함수의 미분</h3>
-        <div class="prereq">
-          <p>위끝이 변수: $\dfrac{d}{dk}\displaystyle\int_a^k g(x)\,dx=g(k)$ (미적분의 기본정리).</p>
-          <p>아래끝이 변수: $\dfrac{d}{dk}\displaystyle\int_k^b \varphi(x)\,dx=-\varphi(k)$ (부호 음).</p>
-        </div>
-        <p>$k$ 가 <strong>적분 구간의 경계</strong>로 들어가면, 미분은 그 경계에서의 피적분함수 값(부호 주의)으로 나온다.</p>
-      </div>
-
-      <div class="concept-block">
-        <h3>② 넓이 합을 $k$ 의 함수로</h3>
-        <p>$k$ 를 기준으로 자른 두 넓이의 합 $h(k)=\displaystyle\int_0^k g\,dx+\int_k^{e^2}(e-g)\,dx$. 앞은 곡선 $y=g$ 아래, 뒤는 $y=e-g$ 아래 넓이.</p>
-        <div class="step-derive">
-          <p>$h'(k)=g(k)-\{e-g(k)\}$ (앞 항 $+g(k)$, 뒤 항 아래끝이라 $-(e-g(k))$).</p>
-          <p>$=2g(k)-e$.</p>
-        </div>
-      </div>
-
-      <div class="concept-block">
-        <h3>③ 핵심 — 최적화 조건과 기하 해석</h3>
-        <div class="formula-box">
-          $h'(k)=2g(k)-e=0 \iff g(k)=\dfrac{e}{2} \iff g(k)=e-g(k)$
-        </div>
-        <p>$g(k)=e-g(k)$ 는 <strong>두 곡선의 세로 높이가 같아지는 순간</strong>. 넓이 합의 극값은 그 지점에서 발생.</p>
-      </div>
-
-      <div class="concept-block">
-        <h3>④ 최대인가 최소인가 — 2차 판정</h3>
-        <div class="step-derive">
-          <p>$h''(k)=2g'(k)$.</p>
-          <p>$g$ 가 <strong>증가함수</strong>($g'>0$) → $h''>0$ → 넓이 합 <strong>최소</strong>.</p>
-          <p>$g$ 가 <strong>감소함수</strong>($g'<0$) → $h''<0$ → 넓이 합 <strong>최대</strong>.</p>
-        </div>
+        <h3>① 큰 그림 — 막히면 대칭성을 의심</h3>
+        <p>분모 미분 꼴($\int\frac{f'}{f}$)·부분적분·기본 치환이 모두 안 되는 복잡한 분수 정적분은, <strong>피적분함수의 대칭성</strong>을 마지막 카드로 꺼낸다.</p>
         <div class="insight">
-          극값 위치 $k=f(e/2)$ 는 $g$ 의 증감과 무관하게 동일. 최대/최소 여부만 $g'$ 부호로 갈린다. (영상 제목 "최대"는 $g$ 가 감소인 맥락.)
+          강사 메시지: "그 삼박자(분모미분·치환·부분적분)가 다 안 되는 마지막 순간, 해야 할 건 <strong>대칭성</strong>."
         </div>
       </div>
 
       <div class="concept-block">
-        <h3>⑤ 역함수로 $k$ 표현</h3>
-        <p>$g(k)=\dfrac{e}{2}$ 를 $k$ 에 대해 직접 못 풀어도, 역함수 $f=g^{-1}$ 로 $k=f\!\left(\dfrac{e}{2}\right)$ 로 즉시 표현.</p>
-        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">예:</strong> $g(x)=\ln x$ 이면 $f(x)=e^x$. $g(k)=\tfrac{e}{2}$ → $k=e^{e/2}=f(e/2)$.</div>
+        <h3>② 선수 지식 — 구간 대칭 치환 $x=a+b-t$</h3>
+        <div class="prereq">
+          <p>$\displaystyle\int_a^b f(x)\,dx=\int_a^b f(a+b-x)\,dx$ (구간을 뒤집는 치환 $x=a+b-t$, $dx=-dt$).</p>
+          <p>구간 $[0,\pi]$ 이면 $x=\pi-t$. 짝함수·홀함수·주기 성질과 함께 정적분의 강력한 도구.</p>
+        </div>
+        <p>핵심은 <strong>치환한 식과 원식을 더했을 때</strong> 피적분함수가 간단(상수)해지는지 보는 것.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 핵심 — $\dfrac{g}{1+g}+\dfrac{1}{1+g}=1$</h3>
+        <div class="step-derive">
+          <p>$g=2^{\cos x}$ 로 두면 원식 $\dfrac{g}{1+g}$. $x\to\pi-x$ 로 $\cos$ 부호 반전 → $g\to\dfrac1g$ → 치환식 $\dfrac{1/g}{1+1/g}=\dfrac{1}{1+g}$.</p>
+          <p>두 식의 합: $\dfrac{g}{1+g}+\dfrac{1}{1+g}=\dfrac{g+1}{1+g}=1$.</p>
+          <p>$\therefore 2S=\displaystyle\int_0^\pi 1\,dx=\pi$ → $S=\dfrac\pi2$.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 — 점대칭이면 "잘라 붙이기"</h3>
+        <p>피적분함수 $y=\dfrac{2^{\cos x}}{1+2^{\cos x}}$ 는 점 $\left(\tfrac\pi2,\tfrac12\right)$ 에 <strong>점대칭</strong>: $f(x)+f(\pi-x)=1$ 이므로 평균이 $\tfrac12$.</p>
+        <div class="callout">
+          <p>점대칭 곡선 아래 넓이는 <strong>대칭 중심 높이 $\times$ 구간 폭</strong> 직사각형과 같다 → $S=\tfrac12\times\pi=\tfrac\pi2$.</p>
+          <p>확신 있으면 수식 없이 즉시. 확신 없으면 ③의 치환으로 정석 확인(강사: "이 정도 하면 성공").</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 점대칭 판별식</h3>
+        <div class="formula-box">
+          $f$ 가 점 $(a,b)$ 에 점대칭 $\iff f(x)+f(2a-x)=2b$
+        </div>
+        <p>여기선 $a=\tfrac\pi2$, $2a-x=\pi-x$, $f(x)+f(\pi-x)=1=2\cdot\tfrac12$ → 중심 $\left(\tfrac\pi2,\tfrac12\right)$. 판별식으로 대칭을 <strong>확인</strong>하고 잘라 붙인다.</p>
       </div>
 
       <div class="concept-block">
         <h3>⑥ 함정 — 흔히 놓치는 3가지</h3>
         <div class="callout">
-          <p>① <strong>아래끝 미분 부호</strong>: $\dfrac{d}{dk}\int_k^b=-\varphi(k)$. 부호 빠뜨리면 조건이 틀림.</p>
-          <p>② <strong>최대/최소 단정</strong>: $h''=2g'$ 로 $g$ 증감을 확인해야. 조건만으로 최대라 단정 ❌.</p>
-          <p>③ <strong>계산에 매몰</strong>: 원리 이해 후엔 "두 높이 같아지는 지점"으로 직관 처리(강사 강조).</p>
+          <p>① <strong>치환 시 부호·구간</strong>: $x=\pi-t$ → $dx=-dt$, 구간 뒤집힘. $-dt$ 와 구간 교환이 상쇄돼 결국 $\int_0^\pi$.</p>
+          <p>② <strong>지수 정리</strong>: $2^{-\cos t}=\dfrac{1}{2^{\cos t}}$ 로 분모·분자에 $2^{\cos t}$ 곱해 형태 맞추기.</p>
+          <p>③ <strong>대칭 확신 없이 잘라 붙이기</strong>: 판별식 $f(x)+f(2a-x)=2b$ 로 <strong>확인 후</strong> 기하 풀이.</p>
         </div>
       </div>
     </section>
@@ -285,25 +286,25 @@
       <h3 class="level-header">🟢 기초</h3>
 
       <article class="problem basic">
-        <h3>기초 1 — 위끝 변수 미분</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle F(k)=\int_1^k (t^2+1)\,dt$ 일 때 $F'(k)$ 를 구하시오.</p>
+        <h3>기초 1 — 구간 대칭 치환</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\int_0^\pi f(x)\,dx$ 에서 $x=\pi-t$ 로 치환하면 무엇과 같아지는지 쓰시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>미적분 기본정리: $F'(k)=k^2+1$.</p>
-            <p class="answer"><strong>정답:</strong> $k^2+1$</p>
+            <p>$dx=-dt$, 구간 $0\to\pi$ 이 $\pi\to0$. $\displaystyle\int_\pi^0 f(\pi-t)(-dt)=\int_0^\pi f(\pi-t)\,dt$.</p>
+            <p class="answer"><strong>정답:</strong> $\displaystyle\int_0^\pi f(\pi-x)\,dx$ (개념 ②)</p>
           </div>
         </details>
       </article>
 
       <article class="problem basic">
-        <h3>기초 2 — 아래끝 변수 미분 (부호)</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle G(k)=\int_k^{5} (3x)\,dx$ 일 때 $G'(k)$ 를 구하시오.</p>
+        <h3>기초 2 — 지수 정리</h3>
+        <p class="problem-body"><strong>문제:</strong> $\dfrac{2^{-\cos t}}{1+2^{-\cos t}}$ 의 분모·분자에 $2^{\cos t}$ 를 곱해 간단히 하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>아래끝이 변수 → $G'(k)=-(3k)=-3k$ (부호 음).</p>
-            <p class="answer"><strong>정답:</strong> $-3k$ (개념 ①)</p>
+            <p>$\dfrac{2^{-\cos t}\cdot2^{\cos t}}{(1+2^{-\cos t})\cdot2^{\cos t}}=\dfrac{1}{2^{\cos t}+1}$.</p>
+            <p class="answer"><strong>정답:</strong> $\dfrac{1}{2^{\cos t}+1}$ (개념 ③)</p>
           </div>
         </details>
       </article>
@@ -311,25 +312,26 @@
       <h3 class="level-header">🔵 기본</h3>
 
       <article class="problem standard">
-        <h3>기본 1 — 넓이 합의 미분</h3>
-        <p class="problem-body"><strong>문제:</strong> $\displaystyle h(k)=\int_0^k g(x)\,dx+\int_k^{b}\{c-g(x)\}\,dx$ 일 때 $h'(k)$ 를 $g(k)$ 로 나타내시오.</p>
+        <h3>기본 1 — 더해서 상수</h3>
+        <p class="problem-body"><strong>문제:</strong> $g>0$ 일 때 $\dfrac{g}{1+g}+\dfrac{1}{1+g}$ 를 계산하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$h'(k)=g(k)-\{c-g(k)\}=2g(k)-c$.</p>
-            <p class="answer"><strong>정답:</strong> $h'(k)=2g(k)-c$ (개념 ②)</p>
+            <p>$\dfrac{g+1}{1+g}=1$.</p>
+            <p class="answer"><strong>정답:</strong> $1$ (두 식의 합이 상수 → 대칭 치환의 핵심)</p>
           </div>
         </details>
       </article>
 
       <article class="problem standard">
-        <h3>기본 2 — 역함수로 $k$ 표현</h3>
-        <p class="problem-body"><strong>문제:</strong> $g$ 의 역함수를 $f$ 라 할 때 $g(k)=\dfrac{c}{2}$ 를 $k$ 에 대해 나타내시오.</p>
+        <h3>기본 2 — 점대칭 판별</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=\dfrac{2^{\cos x}}{1+2^{\cos x}}$ 가 점 $\left(\tfrac\pi2,\tfrac12\right)$ 에 점대칭임을 $f(x)+f(\pi-x)$ 를 계산해 보이시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$k=g^{-1}\!\left(\dfrac{c}{2}\right)=f\!\left(\dfrac{c}{2}\right)$.</p>
-            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{c}{2}\right)$ (개념 ⑤)</p>
+            <p>$f(\pi-x)=\dfrac{2^{-\cos x}}{1+2^{-\cos x}}=\dfrac{1}{2^{\cos x}+1}$ (기초 2).</p>
+            <p>$f(x)+f(\pi-x)=\dfrac{2^{\cos x}}{1+2^{\cos x}}+\dfrac{1}{1+2^{\cos x}}=1=2\cdot\tfrac12$.</p>
+            <p class="answer"><strong>정답:</strong> $f(x)+f(\pi-x)=1$ → 중심 $\left(\tfrac\pi2,\tfrac12\right)$ 점대칭 (개념 ⑤)</p>
           </div>
         </details>
       </article>
@@ -337,26 +339,27 @@
       <h3 class="level-header">🟠 심화</h3>
 
       <article class="problem advanced">
-        <h3>심화 1 — 영상의 완결 (극값 조건)</h3>
-        <p class="problem-body"><strong>문제:</strong> $g$ 의 역함수 $f$, $\displaystyle h(k)=\int_0^k g+\int_k^{e^2}(e-g)$ 의 극값을 주는 $k$ 를 구하시오.</p>
+        <h3>심화 1 — 영상의 완결 (치환으로 더하기)</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle S=\int_0^\pi \dfrac{2^{\cos x}}{1+2^{\cos x}}\,dx$ 를 $x=\pi-t$ 치환으로 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$h'(k)=2g(k)-e=0$ → $g(k)=\dfrac{e}{2}$ → $k=f\!\left(\dfrac{e}{2}\right)$.</p>
-            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)$</p>
+            <p>치환식 $S=\displaystyle\int_0^\pi\dfrac{1}{2^{\cos x}+1}\,dx$. 원식과 더하면 $2S=\displaystyle\int_0^\pi 1\,dx=\pi$.</p>
+            <p>$S=\dfrac\pi2$.</p>
+            <p class="answer"><strong>정답:</strong> $S=\dfrac\pi2$ (수치 검산: $\int_0^\pi \tfrac{2^{\cos x}}{1+2^{\cos x}}dx\approx1.5708=\tfrac\pi2$ ✓)</p>
           </div>
         </details>
       </article>
 
       <article class="problem advanced">
-        <h3>심화 2 — 최대/최소 판정</h3>
-        <p class="problem-body"><strong>문제:</strong> 위 $h(k)$ 에서 $g$ 가 증가함수일 때와 감소함수일 때 $k=f(e/2)$ 가 각각 넓이 합의 최대인지 최소인지 판정하시오.</p>
+        <h3>심화 2 — 기하 (잘라 붙이기)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f$ 가 점 $\left(\tfrac\pi2,\tfrac12\right)$ 점대칭임을 이용해 $S$ 를 수식 없이 직사각형 넓이로 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$h''(k)=2g'(k)$. $g$ 증가 → $h''>0$ → <strong>최소</strong>. $g$ 감소 → $h''<0$ → <strong>최대</strong>.</p>
-            <p class="answer"><strong>정답:</strong> $g$ 증가면 최소, $g$ 감소면 최대 (개념 ④)</p>
-            <p class="key-point"><strong>핵심:</strong> 극값 위치는 같고, 최대/최소는 $g'$ 부호가 결정.</p>
+            <p>점대칭 → 대칭 중심 위쪽 곡선 부분을 잘라 아래 빈 곳에 붙이면 높이 $\tfrac12$·폭 $\pi$ 직사각형.</p>
+            <p>$S=\tfrac12\times\pi=\dfrac\pi2$.</p>
+            <p class="answer"><strong>정답:</strong> $S=\dfrac\pi2$ (개념 ④ — 확신 있으면 즉답)</p>
           </div>
         </details>
       </article>
@@ -364,30 +367,29 @@
       <h3 class="level-header">🔴 수능 대비</h3>
 
       <article class="problem exam-style">
-        <h3>수능 대비 1 — 구체 함수로 완결</h3>
-        <p class="problem-body"><strong>문제:</strong> $g(x)=x$ 일 때 $\displaystyle h(k)=\int_0^k x\,dx+\int_k^{e^2}(e-x)\,dx$ 의 최솟값을 주는 $k$ 를 구하시오.</p>
+        <h3>수능 대비 1 — 부피까지 (영상 완결)</h3>
+        <p class="problem-body"><strong>문제:</strong> $V=\dfrac18\pi\displaystyle\int_0^\pi \dfrac{2^{\cos x}}{1+2^{\cos x}}\,dx$ 의 값을 구하시오.</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p>$h'(k)=2g(k)-e=2k-e=0$ → $k=\dfrac{e}{2}$.</p>
-            <p>$h''(k)=2>0$ → 최소 확인. ($g(x)=x$ 는 증가함수.)</p>
-            <p><strong>검산:</strong> $g(k)=k=\tfrac{e}{2}$, 역함수도 $f(x)=x$ 라 $f(e/2)=\tfrac{e}{2}$ 일치.</p>
-            <p class="answer"><strong>정답:</strong> $k=\dfrac{e}{2}$ (최소)</p>
+            <p>$\displaystyle\int_0^\pi \dfrac{2^{\cos x}}{1+2^{\cos x}}\,dx=\dfrac\pi2$ (심화 1).</p>
+            <p>$V=\dfrac18\pi\cdot\dfrac\pi2=\dfrac{\pi^2}{16}$.</p>
+            <p class="answer"><strong>정답:</strong> $V=\dfrac{\pi^2}{16}$</p>
           </div>
         </details>
       </article>
 
       <article class="problem exam-style">
-        <h3>수능 대비 2 — 로그함수 역함수 결합</h3>
-        <p class="problem-body"><strong>문제:</strong> $g(x)=\ln x$ 의 역함수를 $f$ 라 할 때, $\displaystyle h(k)=\int_1^k \ln x\,dx+\int_k^{b}(e-\ln x)\,dx$ 의 극값을 주는 $k$ 를 $f$ 를 이용해 구하고, 구체값도 쓰시오.</p>
+        <h3>수능 대비 2 — 같은 기법, 다른 함수</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\int_0^{\pi} \dfrac{\sin^2 x}{2^{\cos x}+1}\,dx$ 를 대칭 치환으로 구하시오. (힌트: $\sin^2(\pi-x)=\sin^2 x$)</p>
         <details>
           <summary>📖 풀이 보기</summary>
           <div class="solution">
-            <p><strong>STEP 1:</strong> $h'(k)=\ln k-(e-\ln k)=2\ln k-e=0$ → $\ln k=\dfrac{e}{2}$.</p>
-            <p><strong>STEP 2 — 역함수:</strong> $g(k)=\ln k=\dfrac{e}{2}$, $f=g^{-1}=e^x$ → $k=f\!\left(\dfrac{e}{2}\right)=e^{e/2}$.</p>
-            <p><strong>STEP 3 — 판정:</strong> $g(x)=\ln x$ 증가 → $h''=2g'(k)=\dfrac{2}{k}>0$ → 최소.</p>
-            <p class="answer"><strong>정답:</strong> $k=f\!\left(\dfrac{e}{2}\right)=e^{e/2}$ (최소)</p>
-            <p class="key-point"><strong>핵심:</strong> $g(k)=e/2$ 를 직접 못 풀 때 역함수로 $k=f(e/2)$, 여기선 $f=e^x$ 라 $e^{e/2}$ 로 명시.</p>
+            <p><strong>STEP 1:</strong> $I=\displaystyle\int_0^\pi\dfrac{\sin^2 x}{2^{\cos x}+1}\,dx$. $x=\pi-t$: $\sin^2$ 불변, $2^{\cos}\to2^{-\cos}$ → $I=\displaystyle\int_0^\pi\dfrac{\sin^2 x\cdot2^{\cos x}}{2^{\cos x}+1}\,dx$.</p>
+            <p><strong>STEP 2 — 더하기:</strong> $2I=\displaystyle\int_0^\pi\dfrac{\sin^2 x(1+2^{\cos x})}{2^{\cos x}+1}\,dx=\int_0^\pi \sin^2 x\,dx$.</p>
+            <p><strong>STEP 3:</strong> $\displaystyle\int_0^\pi\sin^2 x\,dx=\int_0^\pi\dfrac{1-\cos2x}{2}\,dx=\dfrac\pi2$. 따라서 $2I=\dfrac\pi2$ → $I=\dfrac\pi4$.</p>
+            <p class="answer"><strong>정답:</strong> $I=\dfrac\pi4$ (수치 검산 일치)</p>
+            <p class="key-point"><strong>핵심:</strong> $\frac{1}{2^{\cos}+1}$ 이 낀 적분은 $x\to\pi-x$ 로 더하면 분모가 사라진다 — 같은 대칭 기법.</p>
           </div>
         </details>
       </article>
@@ -398,24 +400,23 @@
 
   <div class="review-box">
     <h3>✅ 학습자 가이드라인 · 범위 안내</h3>
-    <p><strong>범위 주의:</strong> 본 자료(정적분으로 정의된 함수의 미분·역함수·지수로그)는 <strong>고3 선택 미적분</strong>입니다. 현 고2 미적분Ⅰ(다항함수 적분) 범위 밖이며 갤러리에서 <em>고3 · 미적분</em> 으로 분류됩니다.</p>
-    <p>영상(정병훈T, 39초 쇼츠)의 압축된 결론을 다음과 같이 풀어 작성:</p>
+    <p><strong>범위 주의:</strong> 본 자료(지수함수 정적분·대칭 치환·부피)는 <strong>고3 선택 미적분</strong>입니다. 현 고2 미적분Ⅰ 범위 밖이며 갤러리에서 <em>고3 · 미적분</em> 으로 분류됩니다.</p>
+    <p>영상(정병훈T, 1분 24초 쇼츠)의 결론을 다음과 같이 풀어 작성:</p>
     <ul>
-      <li><strong>정적분 정의 함수의 미분</strong> → 위끝/아래끝 변수의 부호를 분리 (개념 ①, 기초 1·2).</li>
-      <li><strong>넓이 합 최적화 = $2g(k)-e=0$</strong> → $g(k)=e/2$ 유도, 기하로 "두 높이 같아짐" (개념 ②③).</li>
-      <li><strong>최대/최소 판정</strong> → $h''=2g'$ 로 $g$ 증감이 결정 (개념 ④, 심화 2). 영상 제목 "최대"와 정합.</li>
-      <li><strong>역함수로 $k=f(e/2)$</strong> → $g=\ln x$ 구체 예로 $e^{e/2}$ 까지 (개념 ⑤, 수능 대비 2). 순수 검산 완료.</li>
+      <li><strong>대칭 치환</strong> $x=\pi-t$ → 치환식과 원식을 더해 피적분함수 $=1$ → $2S=\pi$ (개념 ②③, 심화 1). <strong>수치적분으로 $S=\tfrac\pi2$ 검산 완료.</strong></li>
+      <li><strong>점대칭 판별 & 잘라 붙이기</strong> → $f(x)+f(\pi-x)=1$ 로 중심 $(\tfrac\pi2,\tfrac12)$ 확인 후 직사각형 (개념 ④⑤, 심화 2).</li>
+      <li><strong>같은 기법 확장</strong> → 수능 대비 2 에서 $\frac{\sin^2 x}{2^{\cos x}+1}$ 도 동일 치환으로 $\tfrac\pi4$ (검산 일치).</li>
     </ul>
     <p>다만 다음은 교사 검토 권장:</p>
     <ul>
-      <li>원영상은 39초 쇼츠로 <strong>전체 발문·$g,f$ 의 구체식이 생략</strong>되었습니다(보고서 명시). 본 자료는 칠판식 $h'(k)=2g(k)-e$·$k=f(e/2)$ 를 <strong>재구성·검산</strong>하고, 완결 수치는 구체 함수($g=x$, $g=\ln x$)로 대체했습니다. (원리·조건 ★★★, 원문제 완전복원 ★★)</li>
+      <li>원영상은 부피 원문제(입체·단면)의 발문이 생략되어(보고서 명시), 부피 식 $V=\tfrac18\pi S$ 부분은 칠판식 그대로 인용했습니다. 핵심 적분값 $S=\tfrac\pi2$·$V=\tfrac{\pi^2}{16}$ 은 <strong>수치 검산 완료</strong>. (적분 기법 ★★★)</li>
       <li>"수능 대비"는 출제 패턴 라벨일 뿐 실재 기출이 아닙니다.</li>
     </ul>
   </div>
 
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260710_역함수적분과치환적분역함수미분_mBc94D-3.html">역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) (mBc94D-3)</a> · <a href="20260725_대칭성이용한정적분치환과기하풀이_rqxFJ4J8.html">대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분) (rqxFJ4J8)</a> · <a href="../../고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../../고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260710_역함수적분과치환적분역함수미분_mBc94D-3.html">역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) (mBc94D-3)</a> · <a href="20260723_정적분정의함수미분과넓이최적화_xoaRbvzQ.html">정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분) (xoaRbvzQ)</a> · <a href="../../고2/수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="../../고2/수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a></div><!--REL_END-->
 <footer>
-    <p>생성일: 2026-07-23 | 영상 출처: <a href="https://youtube.com/shorts/xoaRbvzQUNI">https://youtube.com/shorts/xoaRbvzQUNI</a> (정병훈T 요리조리 수학, 게시 2026-07-23) · 🎓 고3 선택 미적분</p>
+    <p>생성일: 2026-07-25 | 영상 출처: <a href="https://youtube.com/shorts/rqxFJ4J84P0">https://youtube.com/shorts/rqxFJ4J84P0</a> (정병훈T 요리조리 수학, 게시 2026-07-25) · 🎓 고3 선택 미적분</p>
     <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
     <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
   </footer>
