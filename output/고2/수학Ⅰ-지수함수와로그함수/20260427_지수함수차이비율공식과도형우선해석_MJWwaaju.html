@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅰ-지수함수와 로그함수]</div><h1>지수함수 $y=a^x$ — 차이·비율 공식과 도형 우선 해석</h1><p class="sub">🎯 $\frac{y_2}{y_1}=a^{x_2-x_1}$ (길이비↔좌표차)와 이등변·닮음 도형 해석으로 지수 도형 문제를 빠르게</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=MJWwaajugnU" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/MJWwaajugnU/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상</div><div class="v-meta">📺 시대수학 김성호, 6분 30초</div><a class="v-link" href="https://www.youtube.com/watch?v=MJWwaajugnU" target="_blank" rel="noopener">https://www.youtube.com/watch?v=MJWwaajugnU</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 문제</h2>
+      <article class="problem basic">
+        <h3>예시 — 지수함수 도형 문제 (모의고사 준킬러)</h3>
+        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^x$ 위 두 점 $P(a,2^a),Q(b,2^b)$. 직선 $PQ$ 기울기 $m$. 점 $P$ 지나 기울기 $-m$ 인 직선이 $x,y$축과 만나는 점 $A,B$, 점 $Q$ 지나 기울기 $-m$ 인 직선이 $x$축과 만나는 점 $C$. $AB=4PB$, $CQ=3AB$ 일 때 $90(a+b)$ 의 값은? (단 $0<a<b$)</p>
+        <details open>
+          <summary>📖 풀이 보기 (차이·비율 공식 + 도형)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 도형에 시선:</strong> 기울기 $m,-m$ → $x$축과 이루는 각 같음 → <strong>이등변삼각형</strong> → 수직이등분.</p>
+            <p><strong>STEP 2 — 길이를 변수로:</strong> 좌표를 $\alpha,\beta$ 로 각각 잡지 말고, 닮음비($1{:}4$, $1{:}3$)로 한 기준 $\alpha$ 에 몰아 표현 → 두 교점 $x$ 차이 $=9\alpha$.</p>
+            <p><strong>STEP 3 — 차이·비율 공식:</strong> $\dfrac{y_Q}{y_P}=\dfrac{2^b}{2^a}=2^{b-a}$. $y$방향 닮음비 $1{:}4$ → $2^{9\alpha}=4=2^2$ → $9\alpha=2$ → $\alpha=\dfrac29$.</p>
+            <p><strong>STEP 4 — 마무리:</strong> $a+b=\alpha+10\alpha=11\alpha=\dfrac{22}{9}$. $90\times\dfrac{22}{9}=220$.</p>
+            <p class="answer"><strong>정답:</strong> $220$</p>
+            <p class="key-point"><strong>핵심:</strong> $\dfrac{y_2}{y_1}=a^{x_2-x_1}$ — <strong>$y$ 방향 길이비 = $x$ 좌표 차이(지수)</strong>. 곡선에 시선 뺏기지 말고 도형(이등변·닮음)부터.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (차이·비율 공식 · 도형 우선)</h2>
+
+      <div class="concept-block">
+        <h3>① 핵심 — 지수함수의 차이·비율 공식</h3>
+        <div class="step-derive">
+          <p>곡선 $y=a^x$ 위 두 점 $y_1=a^{x_1}$, $y_2=a^{x_2}$.</p>
+          <p>나누면 $\dfrac{y_2}{y_1}=\dfrac{a^{x_2}}{a^{x_1}}=a^{x_2-x_1}$.</p>
+          <p>즉 <strong>$y$ 방향 길이비($\frac{y_2}{y_1}$)가 $x$ 좌표 차이($x_2-x_1$)를 지수로</strong> 바꿔준다.</p>
+        </div>
+        <div class="formula-box">
+          $\dfrac{y_2}{y_1}=a^{\,x_2-x_1}$ &nbsp;(길이비 ↔ 좌표 차이)
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 선수 지식 — 지수법칙</h3>
+        <div class="prereq">
+          <p>$\dfrac{a^{x_2}}{a^{x_1}}=a^{x_2-x_1}$ (나눗셈 = 지수 뺄셈).</p>
+          <p>$a^p=a^q \iff p=q$ (밑이 같으면 지수 비교).</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 핵심 — 기울기 $m,-m$ → 이등변삼각형</h3>
+        <p>기울기 절댓값이 같고 부호 반대인 두 직선은 $x$축과 이루는 각(탄젠트)이 같다 → 밑각이 같은 <strong>이등변삼각형</strong> → 수직이등분선 성질을 최우선으로.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 — 변수 하나로 (거리 변수화)</h3>
+        <p>교점마다 $\alpha,\beta,\gamma$ 로 잡으면 노가다. 한 점을 기준 $\alpha$ 로 두고 <strong>닮음·이등변</strong> 으로 나머지를 $\alpha$ 배수($3\alpha,-2\alpha,10\alpha\dots$)로 통일.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">강사:</strong> "$\alpha,\beta$ 라 하는 순간 노가다 연산." 시선은 온전히 도형에.</div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 차이·비율 공식 적용</h3>
+        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^x$ 위 두 점 $P(1,2^1),Q(3,2^3)$ 에 대해 $\dfrac{y_Q}{y_P}$ 를 지수 차이로 나타내고 값을 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$\dfrac{2^3}{2^1}=2^{3-1}=2^2=4$.</p>
+          <p class="answer"><strong>정답:</strong> $2^{2}=4$ (길이비 = 좌표차 지수)</p>
+        </div></details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 지수 방정식</h3>
+        <p class="problem-body"><strong>문제:</strong> $2^{9\alpha}=4$ 를 만족하는 $\alpha$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$4=2^2$ → $2^{9\alpha}=2^2$ → $9\alpha=2$ → $\alpha=\dfrac29$.</p>
+          <p class="answer"><strong>정답:</strong> $\alpha=\dfrac29$</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 이등변삼각형 판별</h3>
+        <p class="problem-body"><strong>문제:</strong> 기울기 $m$ 과 $-m$ 인 두 직선이 한 점에서 만나 $x$축 위에 밑변을 만들 때, 왜 이등변삼각형이 되는지 설명하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>기울기 $\pm m$ → $x$축과 이루는 각의 탄젠트 $|m|$ 로 같음 → 두 밑각이 같음 → 이등변삼각형.</p>
+          <p class="answer"><strong>정답:</strong> 두 밑각이 같아(탄젠트 $|m|$ 동일) 이등변 (개념 ③)</p>
+        </div></details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 거리비로 좌표차 구하기</h3>
+        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^x$ 위 두 점의 $y$ 값 비가 $8$ 일 때, 두 점의 $x$ 좌표 차이를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$\dfrac{y_2}{y_1}=2^{x_2-x_1}=8=2^3$ → $x_2-x_1=3$.</p>
+          <p class="answer"><strong>정답:</strong> $x$ 좌표 차이 $=3$</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 닮음비로 좌표차 → α</h3>
+        <p class="problem-body"><strong>문제:</strong> 어떤 지수 도형 문제에서 두 교점의 $x$ 좌표 차이가 $9\alpha$ 이고, 그 두 점의 $y$ 방향 길이비가 $4$ 이다. ($y=2^x$ 위) $\alpha$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>차이·비율: $2^{9\alpha}=4=2^2$ → $9\alpha=2$ → $\alpha=\dfrac29$.</p>
+          <p class="answer"><strong>정답:</strong> $\alpha=\dfrac29$ (개념 ①)</p>
+        </div></details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 변수 단일화의 이점</h3>
+        <p class="problem-body"><strong>문제:</strong> 두 점 $x$ 좌표를 각각 $\alpha,\ 10\alpha$ 로 표현했을 때 $a+b$ 를 $\alpha$ 로 나타내고, $\alpha=\dfrac29$ 일 때 값을 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$a+b=\alpha+10\alpha=11\alpha=11\cdot\dfrac29=\dfrac{22}{9}$.</p>
+          <p class="answer"><strong>정답:</strong> $a+b=\dfrac{22}{9}$ (변수 하나로 통일, 개념 ④)</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 영상 문제 완결</h3>
+        <p class="problem-body"><strong>문제:</strong> 도입의 상황에서 $90(a+b)$ 의 값을 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>이등변·닮음으로 $x$차 $9\alpha$, $y$비 $4$ → $2^{9\alpha}=4$ → $\alpha=\dfrac29$.</p>
+          <p>$a+b=11\alpha=\dfrac{22}{9}$ → $90\times\dfrac{22}{9}=220$.</p>
+          <p class="answer"><strong>정답:</strong> $220$</p>
+        </div></details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 밑이 다른 지수</h3>
+        <p class="problem-body"><strong>문제:</strong> 곡선 $y=3^x$ 위 두 점의 $y$ 방향 길이비가 $9$ 이다. 두 점의 $x$ 좌표 차이를 구하고, 차이가 $6\beta$ 라면 $\beta$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$\dfrac{y_2}{y_1}=3^{x_2-x_1}=9=3^2$ → $x_2-x_1=2$.</p>
+          <p>$6\beta=2$ → $\beta=\dfrac13$.</p>
+          <p class="answer"><strong>정답:</strong> $x$ 차이 $=2$, $\beta=\dfrac13$ (밑이 달라도 같은 공식)</p>
+        </div></details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(시대수학 김성호)의 "차이·비율 공식 + 도형 우선"을 중수준(하위 40%)도 따라오게 작성:</p>
+    <ul>
+      <li><strong>차이·비율 공식</strong> → $\frac{y_2}{y_1}=a^{x_2-x_1}$ 유도, $y$비 ↔ $x$차 (개념 ①②, 기초·심화 1).</li>
+      <li><strong>도형 우선(이등변·닮음)</strong> → 기울기 $\pm m$ → 이등변, 변수 하나로 (개념 ③④, 기본 1·심화 2).</li>
+      <li><strong>영상 완결</strong> → $2^{9\alpha}=4$ → $\alpha=\frac29$ → $90(a+b)=220$ (수능 대비 1, 순수 파이썬 검산).</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>기하 개형 추론</strong> — 원문제의 이등변·닮음 비($1{:}4$, $1{:}3$)로 $x$차 $9\alpha$, $y$비 $4$ 를 얻는 도형 과정은 영상 판서를 따랐습니다. 최종 핵심($2^{9\alpha}=4$ → $\alpha=\frac29$ → $220$)은 <strong>검산 완료</strong>. 도형 세부 비율 유도는 그림과 함께 확인 권장. (핵심 공식·정답 ★★★, 기하 세부 ★★)</li>
+      <li>이 자료는 앞서 옵시디언 수동노트로 요지를 정리했던 영상의 <strong>갤러리 정식 자료</strong>입니다.</li>
+      <li>"수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</li>
+    </ul>
+  </div>
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a> · <a href="../수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html">넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ) (xA9JGa0t)</a> · <a href="../수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-04-27 | 영상 출처: <a href="https://www.youtube.com/watch?v=MJWwaajugnU">https://www.youtube.com/watch?v=MJWwaajugnU</a> (시대수학 김성호)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
