@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계) | 학습자료</title>
+  <title>절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학Ⅱ) | 학습자료</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -198,83 +198,63 @@
   </div>
 
 
-  <div class="hero"><div class="tag">[고2-확률과 통계-통계] · 이항분포</div><h1>이항분포 고난도 — <strong>관계식 세워 $E(X^2)$ 구하기</strong></h1><p class="sub">🎯 점수 규칙이 나오면 "몇 점만 가능한지" 대입해 확인 → 특정 점수 <strong>횟수를 확률변수 $Y\sim B(n,p)$</strong> 로. 총점 $X$ 를 $Y$ 의 <strong>일차식</strong>으로 묶고, $E(aY{+}b),V(aY{+}b)$ 와 $E(X^2)=V(X)+\{E(X)\}^2$ 로 역산.</p><div class="video-card"><a class="thumb" href="https://youtu.be/YGoi6Pv-IkQ" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/YGoi6Pv-IkQ/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 확통 만점 노린다면 꼭 풀어야 할 문제 (ft. 이항분포)</div><div class="v-meta">📺 수학강사 이정환, 4분 37초 · 2026-07-27</div><a class="v-link" href="https://youtu.be/YGoi6Pv-IkQ" target="_blank" rel="noopener">https://youtu.be/YGoi6Pv-IkQ</a></div></div></div>
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-함수의 극한 · 미분계수]</div><h1>절댓값 극한 $\dfrac{f(x)}{|x|}$ — <strong>미분계수로 인수 개수 추론</strong></h1><p class="sub">🎯 좌·우극한 노가다 대신 <strong>식 분리</strong>: $\dfrac{f(x)}{|x|}=\dfrac{f(x)}{x}\cdot\dfrac{x}{|x|}$. 부호 갈리는 $\dfrac{x}{|x|}$ 에 곱해 극한이 존재하려면 <strong>$f'(0)=0$</strong>. $f(0)=0,f'(0)=0$ → 원점서 접함 → <strong>$x^2$ 이상 인수</strong>.</p><div class="video-card"><a class="thumb" href="https://youtube.com/shorts/PNV2lKCgQjg" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/PNV2lKCgQjg/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 상위권들은 이미 알고 있습니다 (Shorts)</div><div class="v-meta">📺 수학강사 이정환, 1분 29초 · 2026-07-31</div><a class="v-link" href="https://youtube.com/shorts/PNV2lKCgQjg" target="_blank" rel="noopener">https://youtube.com/shorts/PNV2lKCgQjg</a></div></div></div>
 
   
 
   <main>
 
     <section id="example">
-      <h2>📌 도입: 영상이 던진 문제</h2>
+      <h2>📌 도입: 영상이 던진 통찰</h2>
       <article class="problem basic">
-        <h3>예시 — 이항분포 고난도 (관계식 유형)</h3>
-        <p class="problem-body"><strong>문제:</strong> 주머니 $A$ 에 $1,2,3,4$, 주머니 $B$ 에 $1,3,5$ 가 적힌 카드가 있다. 각각 한 장씩 꺼내(복원) 수를 $a,b$ 라 할 때 <strong>$a>b$ 면 $b$ 점, $a\le b$ 면 $3$ 점</strong>을 얻는다. 이 시행을 $8$ 번 반복한 총점을 $X$ 라 할 때 $E(X^2)$ 을 구하시오.</p>
+        <h3>예시 — $\dfrac{f(x)}{|x|}$ 극한이 존재할 조건</h3>
+        <p class="problem-body"><strong>문제:</strong> 다항함수 $f$ 에 대해 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{|x|}$ 이 존재한다. $f$ 는 원점에서 어떤 조건을 만족하는가?</p>
         <details open>
-          <summary>📖 풀이 보기</summary>
+          <summary>📖 풀이 보기 (식 조작 → 미분계수)</summary>
           <div class="solution">
-            <p><strong>STEP 1 — 얻는 점수는 몇 종류?</strong> $a>b$ 로 $b$ 점: $b=1,a\in\{2,3,4\}$ → $1$점 / $b=3,a=4$ → $3$점. $a\le b$ → $3$점. 즉 <strong>$1$점 또는 $3$점뿐</strong>.</p>
-            <p><strong>STEP 2 — 확률:</strong> $1$점은 $b=1$ 이고 $a\in\{2,3,4\}$ 뿐 → $P(1)=\dfrac13\cdot\dfrac34=\dfrac14$. $P(3)=1-\dfrac14=\dfrac34$ (여사건).</p>
-            <p><strong>STEP 3 — 이항분포:</strong> $8$ 번 중 $1$점 횟수 $Y\sim B\!\left(8,\dfrac14\right)$. 총점 $X=1\cdot Y+3\cdot(8-Y)=-2Y+24$.</p>
-            <p><strong>STEP 4 — 평균·분산:</strong> $E(Y)=8\cdot\tfrac14=2$, $V(Y)=8\cdot\tfrac14\cdot\tfrac34=\tfrac32$.</p>
-            <p>$E(X)=-2\cdot2+24=20$, $V(X)=(-2)^2\cdot\tfrac32=6$.</p>
-            <p><strong>STEP 5 — $E(X^2)$ 역산:</strong> $V(X)=E(X^2)-\{E(X)\}^2$ → $E(X^2)=V(X)+\{E(X)\}^2=6+400=\boxed{406}$.</p>
-            <p class="answer"><strong>정답:</strong> $406$</p>
-            <p class="key-point"><strong>핵심:</strong> $E(X^2)$ 을 직접 구하려 말고, <strong>관계식 → 평균·분산 → 역산</strong>. 이항분포의 힘.</p>
+            <p><strong>STEP 1 — 조작:</strong> 좌·우극한 따로 대입 말고 <strong>분리</strong>: $\dfrac{f(x)}{|x|}=\dfrac{f(x)}{x}\cdot\dfrac{x}{|x|}$.</p>
+            <p><strong>STEP 2 — 미분계수:</strong> $0/0$ 이려면 $f(0)=0$. 그러면 $\dfrac{f(x)}{x}=\dfrac{f(x)-f(0)}{x-0}\to f'(0)$.</p>
+            <p><strong>STEP 3 — 부호 갈림:</strong> $\dfrac{x}{|x|}$ 는 우극한 $+1$, 좌극한 $-1$.</p>
+            <p><strong>STEP 4 — 존재 조건:</strong> 극한 존재 → 우 $f'(0)\cdot1$ = 좌 $f'(0)\cdot(-1)$ → $f'(0)=-f'(0)$ → <strong>$f'(0)=0$</strong>.</p>
+            <p class="answer"><strong>정답:</strong> $f(0)=0$ 이고 $f'(0)=0$ → $f$ 는 원점에서 $x$축에 <strong>접함</strong> → $x^2$ 이상을 인수로 가짐.</p>
+            <p class="key-point"><strong>핵심:</strong> 절댓값 극한을 케이스 노가다 말고 <strong>미분계수 형태로 분리</strong>. 부호 갈리는 것에 곱해 존재하려면 계수가 $0$.</p>
           </div>
         </details>
       </article>
     </section>
 
     <section id="concept">
-      <h2>💡 개념 설명 (이항분포 · 확률변수 관계식)</h2>
+      <h2>💡 개념 설명 (분리 · 부호 · 인수 개수)</h2>
 
       <div class="concept-block">
-        <h3>① 큰 그림 — "횟수 × 점수"로 관계식</h3>
-        <p>고난도 이항분포는 단순 횟수가 아니라 <strong>횟수와 점수의 관계식</strong>을 세우는 게 핵심. 특정 점수를 얻는 횟수를 새 확률변수로.</p>
-        <div class="insight">
-          강사 메시지: "몇 번 나왔냐(횟수)에 점수를 곱하면서 처리하는 게 중요." 관계식만 세우면 평균·분산이 줄줄이.
-        </div>
-      </div>
-
-      <div class="concept-block">
-        <h3>② 선수 지식 — 이항분포의 평균·분산</h3>
+        <h3>① 선수 지식 — 미분계수 정의</h3>
         <div class="prereq">
-          <p>$Y\sim B(n,p)$ 이면 $E(Y)=np$, $V(Y)=np(1-p)$.</p>
-          <p>여기서 $n$ 은 독립시행 횟수, $p$ 는 1회 시행에서 사건이 일어날 확률.</p>
+          <p>$f(0)=0$ 이면 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{x}=\lim_{x\to0}\dfrac{f(x)-f(0)}{x-0}=f'(0)$.</p>
+          <p>$\dfrac{x}{|x|}$: $x>0$ 이면 $+1$, $x<0$ 이면 $-1$ (좌우 부호 갈림).</p>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3>③ 선수 지식 — 확률변수의 일차변환</h3>
-        <div class="formula-box">
-          $X=aY+b$ → $E(X)=aE(Y)+b$, &nbsp; $V(X)=a^2 V(Y)$
-        </div>
-        <p>분산에는 상수 $b$ 가 영향 없고, 계수 $a$ 는 <strong>제곱</strong>으로 들어간다(음수라도 양수화).</p>
-      </div>
-
-      <div class="concept-block">
-        <h3>④ 핵심 — 총점을 $Y$ 의 일차식으로</h3>
+        <h3>② 핵심 — 부호 갈림에 곱해 존재하려면 계수 0</h3>
         <div class="step-derive">
-          <p>$1$점을 $Y$ 번, $3$점을 $(8-Y)$ 번 → 총점 $X=1\cdot Y+3\cdot(8-Y)$.</p>
-          <p>정리: $X=Y+24-3Y=-2Y+24$. ($a=-2$, $b=24$)</p>
+          <p>$\dfrac{f(x)}{|x|}=\underbrace{\dfrac{f(x)}{x}}_{\to f'(0)}\cdot\underbrace{\dfrac{x}{|x|}}_{\pm1}$.</p>
+          <p>우극한 $=f'(0)\cdot(+1)$, 좌극한 $=f'(0)\cdot(-1)$.</p>
+          <p>극한 존재 ⟺ 좌=우 ⟺ $f'(0)=-f'(0)$ ⟺ $f'(0)=0$.</p>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3>⑤ 핵심 — $E(X^2)$ 은 분산 공식으로 역산</h3>
+        <h3>③ 핵심 — $f(0)=0,\ f'(0)=0$ = 인수 2개 이상</h3>
+        <p>$f(a)=0$ 이고 $f'(a)=0$ 이면 $f$ 는 $(x-a)^2$ 을 인수로 가진다(원점에서 $x$축에 접함).</p>
         <div class="formula-box">
-          $V(X)=E(X^2)-\{E(X)\}^2 \iff E(X^2)=V(X)+\{E(X)\}^2$
+          $f(0)=0,\ f'(0)=0 \iff f(x)=x^2\,q(x)$ (인수 $x$ 를 2개 이상)
         </div>
-        <p>$E(X^2)$ 을 직접 구하려면 막힌다. <strong>$V(X)$ 와 $E(X)$ 를 먼저</strong> 구해 더하면 끝.</p>
       </div>
 
       <div class="concept-block">
-        <h3>⑥ 함정 — 흔히 놓치는 3가지</h3>
-        <div class="callout">
-          <p>① <strong>점수 종류 오판</strong>: 규칙을 눈으로만 보지 말고 대입해 "$1$점 또는 $3$점뿐"을 확인.</p>
-          <p>② <strong>$V(aY+b)$ 부호</strong>: $a=-2$ 라도 $V(X)=(-2)^2 V(Y)=4V(Y)$ (제곱이라 양수).</p>
-          <p>③ <strong>$E(X^2)$ 직접 계산</strong>: 항상 $V+E^2$ 로 역산.</p>
-        </div>
+        <h3>④ 확장 — 분모 차수와 분자 인수 개수</h3>
+        <p>분모가 $|x|^m$ (또는 홀수 차수 절댓값)일 때, 분자는 극한 존재를 위해 <strong>분모보다 인수를 1개 이상 더</strong> 가져야 한다.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">감각:</strong> $\dfrac{f(x)}{|x|}$ 존재 → $f$ 는 $x^2$ 인수. $\dfrac{f(x)}{|x|^3}$ 존재 → $f$ 는 $x^4$ 인수(접힘+여유).</div>
       </div>
     </section>
 
@@ -284,112 +264,89 @@
       <h3 class="level-header">🟢 기초</h3>
 
       <article class="problem basic">
-        <h3>기초 1 — 이항분포 평균·분산</h3>
-        <p class="problem-body"><strong>문제:</strong> $Y\sim B\!\left(8,\dfrac14\right)$ 일 때 $E(Y)$ 와 $V(Y)$ 를 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$E(Y)=np=8\cdot\tfrac14=2$. $V(Y)=np(1-p)=8\cdot\tfrac14\cdot\tfrac34=\tfrac32$.</p>
-            <p class="answer"><strong>정답:</strong> $E(Y)=2$, $V(Y)=\dfrac32$</p>
-          </div>
-        </details>
+        <h3>기초 1 — x/|x| 좌우극한</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to0^+}\dfrac{x}{|x|}$ 와 $\displaystyle\lim_{x\to0^-}\dfrac{x}{|x|}$ 를 각각 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$x>0$: $\dfrac{x}{x}=1$. $x<0$: $\dfrac{x}{-x}=-1$.</p>
+          <p class="answer"><strong>정답:</strong> 우극한 $1$, 좌극한 $-1$</p>
+        </div></details>
       </article>
 
       <article class="problem basic">
-        <h3>기초 2 — 확률변수 일차변환</h3>
-        <p class="problem-body"><strong>문제:</strong> $E(Y)=2$, $V(Y)=\dfrac32$ 이고 $X=-2Y+24$ 일 때 $E(X)$, $V(X)$ 를 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$E(X)=-2\cdot2+24=20$. $V(X)=(-2)^2\cdot\tfrac32=4\cdot\tfrac32=6$.</p>
-            <p class="answer"><strong>정답:</strong> $E(X)=20$, $V(X)=6$ (개념 ③ — 분산은 계수 제곱)</p>
-          </div>
-        </details>
+        <h3>기초 2 — 미분계수 정의</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(0)=0$ 인 미분가능 $f$ 에 대해 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{x}$ 를 $f'(0)$ 으로 나타내는 이유를 쓰시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f(0)=0$ 이라 $\dfrac{f(x)}{x}=\dfrac{f(x)-f(0)}{x-0}$ → 미분계수 정의 → $f'(0)$.</p>
+          <p class="answer"><strong>정답:</strong> $f(0)=0$ 이므로 정의에 의해 $f'(0)$</p>
+        </div></details>
       </article>
 
       <h3 class="level-header">🔵 기본</h3>
 
       <article class="problem standard">
-        <h3>기본 1 — 점수 규칙으로 확률 계산</h3>
-        <p class="problem-body"><strong>문제:</strong> 위 주머니 상황에서 $1$점을 얻을 확률을 구하시오. (전수조사 또는 규칙 분석)</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$1$점 = "$a>b$ 이고 $b=1$" → $b=1$ (확률 $\tfrac13$) 이고 $a\in\{2,3,4\}$ (확률 $\tfrac34$).</p>
-            <p>$P(1점)=\tfrac13\cdot\tfrac34=\dfrac14$.</p>
-            <p><strong>검산(전수):</strong> $4\times3=12$ 경우 중 $1$점은 $(a,b)=(2,1),(3,1),(4,1)$ 세 가지 → $\tfrac{3}{12}=\tfrac14$ ✓.</p>
-            <p class="answer"><strong>정답:</strong> $\dfrac14$</p>
-          </div>
-        </details>
+        <h3>기본 1 — 존재 조건 도출</h3>
+        <p class="problem-body"><strong>문제:</strong> 다항함수 $f$ 에 대해 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{|x|}$ 이 존재할 때 $f(0)$ 과 $f'(0)$ 의 값을 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$0/0$ → $f(0)=0$. 분리 후 $\dfrac{x}{|x|}$ 부호 갈림에 $f'(0)$ 곱 → 좌우 일치 위해 $f'(0)=0$.</p>
+          <p class="answer"><strong>정답:</strong> $f(0)=0$, $f'(0)=0$ (개념 ②)</p>
+        </div></details>
       </article>
 
       <article class="problem standard">
-        <h3>기본 2 — 총점 관계식 세우기</h3>
-        <p class="problem-body"><strong>문제:</strong> $8$ 번 시행 중 $1$점을 $Y$ 번 얻을 때 총점 $X$ 를 $Y$ 로 나타내시오. (나머지는 $3$점)</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$X=1\cdot Y+3\cdot(8-Y)=Y+24-3Y=-2Y+24$.</p>
-            <p class="answer"><strong>정답:</strong> $X=-2Y+24$ (개념 ④)</p>
-          </div>
-        </details>
+        <h3>기본 2 — 구체 함수로 확인</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^2-2x$ 일 때 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{|x|}$ 이 존재하는지 판정하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f(0)=0$ 이나 $f'(x)=2x-2$, $f'(0)=-2\neq0$.</p>
+          <p>우극한 $-2\cdot1=-2$, 좌극한 $-2\cdot(-1)=2$ → 좌$\neq$우 → <strong>존재하지 않음</strong>.</p>
+          <p class="answer"><strong>정답:</strong> 존재 X ($f'(0)=-2\neq0$)</p>
+        </div></details>
       </article>
 
       <h3 class="level-header">🟠 심화</h3>
 
       <article class="problem advanced">
-        <h3>심화 1 — $E(X^2)$ 역산</h3>
-        <p class="problem-body"><strong>문제:</strong> $E(X)=20$, $V(X)=6$ 일 때 $E(X^2)$ 을 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$E(X^2)=V(X)+\{E(X)\}^2=6+20^2=6+400=406$.</p>
-            <p class="answer"><strong>정답:</strong> $406$ (개념 ⑤)</p>
-          </div>
-        </details>
+        <h3>심화 1 — 인수 개수 추론</h3>
+        <p class="problem-body"><strong>문제:</strong> 다항함수 $f$ 에 대해 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{|x|}$ 이 존재하면 $f$ 가 인수 $x$ 를 최소 몇 개 갖는지 쓰고, 그런 $f$ 의 예를 하나 드시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f(0)=0,\ f'(0)=0$ → $x^2$ 인수 → <strong>인수 $x$ 최소 2개</strong>.</p>
+          <p>예: $f(x)=x^2$ → $\dfrac{x^2}{|x|}=\dfrac{x^2}{|x|}=|x|\to0$ (존재).</p>
+          <p class="answer"><strong>정답:</strong> 최소 $2$개. 예 $f(x)=x^2$ (극한값 $0$)</p>
+        </div></details>
       </article>
 
       <article class="problem advanced">
-        <h3>심화 2 — 규칙 바뀌면 점수 종류 재확인</h3>
-        <p class="problem-body"><strong>문제:</strong> 같은 주머니에서 규칙을 "$a\ge b$ 면 $b$ 점, $a<b$ 면 $5$ 점"으로 바꿨을 때, 얻을 수 있는 점수의 종류와 각 확률을 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$a\ge b$ 로 $b$ 점: $b=1$($a$ 아무거나 4가지)→1점, $b=3$($a\in\{3,4\}$)→3점. $a<b$ → 5점.</p>
-            <p>전수(12): $1$점 $(a,1)$ 4개 → $\tfrac{4}{12}=\tfrac13$. $3$점 $(3,3),(4,3)$ 2개 → $\tfrac{2}{12}=\tfrac16$. $5$점 나머지 6개 → $\tfrac{6}{12}=\tfrac12$.</p>
-            <p class="answer"><strong>정답:</strong> $1$점 $\tfrac13$, $3$점 $\tfrac16$, $5$점 $\tfrac12$ (점수 3종 — 대입 확인이 중요, 함정 ①)</p>
-          </div>
-        </details>
+        <h3>심화 2 — 분모 차수가 높을 때</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to0}\dfrac{f(x)}{|x|^3}$ 이 $0$ 이 아닌 값으로 존재하려면 $f$ 가 인수 $x$ 를 몇 개 가져야 하는지 추론하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>분모 $|x|^3$ 은 $x^3$ 규모. 극한이 유한·0아님이려면 분자도 $x^3$ 규모여야 하나, $|x|^3$ 은 $x\to0^\pm$ 에서 부호 갈림($\text{sgn}$) 문제 → 홀수 차수라 좌우 부호 처리 필요.</p>
+          <p>$f$ 가 $x^3$ 인수(3개)면 $\dfrac{x^3 q(x)}{|x|^3}=\dfrac{x^3}{|x|^3}q(x)=(\text{sgn }x)\,q(0)$ → 좌우 부호 갈려 <strong>존재 X</strong>. $x^4$ 인수(4개)면 $\dfrac{x^4}{|x|^3}=|x|\cdot(\cdots)\to0$ (존재, 값 0).</p>
+          <p class="answer"><strong>정답:</strong> 유한·0 아닌 값으론 불가(부호 갈림). 극한이 존재(값 0)하려면 $x$ 인수 <strong>최소 4개</strong>. (개념 ④)</p>
+          <p class="key-point"><strong>주의:</strong> 절댓값의 <strong>홀수 차수</strong>는 좌우 부호 문제로 "0 아닌 극한"을 막는다. 존재시키려면 여유 인수로 $0$ 만들기.</p>
+        </div></details>
       </article>
 
       <h3 class="level-header">🔴 수능 대비</h3>
 
       <article class="problem exam-style">
-        <h3>수능 대비 1 — 영상의 완결</h3>
-        <p class="problem-body"><strong>문제:</strong> 도입의 상황에서 $8$ 번 시행 총점 $X$ 에 대해 $E(X^2)$ 을 처음부터 끝까지 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>① $P(1점)=\tfrac14$, $P(3점)=\tfrac34$. ② $Y\sim B(8,\tfrac14)$, $E(Y)=2$, $V(Y)=\tfrac32$.</p>
-            <p>③ $X=-2Y+24$ → $E(X)=20$, $V(X)=6$. ④ $E(X^2)=6+400=406$.</p>
-            <p class="answer"><strong>정답:</strong> $E(X^2)=406$</p>
-          </div>
-        </details>
+        <h3>수능 대비 1 — 미정계수 결합</h3>
+        <p class="problem-body"><strong>문제:</strong> 최고차 계수 $1$ 인 삼차함수 $f$ 가 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{|x|}=0$ 을 만족하고 $f(1)=2$ 이다. $f(x)$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1:</strong> 극한 존재 → $f(0)=0,\ f'(0)=0$ → $x^2$ 인수. 삼차·최고차 $1$ → $f(x)=x^2(x-c)$.</p>
+          <p><strong>STEP 2:</strong> $f(1)=1\cdot(1-c)=1-c=2$ → $c=-1$.</p>
+          <p><strong>STEP 3:</strong> $f(x)=x^2(x+1)=x^3+x^2$.</p>
+          <p><strong>검산:</strong> $f(0)=0$, $f'(x)=3x^2+2x$, $f'(0)=0$ ✓. $\dfrac{f(x)}{|x|}=\dfrac{x^2(x+1)}{|x|}=|x|(x+1)\to0$ ✓.</p>
+          <p class="answer"><strong>정답:</strong> $f(x)=x^3+x^2$</p>
+        </div></details>
       </article>
 
       <article class="problem exam-style">
-        <h3>수능 대비 2 — 다른 이항분포·관계식</h3>
-        <p class="problem-body"><strong>문제:</strong> $Y\sim B\!\left(12,\dfrac13\right)$ 이고 $X=2Y+5$ 일 때 $E(X^2)$ 을 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p><strong>STEP 1:</strong> $E(Y)=12\cdot\tfrac13=4$, $V(Y)=12\cdot\tfrac13\cdot\tfrac23=\tfrac83$.</p>
-            <p><strong>STEP 2:</strong> $E(X)=2\cdot4+5=13$, $V(X)=2^2\cdot\tfrac83=\tfrac{32}{3}$.</p>
-            <p><strong>STEP 3:</strong> $E(X^2)=V(X)+\{E(X)\}^2=\tfrac{32}{3}+169=\tfrac{32+507}{3}=\dfrac{539}{3}$.</p>
-            <p class="answer"><strong>정답:</strong> $E(X^2)=\dfrac{539}{3}$</p>
-            <p class="key-point"><strong>핵심:</strong> $B(n,p)$ 와 일차식만 바뀌어도 같은 절차. $V+E^2$ 역산이 만능.</p>
-          </div>
-        </details>
+        <h3>수능 대비 2 — 평행이동 형태</h3>
+        <p class="problem-body"><strong>문제:</strong> 다항함수 $f$ 가 $\displaystyle\lim_{x\to2}\dfrac{f(x)}{|x-2|}$ 이 존재하도록 할 때 $f(2)$ 와 $f'(2)$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$x-2=t$ 치환 → $\displaystyle\lim_{t\to0}\dfrac{f(t+2)}{|t|}$. 같은 논리로 $f(2)=0$, $f'(2)=0$.</p>
+          <p class="answer"><strong>정답:</strong> $f(2)=0$, $f'(2)=0$ ($f$ 는 $x=2$ 에서 $x$축에 접함, $(x-2)^2$ 인수)</p>
+          <p class="key-point"><strong>핵심:</strong> $|x-a|$ 형태도 $x-a=t$ 치환으로 원점 논리 그대로.</p>
+        </div></details>
       </article>
 
     </section>
@@ -398,19 +355,18 @@
 
   <div class="review-box">
     <h3>✅ 학습자 가이드라인 · 검증</h3>
-    <p>영상(수학강사 이정환)의 이항분포 고난도 풀이를 중수준(하위 40%)도 따라오게 작성:</p>
+    <p>영상(수학강사 이정환, 쇼츠)의 논리를 중수준(하위 40%)도 따라오게 작성:</p>
     <ul>
-      <li><strong>점수 종류·확률</strong> → 규칙을 <strong>전수조사(12경우)</strong>로 검증: $1$점 확률 $\tfrac14$ 확인 (기본 1).</li>
-      <li><strong>이항분포 + 관계식</strong> → $Y\sim B(8,\tfrac14)$, $X=-2Y+24$ 유도 (개념 ②④).</li>
-      <li><strong>일차변환 & 역산</strong> → $E(X)=20$, $V(X)=6$, $E(X^2)=V+E^2=406$ (개념 ③⑤). 순수 파이썬으로 $406$ 검산 완료.</li>
-      <li><strong>변형</strong> → 규칙 변경(심화 2, 점수 3종)·다른 분포(수능 대비 2, $\tfrac{539}{3}$)로 절차 일반화.</li>
+      <li><strong>식 분리 → 미분계수</strong> → $\frac{f}{|x|}=\frac{f}{x}\cdot\frac{x}{|x|}$, 부호 갈림에 곱해 존재하려면 $f'(0)=0$ (개념 ①②, 기본 1).</li>
+      <li><strong>인수 개수 추론</strong> → $f(0)=0,f'(0)=0$ → $x^2$ 인수. 분모 차수 높으면 더 많은 인수 (개념 ③④, 심화 1·2).</li>
+      <li><strong>미정계수·평행이동</strong> → $f=x^3+x^2$, $|x-2|$ 형태까지 (수능 대비 1·2). 순수 파이썬 없이도 대입 검산 병기.</li>
     </ul>
-    <p>참고: 본 문제는 영상·보고서의 수치가 모두 정합하여 <strong>전수조사·공식 양쪽으로 검산 완료</strong>했습니다(정답 $406$). "수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</p>
+    <p>이 자료는 영상이 개념 원리 위주(구체 예제 없음)라, 검증 가능한 <strong>자체 예제</strong>로 원리를 연습시켰습니다. 모든 극한값·인수 조건 검산 완료. "수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</p>
   </div>
 
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../확률과통계-순열과조합/20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html">원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계) (QsWeZRoP)</a> · <a href="../수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html">삼각함수 활용 고난도 (xuzuEsxr)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) (NCqmA7ui)</a> · <a href="20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260719_영분의영극한무한소비율과자유도특수화_lCtDaQQn.html">0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ) (lCtDaQQn)</a></div><!--REL_END-->
 <footer>
-    <p>생성일: 2026-07-27 | 영상 출처: <a href="https://youtu.be/YGoi6Pv-IkQ">https://youtu.be/YGoi6Pv-IkQ</a> (수학강사 이정환, 게시 2026-07-27)</p>
+    <p>생성일: 2026-07-31 | 영상 출처: <a href="https://youtube.com/shorts/PNV2lKCgQjg">https://youtube.com/shorts/PNV2lKCgQjg</a> (수학강사 이정환, 게시 2026-07-31)</p>
     <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
     <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
   </footer>

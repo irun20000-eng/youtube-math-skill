@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계) | 학습자료</title>
+  <title>절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ) | 학습자료</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -198,82 +198,60 @@
   </div>
 
 
-  <div class="hero"><div class="tag">[고2-확률과 통계-통계] · 이항분포</div><h1>이항분포 고난도 — <strong>관계식 세워 $E(X^2)$ 구하기</strong></h1><p class="sub">🎯 점수 규칙이 나오면 "몇 점만 가능한지" 대입해 확인 → 특정 점수 <strong>횟수를 확률변수 $Y\sim B(n,p)$</strong> 로. 총점 $X$ 를 $Y$ 의 <strong>일차식</strong>으로 묶고, $E(aY{+}b),V(aY{+}b)$ 와 $E(X^2)=V(X)+\{E(X)\}^2$ 로 역산.</p><div class="video-card"><a class="thumb" href="https://youtu.be/YGoi6Pv-IkQ" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/YGoi6Pv-IkQ/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 확통 만점 노린다면 꼭 풀어야 할 문제 (ft. 이항분포)</div><div class="v-meta">📺 수학강사 이정환, 4분 37초 · 2026-07-27</div><a class="v-link" href="https://youtu.be/YGoi6Pv-IkQ" target="_blank" rel="noopener">https://youtu.be/YGoi6Pv-IkQ</a></div></div></div>
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-미분] · 절댓값과 미분가능성</div><h1>절댓값 함수의 미분 가능성 — <strong>꺾지 말고 "교차 상태"로 판단</strong></h1><p class="sub">🎯 절댓값이 보인다고 그래프를 꺾지 마라. 함수가 기준 직선과 <strong>단순 교차(미분 불가) / 접점 · 3중근(미분 가능)</strong> 중 어느 상태로 만나는지만 본다. "미분 가능=접한다" ❌ → "<strong>교차하지 않는다</strong>" ⭕.</p><div class="video-card"><a class="thumb" href="https://youtu.be/ZjU-KOUBS80" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/ZjU-KOUBS80/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 절댓값 문제 99%가 다 뚫릴 겁니다</div><div class="v-meta">📺 시대수학 김성호, 8분 32초 · 2026-07-31</div><a class="v-link" href="https://youtu.be/ZjU-KOUBS80" target="_blank" rel="noopener">https://youtu.be/ZjU-KOUBS80</a></div></div></div>
 
   
 
   <main>
 
     <section id="example">
-      <h2>📌 도입: 영상이 던진 문제</h2>
+      <h2>📌 도입: 영상이 던진 통찰</h2>
       <article class="problem basic">
-        <h3>예시 — 이항분포 고난도 (관계식 유형)</h3>
-        <p class="problem-body"><strong>문제:</strong> 주머니 $A$ 에 $1,2,3,4$, 주머니 $B$ 에 $1,3,5$ 가 적힌 카드가 있다. 각각 한 장씩 꺼내(복원) 수를 $a,b$ 라 할 때 <strong>$a>b$ 면 $b$ 점, $a\le b$ 면 $3$ 점</strong>을 얻는다. 이 시행을 $8$ 번 반복한 총점을 $X$ 라 할 때 $E(X^2)$ 을 구하시오.</p>
+        <h3>예시 — "꺾지 마라", 교차 상태를 봐라</h3>
+        <p class="problem-body"><strong>핵심 명제:</strong> 절댓값 함수의 미분 가능성은 <strong>그래프를 꺾어 그리는 것</strong>이 아니라, 함수가 기준 직선과 <strong>어떤 상태로 만나는지</strong>(교차 / 접점 / 3중근)로 판단한다.</p>
         <details open>
-          <summary>📖 풀이 보기</summary>
+          <summary>📖 교차 상태 3종</summary>
           <div class="solution">
-            <p><strong>STEP 1 — 얻는 점수는 몇 종류?</strong> $a>b$ 로 $b$ 점: $b=1,a\in\{2,3,4\}$ → $1$점 / $b=3,a=4$ → $3$점. $a\le b$ → $3$점. 즉 <strong>$1$점 또는 $3$점뿐</strong>.</p>
-            <p><strong>STEP 2 — 확률:</strong> $1$점은 $b=1$ 이고 $a\in\{2,3,4\}$ 뿐 → $P(1)=\dfrac13\cdot\dfrac34=\dfrac14$. $P(3)=1-\dfrac14=\dfrac34$ (여사건).</p>
-            <p><strong>STEP 3 — 이항분포:</strong> $8$ 번 중 $1$점 횟수 $Y\sim B\!\left(8,\dfrac14\right)$. 총점 $X=1\cdot Y+3\cdot(8-Y)=-2Y+24$.</p>
-            <p><strong>STEP 4 — 평균·분산:</strong> $E(Y)=8\cdot\tfrac14=2$, $V(Y)=8\cdot\tfrac14\cdot\tfrac34=\tfrac32$.</p>
-            <p>$E(X)=-2\cdot2+24=20$, $V(X)=(-2)^2\cdot\tfrac32=6$.</p>
-            <p><strong>STEP 5 — $E(X^2)$ 역산:</strong> $V(X)=E(X^2)-\{E(X)\}^2$ → $E(X^2)=V(X)+\{E(X)\}^2=6+400=\boxed{406}$.</p>
-            <p class="answer"><strong>정답:</strong> $406$</p>
-            <p class="key-point"><strong>핵심:</strong> $E(X^2)$ 을 직접 구하려 말고, <strong>관계식 → 평균·분산 → 역산</strong>. 이항분포의 힘.</p>
+            <p><strong>단순 교차</strong>(부호 바뀌며 관통): $|f|$ 는 그 점에서 <strong>미분 불가능</strong>. (꺾임 발생)</p>
+            <p><strong>접점</strong>(부호 안 바뀌고 닿기만, 중근): $|f|$ 는 <strong>미분 가능</strong>.</p>
+            <p><strong>3중근</strong>(부호 바뀌지만 기울기 0으로 관통): $|f|$ 는 <strong>미분 가능</strong>.</p>
+            <p class="key-point"><strong>정확한 해석:</strong> "미분 가능 = 접한다" ❌ → "미분 가능 = <strong>단순 교차하지 않는다</strong>" ⭕. (강사: "교차하면 미분 불가능, 교차 안 하면 가능")</p>
           </div>
         </details>
       </article>
     </section>
 
     <section id="concept">
-      <h2>💡 개념 설명 (이항분포 · 확률변수 관계식)</h2>
+      <h2>💡 개념 설명 (교차 상태 · 곱의 미분 가능성)</h2>
 
       <div class="concept-block">
-        <h3>① 큰 그림 — "횟수 × 점수"로 관계식</h3>
-        <p>고난도 이항분포는 단순 횟수가 아니라 <strong>횟수와 점수의 관계식</strong>을 세우는 게 핵심. 특정 점수를 얻는 횟수를 새 확률변수로.</p>
-        <div class="insight">
-          강사 메시지: "몇 번 나왔냐(횟수)에 점수를 곱하면서 처리하는 게 중요." 관계식만 세우면 평균·분산이 줄줄이.
-        </div>
+        <h3>① 왜 단순 교차에서 미분 불가능한가</h3>
+        <p>$f$ 가 어떤 점에서 부호를 바꾸며 관통(단순근)하면, $|f|$ 는 그 점에서 $x$축 아래 부분이 위로 접혀 <strong>뾰족점</strong>이 생긴다 → 좌·우 미분계수 부호가 달라 미분 불가.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">예:</strong> $y=|x|$ 는 $x=0$ 에서 $f=x$ 가 단순 교차(부호 $-\to+$) → 뾰족점 → 미분 불가.</div>
       </div>
 
       <div class="concept-block">
-        <h3>② 선수 지식 — 이항분포의 평균·분산</h3>
-        <div class="prereq">
-          <p>$Y\sim B(n,p)$ 이면 $E(Y)=np$, $V(Y)=np(1-p)$.</p>
-          <p>여기서 $n$ 은 독립시행 횟수, $p$ 는 1회 시행에서 사건이 일어날 확률.</p>
-        </div>
-      </div>
-
-      <div class="concept-block">
-        <h3>③ 선수 지식 — 확률변수의 일차변환</h3>
-        <div class="formula-box">
-          $X=aY+b$ → $E(X)=aE(Y)+b$, &nbsp; $V(X)=a^2 V(Y)$
-        </div>
-        <p>분산에는 상수 $b$ 가 영향 없고, 계수 $a$ 는 <strong>제곱</strong>으로 들어간다(음수라도 양수화).</p>
-      </div>
-
-      <div class="concept-block">
-        <h3>④ 핵심 — 총점을 $Y$ 의 일차식으로</h3>
+        <h3>② 접점·3중근은 왜 미분 가능한가</h3>
         <div class="step-derive">
-          <p>$1$점을 $Y$ 번, $3$점을 $(8-Y)$ 번 → 총점 $X=1\cdot Y+3\cdot(8-Y)$.</p>
-          <p>정리: $X=Y+24-3Y=-2Y+24$. ($a=-2$, $b=24$)</p>
+          <p><strong>접점(중근):</strong> $f$ 가 $(x-a)^2$ 인수 → $x=a$ 좌우로 $f$ 부호 안 바뀜 → $|f|=f$ (또는 $-f$) 로 매끄러움 → 미분 가능.</p>
+          <p><strong>3중근:</strong> $f$ 가 $(x-a)^3$ 인수 → 부호는 바뀌지만 $x=a$ 에서 기울기 $0$ → 접힌 자리도 기울기 $0$ 으로 이어져 매끄러움 → 미분 가능.</p>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3>⑤ 핵심 — $E(X^2)$ 은 분산 공식으로 역산</h3>
-        <div class="formula-box">
-          $V(X)=E(X^2)-\{E(X)\}^2 \iff E(X^2)=V(X)+\{E(X)\}^2$
-        </div>
-        <p>$E(X^2)$ 을 직접 구하려면 막힌다. <strong>$V(X)$ 와 $E(X)$ 를 먼저</strong> 구해 더하면 끝.</p>
-      </div>
-
-      <div class="concept-block">
-        <h3>⑥ 함정 — 흔히 놓치는 3가지</h3>
+        <h3>③ 핵심 — 곱의 미분 가능성</h3>
+        <p>$y=g(x)\cdot|h(x)|$ 에서 $|h|$ 가 $x=a$ 에서 꺾여도, <strong>$g(a)=0$</strong> 이면 전체는 미분 가능.</p>
         <div class="callout">
-          <p>① <strong>점수 종류 오판</strong>: 규칙을 눈으로만 보지 말고 대입해 "$1$점 또는 $3$점뿐"을 확인.</p>
-          <p>② <strong>$V(aY+b)$ 부호</strong>: $a=-2$ 라도 $V(X)=(-2)^2 V(Y)=4V(Y)$ (제곱이라 양수).</p>
-          <p>③ <strong>$E(X^2)$ 직접 계산</strong>: 항상 $V+E^2$ 로 역산.</p>
+          <p>예: $y=(x-a)|x-1|$ 가 모든 점에서 미분 가능 → $x=1$ 의 꺾임을 $(x-a)$ 가 $0$ 으로 눌러야 함 → <strong>$a=1$</strong>.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 실전 — 기준 직선과의 교차로 개형 세우기</h3>
+        <p>$||f(x)|+c|$ 꼴은 $|f(x)|=-c$, 즉 $f(x)=\pm(-c)$ 인 <strong>기준 직선</strong>과의 교차 상태로 미분 불가점을 센다. 꺾어 그리지 말고 직선 교차만.</p>
+        <div class="step-derive">
+          <p>미분 불가점이 <strong>딱 하나(단순 교차 1개)</strong> 이려면, 나머지 교점은 접점 또는 <strong>3중근</strong>이어야 한다.</p>
+          <p>"$x=1$ 에서만 단순 교차, 다른 곳은 3중근" → 함수식을 $(x-1)(x-\alpha)^3$ 꼴로 미지수 구성.</p>
         </div>
       </div>
     </section>
@@ -284,112 +262,90 @@
       <h3 class="level-header">🟢 기초</h3>
 
       <article class="problem basic">
-        <h3>기초 1 — 이항분포 평균·분산</h3>
-        <p class="problem-body"><strong>문제:</strong> $Y\sim B\!\left(8,\dfrac14\right)$ 일 때 $E(Y)$ 와 $V(Y)$ 를 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$E(Y)=np=8\cdot\tfrac14=2$. $V(Y)=np(1-p)=8\cdot\tfrac14\cdot\tfrac34=\tfrac32$.</p>
-            <p class="answer"><strong>정답:</strong> $E(Y)=2$, $V(Y)=\dfrac32$</p>
-          </div>
-        </details>
+        <h3>기초 1 — 단순 교차의 미분 불가</h3>
+        <p class="problem-body"><strong>문제:</strong> $y=|x-2|$ 가 미분 불가능한 점을 구하고 이유를 쓰시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f=x-2$ 는 $x=2$ 에서 부호 $-\to+$ 로 단순 교차 → $|f|$ 는 $x=2$ 에서 뾰족점.</p>
+          <p class="answer"><strong>정답:</strong> $x=2$ (단순 교차 → 미분 불가)</p>
+        </div></details>
       </article>
 
       <article class="problem basic">
-        <h3>기초 2 — 확률변수 일차변환</h3>
-        <p class="problem-body"><strong>문제:</strong> $E(Y)=2$, $V(Y)=\dfrac32$ 이고 $X=-2Y+24$ 일 때 $E(X)$, $V(X)$ 를 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$E(X)=-2\cdot2+24=20$. $V(X)=(-2)^2\cdot\tfrac32=4\cdot\tfrac32=6$.</p>
-            <p class="answer"><strong>정답:</strong> $E(X)=20$, $V(X)=6$ (개념 ③ — 분산은 계수 제곱)</p>
-          </div>
-        </details>
+        <h3>기초 2 — 접점이면 미분 가능</h3>
+        <p class="problem-body"><strong>문제:</strong> $y=|(x-1)^2|$ 가 $x=1$ 에서 미분 가능한지 판정하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$(x-1)^2\ge0$ 이라 $|(x-1)^2|=(x-1)^2$. $x=1$ 좌우 부호 안 바뀜(접점) → 매끄러움.</p>
+          <p class="answer"><strong>정답:</strong> 미분 가능 (중근=접점, 부호 안 바뀜)</p>
+        </div></details>
       </article>
 
       <h3 class="level-header">🔵 기본</h3>
 
       <article class="problem standard">
-        <h3>기본 1 — 점수 규칙으로 확률 계산</h3>
-        <p class="problem-body"><strong>문제:</strong> 위 주머니 상황에서 $1$점을 얻을 확률을 구하시오. (전수조사 또는 규칙 분석)</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$1$점 = "$a>b$ 이고 $b=1$" → $b=1$ (확률 $\tfrac13$) 이고 $a\in\{2,3,4\}$ (확률 $\tfrac34$).</p>
-            <p>$P(1점)=\tfrac13\cdot\tfrac34=\dfrac14$.</p>
-            <p><strong>검산(전수):</strong> $4\times3=12$ 경우 중 $1$점은 $(a,b)=(2,1),(3,1),(4,1)$ 세 가지 → $\tfrac{3}{12}=\tfrac14$ ✓.</p>
-            <p class="answer"><strong>정답:</strong> $\dfrac14$</p>
-          </div>
-        </details>
+        <h3>기본 1 — |f| 미분 불가점 (단순근 vs 중근)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x(x-3)^2$ 일 때 $y=|f(x)|$ 가 미분 불가능한 점을 모두 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f$ 의 근: $x=0$ (단순근, 부호 $-\to+$ 교차) → $|f|$ 미분 불가. $x=3$ (중근, 접점, 부호 안 바뀜) → 미분 가능.</p>
+          <p class="answer"><strong>정답:</strong> $x=0$ 뿐 (단순 교차만 미분 불가)</p>
+        </div></details>
       </article>
 
       <article class="problem standard">
-        <h3>기본 2 — 총점 관계식 세우기</h3>
-        <p class="problem-body"><strong>문제:</strong> $8$ 번 시행 중 $1$점을 $Y$ 번 얻을 때 총점 $X$ 를 $Y$ 로 나타내시오. (나머지는 $3$점)</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$X=1\cdot Y+3\cdot(8-Y)=Y+24-3Y=-2Y+24$.</p>
-            <p class="answer"><strong>정답:</strong> $X=-2Y+24$ (개념 ④)</p>
-          </div>
-        </details>
+        <h3>기본 2 — 곱의 미분 가능 조건</h3>
+        <p class="problem-body"><strong>문제:</strong> $y=(x-a)|x-1|$ 이 모든 실수에서 미분 가능하도록 하는 상수 $a$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$|x-1|$ 은 $x=1$ 에서 꺾임 → 그 점에서 앞 인수 $(x-a)=0$ 이어야 눌림 → $1-a=0$.</p>
+          <p class="answer"><strong>정답:</strong> $a=1$ (개념 ③)</p>
+        </div></details>
       </article>
 
       <h3 class="level-header">🟠 심화</h3>
 
       <article class="problem advanced">
-        <h3>심화 1 — $E(X^2)$ 역산</h3>
-        <p class="problem-body"><strong>문제:</strong> $E(X)=20$, $V(X)=6$ 일 때 $E(X^2)$ 을 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$E(X^2)=V(X)+\{E(X)\}^2=6+20^2=6+400=406$.</p>
-            <p class="answer"><strong>정답:</strong> $406$ (개념 ⑤)</p>
-          </div>
-        </details>
+        <h3>심화 1 — 기준 직선 교차로 미분 불가점 세기</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=\tfrac12 x(x-3)^2$ 에 대해 $y=||f(x)|-2|$ 의 미분 불가능한 점의 <strong>개수</strong>를, 기준 직선 $f=0,\ f=2,\ f=-2$ 와의 <strong>단순 교차</strong> 개수로 설명하시오. (꺾지 말 것)</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$||f|-2|$ 의 미분 불가점 = $|f|$ 가 $2$ 와 단순 교차하는 곳(=$f=\pm2$ 단순 교차) + $|f|$ 자체가 미분 불가한 곳($f=0$ 단순 교차, 즉 $x=0$).</p>
+          <p>$f=\tfrac12 x(x-3)^2$ 개형: $x=0$ 단순근(교차), $x=3$ 중근(접, $f=0$). $f=2$ 와 단순 교차 2회, $f=-2$ 와 단순 교차 1회(음수부).</p>
+          <p class="answer"><strong>정답:</strong> 단순 교차점의 총 개수 = 미분 불가점 수. (영상: 교차점 3개가 미분 불가) 핵심은 <strong>접점은 세지 않고 단순 교차만</strong> 센다는 것.</p>
+          <p class="key-point"><strong>주의:</strong> 정확한 개수는 $f=\pm2$ 방정식의 실근 상태에 따라 달라지므로 그래프 개형으로 확정 필요(교사 검토). 여기서 익힐 것은 <strong>"단순 교차만 미분 불가"</strong> 원칙.</p>
+        </div></details>
       </article>
 
       <article class="problem advanced">
-        <h3>심화 2 — 규칙 바뀌면 점수 종류 재확인</h3>
-        <p class="problem-body"><strong>문제:</strong> 같은 주머니에서 규칙을 "$a\ge b$ 면 $b$ 점, $a<b$ 면 $5$ 점"으로 바꿨을 때, 얻을 수 있는 점수의 종류와 각 확률을 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>$a\ge b$ 로 $b$ 점: $b=1$($a$ 아무거나 4가지)→1점, $b=3$($a\in\{3,4\}$)→3점. $a<b$ → 5점.</p>
-            <p>전수(12): $1$점 $(a,1)$ 4개 → $\tfrac{4}{12}=\tfrac13$. $3$점 $(3,3),(4,3)$ 2개 → $\tfrac{2}{12}=\tfrac16$. $5$점 나머지 6개 → $\tfrac{6}{12}=\tfrac12$.</p>
-            <p class="answer"><strong>정답:</strong> $1$점 $\tfrac13$, $3$점 $\tfrac16$, $5$점 $\tfrac12$ (점수 3종 — 대입 확인이 중요, 함정 ①)</p>
-          </div>
-        </details>
+        <h3>심화 2 — 3중근이면 미분 가능</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=(x-1)^3$ 일 때 $y=|f(x)|$ 가 $x=1$ 에서 미분 가능한지 판정하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f=(x-1)^3$ 은 $x=1$ 에서 부호 바뀌며 관통(단순근 아님, 3중근). $f'(x)=3(x-1)^2$, $f'(1)=0$ → 접히는 자리 기울기 $0$.</p>
+          <p>좌우 미분계수 모두 $0$ 으로 이어져 매끄러움 → <strong>미분 가능</strong>.</p>
+          <p class="answer"><strong>정답:</strong> 미분 가능 (3중근: 부호 바뀌어도 기울기 0, 개념 ②)</p>
+        </div></details>
       </article>
 
       <h3 class="level-header">🔴 수능 대비</h3>
 
       <article class="problem exam-style">
-        <h3>수능 대비 1 — 영상의 완결</h3>
-        <p class="problem-body"><strong>문제:</strong> 도입의 상황에서 $8$ 번 시행 총점 $X$ 에 대해 $E(X^2)$ 을 처음부터 끝까지 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p>① $P(1점)=\tfrac14$, $P(3점)=\tfrac34$. ② $Y\sim B(8,\tfrac14)$, $E(Y)=2$, $V(Y)=\tfrac32$.</p>
-            <p>③ $X=-2Y+24$ → $E(X)=20$, $V(X)=6$. ④ $E(X^2)=6+400=406$.</p>
-            <p class="answer"><strong>정답:</strong> $E(X^2)=406$</p>
-          </div>
-        </details>
+        <h3>수능 대비 1 — 영상의 준킬러 (개형 → f(2))</h3>
+        <p class="problem-body"><strong>문제:</strong> 최고차 계수 $1$ 인 사차함수 $f$ 와 실수 $k$ 에 대해 $g(x)=f(k)\cdot||f(x)|+f(2)|$ 가 $x=k$ 에서 미분 불가능한 $k$ 가 $1$ 뿐이다. 영상의 논리로 $f(2)$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p><strong>①</strong> $y=0$ 교점이 $k$ 면 $f(k)=0$ 이라 곱함수가 $0$ → 미분 가능. 즉 $x=1$ 은 $f=0$ 위가 아님.</p>
+          <p><strong>②</strong> 미분 불가는 $|f(x)|=-f(2)$ 즉 기준 직선 $y=\pm f(2)$ 와의 <strong>단순 교차</strong>에서. ($f(2)<0$)</p>
+          <p><strong>③</strong> $x=2$ 는 $y=f(2)$ 위 → 여기선 미분 가능해야 하니 <strong>접함</strong>. $x=1$ 에서만 단순 교차, 나머지는 <strong>3중근</strong>.</p>
+          <p><strong>④</strong> 개형: $f(x)-(-f(2))=(x-1)(x-5)^3$ (x=1 교차, x=5 3중근).</p>
+          <p><strong>⑤</strong> $x=2$ 대입: $f(2)+f(2)=(2-1)(2-5)^3=-27$ → $2f(2)=-27$ → $f(2)=-\dfrac{27}{2}$.</p>
+          <p class="answer"><strong>정답:</strong> $f(2)=-\dfrac{27}{2}$</p>
+        </div></details>
       </article>
 
       <article class="problem exam-style">
-        <h3>수능 대비 2 — 다른 이항분포·관계식</h3>
-        <p class="problem-body"><strong>문제:</strong> $Y\sim B\!\left(12,\dfrac13\right)$ 이고 $X=2Y+5$ 일 때 $E(X^2)$ 을 구하시오.</p>
-        <details>
-          <summary>📖 풀이 보기</summary>
-          <div class="solution">
-            <p><strong>STEP 1:</strong> $E(Y)=12\cdot\tfrac13=4$, $V(Y)=12\cdot\tfrac13\cdot\tfrac23=\tfrac83$.</p>
-            <p><strong>STEP 2:</strong> $E(X)=2\cdot4+5=13$, $V(X)=2^2\cdot\tfrac83=\tfrac{32}{3}$.</p>
-            <p><strong>STEP 3:</strong> $E(X^2)=V(X)+\{E(X)\}^2=\tfrac{32}{3}+169=\tfrac{32+507}{3}=\dfrac{539}{3}$.</p>
-            <p class="answer"><strong>정답:</strong> $E(X^2)=\dfrac{539}{3}$</p>
-            <p class="key-point"><strong>핵심:</strong> $B(n,p)$ 와 일차식만 바뀌어도 같은 절차. $V+E^2$ 역산이 만능.</p>
-          </div>
-        </details>
+        <h3>수능 대비 2 — f(7)까지 (영상식 후속)</h3>
+        <p class="problem-body"><strong>문제:</strong> 위에서 $f(x)+f(2)=(x-1)(x-5)^3$ 이 확정되었을 때 $f(7)$ 을 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f(2)=-\tfrac{27}{2}$ 이므로 $f(x)=(x-1)(x-5)^3+\dfrac{27}{2}$.</p>
+          <p>$f(7)=(7-1)(7-5)^3+\dfrac{27}{2}=6\cdot8+\dfrac{27}{2}=48+\dfrac{27}{2}=\dfrac{123}{2}$.</p>
+          <p><strong>검산:</strong> 최고차 $(x-1)(x-5)^3$ 의 $x^4$ 계수 $1$ ✓ (조건 충족). $f(2)=(1)(-27)+\tfrac{27}{2}=-\tfrac{27}{2}$ ✓.</p>
+          <p class="answer"><strong>정답:</strong> $f(7)=\dfrac{123}{2}$</p>
+        </div></details>
       </article>
 
     </section>
@@ -398,19 +354,23 @@
 
   <div class="review-box">
     <h3>✅ 학습자 가이드라인 · 검증</h3>
-    <p>영상(수학강사 이정환)의 이항분포 고난도 풀이를 중수준(하위 40%)도 따라오게 작성:</p>
+    <p>영상(시대수학 김성호)의 통찰 "꺾지 말고 교차 상태를 보라"를 중수준(하위 40%)도 따라오게 작성:</p>
     <ul>
-      <li><strong>점수 종류·확률</strong> → 규칙을 <strong>전수조사(12경우)</strong>로 검증: $1$점 확률 $\tfrac14$ 확인 (기본 1).</li>
-      <li><strong>이항분포 + 관계식</strong> → $Y\sim B(8,\tfrac14)$, $X=-2Y+24$ 유도 (개념 ②④).</li>
-      <li><strong>일차변환 & 역산</strong> → $E(X)=20$, $V(X)=6$, $E(X^2)=V+E^2=406$ (개념 ③⑤). 순수 파이썬으로 $406$ 검산 완료.</li>
-      <li><strong>변형</strong> → 규칙 변경(심화 2, 점수 3종)·다른 분포(수능 대비 2, $\tfrac{539}{3}$)로 절차 일반화.</li>
+      <li><strong>교차 상태 3종</strong>(단순교차→불가 / 접점·3중근→가능) → 뾰족점·기울기 0으로 이유 설명 (개념 ①②, 기초·심화 2).</li>
+      <li><strong>곱의 미분 가능</strong> → $(x-a)|x-1|$ 에서 $a=1$ (개념 ③, 기본 2).</li>
+      <li><strong>기준 직선 교차로 개형</strong> → $x=1$ 교차·$x=5$ 3중근 → $f(2)=-\tfrac{27}{2}$, $f(7)=\tfrac{123}{2}$ (수능 대비 1·2, 순수 파이썬 검산).</li>
     </ul>
-    <p>참고: 본 문제는 영상·보고서의 수치가 모두 정합하여 <strong>전수조사·공식 양쪽으로 검산 완료</strong>했습니다(정답 $406$). "수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</p>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>심화 1의 정확한 개수</strong> — $f=\pm2$ 방정식의 실근 상태에 따라 미분 불가점 수가 달라지므로 그래프 개형으로 확정 필요. 여기서 익힐 원칙은 "단순 교차만 미분 불가". (원칙 ★★★, 특정 개수 ★★)</li>
+      <li><strong>수능 대비 1의 개형 추론</strong>(x=5 3중근·비율)은 영상 논리를 따랐고, $f(2)=-\tfrac{27}{2}$·$f(7)=\tfrac{123}{2}$ 는 그 식으로 검산 완료. 원문제의 조건 전체 정합성은 고난도라 교사 확인 권장. (확신도 ★★☆)</li>
+      <li>"수능 대비"는 출제 패턴 라벨일 뿐 실재 기출이 아닙니다.</li>
+    </ul>
   </div>
 
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../확률과통계-순열과조합/20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html">원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계) (QsWeZRoP)</a> · <a href="../수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html">삼각함수 활용 고난도 (xuzuEsxr)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a> · <a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="20260507_거리곱완전정복도함수까지_M3TGprau.html">거리곱 완전정복 1탄 (M3TGprau)</a> · <a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a></div><!--REL_END-->
 <footer>
-    <p>생성일: 2026-07-27 | 영상 출처: <a href="https://youtu.be/YGoi6Pv-IkQ">https://youtu.be/YGoi6Pv-IkQ</a> (수학강사 이정환, 게시 2026-07-27)</p>
+    <p>생성일: 2026-07-31 | 영상 출처: <a href="https://youtu.be/ZjU-KOUBS80">https://youtu.be/ZjU-KOUBS80</a> (시대수학 김성호, 게시 2026-07-31)</p>
     <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
     <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
   </footer>
