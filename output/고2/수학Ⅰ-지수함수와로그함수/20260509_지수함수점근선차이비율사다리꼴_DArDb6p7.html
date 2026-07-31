@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ) | 학습자료</title>
+  <title>지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ) | 학습자료</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -198,7 +198,7 @@
   </div>
 
 
-  <div class="hero"><div class="tag">[고2-수학Ⅰ-지수함수와 로그함수]</div><h1>지수함수 $y=a^x$ — 차이·비율 공식과 도형 우선 해석</h1><p class="sub">🎯 $\frac{y_2}{y_1}=a^{x_2-x_1}$ (길이비↔좌표차)와 이등변·닮음 도형 해석으로 지수 도형 문제를 빠르게</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=MJWwaajugnU" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/MJWwaajugnU/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상</div><div class="v-meta">📺 시대수학 김성호, 6분 30초</div><a class="v-link" href="https://www.youtube.com/watch?v=MJWwaajugnU" target="_blank" rel="noopener">https://www.youtube.com/watch?v=MJWwaajugnU</a></div></div></div>
+  <div class="hero"><div class="tag">[고2-수학Ⅰ-지수함수와 로그함수]</div><h1>지수함수 점근선과 차이·비율 공식 — 전설의 사다리꼴 문제</h1><p class="sub">🎯 점근선 → 합동(볼록성) → $\Delta y=a(2^{l}-1)$ 차이·비율로, 좌표 대입 없이 지수 도형 문제를 최소 연산으로</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=DArDb6p7N0M" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/DArDb6p7N0M/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상</div><div class="v-meta">📺 시대수학 김성호, 9분 41초</div><a class="v-link" href="https://www.youtube.com/watch?v=DArDb6p7N0M" target="_blank" rel="noopener">https://www.youtube.com/watch?v=DArDb6p7N0M</a></div></div></div>
 
   
 
@@ -206,55 +206,55 @@
 
     <section id="example">
       <h2>📌 도입: 영상이 던진 문제</h2>
-      <article class="problem basic">
-        <h3>예시 — 지수함수 도형 문제 (모의고사 준킬러)</h3>
-        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^x$ 위 두 점 $P(a,2^a),Q(b,2^b)$. 직선 $PQ$ 기울기 $m$. 점 $P$ 지나 기울기 $-m$ 인 직선이 $x,y$축과 만나는 점 $A,B$, 점 $Q$ 지나 기울기 $-m$ 인 직선이 $x$축과 만나는 점 $C$. $AB=4PB$, $CQ=3AB$ 일 때 $90(a+b)$ 의 값은? (단 $0<a<b$)</p>
+      <article class="problem advanced">
+        <h3>예시 — 지수함수 사다리꼴 (전설의 준킬러 유형)</h3>
+        <p class="problem-body"><strong>문제(강의 재구성):</strong> 두 곡선 $y=2^{x}$ (점근선 $y=0$) 과 $y=1-2^{-x}$ (점근선 $y=1$) 이 있다. 두 곡선은 점 $\left(0,\tfrac12\right)$ 에 대해 <strong>대칭(합동)</strong> 이다. 세로 선분 $AB$ (한 곡선 위), $CD$ (다른 곡선 위) 가 $AB=2\,CD$ 를 만족할 때, 각 점근선에서 잰 거리 $a,b$ 와 밑변 관계를 구하시오. (단 두 점근선 사이 거리는 $1$)</p>
         <details open>
-          <summary>📖 풀이 보기 (차이·비율 공식 + 도형)</summary>
+          <summary>📖 풀이 보기 (점근선 우선 · 차이·비율)</summary>
           <div class="solution">
-            <p><strong>STEP 1 — 도형에 시선:</strong> 기울기 $m,-m$ → $x$축과 이루는 각 같음 → <strong>이등변삼각형</strong> → 수직이등분.</p>
-            <p><strong>STEP 2 — 길이를 변수로:</strong> 좌표를 $\alpha,\beta$ 로 각각 잡지 말고, 닮음비($1{:}4$, $1{:}3$)로 한 기준 $\alpha$ 에 몰아 표현 → 두 교점 $x$ 차이 $=9\alpha$.</p>
-            <p><strong>STEP 3 — 차이·비율 공식:</strong> $\dfrac{y_Q}{y_P}=\dfrac{2^b}{2^a}=2^{b-a}$. $y$방향 닮음비 $1{:}4$ → $2^{9\alpha}=4=2^2$ → $9\alpha=2$ → $\alpha=\dfrac29$.</p>
-            <p><strong>STEP 4 — 마무리:</strong> $a+b=\alpha+10\alpha=11\alpha=\dfrac{22}{9}$. $90\times\dfrac{22}{9}=220$.</p>
-            <p class="answer"><strong>정답:</strong> $220$</p>
-            <p class="key-point"><strong>핵심:</strong> $\dfrac{y_2}{y_1}=a^{x_2-x_1}$ — <strong>$y$ 방향 길이비 = $x$ 좌표 차이(지수)</strong>. 곡선에 시선 뺏기지 말고 도형(이등변·닮음)부터.</p>
+            <p><strong>STEP 1 — 점근선부터:</strong> $y=2^{x}$ 의 점근선 $y=0$, $y=1-2^{-x}$ 의 점근선 $y=1$. 두 점근선 사이 거리 $=1$.</p>
+            <p><strong>STEP 2 — 합동(볼록성) 확인:</strong> 밑 $2$ 와 $2^{-1}$ 은 방향만 뒤집은 관계 → 점 $(0,\tfrac12)$ 대칭으로 완전히 포개진다. 증가량 비율을 <strong>똑같이</strong> 적용 가능.</p>
+            <p><strong>STEP 3 — 거리 변수화:</strong> 같은 $y$ 를 갖는 점에서 아래 점근선까지 거리 $a$, 위 점근선까지 거리 $b$. 점근선 사이 거리가 $1$ 이므로 $a+b=1$.</p>
+            <p><strong>STEP 4 — 차이·비율 공식:</strong> $x$ 가 $l$ 만큼 이동하면 곡선 위 $\Delta y = (\text{점근선 거리})\times(2^{l}-1)$. 그러므로 $AB=a(2^{l}-1)$, $CD=b(2^{l}-1)$.</p>
+            <p><strong>STEP 5 — 조건 대입:</strong> $AB=2CD \Rightarrow a(2^l-1)=2\,b(2^l-1) \Rightarrow a=2b$. $a+b=1$ 과 연립하면 $a=\dfrac23,\ b=\dfrac13$.</p>
+            <p class="answer"><strong>정답:</strong> $a=\dfrac23,\ b=\dfrac13$ (그리고 $a=2b$). 이 점에서 $1-2^{-\alpha}=\dfrac23$ → $2^{\alpha}=3$.</p>
+            <p class="key-point"><strong>핵심:</strong> 좌표를 $\alpha,\beta$ 로 잡는 막노동 대신, <strong>점근선 → 합동 → 거리 변수 $a,b$ → 차이·비율 $\Delta y=a(2^l-1)$</strong> 로 식을 극단적으로 줄인다.</p>
           </div>
         </details>
       </article>
     </section>
 
     <section id="concept">
-      <h2>💡 개념 설명 (차이·비율 공식 · 도형 우선)</h2>
+      <h2>💡 개념 설명 (점근선 · 합동 · 차이·비율)</h2>
 
       <div class="concept-block">
-        <h3>① 핵심 — 지수함수의 차이·비율 공식</h3>
+        <h3>① 가장 먼저 — 점근선</h3>
+        <p>지수함수 문제는 <strong>무조건 점근선부터</strong>. $y=a^{x}+k$ 의 점근선은 $y=k$. 곡선의 모든 거리·비율을 이 점근선을 기준선으로 읽는다.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">강사:</strong> "항상 지수함수가 나왔는데 점근선 안 떠올리는 건 말이 안 돼."</div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 핵심 — 차이·비율 공식 (지수함수의 Δy)</h3>
         <div class="step-derive">
-          <p>곡선 $y=a^x$ 위 두 점 $y_1=a^{x_1}$, $y_2=a^{x_2}$.</p>
-          <p>나누면 $\dfrac{y_2}{y_1}=\dfrac{a^{x_2}}{a^{x_1}}=a^{x_2-x_1}$.</p>
-          <p>즉 <strong>$y$ 방향 길이비($\frac{y_2}{y_1}$)가 $x$ 좌표 차이($x_2-x_1$)를 지수로</strong> 바꿔준다.</p>
+          <p>점근선에서 거리 $a$ 인 점: 실제 높이 $a$. 여기서 $x$ 를 $l$ 만큼 이동하면 곡선 위 높이는 $a\cdot 2^{l}$ (밑 $2$ 기준).</p>
+          <p>그 차이 $\Delta y = a\cdot 2^{l}-a = a\,(2^{l}-1)$.</p>
+          <p>즉 세로 증가량은 <strong>점근선까지 거리 × $(2^{l}-1)$</strong>. $x$ 차이 $l$ 만 알면 $\Delta y$ 가 바로 나온다.</p>
         </div>
         <div class="formula-box">
-          $\dfrac{y_2}{y_1}=a^{\,x_2-x_1}$ &nbsp;(길이비 ↔ 좌표 차이)
+          $\Delta y = a\,(2^{\,l}-1)$ &nbsp;(점근선 거리 $a$, $x$ 차이 $l$)
         </div>
       </div>
 
       <div class="concept-block">
-        <h3>② 선수 지식 — 지수법칙</h3>
-        <div class="prereq">
-          <p>$\dfrac{a^{x_2}}{a^{x_1}}=a^{x_2-x_1}$ (나눗셈 = 지수 뺄셈).</p>
-          <p>$a^p=a^q \iff p=q$ (밑이 같으면 지수 비교).</p>
-        </div>
+        <h3>③ 핵심 — 역수 밑 = 합동(대칭)</h3>
+        <p>밑이 $2$ 인 함수와 $2^{-1}=\tfrac12$ 인 함수는 방향만 뒤집힌 것 → 대칭 이동으로 완전히 <strong>포개지는 합동</strong>. 볼록성이 같으므로 한쪽에서 얻은 거리·비율을 다른 쪽에 그대로 옮겨 쓸 수 있다.</p>
+        <p>예: $y=2^{x}$ 와 $y=1-2^{-x}$ 은 점 $\left(0,\tfrac12\right)$ 에 대해 대칭 (본 자료 검산 완료).</p>
       </div>
 
       <div class="concept-block">
-        <h3>③ 핵심 — 기울기 $m,-m$ → 이등변삼각형</h3>
-        <p>기울기 절댓값이 같고 부호 반대인 두 직선은 $x$축과 이루는 각(탄젠트)이 같다 → 밑각이 같은 <strong>이등변삼각형</strong> → 수직이등분선 성질을 최우선으로.</p>
-      </div>
-
-      <div class="concept-block">
-        <h3>④ 핵심 — 변수 하나로 (거리 변수화)</h3>
-        <p>교점마다 $\alpha,\beta,\gamma$ 로 잡으면 노가다. 한 점을 기준 $\alpha$ 로 두고 <strong>닮음·이등변</strong> 으로 나머지를 $\alpha$ 배수($3\alpha,-2\alpha,10\alpha\dots$)로 통일.</p>
-        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">강사:</strong> "$\alpha,\beta$ 라 하는 순간 노가다 연산." 시선은 온전히 도형에.</div>
+        <h3>④ 함정 — 좌표를 미지수로 두는 막노동</h3>
+        <p>점의 $x$ 좌표를 각각 $\alpha,\beta$ 로 두면 식이 $4$ 개 → 연산 폭발. 특히 $y$ 를 $t$ 로 두고 $x$ 를 역으로 구하는 방식은 <strong>역함수(근의 공식)적 발상</strong>.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--advanced);"><strong style="color:var(--advanced);">강사:</strong> "함수는 $x$ 가지고 $y$ 를 설명하는 것. 평가원이 그렇게 출제할 리 없다." — 출제 의도는 <em>길이·차이의 비율 공식</em> 을 아는지 묻는 것.</div>
       </div>
     </section>
 
@@ -264,82 +264,84 @@
       <h3 class="level-header">🟢 기초</h3>
 
       <article class="problem basic">
-        <h3>기초 1 — 차이·비율 공식 적용</h3>
-        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^x$ 위 두 점 $P(1,2^1),Q(3,2^3)$ 에 대해 $\dfrac{y_Q}{y_P}$ 를 지수 차이로 나타내고 값을 구하시오.</p>
+        <h3>기초 1 — Δy 공식 세우기</h3>
+        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^{x}$ 위에서, 점근선까지 거리가 $a$ 인 점에서 $x$ 가 $l$ 만큼 증가할 때 세로 증가량 $\Delta y$ 를 $a,l$ 로 나타내시오.</p>
         <details><summary>📖 풀이 보기</summary><div class="solution">
-          <p>$\dfrac{2^3}{2^1}=2^{3-1}=2^2=4$.</p>
-          <p class="answer"><strong>정답:</strong> $2^{2}=4$ (길이비 = 좌표차 지수)</p>
+          <p>$\Delta y = a\cdot 2^{l}-a = a\,(2^{l}-1)$.</p>
+          <p class="answer"><strong>정답:</strong> $\Delta y=a\,(2^{l}-1)$ (개념 ②)</p>
         </div></details>
       </article>
 
       <article class="problem basic">
-        <h3>기초 2 — 지수 방정식</h3>
-        <p class="problem-body"><strong>문제:</strong> $2^{9\alpha}=4$ 를 만족하는 $\alpha$ 를 구하시오.</p>
+        <h3>기초 2 — 점근선 찾기</h3>
+        <p class="problem-body"><strong>문제:</strong> 곡선 $y=1-2^{-x}$ 의 점근선(수평)을 구하시오.</p>
         <details><summary>📖 풀이 보기</summary><div class="solution">
-          <p>$4=2^2$ → $2^{9\alpha}=2^2$ → $9\alpha=2$ → $\alpha=\dfrac29$.</p>
-          <p class="answer"><strong>정답:</strong> $\alpha=\dfrac29$</p>
+          <p>$x\to\infty$ 일 때 $2^{-x}\to 0$ → $y\to 1$. 점근선 $y=1$.</p>
+          <p class="answer"><strong>정답:</strong> $y=1$ (개념 ①)</p>
         </div></details>
       </article>
 
       <h3 class="level-header">🔵 기본</h3>
 
       <article class="problem standard">
-        <h3>기본 1 — 이등변삼각형 판별</h3>
-        <p class="problem-body"><strong>문제:</strong> 기울기 $m$ 과 $-m$ 인 두 직선이 한 점에서 만나 $x$축 위에 밑변을 만들 때, 왜 이등변삼각형이 되는지 설명하시오.</p>
+        <h3>기본 1 — 지수 방정식</h3>
+        <p class="problem-body"><strong>문제:</strong> $1-2^{-\alpha}=\dfrac23$ 을 만족하는 $\alpha$ 에 대해 $2^{\alpha}$ 의 값을 구하시오.</p>
         <details><summary>📖 풀이 보기</summary><div class="solution">
-          <p>기울기 $\pm m$ → $x$축과 이루는 각의 탄젠트 $|m|$ 로 같음 → 두 밑각이 같음 → 이등변삼각형.</p>
-          <p class="answer"><strong>정답:</strong> 두 밑각이 같아(탄젠트 $|m|$ 동일) 이등변 (개념 ③)</p>
+          <p>$2^{-\alpha}=1-\dfrac23=\dfrac13$ → $2^{\alpha}=3$.</p>
+          <p class="answer"><strong>정답:</strong> $2^{\alpha}=3$ (즉 $\alpha=\log_2 3$)</p>
         </div></details>
       </article>
 
       <article class="problem standard">
-        <h3>기본 2 — 거리비로 좌표차 구하기</h3>
-        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^x$ 위 두 점의 $y$ 값 비가 $8$ 일 때, 두 점의 $x$ 좌표 차이를 구하시오.</p>
+        <h3>기본 2 — 거리 변수 연립</h3>
+        <p class="problem-body"><strong>문제:</strong> 두 점근선 사이 거리가 $1$ 이고, 같은 $y$ 를 갖는 점에서 두 점근선까지 거리 $a,b$ 가 $a=2b$ 를 만족한다. $a,b$ 를 구하시오.</p>
         <details><summary>📖 풀이 보기</summary><div class="solution">
-          <p>$\dfrac{y_2}{y_1}=2^{x_2-x_1}=8=2^3$ → $x_2-x_1=3$.</p>
-          <p class="answer"><strong>정답:</strong> $x$ 좌표 차이 $=3$</p>
+          <p>$a+b=1$, $a=2b$ → $3b=1$ → $b=\dfrac13,\ a=\dfrac23$.</p>
+          <p class="answer"><strong>정답:</strong> $a=\dfrac23,\ b=\dfrac13$ (개념 ③)</p>
         </div></details>
       </article>
 
       <h3 class="level-header">🟠 심화</h3>
 
       <article class="problem advanced">
-        <h3>심화 1 — 닮음비로 좌표차 → α</h3>
-        <p class="problem-body"><strong>문제:</strong> 어떤 지수 도형 문제에서 두 교점의 $x$ 좌표 차이가 $9\alpha$ 이고, 그 두 점의 $y$ 방향 길이비가 $4$ 이다. ($y=2^x$ 위) $\alpha$ 를 구하시오.</p>
+        <h3>심화 1 — AB=2CD 에서 a=2b 유도</h3>
+        <p class="problem-body"><strong>문제:</strong> 두 곡선(밑 $2$, 합동) 위 세로 선분이 $AB=a(2^{l}-1)$, $CD=b(2^{l}-1)$ 로 표현된다. $AB=2CD$ 이고 $2^{l}=\dfrac92$ 일 때, $AB,CD$ 를 (위 문제의 $a=\tfrac23,b=\tfrac13$ 로) 구하시오.</p>
         <details><summary>📖 풀이 보기</summary><div class="solution">
-          <p>차이·비율: $2^{9\alpha}=4=2^2$ → $9\alpha=2$ → $\alpha=\dfrac29$.</p>
-          <p class="answer"><strong>정답:</strong> $\alpha=\dfrac29$ (개념 ①)</p>
+          <p>$AB=2CD \Rightarrow a(2^l-1)=2b(2^l-1) \Rightarrow a=2b$ (공통 인수 $2^l-1\neq0$ 소거).</p>
+          <p>$2^{l}-1=\dfrac92-1=\dfrac72$. $AB=\dfrac23\cdot\dfrac72=\dfrac73$, $CD=\dfrac13\cdot\dfrac72=\dfrac76$.</p>
+          <p class="answer"><strong>정답:</strong> $AB=\dfrac73,\ CD=\dfrac76$ ($AB=2CD$ 확인)</p>
         </div></details>
       </article>
 
       <article class="problem advanced">
-        <h3>심화 2 — 변수 단일화의 이점</h3>
-        <p class="problem-body"><strong>문제:</strong> 두 점 $x$ 좌표를 각각 $\alpha,\ 10\alpha$ 로 표현했을 때 $a+b$ 를 $\alpha$ 로 나타내고, $\alpha=\dfrac29$ 일 때 값을 구하시오.</p>
+        <h3>심화 2 — 합동(대칭) 증명</h3>
+        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^{x}$ 와 $y=1-2^{-x}$ 이 점 $\left(0,\dfrac12\right)$ 에 대해 대칭임을 보이시오.</p>
         <details><summary>📖 풀이 보기</summary><div class="solution">
-          <p>$a+b=\alpha+10\alpha=11\alpha=11\cdot\dfrac29=\dfrac{22}{9}$.</p>
-          <p class="answer"><strong>정답:</strong> $a+b=\dfrac{22}{9}$ (변수 하나로 통일, 개념 ④)</p>
+          <p>점 $(0,\tfrac12)$ 대칭 변환: $(x,y)\mapsto(-x,\,1-y)$.</p>
+          <p>$y=2^{x}$ 위 점 $(x,2^{x})$ 를 변환 → $(-x,\,1-2^{x})$. 이 점이 $y=1-2^{-X}$ ($X=-x$) 위에 있는가? $1-2^{-(-x)}=1-2^{x}$ ✓.</p>
+          <p class="answer"><strong>정답:</strong> 변환한 점이 다른 곡선 위 → 두 곡선은 $(0,\tfrac12)$ 대칭·합동 (개념 ③)</p>
         </div></details>
       </article>
 
       <h3 class="level-header">🔴 수능 대비</h3>
 
       <article class="problem exam-style">
-        <h3>수능 대비 1 — 영상 문제 완결</h3>
-        <p class="problem-body"><strong>문제:</strong> 도입의 상황에서 $90(a+b)$ 의 값을 구하시오.</p>
+        <h3>수능 대비 1 — 단일 곡선 Δy</h3>
+        <p class="problem-body"><strong>문제:</strong> 곡선 $y=2^{x}$ 위 한 점의 점근선까지 거리가 $3$ 이다. 이 점에서 $x$ 를 $l$ 만큼 늘렸더니 $2^{l}=4$ 였다. 세로 증가량 $\Delta y$ 를 구하시오.</p>
         <details><summary>📖 풀이 보기</summary><div class="solution">
-          <p>이등변·닮음으로 $x$차 $9\alpha$, $y$비 $4$ → $2^{9\alpha}=4$ → $\alpha=\dfrac29$.</p>
-          <p>$a+b=11\alpha=\dfrac{22}{9}$ → $90\times\dfrac{22}{9}=220$.</p>
-          <p class="answer"><strong>정답:</strong> $220$</p>
+          <p>$\Delta y=a(2^{l}-1)=3\cdot(4-1)=9$.</p>
+          <p class="answer"><strong>정답:</strong> $\Delta y=9$</p>
         </div></details>
       </article>
 
       <article class="problem exam-style">
-        <h3>수능 대비 2 — 밑이 다른 지수</h3>
-        <p class="problem-body"><strong>문제:</strong> 곡선 $y=3^x$ 위 두 점의 $y$ 방향 길이비가 $9$ 이다. 두 점의 $x$ 좌표 차이를 구하고, 차이가 $6\beta$ 라면 $\beta$ 를 구하시오.</p>
+        <h3>수능 대비 2 — 사다리꼴 넓이 (준킬러)</h3>
+        <p class="problem-body"><strong>문제:</strong> 점근선 사이 거리가 $3$ 인 두 합동 곡선(밑 $2$)에서, 같은 $y$ 점의 두 점근선까지 거리 $a,b$ 가 $a=2b$. $x$ 를 이동해 $2^{l}=4$ 일 때 두 세로 선분 $AB=a(2^{l}-1)$, $CD=b(2^{l}-1)$ 을 밑변(평행)으로, 두 평행변 사이 거리 $2$ 를 높이로 하는 사다리꼴 $ABDC$ 의 넓이를 구하시오.</p>
         <details><summary>📖 풀이 보기</summary><div class="solution">
-          <p>$\dfrac{y_2}{y_1}=3^{x_2-x_1}=9=3^2$ → $x_2-x_1=2$.</p>
-          <p>$6\beta=2$ → $\beta=\dfrac13$.</p>
-          <p class="answer"><strong>정답:</strong> $x$ 차이 $=2$, $\beta=\dfrac13$ (밑이 달라도 같은 공식)</p>
+          <p><strong>STEP 1:</strong> $a+b=3,\ a=2b$ → $a=2,\ b=1$.</p>
+          <p><strong>STEP 2:</strong> $2^{l}-1=4-1=3$ → $AB=2\cdot3=6$, $CD=1\cdot3=3$ ($AB=2CD$ ✓).</p>
+          <p><strong>STEP 3:</strong> 넓이 $=\dfrac{(AB+CD)}{2}\times(\text{높이})=\dfrac{6+3}{2}\times2=9$.</p>
+          <p class="answer"><strong>정답:</strong> $9$ (순수 파이썬 검산 완료)</p>
         </div></details>
       </article>
 
@@ -349,22 +351,23 @@
 
   <div class="review-box">
     <h3>✅ 학습자 가이드라인 · 검증</h3>
-    <p>영상(시대수학 김성호)의 "차이·비율 공식 + 도형 우선"을 중수준(하위 40%)도 따라오게 작성:</p>
+    <p>영상(시대수학 김성호, "전설의 12번")의 <strong>점근선 → 합동 → 차이·비율</strong> 3단 사고를 중수준(하위 40%)도 따라오게 재구성:</p>
     <ul>
-      <li><strong>차이·비율 공식</strong> → $\frac{y_2}{y_1}=a^{x_2-x_1}$ 유도, $y$비 ↔ $x$차 (개념 ①②, 기초·심화 1).</li>
-      <li><strong>도형 우선(이등변·닮음)</strong> → 기울기 $\pm m$ → 이등변, 변수 하나로 (개념 ③④, 기본 1·심화 2).</li>
-      <li><strong>영상 완결</strong> → $2^{9\alpha}=4$ → $\alpha=\frac29$ → $90(a+b)=220$ (수능 대비 1, 순수 파이썬 검산).</li>
+      <li><strong>점근선 우선</strong> → 모든 거리·비율의 기준선 (개념 ①, 기초 2).</li>
+      <li><strong>차이·비율 공식</strong> → $\Delta y=a(2^{l}-1)$ 유도 (개념 ②, 기초 1·심화 1).</li>
+      <li><strong>역수 밑 = 합동</strong> → $(0,\tfrac12)$ 대칭 검산 완료 (개념 ③, 심화 2).</li>
+      <li><strong>막노동 함정</strong> → $\alpha,\beta$·$t$ 치환 지양, 거리 변수 $a,b$ 로 축소 (개념 ④, 기본 2).</li>
+      <li>영상 핵심 수치 <strong>검산 완료</strong>: $a=\tfrac23,\ b=\tfrac13$, $2^{\alpha}=3$, $AB=\tfrac73,\ CD=\tfrac76$ ($AB=2CD$).</li>
     </ul>
-    <p>다만 다음은 교사 검토 권장:</p>
+    <p>다음은 교사 검토 권장:</p>
     <ul>
-      <li><strong>기하 개형 추론</strong> — 원문제의 이등변·닮음 비($1{:}4$, $1{:}3$)로 $x$차 $9\alpha$, $y$비 $4$ 를 얻는 도형 과정은 영상 판서를 따랐습니다. 최종 핵심($2^{9\alpha}=4$ → $\alpha=\frac29$ → $220$)은 <strong>검산 완료</strong>. 도형 세부 비율 유도는 그림과 함께 확인 권장. (핵심 공식·정답 ★★★, 기하 세부 ★★)</li>
-      <li>이 자료는 앞서 옵시디언 수동노트로 요지를 정리했던 영상의 <strong>갤러리 정식 자료</strong>입니다.</li>
-      <li>"수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</li>
+      <li><strong>최종 넓이의 실제 기출 수치</strong> — 원본 영상은 사다리꼴 넓이의 <em>최종 숫자를 명확히 제시하지 않았고</em>(영상 미해결로 표기), 실제 시험 도형의 정확한 배치에 따라 값이 달라집니다. 따라서 본 자료의 <strong>수능 대비 2 는 방법을 그대로 담은 자체 설계·검산 문항(넓이 $=9$)</strong> 이며, 특정 기출의 정답 수치를 재현한 것이 아닙니다. (개념·공식·부분 수치 ★★★, 기출 도형 세부 재현 ★★)</li>
+      <li>"수능 대비"는 난이도 라벨일 뿐 실재 기출 출처가 아닙니다.</li>
     </ul>
   </div>
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260509_지수함수점근선차이비율사다리꼴_DArDb6p7.html">지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ) (DArDb6p7)</a> · <a href="../수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a> · <a href="../수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html">넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ) (xA9JGa0t)</a> · <a href="../수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260427_지수함수차이비율공식과도형우선해석_MJWwaaju.html">지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ) (MJWwaaju)</a> · <a href="../수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html">넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ) (xA9JGa0t)</a> · <a href="../수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="../수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
 <footer>
-    <p>생성일: 2026-04-27 | 영상 출처: <a href="https://www.youtube.com/watch?v=MJWwaajugnU">https://www.youtube.com/watch?v=MJWwaajugnU</a> (시대수학 김성호)</p>
+    <p>생성일: 2026-05-09 | 영상 출처: <a href="https://www.youtube.com/watch?v=DArDb6p7N0M">https://www.youtube.com/watch?v=DArDb6p7N0M</a> (시대수학 김성호)</p>
     <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
     <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
   </footer>
