@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-다항함수의 적분법] · 넓이와 부정적분</div><h1>넓이 비와 부정적분 함숫값 차 — <strong>비율 관계를 넓이에 연쇄 적용</strong></h1><p class="sub">🎯 정적분 계산에 매몰되지 마라. 주어진 함수를 <strong>도함수 $f'$</strong> 로 보면 부정적분 $f$ 의 개형이 있고, 넓이는 <strong>$f$ 의 함숫값 차</strong> $f(b)-f(a)$. $f'=x(x-2)(x-3)$ 의 두 영역 넓이 비 <strong>$32:5$</strong> 를 계산 없이 직관.</p><div class="video-card"><a class="thumb" href="https://youtube.com/shorts/xA9JGa0tRxQ" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/xA9JGa0tRxQ/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 비율관계를 넓이에 적용하기 (Shorts)</div><div class="v-meta">📺 정병훈T 요리조리 수학, 58초 · 2026-07-14</div><a class="v-link" href="https://youtube.com/shorts/xA9JGa0tRxQ" target="_blank" rel="noopener">https://youtube.com/shorts/xA9JGa0tRxQ</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 문제</h2>
+      <article class="problem basic">
+        <h3>예시 — 두 구간 넓이 비를 "생각의 전환"으로</h3>
+        <p class="problem-body"><strong>문제:</strong> $f'(x)=x(x-2)(x-3)$ 의 그래프가 $x$축과 이루는 두 영역 — $[0,2]$ 와 $[2,3]$ — 의 넓이 비를 구하시오.</p>
+        <details open>
+          <summary>📖 풀이 보기 (부정적분 함숫값 차)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 발상 전환:</strong> 정적분을 일일이 계산하지 말고, 주어진 함수를 <strong>도함수 $f'$</strong> 로 보면 <strong>부정적분 $f$</strong> 의 개형이 있다. 넓이 = <strong>$f$ 의 함숫값 차</strong>.</p>
+            <p><strong>STEP 2 — 부정적분:</strong> $f(x)=\displaystyle\int(x^3-5x^2+6x)\,dx=\dfrac{x^4}{4}-\dfrac{5x^3}{3}+3x^2$ (+C, 넓이엔 무관).</p>
+            <p><strong>STEP 3 — 함숫값:</strong> $f(0)=0$, $f(2)=\dfrac{8}{3}$ (극대: $f'$ 가 $2$ 에서 $+\to-$), $f(3)=\dfrac{9}{4}$.</p>
+            <p><strong>STEP 4 — 넓이:</strong> $[0,2]$ ($f'>0$): $f(2)-f(0)=\dfrac83$. $[2,3]$ ($f'<0$): $f(2)-f(3)=\dfrac83-\dfrac94=\dfrac{5}{12}$.</p>
+            <p><strong>STEP 5 — 비:</strong> $\dfrac83:\dfrac{5}{12}=\dfrac{32}{12}:\dfrac{5}{12}=\boxed{32:5}$.</p>
+            <p class="answer"><strong>정답:</strong> $32:5$</p>
+            <p class="key-point"><strong>핵심:</strong> 넓이 = "제시된 함수의 <strong>부정적분에서 함숫값의 차</strong>". 이 마인드가 있어야 비율 관계를 넓이에 연쇄 적용할 수 있다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (넓이 ↔ 함숫값 차 · 비율)</h2>
+
+      <div class="concept-block">
+        <h3>① 선수 지식 — 넓이는 부정적분의 함숫값 차</h3>
+        <div class="prereq">
+          <p>$\displaystyle\int_a^b f'(x)\,dx=f(b)-f(a)$ (미적분의 기본정리).</p>
+          <p>$f'$ 가 양수인 구간은 넓이 $=f(b)-f(a)$, 음수인 구간은 넓이 $=f(a)-f(b)$ (부호 반전).</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 핵심 — 넓이 문제를 "함숫값 차"로 본다</h3>
+        <p>정적분 계산에 매몰되지 말고, 주어진 $f'$ 의 <strong>부정적분 $f$ 개형</strong>을 떠올려 극대·극소 함숫값의 차로 넓이를 읽는다.</p>
+        <div class="callout">
+          <p>$f'=x(x-2)(x-3)$ → $f$ 는 사차함수. $x=2$ 에서 $f'$ 부호 $+\to-$ → $f$ 극대. $x=0,3$ 은 $f'=0$ 이지만 개형상 넓이 경계.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 부호 구간 나누기</h3>
+        <div class="step-derive">
+          <p>$f'=x(x-2)(x-3)$ 의 부호: $0<x<2$ 는 $+$(넓이 그대로), $2<x<3$ 은 $-$(절댓값).</p>
+          <p>$[0,2]$ 넓이 $=f(2)-f(0)$, $[2,3]$ 넓이 $=f(2)-f(3)$ (둘 다 $f(2)$ 에서 내려온 차).</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 비율 관계의 연쇄</h3>
+        <p>사차함수 $f$ 의 극점·변곡점 비율을 외웠다면, 넓이(=함숫값 차)에도 그 비율이 연쇄적으로 작용. 계산 없이 $32:5$ 를 직관할 수 있다(체화 필요).</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">확인:</strong> $f(2)-f(0)=\tfrac83$, $f(2)-f(3)=\tfrac{5}{12}$ → $32:5$. 근이 $0,2,3$ 인 배치의 고유 비율.</div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — f' 부호로 넓이 구간</h3>
+        <p class="problem-body"><strong>문제:</strong> $f'(x)=x(x-2)(x-3)$ 의 $0<x<2$ 와 $2<x<3$ 에서의 부호를 각각 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$0<x<2$: $(+)(-)(-)=+$. $2<x<3$: $(+)(+)(-)=-$.</p>
+          <p class="answer"><strong>정답:</strong> $[0,2]$ 양수, $[2,3]$ 음수</p>
+        </div></details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 부정적분 구하기</h3>
+        <p class="problem-body"><strong>문제:</strong> $f'(x)=x^3-5x^2+6x$ 의 부정적분 $f(x)$ 를 구하시오. ($+C$ 생략 가능)</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f(x)=\dfrac{x^4}{4}-\dfrac{5x^3}{3}+3x^2\ (+C)$.</p>
+          <p class="answer"><strong>정답:</strong> $\dfrac{x^4}{4}-\dfrac{5x^3}{3}+3x^2$</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 함숫값으로 넓이 (0~2)</h3>
+        <p class="problem-body"><strong>문제:</strong> 위 $f$ 로 $[0,2]$ 구간 넓이 $\displaystyle\int_0^2 f'(x)\,dx$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f(0)=0$, $f(2)=\dfrac{16}{4}-\dfrac{40}{3}+12=4-\dfrac{40}{3}+12=\dfrac{48-40}{3}=\dfrac83$.</p>
+          <p>넓이 $=f(2)-f(0)=\dfrac83$.</p>
+          <p class="answer"><strong>정답:</strong> $\dfrac83$</p>
+        </div></details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 음수 구간 넓이 (2~3)</h3>
+        <p class="problem-body"><strong>문제:</strong> $[2,3]$ 구간에서 $f'<0$ 임을 이용해 그 넓이를 함숫값 차로 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f'<0$ 이라 넓이 $=f(2)-f(3)$. $f(3)=\dfrac{81}{4}-45+27=\dfrac{81}{4}-18=\dfrac{9}{4}$.</p>
+          <p>넓이 $=\dfrac83-\dfrac94=\dfrac{32-27}{12}=\dfrac{5}{12}$.</p>
+          <p class="answer"><strong>정답:</strong> $\dfrac{5}{12}$ (음수 구간 → $f(2)-f(3)$)</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 넓이 비 32:5 완성</h3>
+        <p class="problem-body"><strong>문제:</strong> $[0,2]$ 와 $[2,3]$ 의 넓이 비를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$\dfrac83:\dfrac{5}{12}$. 통분(×12): $32:5$.</p>
+          <p class="answer"><strong>정답:</strong> $32:5$ (영상의 결론, 검산 일치)</p>
+        </div></details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 극대 위치와 개형</h3>
+        <p class="problem-body"><strong>문제:</strong> 부정적분 $f$ 가 $x=2$ 에서 극대인 이유와, $x=0,3$ 에서의 $f'$ 부호 변화를 설명하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$x=2$: $f'$ 가 $+\to-$ → $f$ 극대. $x=3$: $f'$ 가 $-\to+$ → $f$ 극소. $x=0$: $f'$ 가 $-\to+$(x<0에서 $(-)(-)(-)=-$) → $f$ 극소.</p>
+          <p class="answer"><strong>정답:</strong> $x=0,3$ 극소, $x=2$ 극대. 넓이는 극대 $f(2)$ 에서 두 극소로 내려온 차이 → $32:5$.</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 영상 완결 (한 번에)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f'(x)=x(x-2)(x-3)$ 의 두 영역 $[0,2]$, $[2,3]$ 넓이 비를 부정적분 함숫값 차로 한 번에 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f=\dfrac{x^4}{4}-\dfrac{5x^3}{3}+3x^2$. $f(0)=0,\ f(2)=\dfrac83,\ f(3)=\dfrac94$.</p>
+          <p>$[0,2]:f(2)-f(0)=\dfrac83$, $[2,3]:f(2)-f(3)=\dfrac{5}{12}$ → $32:5$.</p>
+          <p class="answer"><strong>정답:</strong> $32:5$</p>
+        </div></details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 근 배치 바꾸면 비도 바뀐다</h3>
+        <p class="problem-body"><strong>문제:</strong> $g'(x)=x(x-1)(x-3)$ 의 두 영역 $[0,1]$, $[1,3]$ 넓이 비를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$g(x)=\dfrac{x^4}{4}-\dfrac{4x^3}{3}+\dfrac{3x^2}{2}$. $g(0)=0$, $g(1)=\dfrac14-\dfrac43+\dfrac32=\dfrac{3-16+18}{12}=\dfrac{5}{12}$, $g(3)=\dfrac{81}{4}-36+\dfrac{27}{2}=\dfrac{81-144+54}{4}=-\dfrac94$.</p>
+          <p>$[0,1]$ ($g'>0$): $g(1)-g(0)=\dfrac{5}{12}$. $[1,3]$ ($g'<0$): $g(1)-g(3)=\dfrac{5}{12}+\dfrac94=\dfrac{5+27}{12}=\dfrac{32}{12}=\dfrac83$.</p>
+          <p>비 $\dfrac{5}{12}:\dfrac83=5:32$.</p>
+          <p class="answer"><strong>정답:</strong> $5:32$ (근이 $0,1,3$ 이면 반대 비율 — 배치가 비를 정한다)</p>
+        </div></details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(정병훈T, 58초 쇼츠)의 "생각의 전환"을 중수준(하위 40%)도 따라오게 작성:</p>
+    <ul>
+      <li><strong>넓이 = 부정적분 함숫값 차</strong> → $\int_a^b f'=f(b)-f(a)$, 음수 구간은 부호 반전 (개념 ①②③).</li>
+      <li><strong>넓이 비 32:5</strong> → $f(2)-f(0)=\tfrac83$, $f(2)-f(3)=\tfrac{5}{12}$ → 통분 $32:5$. <strong>순수 파이썬으로 완전 검산</strong>.</li>
+      <li><strong>근 배치가 비를 정한다</strong> → $0,2,3$ 이면 $32:5$, $0,1,3$ 이면 $5:32$ (수능 대비 2, 검산 일치).</li>
+    </ul>
+    <p>참고: 영상의 "$4$차 함수 $2:1$ 비율 관계" 언급은 개형 직관을 위한 것으로, 본 자료는 <strong>함숫값 차로 직접 계산·검산</strong>해 $32:5$ 를 확정했습니다(정합). "수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</p>
+  </div>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> · <a href="20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-07-14 | 영상 출처: <a href="https://youtube.com/shorts/xA9JGa0tRxQ">https://youtube.com/shorts/xA9JGa0tRxQ</a> (정병훈T 요리조리 수학, 게시 2026-07-14)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
