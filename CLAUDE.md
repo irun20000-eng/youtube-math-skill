@@ -106,16 +106,36 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
 
 | 용도 | Drive folder ID |
 |------|----------------|
-| INBOX (Gemini Gem 기초자료 `.md` 수신) | `1K1KndlwA4iY2VVasAcW8aDPu6AfyL2Bv` |
+| **스파크(Spark) 요약본** (INBOX 입력원, 2026-08-06 교체) | `1TEHzkORlQLtsu2CKGgy2TZMIiW-NWMdr` |
+| **스파크 `_done`** (공유 완료 마커, claude_work 와 공용) | `1_XTvautWp8O40l1ZX8Jea97I26SJofAL` |
 | Vault root (010-Youtube-Obsi)* | `11kYZv_E3Go4_jhSIaNSqrVw1TjlJ8J7d` |
 | **수학영상노트** (영상 자료 스텁) | `1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k` |
 | **수학개념노트** (자연어 개념 자료 스텁) | `1FwBBxoaoKBMpd8dqZxGzyvxI3pUoBWSX` |
 | 일반 YouTube (일반지식 노트) | `1j8jRPbq9WmBHYilcX4v8R4qv_hObM664` |
-| INBOX `_done` (처리 완료 마커) | `1bkWZTT-OhPHuAlCagXnwgUgLpRqiWFL2` |
-| INBOX `_queue` | `1aZb2Xuy_xFaPLdkgBxeca3YxYZ5-pM_5` |
 
 > *볼트 root 폴더 이름은 `020-Youtube-Obsi` → `010-Youtube-Obsi` 처럼 바뀔 수 있음.
 > Drive **ID 기반 호출**이라 이름 변경에 무관. ID 만 신뢰할 것 (이름 검색 ❌).
+
+> **❌ 폐지(2026-08-06)**: 옛 GAS INBOX 폴더(`1K1KndlwA4iY2VVasAcW8aDPu6AfyL2Bv`, 죽은 경로 — GAS가 더 이상 채우지 않음), 옛 INBOX 전용 `_done`(`1bkWZTT-OhPHuAlCagXnwgUgLpRqiWFL2`), `_queue`(`1aZb2Xuy_xFaPLdkgBxeca3YxYZ5-pM_5`). `_queue`는 애초에 실제 로직에서 한 번도 쓰인 적 없는 죽은 개념이라 대체 없이 삭제. 아래 "스파크 기반 트랙 A" 섹션 참조.
+
+### 📥 스파크(Spark) 기반 트랙 A — 입력원 전환 (2026-08-06)
+
+claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기반으로 전환하면서, 이 레포도 같은 스파크 폴더를 입력원으로 본다.
+
+- 스파크 폴더의 파일은 제목이 `.md`로 끝나지만 **실제로는 Google Docs 문서**다. 로컬 파일처럼 읽을 수 없다 — 반드시 Drive MCP `read_file_content(fileId)` 로 읽는다.
+- 파일명 패턴: `{YYYY-MM-DD}_[카테고리]_{영상제목}.md`.
+- 본문엔 `type: youtube-insight`, `title`, `url`, `video_id`, `channel`, `published`, `duration_min`, `topics`, `tags` 등 frontmatter 유사 텍스트가 있지만, Google Docs 변환 과정에서 **`---` YAML 펜스가 없고 모든 필드가 줄바꿈 없이 한 문단에 이어붙으며**, `_`·`[`·`]`·`*` 가 `\_`·`\[`·`\]`·`\*` 로 이스케이프되고, 이모지가 `ð` 등으로 깨진다. `scripts/process_inbox.py` 가 이 형태를 그대로 파싱하도록 되어 있다(이스케이프 해제 + 줄바꿈 없는 inline 필드 추출).
+
+**타입(수학 여부) 판별 — `process_inbox.py`의 `classify_math()`**:
+1. **1순위(명시적 필드)**: 본문에 `타입:`/`분야:` 필드가 있고 값에 `수학`이 포함되면 확정 수학(옛 리포트 형식 호환용 — 스파크 표준 템플릿엔 이 필드가 없어 사실상 항상 2순위로 감).
+2. **2순위(휴리스틱)**: 제목(파일명의 `[카테고리]` 태그 포함)·채널·topics·tags 를 합쳐 `MATH_KEYWORDS`(수학·미적분·확률과통계·기하·대수·함수·방정식·부등식·수열·극한·미분·적분·벡터·행렬·삼각함수·로그·지수·도형·확률·통계·수능·모의고사·학력평가·내신·N제·기출·문제풀이) 매치 여부로 판정.
+3. 둘 다 아니면 **이 레포는 관여하지 않고 skip** — claude_work 의 `routines/spark-reconstruct-curator.md` 가 일반 노트로 처리한다.
+
+**공유 완료 마커 (`_done` 폴더, claude_work 와 공용)**:
+- 마커 파일명 `{video_id}.done`, video_id 당 하나만 존재. **처리 시작 전 반드시 먼저 `_done/{video_id}.done` 존재 여부 확인 — 있으면(내용의 `pipeline` 값과 무관하게) 즉시 skip**(이미 어느 쪽이든 처리 완료).
+- **이 레포가 실제로 처리를 완료했을 때만** 마커 생성, 내용에 `pipeline: math` 필수 포함. 수학이 아니라고 판단해 skip한 문서엔 마커를 만들지 않는다(claude_work 쪽이 자기 마커를 남긴다).
+- 생성은 Drive MCP `create_file(contentMimeType='text/plain', disableConversionToGoogleType=true, parentId=스파크 _done ID)`.
+- `output/` 내 `find_existing()` dedup 은 2차 방어로 계속 유지(공유 마커가 1차 방어).
 
 ### 옵시디언 스텁 작성 절차 (Drive MCP)
 
@@ -131,9 +151,23 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
 - 세션·클라우드(=비 Windows) 환경에선 호출 금지 — 어차피 `os.name != "nt"` 자동 dry-run 으로 떨어지지만, 처음부터 부르지 말 것.
 - 일상 옵시디언 스텁 작성은 위 **Drive MCP 직접 호출**.
 
-## 🎬 영상 → 학습자료 워크플로우 (트랙 A — INBOX 루틴은 별도)
+## 🎬 영상 → 학습자료 워크플로우 (트랙 A)
 
-정기 처리(매일 09:00 KST INBOX 루틴)는 **클라우드 에이전트**가 자동 수행. 이 절차는 **사용자가 세션에서 직접 처리**할 때.
+### A-1. 09:00 KST 자동 루틴 (스파크 기반, 2026-08-06 신규 생성)
+
+매일 09:00 KST, 새 세션을 띄우는 Routine 이 자동 수행(정기 처리):
+
+1. Drive MCP `search_files(parentId=스파크 1TEHzkORlQLtsu2CKGgy2TZMIiW-NWMdr)` 로 문서 목록, `search_files(parentId=_done 1_XTvautWp8O40l1ZX8Jea97I26SJofAL)` 로 완료 마커 목록 확보.
+2. video_id 가 이미 `_done/{video_id}.done` 로 있으면 skip(1차 방어).
+3. 남은 문서를 `read_file_content(fileId)` 로 읽어 로컬 스테이징 폴더에 평문 `.md` 로 저장.
+4. `python scripts/process_inbox.py --inbox <스테이징폴더>` 로 수학 여부 판별(위 "스파크 기반 트랙 A" 섹션 참조).
+5. `type=math` 인 것만 아래 A-2 의 3~8단계(자료 생성 ~ 결과 보고)를 그대로 수행.
+6. 완료한 건은 `_done/{video_id}.done` 마커 생성(`pipeline: math` 필수 포함). 수학이 아니라 skip한 문서는 마커를 만들지 않는다.
+7. 처리할 새 수학 영상이 없으면 "처리할 새 자료 없음"만 보고.
+
+### A-2. 세션에서 직접 처리할 때 (URL + 자동 자막 추출)
+
+09:00 루틴과 별개로, **사용자가 세션에서 직접 처리**할 때의 절차.
 
 1. **메타데이터 확인**: `youtube-math-auto/scripts/output_path.py` 의 `find_existing()` 으로 중복 체크
 2. **자막 추출**: `python youtube-math-auto/scripts/fetch_subtitle.py "URL" --out subs/` (yt-dlp 사용, 사용자 IP라 차단 회피)

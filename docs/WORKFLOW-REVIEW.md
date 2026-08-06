@@ -4,24 +4,37 @@
 
 ## 1. 두 트랙
 
-### 트랙 A — INBOX 루틴 (자동, 매일 09:00 KST)
+### 트랙 A — INBOX 루틴 (자동, 매일 09:00 KST, 2026-08-06 스파크 개편)
 
 ```
-입력  : Gemini 통합 Gem → 기초자료 .md → 사용자가 Drive INBOX 폴더에 저장
-        INBOX folder ID: 1K1KndlwA4iY2VVasAcW8aDPu6AfyL2Bv
-실행자: "클라우드 에이전트" — cron-triggered Claude 세션, Linux 컨테이너
+입력  : 구글 스파크(Spark) 요약본 → Google Docs(제목만 .md) → 스파크 폴더에 자동 저장
+        스파크 folder ID: 1TEHzkORlQLtsu2CKGgy2TZMIiW-NWMdr
+        공유 _done folder ID: 1_XTvautWp8O40l1ZX8Jea97I26SJofAL (claude_work 와 공용)
+실행자: "클라우드 에이전트" — 09:00 KST Routine, 매 실행마다 새 세션(Linux 컨테이너)
 처리  :
-  1. INBOX 새 .md 나열 (이름이 _ 시작이면 제외, _done/_queue 폴더 별도)
-  2. 메타 '타입:' 분기 → 수학강의 / 일반지식 / 시청 불가
-  3. (수학) HTML 생성 → output/{학년}/{단원}/{YYYYMMDD}_{주제}_{vid8}.html
-  4. add_back_button → add_related → regen_index → patch_pdf_mode
-  5. git commit + push → main → deploy-pages → 갤러리
-  6. ★ Drive MCP create_file → 수학영상노트/..._{vid8}.md  (★ 2026-06-20: YYYY/MM 폴더 안 씀)
-       (수학영상노트 ID: 1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k)
-  7. 처리한 INBOX .md → _done 폴더에 마커 (중복 방지)
-  8. (가능 시) PlayMCP 카카오 '나에게 보내기' 로 결과 요약
+  1. Drive MCP search_files(parentId=스파크) 로 문서 목록, search_files(parentId=_done)
+     로 완료 마커 목록 확보 → video_id 가 이미 _done/{video_id}.done 있으면 skip(1차 방어)
+  2. 남은 문서 read_file_content(fileId) 로 읽어(Google Docs 라 로컬 파일처럼 못 읽음)
+     로컬 스테이징 폴더에 평문 .md 로 저장
+  3. python scripts/process_inbox.py --inbox <스테이징폴더> → 수학 여부 판별
+       1순위: 명시적 '타입:'/'분야:' 필드(스파크 표준엔 없음, 옛 형식 호환용)
+       2순위: 제목([카테고리] 태그 포함)·채널·topics·tags 키워드 휴리스틱
+       (process_inbox.py 는 순수 파싱만 — Google Docs 변환이 만드는 '\_'·'\[...\]' 이스케이프,
+        줄바꿈 없는 inline frontmatter 를 자체 해제/파싱한다. Drive 접근은 오케스트레이터 몫)
+  4. type=math 아니면 skip, 마커 안 만듦(claude_work 의 spark-reconstruct-curator.md 담당)
+  5. (수학) HTML 생성 → output/{학년}/{단원}/{YYYYMMDD}_{주제}_{vid8}.html
+  6. add_back_button → add_related → regen_index → patch_pdf_mode
+  7. git commit + push → 작업 브랜치 → MCP PR → rebase 머지 → deploy-pages → 갤러리
+  8. ★ Drive MCP create_file → 수학영상노트/..._{vid8}.md (YYYY/MM 폴더 안 씀)
+       (수학영상노트 ID: 1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k) → get_file_metadata 검증
+  9. ★ 처리 완료한 video_id → _done/{video_id}.done 마커 생성
+       (Drive MCP create_file, contentMimeType='text/plain', disableConversionToGoogleType=true)
+       내용에 pipeline: math 필수 포함 — 실제로 완료했을 때만 생성
+  10. 새 수학 영상 없으면 "처리할 새 자료 없음"만 보고
 출력  : 수학영상노트, frontmatter type: youtube-math-stub, source: backfill
 ```
+
+**❌ 폐지(2026-08-06)**: 옛 GAS INBOX 폴더(`1K1KndlwA4iY2VVasAcW8aDPu6AfyL2Bv`, 죽은 경로), 그 전용 `_done`(`1bkWZTT-OhPHuAlCagXnwgUgLpRqiWFL2`), `_queue`(`1aZb2Xuy_xFaPLdkgBxeca3YxYZ5-pM_5` — 실제 로직에서 한 번도 쓰인 적 없어 대체 없이 삭제).
 
 ### 트랙 B — 자연어 요청 (즉시, 사용자 세션에서 직접)
 
@@ -80,6 +93,9 @@
 | ⑤ | 작성 후 검증 부재 → silent failure 위험 | A·B | ✅ `get_file_metadata(id)` 검증 1회 명문화 |
 | ⑥ | 폴더 이름 변경(020→010)에 자동 대응? | A·B | ✅ ID 기반 호출이라 무관 — but **이름 검색 ❌, ID 만 사용** 명문화 |
 | ⑦ | 트랙 명문화 부재 → "어제는 됐는데 오늘은" 혼선 | 메타 | ✅ 본 문서로 명문화 |
+| ⑧ | 트랙 A "09:00 KST INBOX 루틴"이 문서엔 있는데 실제 Routine 이 계정에 없었음(확인: 2026-08-06, `list_triggers`에 youtube-math-skill 대상 트리거 0건) | A | ✅ 신규 Routine 생성(§본 파일 트랙 A) |
+| ⑨ | 옛 GAS INBOX 경로가 죽어 있었음(GAS가 더 이상 안 채움) → `process_inbox.py`가 로컬 평문 `.md`만 파싱 가능해 스파크의 Google Docs·inline frontmatter를 못 읽음 | A | ✅ 스파크 입력원 전환 + `process_inbox.py` 파싱 로직 재작성(이스케이프 해제 + inline 필드 추출) |
+| ⑩ | `_queue` 폴더가 문서에만 언급되고 실제 로직에서 쓰인 적 없음(죽은 개념) | A | ✅ 대체 없이 삭제 |
 
 ## 4. 검증 체크리스트 (트랙 B 종료 직전)
 
