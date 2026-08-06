@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>축 분리 기법으로 방정식의 실근 개수 추적 (수학Ⅱ) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-다항함수의 미분법]</div><h1>축 분리(Axis Separation) — $f(x)=g(t)$ 실근 개수 추적</h1><p class="sub">🎯 x축과 t축을 분리해서 그리고, 극값을 기준으로 실근 개수를 판별한 뒤 대칭성으로 계산량을 줄인다</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=Eb6jcawud3s" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/Eb6jcawud3s/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상</div><div class="v-meta">📺 수학강사 이정환, 30분</div><a class="v-link" href="https://www.youtube.com/watch?v=Eb6jcawud3s" target="_blank" rel="noopener">https://www.youtube.com/watch?v=Eb6jcawud3s</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 문제</h2>
+      <article class="problem advanced">
+        <h3>예시 — $f(x)=g(t)$ 낯선 구조 방정식 (준킬러)</h3>
+        <p class="problem-body"><strong>문제(강의 개념을 그대로 살린 재구성):</strong> $f(x)=x^3-3x$, $g(t)=-(t-2)^2+3$ 이다. 실수 $t$ 에 대해 $x$ 에 관한 방정식 $f(x)=g(t)$ 의 서로 다른 실근의 개수를 $h(t)$ 라 하자. $h(t)=3$ 을 만족시키는 $t$ 의 최댓값과 최솟값의 합을 구하시오.</p>
+        <details open>
+          <summary>📖 풀이 보기 (축 분리)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 왜 바로 못 푸나:</strong> 좌변은 $x$ 의 함수, 우변은 $t$ 의 함수 — <strong>변수도 다르고 모양도 다르다.</strong> 한 좌표평면에 겹쳐 그리면 축이 엉켜서 못 읽는다.</p>
+            <p><strong>STEP 2 — 축 분리:</strong> $y$축(함숫값)만 공유하고, $x$축과 $t$축을 <strong>따로</strong> 그린다. $g(t)$ 의 값 하나가 곧 $f(x)=(\text{그 값})$ 의 <strong>상수선 높이</strong>가 된다.</p>
+            <p><strong>STEP 3 — $f$ 의 극값(기준선) 먼저:</strong> $f'(x)=3x^2-3=0 \Rightarrow x=\pm1$. $f(-1)=2$(극대), $f(1)=-2$(극소). 이 $2,-2$ 가 실근 개수가 바뀌는 <strong>기준 높이</strong>다: $m>2$ 또는 $m<-2$ 이면 1개, $m=\pm2$ 면 2개, $-2<m<2$ 면 3개.</p>
+            <p><strong>STEP 4 — $h(t)=3$ 조건:</strong> $g(t)=m$ 이라 하면 $h(t)=3 \iff -2<g(t)<2$. $g(t)=-(t-2)^2+3$ 이므로 $-2<-(t-2)^2+3<2 \Rightarrow 1<(t-2)^2<5$.</p>
+            <p><strong>STEP 5 — 대칭성으로 마무리(막노동 없이):</strong> $(t-2)^2=5$ 의 두 근은 $t=2\pm\sqrt5$ — 이게 $h(t)=3$ 인 $t$ 구간의 바깥쪽 끝. $t$ 값을 직접 풀 필요 없이, <strong>포물선 $(t-2)^2$ 은 $t=2$ 대칭</strong>이므로 두 끝값의 합은 $2\times2=4$.</p>
+            <p class="answer"><strong>정답:</strong> $4$</p>
+            <p class="key-point"><strong>핵심:</strong> $x$ 축·$t$ 축을 <strong>분리</strong>해서 그리고, 실근 개수가 바뀌는 기준은 언제나 <strong>극값</strong>. 좌표를 직접 다 풀지 말고 <strong>대칭성</strong>으로 합을 구한다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (축 분리 · 극점 기준 · 대칭성)</h2>
+
+      <div class="concept-block">
+        <h3>① 핵심 — 축 분리(Axis Separation)란?</h3>
+        <p>방정식 $f(x)=g(t)$ 처럼 <strong>좌변과 우변의 변수·함수가 다를 때</strong>, $y$축(함숫값)만 공유하고 $x$축과 $t$축을 각각 따로 그리는 기법. $g(t)$ 의 한 값은 $f(x)$ 평면에서 <strong>상수선(가로선)</strong> 으로 투영되고, 그 상수선과 $y=f(x)$ 그래프의 교점 개수가 곧 방정식의 실근 개수다.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">강사(영상 [00:00:48]):</strong> "축 분리가 뭐냐면 $f(x)=g(t)$ 구조에서 한쪽에는 $x$축, 한쪽에는 $t$축을 그린 뒤 $y$축을 공유한다는 생각으로 같이 그려주는 것입니다."</div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 핵심 — 실근 개수가 바뀌는 기준은 극점</h3>
+        <p>다항함수 $y=f(x)$ 에서 상수선 $y=m$ 과의 교점 개수는 $m$ 이 <strong>극댓값·극솟값을 지날 때</strong> 바뀐다. 그래서 $f(x)=k$ 형태 문제를 만나면 <strong>가장 먼저 $f$ 를 미분해 극값부터 구한다.</strong></p>
+        <div class="formula-box">
+          $f'(x)=0$ 의 해에서 극값 $\to$ 그 값을 기준으로 $m$ 의 구간을 나누고 각 구간의 교점(실근) 개수를 센다
+        </div>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">강사(영상 [00:04:20]):</strong> "실근의 개수나 극한값이 달라지려면 곡선의 증감이 바뀌는 극점을 기준으로 의심하면서 풀어야 출제자의 의도를 단번에 찍을 수 있습니다."</div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 함정 — $x,t$ 를 한 평면에 겹쳐 그리기</h3>
+        <p>변수가 다른 두 함수를 억지로 한 좌표평면에 겹쳐 그리면 어느 축이 어느 변수인지 엉켜서 해석이 불가능해진다. <strong>반드시 축을 분리</strong>해서, $t$ 가 움직일 때 $g(t)$ 값(=상수선의 높이)이 어떻게 바뀌는지를 별도로 추적해야 한다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 — 대칭성으로 계산량 줄이기</h3>
+        <p>$t$ 의 정확한 값(무리수 포함)을 낱낱이 구하지 않아도, $g(t)$ 가 <strong>포물선(대칭)</strong> 이면 조건을 만족하는 두 $t$ 값의 <strong>합은 대칭축의 2배</strong>로 바로 나온다. "언제 $t$ 인가"보다 "구해야 하는 게 정말 각각의 $t$ 값인가, 합/개수인가"를 먼저 확인하자.</p>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — $f$ 의 극값 구하기</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^3-3x$ 의 극댓값과 극솟값을 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$f'(x)=3x^2-3=3(x-1)(x+1)=0 \Rightarrow x=-1,1$.</p>
+          <p>$f(-1)=(-1)^3-3(-1)=-1+3=2$(극대), $f(1)=1-3=-2$(극소).</p>
+          <p class="answer"><strong>정답:</strong> 극댓값 $2$, 극솟값 $-2$ (개념 ②)</p>
+        </div></details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — $g$ 의 꼭짓점 구하기</h3>
+        <p class="problem-body"><strong>문제:</strong> $g(t)=-(t-2)^2+3$ 의 꼭짓점 좌표와 최댓값을 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>표준형 $-(t-2)^2+3$ 에서 꼭짓점 $(2,3)$, 위로 볼록(최댓값 존재).</p>
+          <p class="answer"><strong>정답:</strong> 꼭짓점 $(2,3)$, 최댓값 $3$</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 상수선과의 교점 개수 읽기</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^3-3x$ 에 대해 방정식 $f(x)=1$ 의 서로 다른 실근의 개수를 구하시오. (기초1의 극값 이용)</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>극댓값 $2$, 극솟값 $-2$. $-2<1<2$ 이므로 극솟값과 극댓값 사이 $\Rightarrow$ 실근 3개.</p>
+          <p class="answer"><strong>정답:</strong> $3$개 (개념 ②)</p>
+        </div></details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — $g(t)=k$ 를 만족하는 $t$</h3>
+        <p class="problem-body"><strong>문제:</strong> $g(t)=-(t-2)^2+3=2$ 를 만족하는 $t$ 의 값을 모두 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$-(t-2)^2+3=2 \Rightarrow (t-2)^2=1 \Rightarrow t-2=\pm1 \Rightarrow t=1$ 또는 $t=3$.</p>
+          <p class="answer"><strong>정답:</strong> $t=1$ 또는 $t=3$</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 실근 3개 조건을 $m$ 의 범위로</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^3-3x$, $f(x)=m$ 의 서로 다른 실근이 3개이기 위한 $m$ 의 범위를 구하고 근거를 설명하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>극솟값 $-2$ 와 극댓값 $2$ 사이(경계 제외)에서 상수선이 그래프와 3번 만난다.</p>
+          <p class="answer"><strong>정답:</strong> $-2<m<2$ (개념 ①②)</p>
+        </div></details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — $m$ 범위를 $t$ 범위로 (축 분리)</h3>
+        <p class="problem-body"><strong>문제:</strong> $g(t)=-(t-2)^2+3$ 일 때, $-2<g(t)<2$ 를 만족하는 $t$ 의 범위를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$-2<-(t-2)^2+3<2$ 의 각 변에서 $3$을 빼고 $-1$을 곱해 부등호 방향을 바꾼다: $1<(t-2)^2<5$.</p>
+          <p>$(t-2)^2>1 \Rightarrow t<1$ 또는 $t>3$. $(t-2)^2<5 \Rightarrow 2-\sqrt5<t<2+\sqrt5$.</p>
+          <p class="answer"><strong>정답:</strong> $2-\sqrt5<t<1$ 또는 $3<t<2+\sqrt5$ (개념 ①③)</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 도입 문제 완결 (대칭성)</h3>
+        <p class="problem-body"><strong>문제:</strong> 도입의 상황에서 $h(t)=3$ 을 만족시키는 $t$ 의 최댓값과 최솟값의 합을 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>심화2에서 $t$ 의 범위는 $(2-\sqrt5,\,1)\cup(3,\,2+\sqrt5)$. 최솟값은 $2-\sqrt5$(하한, 극한값이지만 열린구간이라도 최댓값·최솟값 취급은 문제 의도상 경계값 사용), 최댓값은 $2+\sqrt5$.</p>
+          <p><strong>대칭성 지름길:</strong> $(t-2)^2=5$ 의 두 해는 $t=2$ 에 대해 대칭 $\Rightarrow$ 합 $=2\times2=4$. $\sqrt5$ 를 직접 계산할 필요가 없다.</p>
+          <p class="answer"><strong>정답:</strong> $4$ (개념 ④, 순수 파이썬 수치검증 완료)</p>
+        </div></details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — $h(t)$ 의 최솟값</h3>
+        <p class="problem-body"><strong>문제:</strong> 도입의 $h(t)$(방정식 $f(x)=g(t)$ 의 실근 개수) 의 최솟값을 구하고 그 근거를 설명하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$g(t)$ 의 최댓값이 $3$ 이므로 $m=g(t)\le3$. $m>2$ 또는 $m\le-2$ 인 구간에서는 실근이 1개(개념①②, 심화1의 여집합). 그런 $m$ 이 항상 존재하므로($t$ 가 $2$ 에서 멀어지면 $g(t)\to-\infty$) $h(t)$ 는 $1$ 을 항상 취한다.</p>
+          <p class="answer"><strong>정답:</strong> 최솟값 $1$ (근거: $|m|>2$ 구간에서 $f(x)=m$ 의 실근이 1개뿐)</p>
+        </div></details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(수학강사 이정환, "축 분리")의 핵심 3단 사고를 중수준(하위 40%)도 따라오게 재구성:</p>
+    <ul>
+      <li><strong>축 분리</strong> → $x$축·$t$축을 나눠 그리는 이유와 방법 (개념 ①③, 기본 1·심화 2).</li>
+      <li><strong>극점 기준</strong> → 실근 개수 변화는 항상 극값에서 (개념 ②, 기초 1·심화 1).</li>
+      <li><strong>대칭성</strong> → 무리수 좌표를 직접 안 풀고 합을 구하는 지름길 (개념 ④, 수능대비 1).</li>
+      <li>강사 발언 2건 <strong>verbatim 인용</strong>([00:00:48], [00:04:20]).</li>
+    </ul>
+    <p>다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>도입·문항의 $f,g$ 함수식은 자체 설계</strong>입니다. 원본 영상(스파크 요약본 기반)은 "축 분리" 개념과 3번·4번·5번·6번 문항의 <strong>전개 논리</strong>(극점 기준 판별, $2a-f'(t)$ 선대칭 등 더 고난도 합성 케이스 포함)만 설명하고 문제의 정확한 함수식·수치는 제공하지 않았습니다. 따라서 본 자료는 강사가 강조한 <strong>기법 자체</strong>는 verbatim으로 살리되, 그 기법을 연습할 구체적 $f(x)=x^3-3x$, $g(t)=-(t-2)^2+3$ 예제는 이 자료에서 새로 설계하고 전 문항 파이썬으로 수치 검산했습니다(핵심 기법·정답 ★★★, 원본 5·6번 같은 합성함수 고난도 변형은 본 자료에 없음 — 별도 학습 필요 ★★).</li>
+      <li>"수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</li>
+    </ul>
+  </div>
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="20260507_거리곱완전정복도함수까지_M3TGprau.html">거리곱 완전정복 1탄 (M3TGprau)</a> · <a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a> · <a href="20260515_항등식근차수인수정리태도_XT-SSrkl.html">항등식의 본질 (XT-SSrkl)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-08-03 | 영상 출처: <a href="https://www.youtube.com/watch?v=Eb6jcawud3s">https://www.youtube.com/watch?v=Eb6jcawud3s</a> (수학강사 이정환)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
