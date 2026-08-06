@@ -3,14 +3,15 @@
 신규 수학 학습자료는 **하이브리드 표준**(`templates/lesson-hybrid-skeleton.html`)으로 생성한다.
 정본 구현 예시: `output/고3/미적분-여러가지미분법/20260614_다변수실제변수연쇄법칙_10NhvK7s.html`.
 
-## 전체 파이프라인
+## 전체 파이프라인 (2026-08-06 스파크 개편)
 
 ```
-유튜브 영상 → Gemini 통합 Gem(영상 시청) → 기초자료 .md
-   → G:\내 드라이브\Claude_Project\INBOX 에 저장
-   → process_inbox.py 로 타입 판별(수학강의/일반)
+유튜브 영상 → 구글 스파크(Spark) 요약본 → Google Docs(제목만 .md) → 스파크 Drive 폴더에 자동 저장
+   → (오케스트레이터) Drive MCP search_files/read_file_content 로 목록·본문 확보
+      + _done 공유 폴더로 이미 처리된 video_id 제외
+   → process_inbox.py 로 타입 판별(수학 여부 — 명시 필드 1순위, 키워드 휴리스틱 2순위. 수학 아니면 skip)
    → [수학] 박PM 5단계 생성(하이브리드 골격에 채움) → output/{학년}/{단원}/{YYYYMMDD}_{주제}_{vid8}.html
-   → 후처리 체인 → 커밋·PR·rebase 머지 → Pages 라이브
+   → 후처리 체인 → 커밋·PR·rebase 머지 → Pages 라이브 → _done/{video_id}.done 마커(pipeline: math)
 ```
 
 ## 파일명·경로 규칙
@@ -31,19 +32,19 @@
 - **검증 박스 필수**: 영상 맥락 반영 요약 + 한계/재구성 사유 + "수능 대비는 난이도 라벨, 실재 기출 아님" 명시.
 - 난이도 필터 동작 조건: `#problems` 안의 `level-header`·`problem-card` 모두에 `filterable {basic|standard|advanced|csat}` 클래스.
 
-## 후처리 체인 (HTML 저장 후, repo 루트에서)
+## 후처리 체인 (HTML 저장 후, repo 루트에서, idempotent 4단계)
 ```
-python scripts/add_back_button.py        # 🏠 갤러리 복귀 버튼 (skeleton에 이미 있으면 자동 skip)
-python scripts/add_related.py            # 관련 자료(같은 단원/공유 개념일 때만, REL 마커)
-python scripts/make_math_stubs.py        # 옵시디언 수학 스텁 생성(수학영상노트/{YYYY}/{MM})
-python youtube-math-auto/scripts/regen_index.py output/   # 갤러리 카탈로그 재생성
+python scripts/add_back_button.py                              # ① 🏠 갤러리 복귀 버튼
+python scripts/add_related.py                                  # ② 관련 자료(REL 마커)
+python youtube-math-auto/scripts/regen_index.py output/        # ③ 갤러리 카탈로그 재생성
+python youtube-math-auto/scripts/patch_pdf_mode.py output/     # ④ PDF 인쇄 모드
 ```
-- 모두 idempotent. `make_math_stubs`는 신규만 생성(기존 skip).
+- `make_math_stubs.py`는 **PC(Windows) 백필 전용** — 세션·클라우드(비Windows)에선 호출 안 함(자동 dry-run으로 떨어지지만 애초에 부르지 않는다). 일상 옵시디언 스텁은 Drive MCP `create_file` 직접 호출(CLAUDE.md "옵시디언 = Drive" 섹션 참조).
 
 ## 배포
-- 브랜치 커밋 → `git push` → `gh pr create` → `gh pr merge --rebase` → `deploy-pages`(~15초) → Pages 라이브.
-- `--delete-branch`는 Drive 잠금으로 로컬 정리 실패 가능 → 생략, 이후 `git merge --ff-only origin/main` 로 로컬 동기화.
+- 작업 브랜치 commit + push → MCP `create_pull_request`(base=main) → MCP `merge_pull_request`(merge_method=rebase) → `deploy-pages`(~1~2분) → Pages 라이브.
+- rebase 머지가 사용자 인증 채널이라 deploy-pages 를 정상 트리거한다(CLAUDE.md "PR 머지가 가장 안정" 섹션 참조). `git push origin main` 직접 시도나 `gh` CLI 는 이 환경에서 사용하지 않는다.
 - 실행 중 `python -m http.server` 가 output/ 잠그면 git 실패 → 배포 전 서버 종료.
 
 ## 일반(비수학) 영상
-`process_inbox.py` 가 `type=general` 로 라우팅 → claude_work 의 youtube-curator(옵시디언 풀노트). 본 표준은 수학 HTML 전용.
+`process_inbox.py` 가 수학 아님으로 판별하면 마커를 만들지 않고 skip — claude_work 의 `routines/spark-reconstruct-curator.md`(옵시디언 풀노트)가 담당. 본 표준은 수학 HTML 전용.
