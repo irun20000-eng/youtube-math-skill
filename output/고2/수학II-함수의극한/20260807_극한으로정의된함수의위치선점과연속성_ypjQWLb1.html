@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학Ⅱ) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-함수의 극한]</div><h1>극한으로 정의된 함수 — <strong>위치선점 2단계</strong>와 연속성</h1><p class="sub">🎯 $g(t)=\displaystyle\lim_{x\to t^+}f(x)$ 처럼 <strong>극한값 자체가 새 함수</strong>가 되는 구조. $t$ 를 먼저 찍고 그 자리에서 우극한을 읽으면 이중 극한도 헷갈리지 않는다.</p><div class="video-card"><a class="thumb" href="https://youtu.be/ypjQWLb1uic" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/ypjQWLb1uic/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 극한으로 정의된 함수</div><div class="v-meta">📺 수학강사 이정환, 13분 · 2025-07-15</div><a class="v-link" href="https://youtu.be/ypjQWLb1uic" target="_blank" rel="noopener">https://youtu.be/ypjQWLb1uic</a></div></div></div>
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 질문</h2>
+      <article class="problem basic">
+        <h3>예시 — $g(t)=\lim_{x\to t^+}f(x)$ 는 도대체 뭘 구하라는 걸까?</h3>
+        <p class="problem-body"><strong>질문:</strong> 함수 $f(x)$ 가 하나 주어졌을 때, 새로운 함수 $g(t)$ 를 $g(t)=\displaystyle\lim_{x\to t^{+}}f(x)$ (즉 "$t$ 에서 $f$ 의 우극한값")로 정의한다고 하자. 이때 $\displaystyle\lim_{t\to a^{-}}g(t)$ 를 구하려면 무엇부터 봐야 할까?</p>
+        <details open>
+          <summary>📖 답 미리보기 (자세한 유도는 개념 설명에서)</summary>
+          <div class="solution">
+            <p><strong>❌ 헷갈리는 이유:</strong> 극한 기호가 두 겹($t\to a^-$ 바깥, $x\to t^+$ 안쪽)이라 한 번에 처리하려 하면 머릿속이 꼬인다.</p>
+            <p><strong>✅ 해결 — 위치선점 2단계:</strong> ① 먼저 $t$ 를 $a$ 보다 살짝 작은 <strong>구체적인 한 점</strong>으로 고정한다. ② 그 고정된 $t$ 에서 $g(t)=\lim_{x\to t^+}f(x)$ 를 계산한다. $f$ 가 $t$ 근처에서 연속이면 이 값은 그냥 $f(t)$ 와 같다.</p>
+            <p class="answer"><strong>핵심 결론:</strong> $a$ 의 왼쪽 근방에서 $f$ 가 연속이기만 하면, $\displaystyle\lim_{t\to a^{-}}g(t)=\lim_{x\to a^{-}}f(x)$. 즉 <strong>바깥쪽 극한은 원래 함수 $f$ 의 좌극한으로 그대로 넘어간다</strong>.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (극한으로 정의된 함수 · 위치선점 2단계 · 연속성)</h2>
+
+      <div class="concept-block">
+        <h3>① 정의 — 극한값이 곧 함숫값인 함수</h3>
+        <p>보통 함수는 "$x$ 를 넣으면 식을 계산해 값이 나오는" 구조다. 그런데 $g(t)=\displaystyle\lim_{x\to t^{+}}f(x)$ 는 다르다. <strong>$t$ 를 넣으면, 그 자리에서 $f(x)$ 의 우극한을 구하는 것 자체가 $g$ 의 함숫값</strong>이 된다.</p>
+        <div class="prereq">
+          <p>우극한 $\displaystyle\lim_{x\to t^+}f(x)$ 은 "$x$ 가 $t$ 보다 큰 쪽에서 $t$ 로 다가갈 때 $f(x)$ 가 다가가는 값"이다(고1 함수의 극한). $f$ 가 $t$ 에서 연속이면 이 값은 $f(t)$ 와 같다.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 비유로 이해하기 — 오른쪽을 살짝 엿보는 관측자</h3>
+        <p>지도 위 $t$ 지점에 서서 <strong>오른쪽으로 눈을 살짝 돌렸을 때</strong> 보이는 건물의 높이를 $g(t)$ 라고 적어 두는 게임이다. 내가 서 있는 자리($t$)가 바뀌면, 오른쪽으로 보이는 높이($g(t)$)도 따라 바뀐다. $g$ 는 "$t$ 마다 오른쪽 풍경을 기록한 새 지도"인 셈이다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 왜 이렇게 될까 — 위치선점 2단계와 g의 우연속성 (유도)</h3>
+        <div class="step-derive">
+          <p>$t$ 가 $f$ 의 불연속점이 <strong>아닌</strong> 구간에 있다고 하자. 그 구간에서는 $f$ 가 연속이므로 우극한이 곧 함숫값과 같다: $g(t)=\lim_{x\to t^+}f(x)=f(t)$.</p>
+          <p>즉 $f$ 의 불연속점을 뺀 자리에서는 <strong>$g(t)$ 는 그냥 $f(t)$ 와 똑같다</strong>. 이중 극한처럼 보이지만 실제로는 "한 겹"으로 줄어드는 것.</p>
+          <p>그래서 $a$ 의 좌측 근방에서 $f$ 가 연속이면, $\lim_{t\to a^-}g(t)=\lim_{t\to a^-}f(t)=\lim_{x\to a^-}f(x)$ 로 정리된다 — 이게 "위치선점 2단계"의 정체다.</p>
+          <p>이제 $t=a$ 자체(불연속점일 수도 있는 자리)를 보자. $g(a)$ 는 정의상 $\lim_{x\to a^+}f(x)$ 다. 그리고 $t\to a^+$ 로 다가갈 때도 $t>a$ 근방에서 $f$ 가 연속이면 $g(t)=f(t)\to \lim_{x\to a^+}f(x)$ 로 <strong>같은 값</strong>에 다가간다.</p>
+          <p>따라서 $g(a)=\lim_{t\to a^+}g(t)$ 가 항상 성립 — <strong>$g$ 는 $f$ 의 불연속점에서도 오른쪽에서는 항상 연속</strong>이다(우연속). $g$ 가 불연속이 되는 경우는 오직 $g(a^-)\ne g(a)$, 즉 $f(a^-)\ne f(a^+)$ 일 때(왼쪽에서만 끊김) 뿐이다.</p>
+        </div>
+        <div class="insight">
+          정리: $g$ 가 $t=a$ 에서 불연속 $\iff$ $f(a^-)\ne f(a^+)$(즉 $f$ 자체가 $a$ 에서 불연속). $f$ 가 모든 점에서 연속이면 $g$ 도 모든 점에서 연속이다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 자주 하는 실수</h3>
+        <ul>
+          <li><strong>이중 극한을 한 번에 계산하려는 실수</strong> — $t\to a^-$ 와 $x\to t^+$ 를 동시에 굴리면 방향을 잃는다. 반드시 $t$ 를 먼저 고정한다(위치선점).</li>
+          <li><strong>$g(a)$ 와 $\lim_{t\to a^-}g(t)$ 를 혼동</strong> — $g(a)$ 는 $f$ 의 <em>우</em>극한, $\lim_{t\to a^-}g(t)$ 는 $f$ 의 <em>좌</em>극한과 연결된다. 방향이 서로 다르다.</li>
+          <li><strong>$g$ 가 항상 불연속일 거라 짐작</strong> — $f$ 가 연속인 점에서는 $g$ 도 그냥 연속이다. 불연속은 $f$ 의 불연속점에서만 검토하면 된다.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 연속인 점에서 g(t) 값 구하기</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^2\ (x<1)$, $f(x)=3x-1\ (x\ge1)$ 로 정의된 함수에 대해 $g(t)=\displaystyle\lim_{x\to t^+}f(x)$ 라 하자. $g(0)$ 과 $g(2)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$t=0$ 은 $f$ 의 불연속점 $x=1$ 이 아니므로 $g(0)=f(0)=0^2=0$.</p>
+            <p>$t=2$ 도 불연속점이 아니므로 $g(2)=f(2)=3(2)-1=5$.</p>
+            <p class="answer"><strong>정답:</strong> $g(0)=0$, $g(2)=5$</p>
+            <p class="key-point"><strong>핵심:</strong> 불연속점이 아닌 자리에서는 $g(t)=f(t)$ 로 바로 계산(개념 ③).</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 위치선점으로 좌극한 구하기</h3>
+        <p class="problem-body"><strong>문제:</strong> 기초 1 의 $f(x)$ 에 대해 $\displaystyle\lim_{t\to 1^{-}}g(t)$ 를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$t\to1^-$ 근방($t<1$)에서 $f$ 는 $x^2$ 이고 연속이므로 $g(t)=f(t)=t^2$.</p>
+            <p>$\displaystyle\lim_{t\to1^-}t^2=1$.</p>
+            <p class="answer"><strong>정답:</strong> $1$ ($=\lim_{x\to1^-}f(x)$, 위치선점 2단계 그대로 적용)</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — g(1) 값과 g의 우연속성 확인</h3>
+        <p class="problem-body"><strong>문제:</strong> 기초 1 의 $f(x)$ 에 대해 $g(1)$ 과 $\displaystyle\lim_{t\to1^{+}}g(t)$ 를 각각 구하고, 두 값이 같은지 확인하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$g(1)=\lim_{x\to1^+}f(x)=3(1)-1=2$ (정의 그대로).</p>
+            <p>$t\to1^+$ 근방($t\ge1$)에서 $g(t)=f(t)=3t-1$ 이므로 $\lim_{t\to1^+}g(t)=3(1)-1=2$.</p>
+            <p class="answer"><strong>정답:</strong> $g(1)=2=\lim_{t\to1^+}g(t)$ — 항상 같다(개념 ③, $g$ 는 우연속).</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — g가 불연속인 점 찾기</h3>
+        <p class="problem-body"><strong>문제:</strong> 기초 1 의 $f(x)$ 에 대해 $g(t)$ 가 $t=1$ 에서 연속인지 불연속인지 판정하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>기초 2 에서 $\lim_{t\to1^-}g(t)=1$, 기본 1 에서 $g(1)=\lim_{t\to1^+}g(t)=2$.</p>
+            <p>좌극한($1$) $\ne$ 함숫값($2$)이므로 $t=1$ 에서 <strong>불연속</strong>(왼쪽만 끊김, 오른쪽은 항상 이어짐).</p>
+            <p class="answer"><strong>정답:</strong> $t=1$ 에서 불연속. 원인: $f(1^-)=1\ne f(1^+)=2$, 즉 $f$ 자체가 $x=1$ 에서 불연속이기 때문(개념 ③ 정리).</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 미정계수: f가 연속이면 g도 연속</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^2\ (x<1)$, $f(x)=3x-1+k\ (x\ge1)$ 일 때, $g(t)=\lim_{x\to t^+}f(x)$ 가 <strong>모든 실수에서 연속</strong>이 되도록 하는 상수 $k$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>개념 ③ 정리에 의해 $g$ 가 모든 점에서 연속 $\iff$ $f$ 가 모든 점에서 연속. 유일한 후보점은 $x=1$.</p>
+            <p>$f(1^-)=\lim_{x\to1^-}x^2=1$, $\ \ f(1)=3(1)-1+k=2+k$.</p>
+            <p>연속 조건: $1=2+k \implies k=-1$.</p>
+            <p class="answer"><strong>정답:</strong> $k=-1$</p>
+            <p class="key-point"><strong>핵심:</strong> "$g$ 가 연속"이라는 조건을 $g$ 를 직접 다루지 않고 "$f$ 가 연속"이라는 더 쉬운 조건으로 바꿔 풀었다(개념 ③).</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 갈아타기: 두 함수를 잇는 연속 조건</h3>
+        <p class="problem-body"><strong>문제:</strong> $x\le a$ 에서는 $p(x)=x^2$, $x>a$ 에서는 $q(x)=4x-3$ 을 사용하는 함수 $H(x)$ 가 있다. $H(x)$ 가 $x=a$ 에서 연속이 되도록 하는 상수 $a$ 의 값을 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>갈아타기 연속 조건:</strong> 갈아타는 지점 $x=a$ 에서 두 후보 함수의 값이 일치해야 한다: $p(a)=q(a)$.</p>
+            <p>$a^2=4a-3 \implies a^2-4a+3=0 \implies (a-1)(a-3)=0$.</p>
+            <p>$a=1$ 또는 $a=3$.</p>
+            <p><strong>검산:</strong> $a=1$: $p(1)=1=q(1)=4-3=1$ ✓. $a=3$: $p(3)=9=q(3)=12-3=9$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> $a=1$ 또는 $a=3$</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — g의 불연속점 개수 세기</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)= x+1\ (x<0)$, $-x+3\ (0\le x<2)$, $2x-2\ (x\ge2)$ 로 정의된 함수에 대해 $g(t)=\lim_{x\to t^+}f(x)$ 가 불연속인 실수 $t$ 의 개수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>개념 ③ 정리: $g$ 는 정확히 $f$ 가 불연속인 점에서만 불연속. $f$ 의 이음매 후보는 $x=0,\,2$.</p>
+            <p>$x=0$: $f(0^-)=1$, $f(0)=f(0^+)=3$ → 다름 → 불연속.</p>
+            <p>$x=2$: $f(2^-)=-2+3=1$, $f(2)=f(2^+)=2(2)-2=2$ → 다름 → 불연속.</p>
+            <p>두 점 모두에서 $f$ 가 불연속이므로 $g$ 도 두 점 모두에서 불연속.</p>
+            <p class="answer"><strong>정답:</strong> $2$개 ($t=0,\,2$)</p>
+            <p class="key-point"><strong>핵심:</strong> $g$ 를 직접 두 겹 극한으로 계산하지 않고, "$f$ 의 이음매만 확인"하는 것으로 문제를 단순화했다.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — t를 곱해 불연속을 없애는 함수</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^2+1\ (x<0)$, $f(x)=3x+m\ (x\ge0)$ 이고 $g(t)=\lim_{x\to t^+}f(x)$ 일 때, $h(t)=t\,g(t)$ 라 하자. $h(t)$ 가 $t=0$ 에서 <strong>미분가능</strong>하도록 하는 상수 $m$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$g(t)=t^2+1\ (t<0)$, $g(t)=3t+m\ (t\ge0)$ (개념 ③, 이음매 아닌 곳은 $g(t)=f(t)$).</p>
+            <p>먼저 연속 확인: $h(0)=0\cdot g(0)=0$. $\lim_{t\to0^-}h(t)=\lim_{t\to0^-}t(t^2+1)=0$. $t$ 를 곱했기 때문에 $g$ 의 불연속 크기와 무관하게 $h$ 는 $m$ 값과 상관없이 $t=0$ 에서 <strong>항상 연속</strong>이다.</p>
+            <p>미분가능은 더 강한 조건 — 좌우 미분계수(차분몫의 극한)를 비교한다.</p>
+            <p>$\dfrac{h(t)-h(0)}{t-0}=g(t)$ 이므로, 좌미분계수 $=\lim_{t\to0^-}g(t)=\lim_{t\to0^-}(t^2+1)=1$, 우미분계수 $=\lim_{t\to0^+}g(t)=g(0)=m$.</p>
+            <p>미분가능 조건: $1=m$.</p>
+            <p class="answer"><strong>정답:</strong> $m=1$</p>
+            <p class="key-point"><strong>주의:</strong> "연속"과 "미분가능"은 다른 조건! $t$ 를 곱하면 연속은 $m$ 과 무관하게 항상 성립하지만, 미분가능하려면 $m$ 이 정확히 $1$ 이어야 한다.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(수학강사 이정환)의 "위치선점 2단계" 및 "갈아타기 연속" 아이디어를 중수준(하위 40%)도 따라오게, 결과 공식만 던지지 않고 유도부터 풀어 작성:</p>
+    <ul>
+      <li><strong>이중 극한이 왜 헷갈리는지</strong> → "$t$ 를 먼저 고정 → 그 자리에서 우극한" 2단계로 분해해 유도 (개념 ③, 기초 1·2).</li>
+      <li><strong>$g$ 는 항상 우연속</strong> → $g(a)=\lim_{t\to a^+}g(t)$ 가 항상 성립함을 정의로부터 직접 증명 (개념 ③, 기본 1).</li>
+      <li><strong>$g$ 의 불연속 = $f$ 의 불연속</strong> → "$g$ 를 직접 보지 않고 $f$ 의 이음매만 확인"하는 실전 전략으로 연결 (기본 2, 심화 1, 수능 대비 1).</li>
+      <li><strong>갈아타기 연속 조건</strong> → 두 후보 함수를 잇는 미지수를 구하는 표준 유형으로 확장 (심화 2).</li>
+      <li><strong>연속 vs 미분가능 구분</strong> → "$t$ 를 곱하면 항상 연속"이라는 함정을 파고, 미분가능은 별도 조건임을 수능 대비 2에서 명시.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>원본 영상의 구체적 수치 예제(3차함수 대칭성 문항 등)</strong>는 자막 요약만으로 세부 계수까지 완전히 복원하기 어려워, 동일한 두 핵심 개념(위치선점 2단계·갈아타기 연속)을 가르치는 <strong>자체 검증한 문항</strong>으로 대체했습니다. 모든 수치는 직접 계산·검산했습니다 (수학 정확도 ★★★, 단 "영상과 동일 문제"는 아님 — 교사 확인 권장 ★★).</li>
+      <li>"수능 대비"는 출제 패턴 라벨일 뿐 실재 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) (NCqmA7ui)</a> · <a href="20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260708_함수의연속꿀팁과오개념_개념.html">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-08-07 | 영상 출처: <a href="https://youtu.be/ypjQWLb1uic">https://youtu.be/ypjQWLb1uic</a> (수학강사 이정환, 게시 2025-07-15)</p>
+    <p>본 자료는 AI가 영상 자막 요약을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
