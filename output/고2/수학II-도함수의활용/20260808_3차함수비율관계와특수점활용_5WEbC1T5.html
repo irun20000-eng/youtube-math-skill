@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .example-card { background: var(--visual-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 14px 0; }
+    .example-title { font-weight: 700; margin-bottom: 8px; color: var(--primary-dark); }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅱ(미적분Ⅰ) — 도함수의 활용</div>
+    <h1>1차항이 없으면 그래프가<br>먼저 보인다 — 3차함수 특수점 활용</h1>
+    <p>일반화된 그림 대신 <strong>식의 구조</strong>부터 읽는다 — 인수분해 · 미분계수 매칭 · 높이÷기울기</p>
+    <div class="quote">
+      "높이 차이 알려주고 기울기 알려줬으면 $\Delta x$는 높이 차이를 기울기로 나누면 바로 나옵니다. 왜 쓸데없이 직선 연립을 합니까?" — 강사 인용
+    </div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/5WEbC1T5E80" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/5WEbC1T5E80/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">요즘 문제가 안 풀린다면 꼭 체크해 보세요.</div>
+        <div class="v-meta">📺 YouTube · 시대수학 김성호 · 약 7분</div>
+        <a class="v-link" href="https://youtu.be/5WEbC1T5E80" target="_blank" rel="noopener">https://youtu.be/5WEbC1T5E80</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 예시 문항 (도입) ===== -->
+    <div class="section-title">🔥 예시 문항 — 왜 이 관점이 필요할까?</div>
+    <div class="card">
+      <p><strong>문제</strong>: $f(x) = \dfrac{1}{3}x^3 - x^2 + 2$ 가 직선 $y=2$와 만나는 두 점의 $x$좌표를 구하시오.</p>
+      <div class="caution">
+        <strong>일반적인 방법</strong>: $\dfrac{1}{3}x^3 - x^2 + 2 = 2$ 를 정리하면 $\dfrac{1}{3}x^3 - x^2 = 0$. 이걸 삼차방정식 공식처럼 접근하면 시간이 걸린다.
+      </div>
+      <div class="tip">
+        <strong>구조로 보는 방법</strong>: 이 식엔 <strong>1차항이 없다</strong>. 그러면 $x^2$이 통째로 묶인다 — $\dfrac13x^3-x^2 = x^2\left(\dfrac13x-1\right)=0$. 바로 $x=0$ (중근) 또는 $x=3$.
+      </div>
+      <div style="margin-top:8px"><span class="answer-tag">정답: $x=0,\ x=3$</span></div>
+      <p style="margin-top:10px; font-size:14px; color:var(--sub)">1차항이 없다는 사실 하나만 알아채면, 식을 전개하지 않고도 교점을 바로 읽어낼 수 있다. 이 관찰이 오늘 배울 모든 기법의 출발점이다.</p>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">📐 개념 — 구조를 먼저 읽는 3차함수</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>인수분해:</strong> 다항식을 곱셈 형태로 바꾸는 것. $x^2(x-3)=0$이면 $x=0$ 또는 $x=3$.</li>
+        <li><strong>극값:</strong> $f'(x)=0$이 되는 지점에서 함수가 증가에서 감소로(극대) 또는 감소에서 증가로(극소) 바뀐다.</li>
+        <li><strong>접선의 기울기:</strong> 곡선 위 점 $x=a$에서의 접선 기울기는 미분계수 $f'(a)$와 같다.</li>
+      </ul>
+    </div>
+
+    <!-- CONCEPT 1 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>1차항이 없는 3차함수 — 접점과 교점을 동시에 얻기</div>
+
+      <p><strong>① 정의</strong>: 3차함수 $f(x)=ax^3+bx^2+d$ (1차항 계수가 $0$)는 $f(x)-d = ax^2\left(x+\dfrac{b}{a}\right)$ 로 인수분해되어, 수평선 $y=d$와 $x=0$에서 <strong>접하고</strong>(중근), $x=-\dfrac{b}{a}$에서 <strong>만난다</strong>(단순근).</p>
+
+      <p style="margin-top:10px"><strong>② 비유</strong>: 공을 땅(=$y=d$)에 살짝 얹어 놓았다가($x=0$, 닿기만 하고 안 튕김 = 접함) 다시 굴려서 다른 지점($x=-b/a$)에서 완전히 땅을 뚫고 지나가는 모습을 떠올리면 된다.</p>
+
+      <p style="margin-top:10px"><strong>③ 작동 원리</strong>: $f(x)-d$에는 상수항이 없으므로 모든 항에 $x$가 최소 하나씩 들어있다. 게다가 1차항도 없으므로 $x^2$이 공통으로 묶인다. $x^2$이 인수로 나온다는 것 자체가 "$x=0$은 중근"이라는 뜻이고, 중근은 곧 그 자리에서 그래프가 $y=d$에 스치듯 접한다는 뜻이다.</p>
+
+      <div class="formula-box">
+        $$f(x)=\dfrac13x^3-kx^2+d \ \Longrightarrow\ f(x)-d=\dfrac13x^2(x-3k)$$
+        $x=0$에서 접함, $x=3k$에서 만남 ($k>0$ 가정)
+      </div>
+
+      <div class="caution">
+        <strong>④ 자주 하는 실수</strong>: $y=d$와의 교점을 $x$축($y=0$)과의 교점으로 착각해 처음부터 일반적인 삼차방정식 풀이(인수정리·조립제법)를 시도하는 것. 먼저 "1차항이 있는가?"부터 확인하는 습관을 들이자.
+      </div>
+    </div>
+
+    <!-- CONCEPT 2 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>극점의 위치 — 2:1 비율관계</div>
+
+      <p>개념 1에서 찾은 접점 $x=0$과 교점 $x=3k$ 사이 어딘가에 <strong>또 다른 극점</strong>이 하나 더 있다. 이 위치도 미분 없이 비율로 바로 구할 수 있다.</p>
+
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">$f(x)=\dfrac13x^3-kx^2+d$ 를 직접 미분하면 $f'(x)=x^2-2kx=x(x-2k)$.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">극점은 $x=0$과 $x=2k$. $x=0$은 이미 접점(개념 1)이었고, $x=2k$가 새로 찾은 극점이다.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">$0$과 $3k$ 사이에서 $2k$의 위치를 비교하면 $0$에서 $2k$까지 거리는 $2k$, $2k$에서 $3k$까지 거리는 $k$. 즉 <strong>2 : 1</strong>로 나뉜다.</div>
+      </div>
+
+      <div class="concept-box">
+        <strong>2:1 비율관계</strong>: 3차함수가 $x=p$에서 수평선에 접하고 $x=q$에서 만나면, 남은 극점은 $x=\dfrac{p+2q}{3}$에 있다 — 접점에서 교점 쪽으로 $2:1$ 내분점.
+      </div>
+
+      <p style="margin-top:10px">이제 극값(함숫값)까지 미분 없이 대입만으로 구할 수 있다: $f(2k)=\dfrac13(2k)^3-k(2k)^2+d = d-\dfrac43k^3$.</p>
+    </div>
+
+    <!-- CONCEPT 3 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>미분계수 매칭 — 원하는 기울기를 갖는 점 찾기</div>
+
+      <p>문제에서 "기울기가 얼마인 접선"을 요구하면, 무작정 임의의 점을 잡지 말고 <strong>이미 알고 있는 특수점의 미분계수부터 확인</strong>한다.</p>
+
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">교점 $x=3k$에서의 기울기: $f'(3k)=(3k)^2-2k(3k)=9k^2-6k^2=3k^2$.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">"기울기가 $3k^2$인 다른 접점"을 찾고 싶다면 $f'(x)=3k^2$을 직접 풀면 된다: $x^2-2kx=3k^2 \Rightarrow x^2-2kx-3k^2=0 \Rightarrow (x-3k)(x+k)=0$.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">근은 $x=3k$(이미 아는 점) 또는 $x=-k$(새로 찾은 점). 즉 <strong>계산으로 확정</strong>되지, 그림만 보고 짐작하는 게 아니다.</div>
+      </div>
+
+      <div class="tip">
+        $x=3k$와 $x=-k$는 극점 두 개($0$, $2k$)의 중점인 <strong>변곡점 $x=k$</strong>를 기준으로 서로 대칭이다 ($\frac{3k+(-k)}{2}=k$). 3차함수는 변곡점에 대해 점대칭이므로 당연한 결과.
+      </div>
+    </div>
+
+    <!-- CONCEPT 4 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>평행한 두 접선 — 높이 차이 ÷ 기울기로 가로 거리 구하기</div>
+
+      <p>기울기가 같은(=평행한) 두 접선이 있을 때, 직선을 연립하지 않고도 두 점 사이의 가로 거리를 구하는 지름길이 있다.</p>
+
+      <div class="formula-box">
+        평행한 두 직선 $l_1: y=mx+c_1,\ l_2: y=mx+c_2$ 의 $y$절편 차이를 $h=c_2-c_1$이라 하면,<br>
+        같은 높이(같은 $y$값)에서 두 직선의 $x$좌표 차이는 $$\Delta x = \dfrac{h}{m}$$
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">⚙</div>
+        <div class="step-body"><strong>왜 성립하는가</strong>: 높이 $y_0$에서 $l_1$의 $x$좌표는 $x_1=\dfrac{y_0-c_1}{m}$, $l_2$는 $x_2=\dfrac{y_0-c_2}{m}$. 두 식을 빼면 $y_0$이 사라지고 $x_2-x_1=\dfrac{c_1-c_2}{m}$만 남는다 — 어떤 높이에서 재도 항상 같은 값.</div>
+      </div>
+
+      <div class="visual">기울기 m으로 평행한 두 직선
+
+       y                     l1: y = mx + c1
+       │        ╱  ╱         l2: y = mx + c2
+       │       ╱  ╱
+       │      ╱  ╱  ← 세로 간격 h = c2 - c1 (항상 일정)
+       │     ╱  ╱
+       ├────╱──╱──── x
+          x1    x2
+
+      가로 간격 Δx = x2 - x1 = h / m  (어느 높이에서 재도 동일)</div>
+
+      <div class="caution">
+        <strong>자주 하는 실수</strong>: 두 접선의 방정식을 각각 세운 뒤 연립방정식으로 교점이나 특정 $x$값을 찾으려는 것. 이미 <strong>평행</strong>이라는 사실을 알고 있다면 연립할 필요 없이 $y$절편 차이만 빼면 끝난다.
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 기초 문항 ===== -->
+    <div class="level-header filterable basic">
+      <span class="level-badge badge-basic">기초</span>
+      <span style="font-weight:600; color:#2e7d32">인수분해로 교점 읽기</span>
+    </div>
+
+    <div class="problem-card filterable basic">
+      <div class="problem-num">기초 1 — 1차항 없는 3차함수의 교점</div>
+      <div class="problem-body">
+        3차함수 $f(x) = \dfrac13x^3 - x^2 + 5$ 가 직선 $y=5$와 만나는 두 점의 $x$좌표를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$f(x)-5 = \dfrac13x^3-x^2$. 1차항과 상수항이 없으므로 모든 항에 $x^2$이 공통.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$\dfrac13x^3-x^2 = x^2\left(\dfrac13x-1\right)=0$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$x^2=0 \Rightarrow x=0$ (중근), $\dfrac13x-1=0 \Rightarrow x=3$ (단순근).</div>
+          </div>
+          <div class="why">중근 $x=0$은 접점, 단순근 $x=3$은 완전히 통과하는 교점이다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $x=0,\ x=3$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable basic">
+      <div class="problem-num">기초 2 — 2:1 비율관계로 극솟값 구하기</div>
+      <div class="problem-body">
+        3차함수 $f(x) = \dfrac13x^3 - 3x^2 + 7$ 의 극솟값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>1차항이 없으므로 $f(x)-7 = \dfrac13x^2(x-9)$. 접점 $p=0$, 교점 $q=9$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>2:1 비율관계로 남은 극점은 $x=\dfrac{p+2q}{3}=\dfrac{0+18}{3}=6$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$f(6)=\dfrac13(216)-3(36)+7 = 72-108+7=-29$.</div>
+          </div>
+          <div class="why">직접 미분해서 확인: $f'(x)=x^2-6x=x(x-6)$, 극점 $x=0,6$ — 일치.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: 극솟값 $-29$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 기본 문항 ===== -->
+    <div class="level-header filterable standard">
+      <span class="level-badge badge-standard">기본</span>
+      <span style="font-weight:600; color:#1565c0">미분계수 매칭 · 높이÷기울기</span>
+    </div>
+
+    <div class="problem-card filterable standard">
+      <div class="problem-num">기본 1 — 미분계수 매칭으로 대칭점 찾기</div>
+      <div class="problem-body">
+        위 기초 2의 함수 $f(x) = \dfrac13x^3 - 3x^2 + 7$ 에서, $x=9$에서의 접선과 <strong>기울기가 같은</strong> 다른 점의 $x$좌표와 그 점에서의 함숫값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$f'(x)=x^2-6x$. $f'(9)=81-54=27$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$f'(x)=27$을 풀면 $x^2-6x-27=0 \Rightarrow (x-9)(x+3)=0$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$x=9$(이미 아는 점) 또는 $x=-3$(새로운 점). $f(-3)=\dfrac13(-27)-3(9)+7=-9-27+7=-29$.</div>
+          </div>
+          <div class="why">임의의 점을 대입해 보며 찾는 대신, 방정식을 풀어 정확히 확정했다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $x=-3$, $f(-3)=-29$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable standard">
+      <div class="problem-num">기본 2 — 높이 차이 ÷ 기울기</div>
+      <div class="problem-body">
+        기울기가 같은 두 접선 $l_1: y=27x-236$, $l_2: y=27x+52$이 있다. 같은 높이(같은 $y$값)에서 두 직선의 $x$좌표 차이 $\Delta x$를 직선을 연립하지 않고 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>두 직선은 기울기 $27$로 평행. $y$절편 차이 $h = 52-(-236)=288$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$\Delta x = \dfrac{h}{m} = \dfrac{288}{27}=\dfrac{32}{3}$.</div>
+          </div>
+          <div class="why">사실 이 두 직선은 기본 1의 두 접선이다 — $f(9)=7$, $f(-3)=-29$인 점에서의 접선. $7-27\cdot9=-236$, $-29-27\cdot(-3)=52$로 확인된다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $\Delta x = \dfrac{32}{3}$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 심화 문항 ===== -->
+    <div class="level-header filterable advanced">
+      <span class="level-badge badge-advanced">심화</span>
+      <span style="font-weight:600; color:#6a1b9a">조건 역산 · 공식 유도</span>
+    </div>
+
+    <div class="problem-card filterable advanced">
+      <div class="problem-num">심화 1 — 조건에서 $k$, $d$ 역산</div>
+      <div class="problem-body">
+        최고차항의 계수가 $\dfrac13$이고 1차항이 없는 삼차함수 $f(x)=\dfrac13x^3-kx^2+d$ ($k>0$)의 극댓값이 $10$이고, $y=10$과 만나는 다른 교점이 $x=15$일 때, $k$와 $d$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$f'(x)=x^2-2kx=x(x-2k)$. $k>0$이면 $x<0$에서 증가, $0<x<2k$에서 감소, $x>2k$에서 증가 — 즉 $x=0$은 <strong>극대</strong>, $x=2k$는 극소.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>극댓값은 $f(0)=d$. 조건에서 $d=10$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$y=10$과 만나는 다른 교점은 개념 1에서 $x=3k$. 조건에서 $3k=15 \Rightarrow k=5$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>검산: $f(x)=\dfrac13x^3-5x^2+10$, $f(0)=10$ ✓, $f(15)=\dfrac13(3375)-5(225)+10=1125-1125+10=10$ ✓.</div>
+          </div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $k=5,\ d=10$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable advanced">
+      <div class="problem-num">심화 2 — 평행 접선의 $y$절편 차이 공식화</div>
+      <div class="problem-body">
+        1차항이 없는 삼차함수 $f(x)=\dfrac13x^3-6x^2+d$ ($d$는 상수)에서, $x=18$에서의 접선과 평행한 다른 접선의 $y$절편 차이를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$k=6$이므로 $x=18(=3k)$는 교점, $f(18)=d$. $f'(x)=x^2-12x$, $f'(18)=324-216=108$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>기울기 매칭: $x^2-12x=108 \Rightarrow x^2-12x-108=0 \Rightarrow (x-18)(x+6)=0$. 다른 점은 $x=-6$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$f(-6)=\dfrac13(-216)-6(36)+d=-72-216+d=d-288$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$x=18$ 접선: $y-d=108(x-18) \Rightarrow y=108x+(d-1944)$.<br>
+            $x=-6$ 접선: $y-(d-288)=108(x+6) \Rightarrow y=108x+(648+d-288)=108x+(d+360)$.<br>
+            $y$절편 차이 $= (d+360)-(d-1944)=2304$.</div>
+          </div>
+          <div class="why">$d$가 사라지고 $2304$라는 고정값만 남는다 — 평행이동해도 두 접선 사이 간격은 변하지 않기 때문.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $2304$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 수능 대비 ===== -->
+    <div class="level-header filterable csat">
+      <span class="level-badge badge-csat">수능 대비</span>
+      <span style="font-weight:600; color:#b71c1c">준킬러 — 개념 종합</span>
+    </div>
+
+    <div class="problem-card filterable csat">
+      <div class="problem-num">수능 대비 1 — 준킬러 유형(높이차 역산)</div>
+      <div class="problem-body">
+        1차항이 없는 삼차함수 $f(x)=\dfrac13x^3-kx^2+d$ ($k>0$)가 $x=0$에서 $y=d$에 접하고 $x=3k$에서 만난다. $x=3k$에서의 접선과 평행한 다른 접선의 $y$절편 차이가 $288$일 때, $k$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>개념 3에 의해 기울기가 같은 다른 점은 $x=-k$ (일반화: $f'(x)=x^2-2kx$, $f'(3k)=3k^2$, $x^2-2kx-3k^2=0 \Rightarrow (x-3k)(x+k)=0$).</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$f(3k)=d$, $f(-k)=\dfrac13(-k)^3-k(-k)^2+d = d-\dfrac43k^3$. 기울기 $m=3k^2$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$x=3k$ 접선의 $y$절편: $d-3k^2\cdot3k=d-9k^3$.<br>
+            $x=-k$ 접선의 $y$절편: $\left(d-\dfrac43k^3\right)-3k^2\cdot(-k)=d-\dfrac43k^3+3k^3=d+\dfrac53k^3$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$y$절편 차이 $=\left(d+\dfrac53k^3\right)-(d-9k^3)=\dfrac{32}{3}k^3$. 조건: $\dfrac{32}{3}k^3=288 \Rightarrow k^3=27 \Rightarrow k=3$.</div>
+          </div>
+          <div class="why">심화 2에서 $k=6$일 때 $2304$였는데, $\left(\dfrac{6}{3}\right)^3=8$배 관계로 $288\times8=2304$ — 서로 검산이 된다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $k=3$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable csat">
+      <div class="problem-num">수능 대비 2 — 준킬러 유형(대칭 + 극솟값)</div>
+      <div class="problem-body">
+        1차항이 없는 삼차함수 $f(x)=\dfrac13x^3-kx^2+290$ ($k>0$)이 있다. $x=3k$에서의 접선과 평행한 다른 접선의 접점을 $Q$, $x=3k$에서의 접점을 $P$라 하자. 선분 $PQ$의 중점의 $x$좌표가 $6$일 때, $f$의 극솟값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>수능 대비 1의 STEP 1에 의해 $Q$의 $x$좌표는 $-k$. $P$의 $x$좌표는 $3k$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>중점 $x$좌표 $=\dfrac{3k+(-k)}{2}=k$. 조건에서 $k=6$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>개념 2에 의해 극솟값은 $x=2k=12$에서. $f(12)=d-\dfrac43k^3=290-\dfrac43(216)=290-288=2$.</div>
+          </div>
+          <div class="why">$P,Q$의 중점이 항상 변곡점 $x=k$와 같다는 사실(개념 3의 대칭성)을 그대로 활용했다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: 극솟값 $2$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>상황</th><th>판단 근거</th><th>바로 얻는 것</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">1차항 없음</td><td>$f(x)-d=ax^2(x-r)$ 형태</td><td>$x=0$ 접점, $x=r$ 교점</td></tr>
+          <tr style="background:#e0f7fa"><td style="font-weight:700">접점·교점 확보</td><td>$p,q$ 알면</td><td>남은 극점 $x=\dfrac{p+2q}{3}$ (2:1)</td></tr>
+          <tr><td style="font-weight:700">기울기 조건 제시</td><td>$f'(x)=m$ 방정식</td><td>후보점을 대입 없이 인수분해로 확정</td></tr>
+          <tr style="background:#e0f7fa"><td style="font-weight:700">평행한 두 접선</td><td>$y$절편 차 $h$, 기울기 $m$</td><td>가로 거리 $\Delta x = h/m$ (연립 불필요)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+      <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+      <div>① 3차함수 식을 보면 가장 먼저 "1차항이 있는가?" 확인.<br>
+      ② 1차항이 없으면 상수항을 넘겨 $x^2$으로 묶어 접점·교점 동시 확보.<br>
+      ③ 극점 찾기는 미분보다 2:1 비율관계가 더 빠를 때가 많다 (검산은 미분으로).<br>
+      ④ 기울기 조건이 나오면 임의의 점을 대입해 찾지 말고 $f'(x)=m$을 직접 풀어라.<br>
+      ⑤ 두 접선이 평행이면 연립방정식 대신 "$y$절편 차 ÷ 기울기"로 가로 거리를 즉시 계산.</div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">⚠️ 사용자 검토 권고</div>
+      <div>
+        본 자료의 문항 속 숫자는 영상이 제시한 풀이 기법(1차항 없는 3차함수 인수분해 · 2:1 비율관계 · 미분계수 매칭 · 평행접선 높이÷기울기 공식)을 재구성하여 새로 만든 것이며, 영상에 등장한 원래 문제의 구체적인 숫자와는 다를 수 있습니다. 모든 계산은 이 자료 작성 과정에서 직접 재검산했으나, 학생 배포 전 교사의 최종 검토를 권장합니다.
+      </div>
+    </div>
+
+    <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+      📺 <strong>원본 영상</strong>: <a href="https://youtu.be/5WEbC1T5E80" target="_blank" rel="noopener" style="color:var(--primary)">요즘 문제가 안 풀린다면 꼭 체크해 보세요. (시대수학 김성호)</a><br>
+      📅 자료 생성: 2026-08-08 · 본 자료는 영상 요약을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+    </div>
+
+  </div><!-- /container -->
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+  <script>
+    function toggleDark(){document.body.classList.toggle('dark');}
+    function filterLevel(level,btn){
+      document.querySelectorAll('.toolbar .flt').forEach(b=>b.classList.remove('active'));
+      if(btn)btn.classList.add('active');
+      document.querySelectorAll('.filterable').forEach(el=>{el.style.display=(level==='all'||el.classList.contains(level))?'':'none';});
+      if(level!=='all'){const f=document.querySelector('.level-header');if(f)f.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+    window.addEventListener('scroll',()=>{const b=document.getElementById('scrollTopBtn');if(b)b.style.display=window.scrollY>400?'block':'none';});
+    document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;if(e.key==='d'||e.key==='D')toggleDark();});
+  </script>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html">교점 개수 함수와 3차함수 높이차 2대1 공식 (ONHx5OaS)</a> · <a href="20260520_차함수특강관계내리기와보정_WhojOfqC.html">차함수 특강 (WhojOfqC)</a> · <a href="20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a> · <a href="20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html">실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기 (OJyw8C5k)</a></div><!--REL_END-->
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
