@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .example-card { background: var(--visual-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 14px 0; }
+    .example-title { font-weight: 700; margin-bottom: 8px; color: var(--primary-dark); }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 대수(수학Ⅰ) — 지수함수와 로그함수</div>
+    <h1>그래프를 그리지 마라,<br>식만 보고 확대·축소를 읽어라</h1>
+    <p>$y=f(x/c)$ 대입 원리 하나로 지수함수의 밑 변화와 로그함수의 평행이동, 원점 지나는 직선의 비율까지 전부 설명된다</p>
+    <div class="quote">
+      "$x$축과 $y$축 방향으로 같은 비율 $k$배만큼 동시에 확대하면, 원점을 지나는 직선 위의 두 점의 길이 비율이 $1:k$가 됩니다." — 강사 인용
+    </div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/G6iWQpMuTsU" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/G6iWQpMuTsU/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">구독자 분들만 조용히 보세요. (ft. 지수로그함수 확대, 축소의 모든 것)</div>
+        <div class="v-meta">📺 YouTube · 다정수학 · 약 33분</div>
+        <a class="v-link" href="https://youtu.be/G6iWQpMuTsU" target="_blank" rel="noopener">https://youtu.be/G6iWQpMuTsU</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 예시 문항 (도입) ===== -->
+    <div class="section-title">🔥 예시 문항 — 왜 이 관점이 필요할까?</div>
+    <div class="card">
+      <p><strong>문제</strong>: 함수 $y=2^x$을 $x$축 방향으로 $\dfrac12$배 한 그래프는 어떤 지수함수인지, 그래프를 직접 그리지 않고 식만으로 알아내시오.</p>
+      <div class="caution">
+        <strong>일반적인 방법</strong>: 좌표평면에 $y=2^x$를 점 몇 개 찍어 그린 뒤, 그 점들을 전부 가로로 절반씩 옮겨서 새 그래프를 다시 그린다. 시간이 오래 걸리고 그래프도 부정확해지기 쉽다.
+      </div>
+      <div class="tip">
+        <strong>구조로 보는 방법</strong>: "$x$축 방향으로 $c$배"는 식에서 $x$ 대신 $\dfrac{x}{c}$를 대입하면 끝이다. $c=\dfrac12$이므로 $x$ 대신 $\dfrac{x}{1/2}=2x$를 대입: $y=2^{2x}=(2^2)^x=4^x$.
+      </div>
+      <div style="margin-top:8px"><span class="answer-tag">정답: $y=4^x$</span></div>
+      <p style="margin-top:10px; font-size:14px; color:var(--sub)">그래프를 한 번도 그리지 않고 대입만으로 답을 얻었다. 이 "대입 원리"가 오늘 배울 모든 기법의 출발점이다.</p>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">📐 개념 — 확대·축소는 결국 대입이다</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>지수법칙:</strong> $a^m\cdot a^n=a^{m+n}$, $(a^m)^n=a^{mn}$. 밑이 같으면 지수끼리 계산한다.</li>
+        <li><strong>로그의 정의:</strong> $\log_a N=x \iff a^x=N$ ($a>0,\ a\ne1,\ N>0$). "$a$를 몇 제곱해야 $N$이 되는가"를 나타내는 값이다.</li>
+        <li><strong>로그의 성질:</strong> $\log_a(xy)=\log_a x+\log_a y$, $\log_a x^n=n\log_a x$.</li>
+        <li><strong>평행이동:</strong> $y=f(x)+n$은 $y=f(x)$ 그래프를 $y$축 방향으로 $n$만큼 평행이동한 것.</li>
+      </ul>
+    </div>
+
+    <!-- CONCEPT 1 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>그래프의 확대·축소 — $y=f(x/c)$의 정체</div>
+
+      <p><strong>① 정의</strong>: 함수 $y=f(x)$의 그래프를 $x$축 방향으로 $c$배($c\ne0$) 한 그래프의 방정식은 $y=f\!\left(\dfrac{x}{c}\right)$이다. $c>1$이면 가로로 넓어지는 확대, $0<c<1$이면 가로로 좁아지는 축소다.</p>
+
+      <p style="margin-top:10px"><strong>② 비유</strong>: 사진을 가로로만 늘리거나 줄이는 것과 같다. 세로(높이) 값은 그대로 두고 가로 폭만 $c$배로 조절한다.</p>
+
+      <p style="margin-top:10px"><strong>③ 작동 원리</strong>: 원래 그래프 위에 점 $(a,b)$가 있다고 하자 (즉 $f(a)=b$). 새 그래프 $y=f(x/c)$가 같은 높이 $b$를 만들려면 $f\!\left(\dfrac{x'}{c}\right)=b=f(a)$가 되는 $x'$을 찾아야 한다. 즉 $\dfrac{x'}{c}=a$이므로 $x'=ca$. 원래 $x$좌표였던 $a$가 $ca$로 바뀌었으니, 정확히 $x$축 방향으로 $c$배 늘어난(또는 줄어든) 것이다.</p>
+
+      <div class="formula-box">
+        $$y=f(x)\ \xrightarrow{\ x\text{축 방향}\ c\text{배}\ }\ y=f\!\left(\dfrac{x}{c}\right)$$
+      </div>
+
+      <div class="caution">
+        <strong>④ 자주 하는 실수</strong>: $y=f(cx)$와 $y=f(x/c)$를 헷갈리는 것. "$x$축 방향으로 $c$배"라고 하면 식에서는 $x$ 대신 $\dfrac{x}{c}$를 대입해야 한다. $x$에 그냥 $c$를 곱해버리면 정반대 방향인 $\dfrac1c$배가 되어버린다.
+      </div>
+    </div>
+
+    <!-- CONCEPT 2 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>지수함수의 확대·축소 — 밑(Base)이 바뀐다</div>
+
+      <p>지수함수 $f(x)=a^x$에 개념 1의 대입 규칙을 그대로 적용하면 어떤 일이 벌어질까?</p>
+
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">$x$축 방향으로 $c$배 한 그래프: $y=f\!\left(\dfrac{x}{c}\right)=a^{x/c}$.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">지수법칙 $(a^m)^n=a^{mn}$을 거꾸로 쓰면 $a^{x/c}=\left(a^{1/c}\right)^{x}$.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">즉 새 함수는 밑이 $a^{1/c}$인 지수함수다 — <strong>밑만 바뀌었지, 여전히 지수함수</strong>다.</div>
+      </div>
+
+      <div class="concept-box">
+        <strong>지수함수의 $x$축 방향 $c$배</strong>: $y=a^x \to y=\left(a^{1/c}\right)^x$ — 밑이 $a$에서 $a^{1/c}$로 변한다.
+      </div>
+
+      <p style="margin-top:10px">예를 들어 $a=2,\ c=\dfrac12$이면 새 밑은 $2^{1/(1/2)}=2^2=4$, 즉 $y=2^x \to y=4^x$ — 예시 문항에서 확인한 결과와 정확히 일치한다.</p>
+    </div>
+
+    <!-- CONCEPT 3 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>로그함수의 확대·축소 — $y$축 평행이동이 된다</div>
+
+      <p>같은 대입 규칙을 로그함수 $g(x)=\log_a x$에 적용하면 지수함수와는 전혀 다른 결과가 나온다.</p>
+
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">$x$축 방향으로 $c$배 한 그래프: $y=g\!\left(\dfrac{x}{c}\right)=\log_a\dfrac{x}{c}$.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">로그의 성질 $\log_a\dfrac{x}{c}=\log_a x-\log_a c$로 분리한다.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">$-\log_a c$는 $x$가 들어있지 않은 <strong>상수</strong>다. 즉 $y=\log_a x + (-\log_a c)$ 꼴 — $\log_a x$ 그래프를 $y$축 방향으로 $-\log_a c$만큼 평행이동한 것과 완전히 같다.</div>
+      </div>
+
+      <div class="concept-box">
+        <strong>로그함수의 $x$축 방향 $c$배</strong>: $y=\log_a x \to y=\log_a x-\log_a c$ — 그래프 모양은 그대로, $y$축 방향으로만 이동한다.
+      </div>
+
+      <div class="tip">
+        지수함수는 밑이 바뀌고(모양이 변함), 로그함수는 평행이동만 한다(모양은 그대로). 두 함수가 서로 역함수 관계이기 때문에 $x$축 확대·축소의 효과가 서로 "교차"해서 나타나는 것이다.
+      </div>
+    </div>
+
+    <!-- CONCEPT 4 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>$x$축·$y$축 동시 확대 — 원점 지나는 직선의 $1:k$ 비율</div>
+
+      <p>이번엔 방향을 하나 더 늘려 $x$축과 $y$축을 <strong>동시에 같은 비율 $k$배</strong> 하면 어떤 일이 생기는지 살펴보자. 즉 원래 그래프 위의 점 $(a,b)$가 새 그래프에서는 $(ka,\ kb)$로 옮겨간다.</p>
+
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">원점 $O$와 $(a,b)$를 잇는 직선의 기울기: $\dfrac{b}{a}$.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">원점 $O$와 $(ka,kb)$를 잇는 직선의 기울기: $\dfrac{kb}{ka}=\dfrac{b}{a}$ — <strong>기울기가 똑같다.</strong> 즉 $O,\ (a,b),\ (ka,kb)$ 세 점은 한 직선 위에 있다(공선점).</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">원점에서 각 점까지의 거리: $\overline{O(a,b)}=\sqrt{a^2+b^2}$, $\overline{O(ka,kb)}=\sqrt{(ka)^2+(kb)^2}=k\sqrt{a^2+b^2}$ ($k>0$).</div>
+      </div>
+
+      <div class="concept-box">
+        <strong>원점 지나는 직선의 길이 비율</strong>: $x$축·$y$축을 동일하게 $k$배 확대하면, 원점과 원래 점을 잇는 선분과 원점과 새 점을 잇는 선분은 <strong>같은 직선 위</strong>에 있고 길이 비율이 정확히 $1:k$다.
+      </div>
+
+      <div class="caution">
+        <strong>오해 바로잡기</strong>: $x$축으로 $2$배, $y$축으로 $3$배처럼 <strong>비율이 다르면</strong> 두 점을 잇는 직선은 원점을 지나지 않는다(기울기가 $\dfrac{3b}{2a}\ne\dfrac{b}{a}$로 바뀌어버림). 비율이 같을 때(동일한 $k$)만 원점을 지나는 직선이 만들어진다는 것이 핵심 함정이다.
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 기초 문항 ===== -->
+    <div class="level-header filterable basic">
+      <span class="level-badge badge-basic">기초</span>
+      <span style="font-weight:600; color:#2e7d32">대입 규칙 그대로 적용하기</span>
+    </div>
+
+    <div class="problem-card filterable basic">
+      <div class="problem-num">기초 1 — 로그함수의 $x$축 방향 $c$배</div>
+      <div class="problem-body">
+        로그함수 $y=\log_3 x$를 $x$축 방향으로 $\dfrac13$배 한 그래프는 $y=\log_3 x + n$ 꼴이 된다. $n$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$c=\dfrac13$이므로 $x$ 대신 $\dfrac{x}{1/3}=3x$를 대입한다: $y=\log_3(3x)$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>로그의 성질로 분리: $\log_3(3x)=\log_3 3+\log_3 x=1+\log_3 x$.</div>
+          </div>
+          <div class="why">개념 3의 공식 $-\log_a c$에 $a=3,\ c=\dfrac13$을 대입해도 $-\log_3\frac13=1$로 같은 값이 나온다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $n=1$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable basic">
+      <div class="problem-num">기초 2 — 지수함수의 $x$축 방향 $c$배</div>
+      <div class="problem-body">
+        지수함수 $y=3^x$를 $x$축 방향으로 $\dfrac12$배 한 그래프의 식을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$c=\dfrac12$이므로 $x$ 대신 $\dfrac{x}{1/2}=2x$를 대입한다: $y=3^{2x}$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$3^{2x}=(3^2)^x=9^x$로 정리한다.</div>
+          </div>
+          <div class="why">개념 2의 공식 $a^{1/c}$에 $a=3,\ c=\frac12$를 대입하면 $3^{1/(1/2)}=3^2=9$로 같은 값이 나온다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $y=9^x$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 기본 문항 ===== -->
+    <div class="level-header filterable standard">
+      <span class="level-badge badge-standard">기본</span>
+      <span style="font-weight:600; color:#1565c0">거꾸로 $c$ 구하기</span>
+    </div>
+
+    <div class="problem-card filterable standard">
+      <div class="problem-num">기본 1 — 확대 비율 $c$ 역산 (지수함수)</div>
+      <div class="problem-body">
+        지수함수 $y=2^x$의 그래프를 $x$축 방향으로 $c$배($c>0$) 했더니 $y=\sqrt{2}^{\,x}$의 그래프와 일치했다. $c$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$x$축 방향 $c$배 한 그래프는 $y=2^{x/c}$이다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>이것이 $y=\sqrt2^{\,x}=2^{x/2}$와 같아야 하므로 밑을 비교하면 $\dfrac{x}{c}=\dfrac{x}{2}$가 모든 $x$에서 성립해야 한다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>따라서 $c=2$.</div>
+          </div>
+          <div class="why">밑끼리 비교하면 $2^{1/c}=\sqrt2=2^{1/2}$이므로 $\dfrac1c=\dfrac12 \Rightarrow c=2$로도 확인된다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $c=2$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable standard">
+      <div class="problem-num">기본 2 — 확대 비율 $c$ 역산 (로그함수)</div>
+      <div class="problem-body">
+        로그함수 $y=\log_2 x$를 $x$축 방향으로 $\dfrac14$배 한 그래프는 $y=\log_2 x + m$ 꼴이 된다. $m$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$c=\dfrac14$이므로 $x$ 대신 $\dfrac{x}{1/4}=4x$를 대입한다: $y=\log_2(4x)$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$\log_2(4x)=\log_2 4+\log_2 x=2+\log_2 x$.</div>
+          </div>
+          <div class="why">$4=2^2$이므로 $\log_2 4=2$ — 밑이 같은 값의 거듭제곱은 지수만 읽으면 바로 나온다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $m=2$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 심화 문항 ===== -->
+    <div class="level-header filterable advanced">
+      <span class="level-badge badge-advanced">심화</span>
+      <span style="font-weight:600; color:#6a1b9a">동시 확대 · 여러 개념 결합</span>
+    </div>
+
+    <div class="problem-card filterable advanced">
+      <div class="problem-num">심화 1 — 동시 확대와 원점 비율로 새 곡선 구하기</div>
+      <div class="problem-body">
+        곡선 $y=2^x$ 위의 점 $P(2,4)$가 있다 ($2^2=4$이므로). 원점을 기준으로 이 곡선을 $x$축·$y$축 방향으로 동시에 $k$배($k>1$) 확대한 곡선을 $C'$이라 하고, 직선 $OP$가 $C'$과 만나는 점을 $Q$라 하자. $\overline{OQ}=3\overline{OP}$일 때, $k$의 값과 점 $Q$의 좌표, 곡선 $C'$의 방정식을 모두 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>개념 4에 의해 원점을 중심으로 동시에 $k$배 확대하면 $\overline{OQ}=k\cdot\overline{OP}$가 성립한다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>조건 $\overline{OQ}=3\overline{OP}$와 비교하면 $k=3$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$Q$는 $P(2,4)$를 원점 기준으로 $3$배 확대한 점이므로 $Q=(3\times2,\ 3\times4)=(6,12)$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$C'$의 방정식: 원래 곡선 위의 점 $(a,2^a)$이 $(3a,\ 3\cdot2^a)$로 옮겨간다. $x=3a$라 하면 $a=\dfrac{x}{3}$이므로 $C':\ y=3\cdot2^{x/3}$. 검산: $x=6$ 대입 시 $y=3\cdot2^2=12$ — $Q(6,12)$와 일치.</div>
+          </div>
+          <div class="why">$C'$은 지수함수가 아니라 지수함수에 상수배가 곱해진 곡선이다. 개념 2(밑의 변화)는 $x$축만 늘렸을 때의 결과이고, 지금처럼 $y$축도 함께 늘리면 앞에 상수 계수가 붙는다는 점이 다르다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $k=3$, $Q(6,12)$, $C': y=3\cdot2^{x/3}$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable advanced">
+      <div class="problem-num">심화 2 — 로그함수 평행이동과 방정식 풀기</div>
+      <div class="problem-body">
+        함수 $f(x)=\log_2 x$의 그래프를 $x$축 방향으로 $\dfrac12$배 한 그래프를 $g(x)$라 하자. $g(x)=f(x)+m$ 꼴로 나타낼 때 $m$의 값을 구하고, 방정식 $g(x)=5$의 해를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$c=\dfrac12$이므로 $g(x)=f(2x)=\log_2(2x)=1+\log_2 x=f(x)+1$. 따라서 $m=1$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$g(x)=5$는 $\log_2 x+1=5$와 같다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$\log_2 x=4$이므로 로그의 정의에 의해 $x=2^4=16$.</div>
+          </div>
+          <div class="why">$m$을 구하는 과정과 방정식을 푸는 과정을 분리해서 접근하면 실수가 줄어든다 — 먼저 $g(x)$의 정체(개념 3)를 확정한 뒤에 방정식을 푼다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $m=1$, $x=16$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 수능 대비 ===== -->
+    <div class="level-header filterable csat">
+      <span class="level-badge badge-csat">수능 대비</span>
+      <span style="font-weight:600; color:#b71c1c">준킬러 — 개념 종합</span>
+    </div>
+
+    <div class="problem-card filterable csat">
+      <div class="problem-num">수능 대비 1 — 준킬러 유형(공선점 활용)</div>
+      <div class="problem-body">
+        곡선 $y=2^x$ 위의 점 $P(2,4)$가 있다. 원점을 기준으로 이 곡선을 $x$축·$y$축 방향으로 동시에 $k$배($k>1$) 확대한 곡선이 직선 $OP$와 만나는 점을 $Q$라 하자. 선분 $PQ$의 길이가 선분 $OP$의 길이의 $3$배일 때, $k$의 값과 점 $Q$의 좌표를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>개념 4에 의해 $O,\ P,\ Q$는 한 직선 위에 있고 $\overline{OQ}=k\cdot\overline{OP}$이다. $k>1$이므로 $Q$는 $O$에서 볼 때 $P$보다 더 먼 위치에 있다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>세 점이 이 순서로 한 직선 위에 있으므로 $\overline{PQ}=\overline{OQ}-\overline{OP}=(k-1)\overline{OP}$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>조건 $\overline{PQ}=3\overline{OP}$에서 $(k-1)\overline{OP}=3\overline{OP}$, 즉 $k-1=3 \Rightarrow k=4$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$Q$는 $P(2,4)$를 원점 기준 $4$배 확대한 점이므로 $Q=(4\times2,\ 4\times4)=(8,16)$.</div>
+          </div>
+          <div class="why">$O,P,Q$가 일직선 위에 있다는 사실을 놓치고 두 점 사이 거리 공식을 각각 계산해 방정식을 세우면 계산이 훨씬 복잡해진다. 공선점이라는 사실을 먼저 확인하면 선분 길이는 스칼라 배로 즉시 계산된다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $k=4$, $Q(8,16)$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable csat">
+      <div class="problem-num">수능 대비 2 — 준킬러 유형(지수·로그 동시 변환)</div>
+      <div class="problem-body">
+        두 함수 $f(x)=2^x$, $g(x)=\log_2 x$가 있다. $f(x)$를 $x$축 방향으로 $\dfrac13$배 한 함수를 $F(x)$, $g(x)$를 $x$축 방향으로 $3$배 한 함수를 $G(x)$라 하자. $F(1)+G(24)$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$c=\dfrac13$이므로 $F(x)=f\!\left(\dfrac{x}{1/3}\right)=f(3x)=2^{3x}$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$F(1)=2^{3\times1}=2^3=8$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$c=3$이므로 $G(x)=g\!\left(\dfrac{x}{3}\right)=\log_2\dfrac{x}{3}$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$G(24)=\log_2\dfrac{24}{3}=\log_2 8=3$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 5</div>
+            <div>$F(1)+G(24)=8+3=11$.</div>
+          </div>
+          <div class="why">$F$는 개념 2(밑의 변화), $G$는 개념 3(평행이동)이 각각 적용된 결과다. 두 함수를 서로 다른 변환 규칙으로 헷갈리지 않는 것이 이 문제의 핵심.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $11$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>변환</th><th>대입 규칙</th><th>지수함수 $a^x$에 적용 시</th><th>로그함수 $\log_a x$에 적용 시</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">$x$축 방향 $c$배</td><td>$x \to \dfrac{x}{c}$</td><td>밑이 $a^{1/c}$로 변경</td><td>$y$축으로 $-\log_a c$ 평행이동</td></tr>
+          <tr style="background:#e0f7fa"><td style="font-weight:700">$x,y$축 동시 $k$배<br>(원점 중심)</td><td>$(a,b)\to(ka,kb)$</td><td colspan="2">원점 지나는 직선 위 대응점의 길이 비율이 $1:k$ (두 함수 공통)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+      <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+      <div>① "$x$축 방향으로 $c$배"를 보면 무조건 $x$ 대신 $\dfrac{x}{c}$를 대입한다 ($x$에 $c$를 곱는 게 아니다).<br>
+      ② 지수함수는 밑이 바뀌고, 로그함수는 평행이동한다 — 두 결과를 헷갈리지 않는다.<br>
+      ③ 원점을 지나는 직선과 두 곡선이 함께 등장하면 "동시에 같은 비율로 확대했는가"부터 확인 — 그렇다면 길이 비율이 곧 확대 비율 $k$다.<br>
+      ④ 세 점이 한 직선 위(공선점)라는 사실을 확인하면 선분 길이는 스칼라 배로 즉시 계산되어 거리 공식이 필요 없다.<br>
+      ⑤ $x$축과 $y$축의 확대 비율이 다르면 원점을 지나는 직선이 만들어지지 않는다는 함정에 주의한다.</div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">⚠️ 사용자 검토 권고</div>
+      <div>
+        본 자료의 문항 속 숫자는 영상이 제시한 풀이 기법($y=f(x/c)$ 대입 원리 · 지수함수의 밑 변화 · 로그함수의 평행이동 · 동시 확대와 원점 직선의 $1:k$ 비율)을 재구성하여 새로 만든 것이며, 영상에 등장한 원래 문제의 구체적인 숫자와는 다를 수 있습니다. 모든 계산은 이 자료 작성 과정에서 직접 재검산했으나, 학생 배포 전 교사의 최종 검토를 권장합니다.
+      </div>
+    </div>
+
+    <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+      📺 <strong>원본 영상</strong>: <a href="https://youtu.be/G6iWQpMuTsU" target="_blank" rel="noopener" style="color:var(--primary)">구독자 분들만 조용히 보세요. (ft. 지수로그함수 확대, 축소의 모든 것) (다정수학)</a><br>
+      📅 자료 생성: 2026-08-08 · 본 자료는 영상 요약을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+    </div>
+
+  </div><!-- /container -->
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+  <script>
+    function toggleDark(){document.body.classList.toggle('dark');}
+    function filterLevel(level,btn){
+      document.querySelectorAll('.toolbar .flt').forEach(b=>b.classList.remove('active'));
+      if(btn)btn.classList.add('active');
+      document.querySelectorAll('.filterable').forEach(el=>{el.style.display=(level==='all'||el.classList.contains(level))?'':'none';});
+      if(level!=='all'){const f=document.querySelector('.level-header');if(f)f.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+    window.addEventListener('scroll',()=>{const b=document.getElementById('scrollTopBtn');if(b)b.style.display=window.scrollY>400?'block':'none';});
+    document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;if(e.key==='d'||e.key==='D')toggleDark();});
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260427_지수함수차이비율공식과도형우선해석_MJWwaaju.html">지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ) (MJWwaaju)</a> · <a href="20260509_지수함수점근선차이비율사다리꼴_DArDb6p7.html">지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ) (DArDb6p7)</a> · <a href="../수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html">넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ) (xA9JGa0t)</a> · <a href="../수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a></div><!--REL_END-->
+</body>
+</html>
