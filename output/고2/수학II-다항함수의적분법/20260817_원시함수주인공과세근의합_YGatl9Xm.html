@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>원시함수가 주인공 — 세 근의 합으로 미지수 찾기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .feynman-step { margin: 14px 0; padding: 12px 16px; border-radius: 8px; background: var(--sol-bg); }
+    .feynman-label { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; display: block; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .intent-tag { font-size: 13px; color: var(--sub); margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    .warning-box { max-width: 880px; margin: 30px auto 0; border: 2px solid var(--orange); background: var(--caution-bg); padding: 18px 24px; border-radius: 12px; text-align: left; }
+    .warning-box h3 { color: var(--orange); margin-bottom: 10px; font-size: 1.02rem; }
+    .warning-box ul { margin-left: 20px; }
+    .warning-box li { margin: 6px 0; font-size: .92em; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 10px; border: 1px solid var(--border); text-align: center; }
+    th { background: var(--box-blue); }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅱ — 다항함수의 적분법</div>
+    <h1>원시함수가 주인공?<br>세 근의 합으로 미지수 찾기</h1>
+    <p class="sub">F(x)를 전개하지 말고, 접선과 변곡점만으로 삼차함수의 식을 세우는 법</p>
+    <div class="quote">
+      영상 핵심 메시지: 문제의 진짜 주인공이 부정적분 $F(x)$라면, $f(x)$를 전개해서 적분상수를 구하려 하지 말고 $F(x)$ 자체를 삼차함수로 놓고 접선 관계 + 변곡점의 <strong>"세 근의 합" 성질</strong>로 미지수를 즉시 확정한다.
+    </div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://www.youtube.com/watch?v=YGatl9XmkUQ" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/YGatl9XmkUQ/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">풀이가 지저분한 학생들, 대부분 이걸 못 봅니다 (원시함수 주인공과 세 근의 합)</div>
+        <div class="v-meta">📺 YouTube · 수능 수학은 이동준 · 원시함수·삼차함수 구조적 풀이</div>
+        <a class="v-link" href="https://www.youtube.com/watch?v=YGatl9XmkUQ" target="_blank" rel="noopener">https://www.youtube.com/watch?v=YGatl9XmkUQ</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 예시 ===== -->
+    <div class="section-title">🎯 도입 — 이 문제, 정말 몇 초 만에 풀릴까?</div>
+    <div class="problem-card">
+      <div class="problem-num">예시 문항 — 정공법이면 오래 걸리는 문제</div>
+      <div class="problem-body">
+        최고차항의 계수가 $1$인 삼차함수 $F(x)$의 도함수를 $f(x)$라 하자. 곡선 $y=F(x)$ 위의 점 $\left(\dfrac{5}{3},\ F\!\left(\dfrac{5}{3}\right)\right)$에서 곡선에 접하는 직선이 $y=4x-4$이고, $F(x)$의 변곡점의 $x$좌표는 $-\dfrac13$이다.<br><br>
+        곡선 $y=F(x)$와 직선 $y=4x-4$가 만나는 점 중 접점이 아닌 점의 $x$좌표를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기 (이 자료를 다 읽으면 이렇게 풀립니다)</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$f(x)=F'(x)$이므로 이 문제의 진짜 주인공은 $F(x)$다. $f(x)$를 전개해서 적분하고 상수 $C$까지 구하는 정공법 대신, 접선과 $F(x)$의 <strong>차함수</strong> $G(x) = F(x) - (4x-4)$를 바로 세운다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>직선이 $x=\dfrac53$에서 곡선에 <strong>접한다</strong>는 것은 $G(x)=0$이 $x=\dfrac53$을 <strong>중근(이중근)</strong>으로 가진다는 뜻이다. $F(x)$의 최고차항 계수가 $1$이므로 $G(x)$의 최고차항 계수도 $1$(직선을 빼도 삼차항·이차항 계수는 그대로).<br>
+            $$G(x) = \left(x-\dfrac53\right)^2(x-\alpha)$$</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$G(x)$의 세 근의 합은 $G$(=$F$)의 변곡점 $x$좌표의 $3$배와 같다 (뒤 "개념 2"에서 직접 증명). 변곡점 $x$좌표가 $-\dfrac13$이므로<br>
+            $$\dfrac53+\dfrac53+\alpha = 3\times\left(-\dfrac13\right) = -1$$</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$\dfrac{10}{3}+\alpha = -1$ 이므로 $\alpha = -1-\dfrac{10}{3} = -\dfrac{13}{3}$.</div>
+          </div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $x=-\dfrac{13}{3}$</span></div>
+          <div class="tip"><strong>핵심:</strong> $f(x)$를 단 한 줄도 전개하지 않았다. $F(x)$를 인수분해된 "구조"로만 다뤘다 — 이게 "5초 컷"의 정체.</div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 선수 학습 ===== -->
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:22px; margin-top:6px; line-height:2">
+        <li><strong>부정적분과 도함수의 관계:</strong> $F'(x)=f(x)$이면 $F(x)$를 $f(x)$의 부정적분(원시함수)이라 한다. 미분해서 $f(x)$가 나오는 함수는 $F(x)+C$ 꼴로 무수히 많다.</li>
+        <li><strong>삼차함수의 변곡점:</strong> $F''(x)=0$을 만족하는 점. 이 점을 기준으로 오목·볼록이 바뀌며, 모든 삼차함수는 변곡점에 대해 점대칭이다.</li>
+        <li><strong>접선의 방정식:</strong> 곡선 $y=F(x)$ 위의 점 $(t, F(t))$에서의 접선은 $y = F'(t)(x-t) + F(t)$.</li>
+        <li><strong>근과 계수의 관계(삼차방정식):</strong> $ax^3+bx^2+cx+d=0$의 세 근을 $p,q,r$이라 하면 $p+q+r = -\dfrac{b}{a}$ (고1 과정에서 학습).</li>
+        <li><strong>곱의 미분법:</strong> $\{f(x)g(x)\}' = f'(x)g(x) + f(x)g'(x)$.</li>
+      </ul>
+    </div>
+
+    <!-- ===== 개념 1 ===== -->
+    <div class="section-title">📐 개념 — 원시함수 주인공과 세 근의 합</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>주인공 전환 — F(x) 중심 사고</div>
+
+      <div class="feynman-step">
+        <span class="feynman-label">① 정의</span>
+        문제에서 실제로 다루는 대상이 $f(x)$가 아니라 그 부정적분 $F(x)$일 때는, $f(x)$를 <strong>조연(기울기 정보 제공자)</strong>으로 보고 $F(x)$ 자체를 직접 분석 대상(주인공)으로 삼는 사고방식이다.
+      </div>
+
+      <div class="feynman-step">
+        <span class="feynman-label">② 비유로 이해하기</span>
+        자동차를 생각해 보자. 속도계 눈금($f(x)$, 도함수)은 "지금 얼마나 빨리 달리는지"만 알려준다. 하지만 문제가 진짜 궁금해하는 건 자동차가 <strong>지금 어디에 있는지</strong>($F(x)$, 위치)다. 속도계만 뚫어져라 보면서 위치를 계산하려 하면 계산이 길어지지만, "지금 위치가 어디쯤일지"를 그래프의 모양(접선, 변곡점)으로 바로 짚으면 훨씬 빠르다.
+      </div>
+
+      <div class="feynman-step">
+        <span class="feynman-label">③ 왜 이렇게 될까? (작동 원리)</span>
+        $f(x)$를 직접 적분해서 $F(x) = \int f(x)\,dx$를 구하고, 주어진 조건으로 적분상수 $C$까지 결정하는 것이 이론적으로는 정공법이다. 하지만 $f(x)$가 복잡하면 전개·적분 계산량이 급격히 늘어난다. 반면 "$F(x)$가 삼차함수다", "이 직선이 $F(x)$에 접한다", "변곡점이 여기다" 같은 <strong>구조적 정보</strong>만 있으면, $F(x)$를 전개하지 않고 인수분해된 형태 $F(x) - (\text{직선}) = (\text{이차식})(\text{일차식})$로 바로 세운 뒤 미지수 하나만 결정하면 끝난다.
+      </div>
+
+      <div class="feynman-step">
+        <span class="feynman-label">④ 자주 하는 실수</span>
+        <ul style="margin-left:20px">
+          <li>$f(x)$를 성급히 적분해서 상수 $C$부터 구하려다 계산이 꼬이는 경우 — 진짜 필요한 정보(접선·변곡점)를 먼저 확인하지 않고 손부터 움직임.</li>
+          <li>문제가 $F(x)$의 값이나 그래프를 묻는데도 계속 $f(x)$의 그래프만 들여다보며 시간을 허비하는 경우.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== 개념 2 ===== -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>세 근의 합 불변 법칙</div>
+
+      <div class="feynman-step">
+        <span class="feynman-label">① 정의</span>
+        삼차함수 $y=F(x)$와 임의의 직선 $y=mx+n$이 만날 때 생기는 교점들의 $x$좌표의 합은, 직선의 기울기 $m$이나 $y$절편 $n$이 무엇이든 상관없이 <strong>$F(x)$의 변곡점 $x$좌표의 $3$배</strong>로 항상 일정하다.
+      </div>
+
+      <div class="feynman-step">
+        <span class="feynman-label">② 비유로 이해하기</span>
+        변곡점은 삼차함수 그래프의 "무게중심" 같은 점이다(점대칭의 중심이기 때문). 시소의 중심축이 고정되어 있으면 양쪽에 물건을 어떻게 올려놓든 <strong>평균적으로는 항상 그 중심에서 균형</strong>이 잡히는 것처럼, 어떤 직선이 그래프를 몇 번 가로지르든 그 교점들의 "평균 위치"(세 근의 합을 $3$으로 나눈 값)는 항상 변곡점에 고정되어 있다.
+      </div>
+
+      <div class="feynman-step">
+        <span class="feynman-label">③ 왜 이렇게 될까? (유도 — 반드시 확인)</span>
+        <div style="margin-top:6px">
+          <div class="step-row"><div class="step-num">1</div><div class="step-body">
+            $F(x) = ax^3+bx^2+cx+d$ ($a\neq0$)라 하고, 직선을 $y=mx+n$이라 하자. 두 함수의 <strong>차함수</strong> $G(x) = F(x) - (mx+n)$을 만들면
+            $$G(x) = ax^3+bx^2+(c-m)x+(d-n)$$
+            직선(일차식)을 빼도 <strong>삼차항 계수 $a$, 이차항 계수 $b$는 바뀌지 않는다</strong>. 오직 일차항·상수항만 바뀐다.
+          </div></div>
+          <div class="step-row"><div class="step-num">2</div><div class="step-body">
+            곡선과 직선의 교점들의 $x$좌표는 바로 $G(x)=0$의 근이다. $G(x)=0$의 세 근을 $p,q,r$이라 하면, 선수 학습에서 확인한 <strong>근과 계수의 관계</strong>에 의해
+            $$p+q+r = -\dfrac{b}{a}$$
+          </div></div>
+          <div class="step-row"><div class="step-num">3</div><div class="step-body">
+            한편 $F(x)$의 변곡점은 $F''(x)=6ax+2b=0$을 풀어 $x=-\dfrac{b}{3a}$. $G(x)$도 $F(x)$와 삼차항·이차항 계수($a,b$)가 완전히 같으므로 $G''(x)=F''(x)$이고, 따라서 <strong>$G(x)$의 변곡점 $x$좌표도 똑같이 $-\dfrac{b}{3a}$</strong> (직선을 뺀다고 변곡점 위치가 안 바뀜).
+          </div></div>
+          <div class="step-row"><div class="step-num">4</div><div class="step-body">
+            두 결과를 연결하면
+            $$p+q+r = -\dfrac{b}{a} = 3\times\left(-\dfrac{b}{3a}\right) = 3\times(\text{변곡점 } x\text{좌표})$$
+            직선의 기울기 $m$, 절편 $n$은 애초에 $a,b$에 영향을 주지 않으므로, 이 결과는 <strong>직선이 무엇이든 항상 성립</strong>한다. 이것이 "세 근의 합 불변"의 완전한 증명이다.
+          </div></div>
+        </div>
+      </div>
+
+      <div class="feynman-step">
+        <span class="feynman-label">④ 적용 / 자주 하는 실수</span>
+        <div class="concept-box">
+          <strong>실전 적용:</strong> 교점(또는 접점=중근) 중 두 개의 $x$좌표를 알고 변곡점 $x$좌표를 알면, 나머지 한 교점의 $x$좌표는 뺄셈 한 번으로 끝난다.
+        </div>
+        <ul style="margin-left:20px; margin-top:8px">
+          <li><strong>실수 1:</strong> "삼차함수 $F(x)=0$의 세 근의 합"과 혼동해서, 직선을 빼지 않고 그냥 $F(x)=0$의 근이라고 착각하는 경우. 반드시 <strong>차함수 $G(x)=F(x)-(\text{직선})$</strong>의 근이어야 한다.</li>
+          <li><strong>실수 2:</strong> 접선이면 접점이 <strong>중근(2개로 취급)</strong>이라는 사실을 놓치고 "세 교점"을 서로 다른 세 값으로 착각하는 경우.</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 기초 ===== -->
+    <div class="level-header filterable basic">
+      <span class="level-badge badge-basic">기초</span>
+      <span style="font-weight:600; color:#2e7d32">변곡점 · 세 근의 합 직접 대입</span>
+    </div>
+
+    <div class="problem-card filterable basic">
+      <div class="problem-num">기초 1 — 변곡점 x좌표 구하기</div>
+      <div class="problem-body">
+        $F(x) = x^3 - 6x^2 + 5x + 2$의 변곡점의 $x$좌표를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><div class="sol-step-label">STEP 1</div><div>$F'(x) = 3x^2-12x+5$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 2</div><div>$F''(x) = 6x-12 = 0$ 을 풀면 $x=2$.</div></div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $x=2$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable basic">
+      <div class="problem-num">기초 2 — 세 근의 합 공식 바로 적용</div>
+      <div class="problem-body">
+        삼차함수 $y=F(x)$의 변곡점의 $x$좌표가 $2$이다. 곡선 $y=F(x)$와 어떤 직선이 만나는 세 교점의 $x$좌표가 각각 $-1,\ 3,\ k$일 때, $k$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><div class="sol-step-label">STEP 1</div><div>세 근의 합 $= 3\times(\text{변곡점 } x\text{좌표}) = 3\times2 = 6$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 2</div><div>$-1+3+k=6$ 이므로 $k=4$.</div></div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $k=4$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 기본 ===== -->
+    <div class="level-header filterable standard">
+      <span class="level-badge badge-standard">기본</span>
+      <span style="font-weight:600; color:#1565c0">접선(중근) + 세 근의 합 / 부정적분 계산</span>
+    </div>
+
+    <div class="problem-card filterable standard">
+      <div class="problem-num">기본 1 — 접점(중근) + 세 근의 합</div>
+      <div class="problem-body">
+        최고차항의 계수가 $1$인 삼차함수 $y=F(x)$와 직선 $y=2x+1$이 $x=-2$에서 접하고, $F(x)$의 변곡점의 $x$좌표가 $1$이다. 곡선과 직선이 만나는 점 중 접점이 아닌 점의 $x$좌표를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><div class="sol-step-label">STEP 1</div><div>$G(x) = F(x)-(2x+1)$로 두면, $x=-2$에서 접하므로 $G(x)$는 $x=-2$를 중근으로 갖는다. 최고차항 계수가 $1$이므로 $G(x) = (x+2)^2(x-\alpha)$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 2</div><div>세 근의 합 $= 3\times1 = 3$. 즉 $(-2)+(-2)+\alpha = 3$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 3</div><div>$\alpha = 3+4 = 7$.</div></div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $x=7$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable standard">
+      <div class="problem-num">기본 2 — 부정적분 계산 + 변곡점 함숫값</div>
+      <div class="problem-body">
+        $F'(x) = f(x) = 3x^2-6x-9$이고 $F(0)=2$인 삼차함수 $F(x)$가 있다. $F(x)$의 변곡점에서의 함숫값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><div class="sol-step-label">STEP 1</div><div>$F(x) = \displaystyle\int f(x)\,dx = x^3-3x^2-9x+C$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 2</div><div>$F(0)=C=2$이므로 $F(x) = x^3-3x^2-9x+2$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 3</div><div>$F''(x) = 6x-6=0$ 이므로 변곡점 $x=1$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 4</div><div>$F(1) = 1-3-9+2 = -9$.</div></div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $-9$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 심화 ===== -->
+    <div class="level-header filterable advanced">
+      <span class="level-badge badge-advanced">심화</span>
+      <span style="font-weight:600; color:#6a1b9a">구조식 그대로 넓이·함숫값 계산</span>
+    </div>
+
+    <div class="problem-card filterable advanced">
+      <div class="problem-num">심화 1 — 세 근의 합 + 정적분 넓이</div>
+      <div class="problem-body">
+        최고차항의 계수가 $1$인 삼차함수 $y=F(x)$와 직선 $l$이 $x=1$에서 접하고, $F(x)$의 변곡점의 $x$좌표가 $0$이다. 곡선 $y=F(x)$와 직선 $l$로 둘러싸인 도형의 넓이를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><div class="sol-step-label">STEP 1</div><div>$G(x) = F(x) - l$로 두면 $x=1$에서 접하므로 $G(x) = (x-1)^2(x-\alpha)$ (최고차항 계수 $1$).</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 2</div><div>세 근의 합 $=3\times0=0$. $1+1+\alpha=0$ 이므로 $\alpha=-2$. 즉 $G(x)=(x-1)^2(x+2)$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 3</div><div>구간 $[-2,1]$에서 $(x-1)^2\ge0$이고 $x+2\ge0$이므로 $G(x)\ge0$ — 곡선이 직선 위쪽에 있다. 따라서 넓이 $=\displaystyle\int_{-2}^{1}G(x)\,dx$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 4</div><div>$G(x)=(x-1)^2(x+2) = x^3-3x+2$ (직선 $l$의 $m,n$은 몰라도 $G(x)$는 이미 완전히 결정됨).<br>
+          $$\int_{-2}^{1}(x^3-3x+2)\,dx = \left[\dfrac{x^4}{4}-\dfrac{3x^2}{2}+2x\right]_{-2}^{1} = \dfrac34 -(-6) = \dfrac{27}{4}$$</div></div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $\dfrac{27}{4}$</span></div>
+          <div class="intent-tag"><strong>출제 의도:</strong> 직선의 기울기·절편($m,n$)을 몰라도 접점과 변곡점 정보만으로 차함수 $G(x)$를 완전히 결정할 수 있음을 확인하고, 그 구조식을 그대로 정적분에 활용하는 융합 사고력을 측정한다.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable advanced">
+      <div class="problem-num">심화 2 — 전개 없이 특정 함숫값 계산</div>
+      <div class="problem-body">
+        최고차항의 계수가 $2$인 삼차함수 $y=F(x)$와 직선 $y=-3x+5$가 $x=-1$에서 접하고, $F(x)$의 변곡점의 $x$좌표가 $2$이다. $F(4)$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><div class="sol-step-label">STEP 1</div><div>$G(x) = F(x)-(-3x+5)$로 두면 $x=-1$에서 접하므로 $G(x) = 2(x+1)^2(x-\alpha)$ (최고차항 계수 $2$).</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 2</div><div>세 근의 합 $=3\times2=6$. $(-1)+(-1)+\alpha=6$ 이므로 $\alpha=8$. $G(x)=2(x+1)^2(x-8)$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 3</div><div>$F(x) = G(x) + (-3x+5)$이므로 $F(4) = G(4) + (-3\cdot4+5)$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 4</div><div>$G(4) = 2(4+1)^2(4-8) = 2\cdot25\cdot(-4) = -200$. 그리고 $-3\cdot4+5=-7$.<br>
+          $F(4) = -200+(-7) = -207$.</div></div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $-207$</span></div>
+          <div class="intent-tag"><strong>출제 의도:</strong> $F(x)$를 완전히 전개하지 않고, 인수분해된 구조식 $G(x)$에 특정 $x$값만 대입해 효율적으로 함숫값을 얻는 습관을 평가한다.</div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 수능 대비 ===== -->
+    <div class="level-header filterable csat">
+      <span class="level-badge badge-csat">수능 대비</span>
+      <span style="font-weight:600; color:#b71c1c">준킬러 — 세 근의 합 + 접선 융합</span>
+    </div>
+
+    <div class="problem-card filterable csat">
+      <div class="problem-num">수능 대비 1 — 수능 21번 유형(준킬러)</div>
+      <div class="problem-body">
+        최고차항의 계수가 $1$인 삼차함수 $F(x)$의 변곡점의 $x$좌표는 $0$이다. 직선 $y=6x-2$는 곡선 $y=F(x)$와 $x=2$에서 접하고, 이 직선과 곡선이 만나는 점 중 접점이 아닌 점을 $P$라 하자. 점 $P$에서 곡선 $y=F(x)$에 접하는 직선의 $y$절편을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><div class="sol-step-label">STEP 1</div><div>$G(x)=F(x)-(6x-2)$로 두면 $x=2$에서 접하므로 $G(x)=(x-2)^2(x-\alpha)$ (최고차항 계수 $1$).</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 2</div><div>세 근의 합 $=3\times0=0$. $2+2+\alpha=0$ 이므로 $\alpha=-4$. 즉 점 $P$의 $x$좌표는 $-4$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 3</div><div>$F(x) = (x-2)^2(x+4)+6x-2$. $F(-4) = (-6)^2\cdot0 + (-24-2) = -26$. (점 $P(-4,-26)$)</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 4</div><div>곱의 미분법으로 $F'(x) = 2(x-2)(x+4)+(x-2)^2+6$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 5</div><div>$x=-4$ 대입: $2(-6)(0)+(-6)^2+6 = 0+36+6=42$. 즉 점 $P$에서의 접선의 기울기는 $42$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 6</div><div>점 $P(-4,-26)$에서 기울기 $42$인 접선: $y=42(x+4)-26 = 42x+142$. $y$절편은 $142$.</div></div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $142$</span></div>
+          <div class="intent-tag"><strong>출제 의도:</strong> ① 세 근의 합으로 접점이 아닌 교점을 찾고, ② 구조식에 값을 대입해 함숫값을 구하고, ③ 곱의 미분법으로 그 점에서의 새로운 접선까지 잇는 3단계 연쇄 사고력을 측정한다.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable csat">
+      <div class="problem-num">수능 대비 2 — 모의고사 단답형 4점 유형(준킬러)</div>
+      <div class="problem-body">
+        최고차항의 계수가 $a$ ($a\neq0$)인 삼차함수 $F(x)$에 대해 직선 $y=2x+3$이 $x=1$에서 곡선 $y=F(x)$에 접하고, $F(x)$의 변곡점의 $x$좌표는 $-2$이다. $F(0)=11$일 때, $a$의 값을 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><div class="sol-step-label">STEP 1</div><div>$G(x)=F(x)-(2x+3)$로 두면 $x=1$에서 접하므로 $G(x)=a(x-1)^2(x-\alpha)$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 2</div><div>세 근의 합 $=3\times(-2)=-6$. $1+1+\alpha=-6$ 이므로 $\alpha=-8$. $G(x)=a(x-1)^2(x+8)$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 3</div><div>$F(x)=a(x-1)^2(x+8)+2x+3$. $x=0$는 근이 아니므로 이 값은 자유롭게 대입해 $a$를 결정하는 데 쓸 수 있다.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 4</div><div>$F(0) = a(-1)^2(8)+3 = 8a+3$.</div></div>
+          <div class="sol-step"><div class="sol-step-label">STEP 5</div><div>$8a+3=11$ 이므로 $8a=8$, $a=1$.</div></div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $a=1$</span></div>
+          <div class="intent-tag"><strong>출제 의도:</strong> 세 근(교점)에 해당하는 $x$값을 대입하면 미지수 $a$가 소거되어 정보를 얻을 수 없다는 함정을 피하고, 근이 <strong>아닌</strong> 다른 $x$값을 대입해야 $a$를 결정할 수 있다는 점을 이해하는지 측정한다.</div>
+        </div>
+      </details>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>도구</th><th>핵심</th><th>활용</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">주인공 전환</td><td>묻는 대상이 $F(x)$면 $F(x)$를 직접 분석</td><td>$f(x)$ 전개·적분 생략</td></tr>
+          <tr style="background:var(--box-blue)"><td style="font-weight:700">차함수 $G(x)$</td><td>$F(x)-(\text{직선})$</td><td>접선 = 중근 구조로 즉시 인수분해</td></tr>
+          <tr><td style="font-weight:700">접점 = 중근</td><td>접선이면 교점 하나가 $2$개로 취급</td><td>$(x-p)^2(x-q)$ 꼴</td></tr>
+          <tr style="background:var(--box-blue)"><td style="font-weight:700">세 근의 합</td><td>$3\times$변곡점 $x$좌표 (직선과 무관)</td><td>미지수 근 즉시 확정</td></tr>
+          <tr><td style="font-weight:700">구조식 대입</td><td>전개 없이 특정 $x$값 대입</td><td>함숫값·넓이·새 접선까지 확장</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+      <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+      <div>
+        ① 문제가 묻는 대상이 $f(x)$가 아니라 $F(x)$인지 먼저 확인한다.<br>
+        ② "접한다"는 조건이 보이면 즉시 차함수 $G(x)=F(x)-(\text{직선})$을 세우고, 접점을 중근으로 쓴다.<br>
+        ③ 나머지 근은 <strong>세 근의 합 $=3\times$변곡점 $x$좌표</strong>로 뺄셈 한 번에 구한다.<br>
+        ④ $a$(계수)를 구해야 할 때는 근이 <strong>아닌</strong> $x$값(예: $x=0$)을 대입해야 정보를 얻는다 — 근을 대입하면 항등적으로 $0$이 되어 소용없다.<br>
+        ⑤ $F(x)$를 완전히 전개할 필요는 거의 없다 — 필요한 값만 구조식에 바로 대입한다.
+      </div>
+    </div>
+
+    <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+      📺 <strong>원본 영상</strong>: <a href="https://www.youtube.com/watch?v=YGatl9XmkUQ" target="_blank" rel="noopener" style="color:var(--primary)">풀이가 지저분한 학생들, 대부분 이걸 못 봅니다 (원시함수 주인공과 세 근의 합)</a> · 채널: 수능 수학은 이동준<br>
+      📅 자료 생성: 2026-08-17 · 본 자료는 영상 자막 요약을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토를 권장합니다.
+    </div>
+
+  </div><!-- /container -->
+
+  <div class="warning-box">
+    <h3>⚠️ 사용자 검토 권고</h3>
+    <ul>
+      <li><strong>(★★) 도입 예시 문항 수치 정정:</strong> 원본 영상의 요약 자료에는 최종 값이 $\alpha=-\dfrac73$으로 적혀 있었으나, 제시된 변곡점($x=-\dfrac13$)과 접점($x=\dfrac53$, 중근) 조건으로 근과 계수의 관계를 이용해 자체 재검산한 결과 $\alpha=-\dfrac{13}{3}$이 수학적으로 일관된 값이었습니다. 요약 과정에서 생긴 오기로 추정되어 본 자료에서는 검산된 $-\dfrac{13}{3}$을 사용했습니다. 실제 영상을 재확인해 대조 후 필요시 수정해 주세요.</li>
+      <li><strong>(★) 영상 길이·정확한 게시 시각:</strong> 제공된 자료(구조화 요약본)에 영상 러닝타임이 명시되어 있지 않아 본문에 추측 기재하지 않았습니다.</li>
+    </ul>
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> · <a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    <p>본 학습자료는 AI가 영상 요약을 기반으로 생성했습니다 · 실재하지 않는 기출 출처는 표기하지 않았습니다.</p>
+  </footer>
+
+  <script defer src="../../pdf-mode.js"></script>
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+  <script>
+    function toggleDark(){document.body.classList.toggle('dark');}
+    function filterLevel(level,btn){
+      document.querySelectorAll('.toolbar .flt').forEach(b=>b.classList.remove('active'));
+      if(btn)btn.classList.add('active');
+      document.querySelectorAll('.filterable').forEach(el=>{el.style.display=(level==='all'||el.classList.contains(level))?'':'none';});
+      if(level!=='all'){const f=document.querySelector('.level-header');if(f)f.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+    window.addEventListener('scroll',()=>{const b=document.getElementById('scrollTopBtn');if(b)b.style.display=window.scrollY>400?'block':'none';});
+    document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;if(e.key==='d'||e.key==='D')toggleDark();});
+  </script>
+</body>
+</html>
