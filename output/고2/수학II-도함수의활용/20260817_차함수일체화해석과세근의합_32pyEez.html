@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>차함수 일체화 해석법 - 교점 접점과 세 근의 합</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .example-card { background: var(--box-blue); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+    .example-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; font-size: 14px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .intent { font-size: .9em; color: var(--purple); margin-top: 8px; }
+    .pitfall { font-size: .9em; color: var(--orange); margin-top: 6px; }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .warning-box { border: 2px solid var(--orange); background: var(--caution-bg); border-radius: 12px; padding: 18px 24px; margin: 26px 0 16px; }
+    .warning-box h3 { color: var(--orange); margin-bottom: 8px; }
+    .warning-box ul { margin-left: 20px; margin-top: 6px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 10px; border: 1px solid var(--border); text-align: center; }
+    th { background: var(--box-blue); }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+<div class="hero">
+  <div class="tag">고2 · 수학Ⅱ — 도함수의 활용</div>
+  <h1>차함수 일체화 해석법<br>교점·접점과 세 근의 합</h1>
+  <p class="sub">삼차함수를 억지로 미지수 연립으로 풀지 말고, "차함수" 하나로 접점·교점 구조를 한눈에 읽어 최고차항 계수까지 빠르게 결정한다</p>
+  <div class="quote">
+    "다항함수끼리는 완벽히 섞인다 — 미적분처럼 억지로 찢어서 볼 필요 없다." — 영상 핵심 메시지 요약
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/_32pyEezkZc" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/_32pyEezkZc/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">3모 1등급이 목표면 반드시 보세요 (차함수 일체화 해석법)</div>
+      <div class="v-meta">📺 YouTube · 수능 수학은 이동준</div>
+      <a class="v-link" href="https://youtu.be/_32pyEezkZc" target="_blank" rel="noopener">https://youtu.be/_32pyEezkZc</a><br>
+      <a class="related" href="20260520_차함수특강관계내리기와보정_WhojOfqC.html">📖 관련: 차함수 특강 — 관계·내리기·보정 (WhojOfqC) →</a>
+    </div>
+  </div>
+
+  <div class="learn">
+    🎯 <strong>학습 목표</strong>: (1) 두 그래프의 교점=차함수의 근, 접점=차함수의 중근이 되는 이유를 스스로 유도할 수 있다. (2) 삼차함수의 이차항 계수만으로 "임의의 직선"과 만나는 세 점의 x좌표의 합이 항상 일정함을 유도하고, 이를 이용해 미지수·최고차항 계수를 빠르게 결정할 수 있다.<br>
+    📚 <strong>단원</strong>: [고2-수학Ⅱ-도함수의 활용] (다항함수의 그래프와 미분, 정적분의 활용)<br>
+    ⏱️ <strong>예상 소요시간</strong>: 약 45분 (개념 15분 + 문항 8개 30분)
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 — 차함수 일체화와 근과 계수의 관계</div>
+
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+    <ul style="margin-left:24px; margin-top:6px">
+      <li><strong>인수정리:</strong> 다항식 $h(x)$에 대해 $h(\alpha)=0$ ↔ $(x-\alpha)$가 $h(x)$의 인수. (중3~고1)</li>
+      <li><strong>중근의 의미:</strong> $h(x)=(x-\alpha)^2\cdot(\text{다른 인수})$ 꼴이면 그래프는 $x=\alpha$에서 $x$축에 스치듯 닿고 부호를 바꾸지 않는다.</li>
+      <li><strong>미분계수 = 접선의 기울기:</strong> $f'(\alpha)$는 $x=\alpha$에서 그래프에 접하는 접선의 기울기다. (수학Ⅱ 미분)</li>
+      <li><strong>정적분과 넓이:</strong> $\left|\displaystyle\int_a^b h(x)\,dx\right|$는 $h(x)$의 그래프와 $x$축 사이의 넓이다.</li>
+    </ul>
+  </div>
+
+  <!-- CONCEPT 1 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>차함수와 교점·접점의 관계</div>
+
+    <p><strong>① 정의</strong> — 두 그래프 $y=f(x)$, $y=g(x)$가 있을 때 $h(x)=f(x)-g(x)$를 두 함수의 <strong>차함수</strong>라 부른다. 두 그래프의 교점의 $x$좌표는 $h(x)$의 근이고, 두 그래프가 접하는 점의 $x$좌표는 $h(x)$의 중근이다.</p>
+
+    <p><strong>② 비유로 이해하기</strong> — 같은 트랙을 달리는 두 사람 A, B를 생각하자. $f(x)$는 A의 위치, $g(x)$는 B의 위치라면 $h(x)=f(x)-g(x)$는 "두 사람 사이의 거리"다. 거리가 0이 되는 순간 두 사람이 만난 것(교점)이고, 거리가 0에 살짝 닿았다가 <em>다시 벌어지면</em>(부호를 안 바꾸면) 스쳐 지나간 것(접점)이다. 완전히 넘어가 버리면(부호가 바뀌면) 그냥 교차한 것이다.</p>
+
+    <p><strong>③ 왜 이렇게 될까? (유도)</strong></p>
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>교점 → 근:</strong> $x=\alpha$에서 두 그래프가 만난다 ⟺ $f(\alpha)=g(\alpha)$ ⟺ $f(\alpha)-g(\alpha)=0$ ⟺ $h(\alpha)=0$. 이는 곧 인수정리에 의해 $(x-\alpha)$가 $h(x)$의 인수라는 뜻이다.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>접점 → 중근:</strong> $x=\alpha$에서 접한다는 것은 두 조건을 <em>동시에</em> 만족한다는 뜻이다. (가) 만난다: $f(\alpha)=g(\alpha)$. (나) 기울기가 같다(접선이 겹친다): $f'(\alpha)=g'(\alpha)$.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">(가)는 $h(\alpha)=0$, (나)는 $h'(\alpha)=f'(\alpha)-g'(\alpha)=0$. $h(\alpha)=0$이면서 $h'(\alpha)=0$이라는 것은 $h(x)$를 $(x-\alpha)$로 나눈 몫도 다시 $x=\alpha$에서 0이 된다는 뜻 — 즉 $h(x)=(x-\alpha)^2\times(\text{다른 인수})$ 꼴, 바로 중근이다.</div>
+    </div>
+
+    <div class="concept-box">
+      <strong>🔍 "극솟값이 0"이 왜 접점인가?</strong><br>
+      $g(x)=0$($x$축)인 특수한 경우를 생각하자. "$f(x)$가 $x=\alpha$에서 극솟값 $0$을 가진다"는 것은 (가) $f(\alpha)=0$(극값이 0이므로 $x$축과 만남)과 (나) $f'(\alpha)=0$(극값이므로 미분계수 0)을 <em>동시에</em> 만족한다는 뜻이다. 이는 위 접점 조건과 완전히 같다! 그래서 "극솟값 0"은 곧 "$f(x)$가 그 점에서 $x$축과 접한다(중근)"는 말과 같은 뜻이다.
+    </div>
+
+    <div class="tip">
+      <strong>🆚 세 가지 접근법, 왜 3번째가 빠른가?</strong><br>
+      <strong>1단계(연립)</strong>: $f(\alpha)=0$과 $f'(\alpha)=0$을 미지수(계수)들의 연립방정식으로 풀기 → 미지수가 2개 이상이면 식이 지저분해지고 계산량이 많다.<br>
+      <strong>2단계(판별식)</strong>: 중근 조건을 판별식 $D=0$으로 처리 → 삼차식은 판별식 공식 자체가 복잡해서 실전에서 거의 안 쓴다.<br>
+      <strong>3단계(차함수 해석)</strong>: 위 유도를 그대로 써서 $h(x)$를 인수분해 형태로 바로 적는다 → 연립방정식도 판별식도 필요 없다. <strong>이 자료에서는 항상 3단계 방식을 쓴다.</strong>
+    </div>
+
+    <p><strong>④ 자주 하는 실수</strong></p>
+    <div class="pitfall">
+      ⚠️ 교점=단순근, 접점=중근이라고 <em>결과만</em> 외우고 "왜"인지 모르면, 문제가 살짝 변형될 때(예: 접점이 3개인 경우) 대응을 못 한다.<br>
+      ⚠️ $h(x)=f(x)-g(x)$의 최고차항 계수를 항상 $f$의 최고차항 계수와 같다고 착각. $g$가 $f$보다 낮은 차수면 맞지만, $g$도 같은 차수라면 최고차항끼리 빼야 한다.<br>
+      ⚠️ 접점에서 $h(x)$의 부호가 안 바뀐다는 사실을 놓쳐서, 넓이 계산 시 절댓값 처리를 잘못한다.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>근과 계수의 관계로 최고차항 계수 결정</div>
+
+    <p><strong>① 정의</strong> — 최고차항의 계수가 $k$($k\neq0$)인 삼차함수 $f(x)=kx^3+ax^2+bx+c$의 그래프가 <strong>어떤 직선</strong> $y=mx+n$과 만나는 점들의 $x$좌표 3개(중근이면 두 번 세기)의 합은, 직선이 무엇이든 항상 $-\dfrac{a}{k}$로 일정하다.</p>
+
+    <p><strong>② 비유로 이해하기</strong> — 삼차함수 그래프를 무거운 저울추($kx^3+ax^2$, 2차항까지)와 가벼운 실($bx+c$, 1차항+상수항)이 매달린 모빌이라고 생각하자. 직선을 바꾸는 것은 이 모빌에서 가벼운 실 부분만 살짝 잘라내거나 붙이는 것과 같다. 저울추(2차항까지의 구조)는 전혀 안 건드리므로, 교점들의 "무게중심" 격인 근의 합은 조금도 변하지 않는다.</p>
+
+    <p><strong>③ 왜 이렇게 될까? (유도)</strong></p>
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">$f(x)$와 직선 $y=mx+n$의 교점의 $x$좌표는 방정식 $f(x)-(mx+n)=0$의 해다. 전개하면 $kx^3+ax^2+(b-m)x+(c-n)=0$ — <strong>$x^2$의 계수는 여전히 $a$</strong>다. 직선은 1차식이라 $x^2$항이 없으므로 $x^2$ 계수에 전혀 영향을 못 준다.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">이 삼차방정식의 세 근을 $\alpha,\beta,\gamma$라 하면 $kx^3+ax^2+(b-m)x+(c-n)=k(x-\alpha)(x-\beta)(x-\gamma)$로 인수분해된다. 우변을 전개하면 $x^2$의 계수는 $-k(\alpha+\beta+\gamma)$.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">좌변의 $x^2$ 계수 $a$와 비교하면 $a=-k(\alpha+\beta+\gamma)$, 즉 $\alpha+\beta+\gamma=-\dfrac{a}{k}$. 이 식 어디에도 직선의 정보($m,n$)가 없으므로, <strong>직선을 어떻게 바꿔도 세 근의 합은 항상 $-\dfrac{a}{k}$로 고정</strong>된다.</div>
+    </div>
+
+    <div class="formula-box">
+      $$\alpha+\beta+\gamma = -\dfrac{a}{k}\quad(\text{직선과 무관, 접점은 두 번 센다})$$
+    </div>
+
+    <p><strong>④ 자주 하는 실수</strong></p>
+    <div class="pitfall">
+      ⚠️ 이차방정식의 근과 계수 관계($-\dfrac{b}{a}$, 1차항계수/최고차항계수)와 헷갈려서 삼차에서도 1차항 계수를 씀 — 삼차는 반드시 <strong>2차항 계수</strong>를 써야 한다.<br>
+      ⚠️ 접점(중근)을 근 1개로만 세는 실수 — 중근은 <strong>두 번</strong> 세야 세 근의 합 공식이 맞는다.<br>
+      ⚠️ "직선이 바뀌면 교점도 바뀌니까 합도 바뀔 것"이라고 지레짐작 — 실제로는 $x^2$ 계수가 안 바뀌므로 합은 불변.
+    </div>
+
+    <div class="example-card">
+      <div class="example-title">📐 확장 — 접점·교점 넓이 공식(12분 공식) 유도</div>
+      <p>$h(x)=k(x-\alpha)^2(x-\beta)$일 때, $d=\beta-\alpha$로 두고 $u=x-\alpha$로 치환하면:</p>
+      <div class="sol-step">
+        <div class="sol-step-label">치환</div>
+        <div>$\displaystyle\int_\alpha^\beta k(x-\alpha)^2(x-\beta)\,dx = \int_0^d k\,u^2(u-d)\,du = k\int_0^d (u^3 - du^2)\,du$</div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-step-label">계산</div>
+        <div>$= k\left[\dfrac{u^4}{4}-\dfrac{du^3}{3}\right]_0^d = k\left(\dfrac{d^4}{4}-\dfrac{d^4}{3}\right) = -\dfrac{k\,d^4}{12}$</div>
+      </div>
+      <div class="tip">
+        절댓값을 취하면 두 그래프 사이의 넓이 $S=\dfrac{|k|}{12}(\beta-\alpha)^4$. 뒤에 나오는 넓이 문항에서 이 식을 바로 쓴다.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 도입 예시 문항 ===== -->
+  <div class="section-title">📌 도입 — 예시 문항으로 감 잡기</div>
+  <div class="problem-card">
+    <div class="problem-num">예시 — 접점·교점을 값 대입으로 완성하기</div>
+    <div class="problem-body">
+      최고차항의 계수가 양수인 삼차함수 $f(x)$가 직선 $y=x$와 $x=0$에서 접하고 $x=3$에서 만난다. $f(2)=-2$일 때, $f(x)$의 최고차항의 계수를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1</div>
+          <div>접점 $x=0$ → 중근, 교점 $x=3$ → 단근. 최고차항 계수를 $k$라 하면 (개념1)<br>
+          $h(x)=f(x)-x = k\,x^2(x-3)$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2</div>
+          <div>$f(x)=kx^2(x-3)+x$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 3</div>
+          <div>$f(2)=k(4)(2-3)+2 = -4k+2$. 조건 $f(2)=-2$ 대입: $-4k+2=-2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 4</div>
+          <div>$-4k=-4 \Rightarrow k=1$. (검산: $f(x)=x^3-3x^2+x$, $f(0)=0=$직선값, $f'(0)=1=$직선기울기 ✔ 접함 확인. $f(3)=27-27+3=3=$직선값 ✔)</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 최고차항의 계수 $1$</span></div>
+      </div>
+    </details>
+    <div class="tip" style="margin-top:14px">
+      💡 <strong>핵심 포인트</strong>: $f(x)$의 식을 처음부터 전부 구하려 하지 않는다. "차함수 = 인수분해 형태"로 즉시 적고, 딱 하나 주어진 값만 대입하면 끝난다.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header filterable basic">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">차함수 구조 직접 세우기</span>
+  </div>
+
+  <div class="problem-card filterable basic">
+    <div class="problem-num">기초 1 — 접점·교점으로 $f(x)$ 완성</div>
+    <div class="problem-body">
+      최고차항의 계수가 $2$인 삼차함수 $f(x)$가 직선 $y=1$과 $x=-1$에서 접하고 $x=2$에서 만난다. $f(x)$를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1</div>
+          <div>접점 $x=-1$ → 중근, 교점 $x=2$ → 단근. $h(x)=f(x)-1=2(x+1)^2(x-2)$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2</div>
+          <div>$(x+1)^2(x-2)=(x^2+2x+1)(x-2)=x^3-3x-2$. 양변에 $2$를 곱하면 $2x^3-6x-4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 3</div>
+          <div>$f(x)=(2x^3-6x-4)+1=2x^3-6x-3$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $f(x)=2x^3-6x-3$</span></div>
+      </div>
+    </details>
+    <div class="pitfall">🙅 오답 주의: $h(x)$에 다시 $1$을 더하는 것을 잊고 $f(x)=2x^3-6x-4$로 마무리하는 실수가 많다.</div>
+  </div>
+
+  <div class="problem-card filterable basic">
+    <div class="problem-num">기초 2 — 세 근의 합은 직선과 무관</div>
+    <div class="problem-body">
+      삼차함수 $f(x)=2x^3-6x^2+5x-1$의 그래프와 직선 $y=mx+n$이 세 점(중근 포함)에서 만난다. 이 직선을 어떻게 바꾸어도 세 교점의 $x$좌표의 합은 항상 일정하다. 그 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1</div>
+          <div>개념2 공식: 세 근의 합 $=-\dfrac{a}{k}$. 여기서 최고차항 계수 $k=2$, 이차항 계수 $a=-6$.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2</div>
+          <div>$-\dfrac{a}{k}=-\dfrac{-6}{2}=3$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $3$</span></div>
+      </div>
+    </details>
+    <div class="pitfall">🙅 오답 주의: $-\dfrac{b}{a}$(이차방정식 공식)를 그대로 가져와 $1$차항 계수 $5$와 최고차항 계수 $2$로 계산하면 틀린다. 삼차는 반드시 <strong>2차항 계수</strong>를 쓴다.</div>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header filterable standard">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">근의 합 + 넓이 공식 적용</span>
+  </div>
+
+  <div class="problem-card filterable standard">
+    <div class="problem-num">기본 1 — 이차항 계수만으로 나머지 교점 찾기</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$이고 이차항의 계수가 $-3$인 삼차함수 $f(x)$와 어떤 직선이 $x=0$에서 접하고 $x=a$ $(a\neq0)$에서 만난다. $a$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1</div>
+          <div>세 근의 합 $=-\dfrac{a_{2}}{k}=-\dfrac{-3}{1}=3$ (직선이 무엇인지 몰라도 계산 가능, 개념2)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2</div>
+          <div>접점 $x=0$은 중근 → $0+0+a=3$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 3</div>
+          <div>$a=3$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $a=3$</span></div>
+      </div>
+    </details>
+    <div class="pitfall">🙅 오답 주의: 중근 $x=0$을 한 번만 세어 $a=3$이 아니라 다른 값으로 잘못 계산하는 경우가 많다.</div>
+  </div>
+
+  <div class="problem-card filterable standard">
+    <div class="problem-num">기본 2 — 접점·교점 넓이 공식 적용</div>
+    <div class="problem-body">
+      최고차항의 계수가 $3$인 삼차함수 $f(x)$와 직선 $y=g(x)$가 $x=-1$에서 접하고 $x=1$에서 만난다. 두 그래프로 둘러싸인 부분의 넓이를 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1</div>
+          <div>$h(x)=f(x)-g(x)=3(x+1)^2(x-1)$ (접점 $-1$: 중근, 교점 $1$: 단근)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2</div>
+          <div>개념2 확장 공식 $S=\dfrac{|k|}{12}(\beta-\alpha)^4$에서 $\beta-\alpha=1-(-1)=2$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 3</div>
+          <div>$S=\dfrac{3}{12}\cdot 2^4=\dfrac{3\times16}{12}=4$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $4$</span></div>
+      </div>
+    </details>
+    <div class="pitfall">🙅 오답 주의: 공식의 $(\beta-\alpha)$에 접점·교점 순서를 바꿔 넣어도 4제곱이라 결과는 같지만, $k$의 절댓값을 빼먹고 부호째로 답에 넣는 실수가 흔하다.</div>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header filterable advanced">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">두 개념 결합 + 미분계수 보정</span>
+  </div>
+
+  <div class="problem-card filterable advanced">
+    <div class="problem-num">심화 1 — 근의 합으로 나머지 교점, 차함수로 미분계수</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$이고 이차항의 계수가 $0$인 삼차함수 $f(x)$가 직선 $y=3x-2$와 $x=-2$에서 접한다. 나머지 교점의 $x$좌표를 $\beta$라 할 때, $f'(\beta)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1</div>
+          <div>세 근의 합 $=-\dfrac{0}{1}=0$. 접점 $-2$는 중근 → $-2-2+\beta=0 \Rightarrow \beta=4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2</div>
+          <div>$h(x)=f(x)-(3x-2)=(x+2)^2(x-4)$ (최고차항 계수는 직선을 빼도 그대로 $1$)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 3</div>
+          <div>$h'(x)=2(x+2)(x-4)+(x+2)^2=(x+2)[2(x-4)+(x+2)]=(x+2)(3x-6)$<br>
+          $h'(4)=(6)(6)=36$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 4 — 보정</div>
+          <div>직선 $y=3x-2$의 기울기는 $3$이므로 $f'(4)=h'(4)+3=36+3=39$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $\beta=4$, $f'(\beta)=39$</span></div>
+      </div>
+    </details>
+    <div class="intent">🎯 출제 의도: 개념1(접점=중근)과 개념2(근의 합 불변)를 함께 써서 나머지 교점을 먼저 확정한 뒤, $f(x)$ 전체를 전개하지 않고 차함수 미분 + 보정만으로 미분계수를 구하는 능력을 확인한다.</div>
+    <div class="pitfall">🙅 오답 주의: $f'(4)$를 구할 때 보정(직선의 기울기 더하기)을 빼먹고 $h'(4)=36$을 그대로 답으로 쓰는 실수가 가장 흔하다.</div>
+  </div>
+
+  <div class="problem-card filterable advanced">
+    <div class="problem-num">심화 2 — 이차항 계수를 최고차항 계수로 표현</div>
+    <div class="problem-body">
+      최고차항의 계수가 $k$ $(k>0)$인 삼차함수 $f(x)=kx^3+ax^2+bx+c$의 이차항의 계수가 $a=-3k$이다. $f(x)$와 어떤 직선이 $x=0$에서 접하고 다른 한 점에서 만난다. 두 그래프로 둘러싸인 부분의 넓이가 $27$일 때, $k$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1</div>
+          <div>이차항 계수를 $-3k$처럼 $k$의 배수로 두는 이유: $-\dfrac{a}{k}$ 계산 시 $k$가 약분되어 깔끔한 정수가 나오게 하기 위함이다. $-\dfrac{a}{k}=-\dfrac{-3k}{k}=3$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2</div>
+          <div>접점 $x=0$은 중근 → $0+0+\beta=3 \Rightarrow \beta=3$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 3</div>
+          <div>$h(x)=k\,x^2(x-3)$. 넓이 공식 $S=\dfrac{|k|}{12}(\beta-\alpha)^4=\dfrac{k}{12}\cdot3^4=\dfrac{81k}{12}=\dfrac{27k}{4}$ ($k>0$이므로 $|k|=k$)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 4</div>
+          <div>$\dfrac{27k}{4}=27 \Rightarrow k=4$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $k=4$</span></div>
+      </div>
+    </details>
+    <div class="intent">🎯 출제 의도: 이차항 계수가 최고차항 계수의 배수로 주어질 때도 개념2의 비율식이 그대로 성립함을 확인하고, 넓이 조건을 거꾸로 이용해 미지의 최고차항 계수를 결정하는 흐름(영상의 "5초 결정" 테크닉)을 연습한다.</div>
+    <div class="pitfall">🙅 오답 주의: $\dfrac{27k}{4}=27$을 풀 때 양변에 $4$를 곱하지 않고 바로 $27$로 나눠 $k=\dfrac{1}{4}$처럼 잘못 계산하는 실수가 나온다.</div>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header filterable csat">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 차함수 일체화 종합</span>
+  </div>
+
+  <div class="problem-card filterable csat">
+    <div class="problem-num">수능 대비 1 — 14번 유형(준킬러): 넓이 + 미분계수 합산</div>
+    <div class="problem-body">
+      최고차항의 계수가 $3$이고 이차항의 계수가 $-15$인 삼차함수 $f(x)$가 직선 $y=x$와 $x=1$에서 접하고 $x=t$ $(t>1)$에서 만난다. 두 그래프로 둘러싸인 부분의 넓이를 $S$, $f'(t)$의 값을 $T$라 할 때, $S+T$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1 — $t$ 결정</div>
+          <div>세 근의 합 $=-\dfrac{-15}{3}=5$. 접점 $1$은 중근 → $1+1+t=5 \Rightarrow t=3$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2 — 차함수</div>
+          <div>$h(x)=f(x)-x=3(x-1)^2(x-3)$ (최고차항 계수는 직선을 빼도 $3$ 그대로)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 3 — 넓이 $S$</div>
+          <div>$S=\dfrac{|3|}{12}(3-1)^4=\dfrac{3}{12}\times16=4$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 4 — $T=f'(3)$</div>
+          <div>$h'(x)=6(x-1)(x-3)+3(x-1)^2=3(x-1)[2(x-3)+(x-1)]=3(x-1)(3x-7)$<br>
+          $h'(3)=3(2)(2)=12$. 직선 $y=x$의 기울기는 $1$이므로 $T=f'(3)=h'(3)+1=12+1=13$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 5 — 합산</div>
+          <div>$S+T=4+13=17$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $17$</span></div>
+      </div>
+    </details>
+    <div class="intent">🎯 출제 의도: 근의 합으로 미지의 교점을 확정하는 단계와, 넓이·미분계수 두 가지를 각각 차함수에서 계산해 보정하는 단계를 한 문제 안에서 순차적으로 요구해 종합 적용력을 확인한다.</div>
+    <div class="pitfall">🙅 오답 주의: $T=f'(3)$을 구할 때 $h'(3)=12$를 그대로 $T$로 쓰고 직선의 기울기 보정을 빠뜨리는 실수가 가장 많다.</div>
+  </div>
+
+  <div class="problem-card filterable csat">
+    <div class="problem-num">수능 대비 2 — 21번 유형(준킬러): 극솟값 0으로 최고차항 계수 결정</div>
+    <div class="problem-body">
+      삼차함수 $f(x)=kx^3+ax^2+bx+c$ $(k>0)$가 $x=2$에서 극솟값 $0$을 갖는다. $f(x)$의 이차항의 계수가 $a=-3k$이고 $f(0)=32$일 때, $k$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 1</div>
+          <div>"극솟값 0" = $x=2$에서 $f$와 $x$축($y=0$)이 접함 = $f(x)=0$이 $x=2$에서 중근을 가짐 (개념1의 확장 성질)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 2</div>
+          <div>세 근의 합 $=-\dfrac{a}{k}=-\dfrac{-3k}{k}=3$ ($y=0$도 직선의 한 종류이므로 개념2 그대로 적용). 중근 $2,2$와 나머지 근 $\beta$: $2+2+\beta=3 \Rightarrow \beta=-1$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 3</div>
+          <div>$f(x)=k(x-2)^2(x+1)$ 형태로 쓸 수 있다.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 4</div>
+          <div>$f(0)=k(-2)^2(1)=4k$. 조건 $f(0)=32$ 대입: $4k=32 \Rightarrow k=8$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">STEP 5 — 검산</div>
+          <div>$f(x)=8(x-2)^2(x+1)$. $f'(x)=8(x-2)(3x)=24x(x-2)$, $f''(x)=48x-48$, $f''(2)=48>0$ → $x=2$는 실제로 극솟값(극댓값 아님) ✔</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: $k=8$</span></div>
+      </div>
+    </details>
+    <div class="intent">🎯 출제 의도: 영상의 핵심 장면("극솟값 0 → 접점 → 근과 계수의 관계로 최고차항 계수 5초 결정")을 그대로 재현한 문제. $x$축도 하나의 직선이라는 것, 이차항 계수를 최고차항 계수의 배수로 다룰 때도 근의 합 공식이 성립한다는 것을 종합적으로 확인한다.</div>
+    <div class="pitfall">🙅 오답 주의: $x$축을 "직선이 아니다"라고 생각해서 개념2를 적용하지 못하고 다시 $f(x)=0,\,f'(x)=0$ 연립으로 돌아가는 경우가 많다 — $y=0$도 $m=0,n=0$인 평범한 직선이다.</div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 정리 ===== -->
+  <div class="section-title">📝 한눈에 보는 정리</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>도구</th><th>핵심 식</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">접점+교점 차함수</td><td>$h=f-g=k(x-\alpha)^2(x-\beta)$</td><td>교점=근, 접점=중근</td></tr>
+        <tr style="background:#fbe9e7"><td style="font-weight:700">세 근의 합 불변</td><td>$\alpha+\beta+\gamma=-\dfrac{a}{k}$</td><td>직선 무관, 미지의 교점 즉시 결정</td></tr>
+        <tr><td style="font-weight:700">미분계수 보정</td><td>$f'(p)=h'(p)+g'(p)$</td><td>$g$가 직선이면 $g'$은 상수</td></tr>
+        <tr style="background:#fbe9e7"><td style="font-weight:700">넓이(12분 공식)</td><td>$S=\dfrac{|k|}{12}(\beta-\alpha)^4$</td><td>접점+교점 구조 시 즉시 계산</td></tr>
+        <tr><td style="font-weight:700">극솟값 0</td><td>$f(\alpha)=0,\ f'(\alpha)=0$</td><td>$x$축과 접함 = 중근</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+    <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+    <div>① 두 그래프(또는 그래프와 $x$축)가 등장 → 즉시 <strong>차함수 $h=f-g$</strong>를 인수분해 형태로.<br>
+    ② 접점 → 중근, 교점 → 단근. $x$축도 직선의 하나($y=0$)로 취급.<br>
+    ③ 미지의 교점이 남으면 <strong>세 근의 합 $=-\dfrac{a}{k}$</strong>부터 확인 — 직선을 몰라도 계산 가능.<br>
+    ④ 함숫값·미분계수는 차함수에서 계산한 뒤 직선의 값/기울기를 <strong>보정(더하기)</strong>.<br>
+    ⑤ 넓이는 두 그래프 사이 = 차함수와 $x$축 사이. 접점+교점 구조면 12분 공식 즉시 적용.</div>
+  </div>
+
+  <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+    📺 <strong>원본 영상</strong>: <a href="https://youtu.be/_32pyEezkZc" target="_blank" rel="noopener" style="color:var(--primary)">3모 1등급이 목표면 반드시 보세요 (차함수 일체화 해석법)</a> · 수능 수학은 이동준<br>
+    📖 <strong>관련 자료</strong>: <a href="20260520_차함수특강관계내리기와보정_WhojOfqC.html">차함수 특강 — 관계·내리기·보정 (WhojOfqC)</a><br>
+    📅 자료 생성: 2026-08-17 · 본 자료는 영상 요약을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+  </div>
+
+  <div class="warning-box">
+    <h3>⚠️ 사용자 검토 권고</h3>
+    <p>아래 항목은 자체 검증 과정에서 표시된 부분입니다. 학생 배포 전 반드시 교사가 검토해 주세요.</p>
+    <ul>
+      <li>(★★) 심화 2·수능 대비 2에서 이차항 계수를 최고차항 계수의 배수(예: $a=-3k$)로 표현하는 대수적 설정이 중하위권 학생에게는 다소 추상적일 수 있습니다. 각 문항 STEP 1에 "왜 이렇게 두는가"를 설명했지만, 수업 중 개별 확인을 권장합니다.</li>
+      <li>모든 문항의 수치는 본 세션에서 자체 설계·검산(전개식/정적분 직접 계산으로 교차 검증)했으며, 실제 기출문제를 인용하지 않았습니다 — "N번 유형" 표기는 난이도 참고용 일반 명칭입니다.</li>
+    </ul>
+  </div>
+
+</div><!-- /container -->
+
+  <script defer src="../../pdf-mode.js"></script>
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+  <script>
+    function toggleDark(){document.body.classList.toggle('dark');}
+    function filterLevel(level,btn){
+      document.querySelectorAll('.toolbar .flt').forEach(b=>b.classList.remove('active'));
+      if(btn)btn.classList.add('active');
+      document.querySelectorAll('.filterable').forEach(el=>{el.style.display=(level==='all'||el.classList.contains(level))?'':'none';});
+      if(level!=='all'){const f=document.querySelector('.level-header');if(f)f.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+    window.addEventListener('scroll',()=>{const b=document.getElementById('scrollTopBtn');if(b)b.style.display=window.scrollY>400?'block':'none';});
+    document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;if(e.key==='d'||e.key==='D')toggleDark();});
+  </script>
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html">교점 개수 함수와 3차함수 높이차 2대1 공식 (ONHx5OaS)</a> · <a href="20260520_차함수특강관계내리기와보정_WhojOfqC.html">차함수 특강 (WhojOfqC)</a> · <a href="20260808_3차함수비율관계와특수점활용_5WEbC1T5.html">3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이 (5WEbC1T5)</a> · <a href="20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a></div><!--REL_END-->
+</body>
+</html>
