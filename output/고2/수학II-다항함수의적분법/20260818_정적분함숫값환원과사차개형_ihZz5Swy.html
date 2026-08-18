@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ — 다항함수의 적분법</div>
+    <h1>정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기</h1>
+    <p class="sub">$\int_c^x f(t)\,dt$ 를 "넓이"가 아니라 <strong>주인공 함수 $F(x)$ 의 함숫값</strong>으로 보는 순간, 사차함수 개형이 1분 만에 완성된다</p>
+    <div class="quote">"적분을 잘하려면 가장 먼저 빼야 하는 독소가 바로 '넓이'로 보는 태도입니다." — 강사 인용 [00:00:00]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/ihZz5SwynTM" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/ihZz5SwynTM/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">적분을 넓이로 본다? 당신은 하수입니다.</div>
+        <div class="v-meta">📺 YouTube · 약 7분 · 수능 수학은 이동준</div>
+        <a class="v-link" href="https://youtu.be/ihZz5SwynTM" target="_blank" rel="noopener">https://youtu.be/ihZz5SwynTM</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① $F(x)=\int_a^x f(t)dt$ 의 차수·인수·$F(a)=0$ 을 즉시 말한다 ② 피적분함수의 실근을 $F$ 의 극점으로 번역한다 ③ 정적분 조건을 $F$ 의 함숫값 차이로 바꿔 계산 없이 답을 낸다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 넓이를 한 번도 계산하지 않고 푸는 정적분</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)$ 에 대하여 방정식 $f(x)=0$ 의 세 실근이 $a,\ b,\ c$ ($a&lt;b&lt;c$) 이다. 함수 $F(x)=\displaystyle\int_c^x f(t)\,dt$ 에 대하여 $F(a)&lt;0&lt;F(b)$ 이고, 세 수 $|F(c)|,\ |F(b)|,\ |F(a)|$ 가 이 순서대로 등차수열을 이룬다. $\displaystyle\int_a^b f(t)\,dt=6$ 일 때, $\displaystyle\int_c^a f(t)\,dt$ 의 값을 구하시오.</div>
+      <div class="visual">  f(x) 의 부호 (최고차항 계수 &gt; 0, 근 a &lt; b &lt; c)
+     ─────●───────●───────●─────→ x
+          a       b       c
+   f:  −    +       −       +
+   F:  ↓  극소↑   극대↓   극소↑
+                          F(c)=0
+</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$F(x)=\displaystyle\int_c^x f(t)\,dt$ 이므로 적분의 아래끝과 위끝이 같아지는 $x=c$ 를 대입하면 $F(c)=\displaystyle\int_c^c f(t)\,dt=0$.
+            <div class="why">아래끝과 위끝이 같은 정적분은 항상 $0$ 이다 ($\int_c^c f(t)dt=0$). 이것이 "$F$ 는 $x=c$ 에서 $x$축과 만난다"는 뜻이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>미적분의 기본정리에 의해 $F'(x)=f(x)$. 따라서 $f(x)=0$ 의 근 $a,b,c$ 가 곧 $F$ 의 <strong>극점 후보</strong>이고, 위 그림처럼 $f$ 의 부호가 세 근에서 모두 바뀌므로 $x=a,\,b,\,c$ 는 전부 실제 극점이다.
+            <div class="why">$F'=f$ 의 부호가 $+\to-$ 로 바뀌면 극대, $-\to+$ 로 바뀌면 극소. 삼차함수 $f$ 의 최고차항이 양수이고 근이 셋이면 부호가 $-,+,-,+$ 로 번갈아 나타난다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$|F(c)|=0$ 이므로 등차수열 조건 "$|F(c)|,\ |F(b)|,\ |F(a)|$ 가 등차" 는 $2|F(b)|=|F(c)|+|F(a)|=0+|F(a)|$, 즉 $|F(a)|=2|F(b)|$.
+            <div class="why">세 수 $p,q,r$ 이 이 순서로 등차수열이면 가운데 항의 2배가 양 끝의 합이다 ($2q=p+r$). 고1 수열의 기본 성질.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>주어진 조건 $F(a)&lt;0&lt;F(b)$ 에서 $|F(a)|=-F(a)$, $|F(b)|=F(b)$. STEP 3에 넣으면 $-F(a)=2F(b)$, 즉 $F(a)=-2F(b)$.
+            <div class="why">절댓값을 벗길 때 부호를 반드시 확인한다. 음수의 절댓값은 부호를 뒤집은 값이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$\displaystyle\int_a^b f(t)\,dt=F(b)-F(a)=6$ 에 $F(a)=-2F(b)$ 를 대입: $F(b)-(-2F(b))=3F(b)=6$ 이므로 $F(b)=2$, $F(a)=-4$.
+            <div class="why">여기가 이 문제의 핵심. $\int_a^b f$ 를 "넓이"로 보면 그래프를 그려 칠해야 하지만, $F$ 의 <strong>함숫값 차이</strong>로 보면 그냥 일차방정식이 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>구하는 값은 $\displaystyle\int_c^a f(t)\,dt=F(a)-F(c)=-4-0=-4$.
+            <div class="why">$\int_c^a f(t)dt$ 는 위끝이 $a$, 아래끝이 $c$ 이므로 $F(a)-F(c)$. $F(c)=0$ 이라 그대로 $F(a)$ 가 답이 된다.</div></div></div>
+          <span class="answer-tag">정답: $-4$</span>
+        </div>
+      </details>
+      <div class="tip">넓이를 한 줄도 계산하지 않았다. 그림을 칠하는 대신 <strong>$F$ 의 함숫값 $0,\ 2,\ -4$ 세 개</strong>만 확정했을 뿐이다. 이것이 영상이 말하는 "주인공 바꾸기"다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 미적분의 기본정리</div>
+      <p>$f(x)$ 의 부정적분 중 하나를 $F(x)$ 라 하면 ($F'(x)=f(x)$), 정적분은 다음과 같이 계산한다. 중학교 때 배운 "넓이" 이미지는 <strong>도입용 직관</strong>일 뿐, 실제 계산 도구는 아래 식이다.</p>
+      <div class="formula-box">$$\int_a^b f(t)\,dt = \Big[\,F(t)\,\Big]_a^b = F(b)-F(a)$$</div>
+      <p>즉 정적분의 값은 처음부터 끝까지 <strong>"$F$ 라는 함수의 두 함숫값의 차이"</strong> 였다. 우리가 할 일은 이 사실을 문제 풀 때도 잊지 않는 것뿐이다.</p>
+      <div class="caution">"$\int_a^b f = $ 넓이" 는 <strong>$f(x)\ge 0$ 일 때만</strong> 맞는 말이다. $f$ 가 음수인 구간에서는 정적분 값이 음수가 되므로 넓이와 다르다. 이 자료의 도입 문제에서 답이 $-4$ 인 것도 그래서다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>태도 1 — 차수는 하나 올라가고, 아래끝에서 값은 0</div>
+      <p>$f(x)$ 가 $n$차 다항함수일 때 $F(x)=\displaystyle\int_a^x f(t)\,dt$ 를 보면 <strong>세 가지를 즉시</strong> 말할 수 있어야 한다.</p>
+      <div class="formula-box">
+        $$F(x)=\int_a^x f(t)\,dt \quad\Longrightarrow\quad
+        \begin{cases}
+        F \text{ 는 } (n+1)\text{차 다항함수} \\[4pt]
+        F(a)=0 \ \ (\text{즉 } (x-a) \text{ 를 인수로 가짐}) \\[4pt]
+        F'(x)=f(x)
+        \end{cases}$$
+      </div>
+      <div class="concept-box">특히 <strong>$f$ 가 삼차 → $F$ 는 사차</strong>. 영상 제목의 "사차함수 개형"이 여기서 나온다. 삼차함수 $f$ 의 그래프를 그리려 애쓰지 말고, 처음부터 사차함수 $F$ 의 개형을 목표로 삼는다.</div>
+      <p>왜 $F(a)=0$ 인가? $x=a$ 를 대입하면 $F(a)=\displaystyle\int_a^a f(t)\,dt$ 인데, 적분 구간의 길이가 $0$ 이므로 값도 $0$ 이다. 이 한 줄이 미지수 하나를 공짜로 없애 준다.</p>
+      <div class="caution">아래끝이 무엇인지 반드시 확인하라. $\int_0^x$ 이면 $F(0)=0$, $\int_c^x$ 이면 $F(c)=0$ 이다. 문제마다 다르며, 이걸 놓치면 상수항을 못 정해 문제가 안 풀린다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>태도 2 — 피적분함수의 근 = 원함수의 극점</div>
+      <p>$F'(x)=f(x)$ 이므로, <strong>$f$ 의 그래프는 $F$ 의 증감을 알려주는 지도</strong>다. $f(x)=0$ 인 지점에서 $f$ 의 부호가 바뀌면 그 자리가 $F$ 의 극점이 된다.</p>
+      <table class="grid">
+        <tr><th>$f$ 의 부호 변화</th><th>$F'$ 의 부호</th><th>$F$ 의 상태</th></tr>
+        <tr><td>$-$ 에서 $+$ 로</td><td>감소 → 증가</td><td><strong>극소</strong></td></tr>
+        <tr><td>$+$ 에서 $-$ 로</td><td>증가 → 감소</td><td><strong>극대</strong></td></tr>
+        <tr><td>부호 안 바뀜 (중근)</td><td>$-\to-$ 또는 $+\to+$</td><td>극점 아님 (평평하게 지나감)</td></tr>
+      </table>
+      <div class="concept-box">삼차함수 $f$ 의 최고차항 계수가 <strong>양수</strong>이고 서로 다른 세 실근 $a&lt;b&lt;c$ 를 가지면, $f$ 의 부호는 왼쪽부터 $-,\ +,\ -,\ +$ 로 번갈아 나타난다. 따라서 사차함수 $F$ 는 <strong>극소 → 극대 → 극소</strong> 의 "W" 모양이 된다.</div>
+      <div class="caution">셋째 줄을 조심하라. $f$ 가 $(x-p)^2$ 처럼 <strong>중근</strong>을 가지면 그 자리에서 부호가 바뀌지 않으므로 $F$ 의 극점이 아니다. "근의 개수 = 극점의 개수"가 항상 참은 아니다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>태도 3 — 조건을 전부 "함숫값"으로 번역하기</div>
+      <p>문제에 나오는 정적분 조건은 예외 없이 $F$ 의 함숫값 언어로 바꿀 수 있다. 아래 번역표를 외우는 것이 아니라, <strong>$\int_p^q f = F(q)-F(p)$ 하나</strong>에서 전부 나온다는 걸 이해하면 된다.</p>
+      <table class="grid">
+        <tr><th>문제에 나온 말</th><th>$F$ 의 언어로 번역</th></tr>
+        <tr><td>$\displaystyle\int_a^b f(t)\,dt = 6$</td><td>$F(b)-F(a)=6$ (높이 차가 6)</td></tr>
+        <tr><td>$\displaystyle\int_c^x f(t)\,dt$ 로 정의</td><td>$F(c)=0$</td></tr>
+        <tr><td>$f(p)=0$ 이고 부호가 바뀜</td><td>$F$ 가 $x=p$ 에서 극값</td></tr>
+        <tr><td>구간 $[a,b]$ 에서 $f&gt;0$</td><td>$F$ 가 그 구간에서 증가</td></tr>
+      </table>
+      <div class="concept-box">"정적분 구간 $[a,b]$ 의 값이 6이라는 것은, 주인공 $F(x)$ 입장에서 $F(b)$ 와 $F(a)$ 의 함숫값 차이가 6이라는 뜻입니다." — 강사 인용 [00:05:40]</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>태도 4 — 내려갔다 올라오기</div>
+      <p>식이 무겁고 복잡할 때 쓰는 전략이다. 특히 $\displaystyle\int_a^x f(t)\,dt = (\text{$x$ 에 대한 식})$ 꼴의 <strong>정적분 항등식</strong>에서 위력을 발휘한다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>내려가기(미분)</strong>: 양변을 $x$ 로 미분한다. 좌변은 미적분의 기본정리로 그냥 $f(x)$ 가 되어 적분 기호가 사라진다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>값 하나 줍기(대입)</strong>: 원래 식에 $x=a$ (아래끝) 를 대입한다. 좌변이 $0$ 이 되어 미지수 하나가 즉시 결정된다.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body"><strong>올라오기(복원)</strong>: 구한 $f$ 와 상수를 원래 식이나 목표 식에 되돌려 넣는다.</div></div>
+      <div class="formula-box">$$\frac{d}{dx}\int_a^x f(t)\,dt = f(x)$$</div>
+      <div class="caution">미분만 하고 <strong>대입을 잊는 실수</strong>가 가장 흔하다. 미분은 상수항 정보를 지워 버리므로, $x=a$ 대입으로 그 정보를 따로 챙겨야 한다. 두 단계는 세트다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — 적분변수와 함수변수 혼동.</strong> $F(x)=\int_a^x f(t)dt$ 에서 $t$ 는 적분이 끝나면 사라지는 <strong>더미 변수</strong>다. 답에 $t$ 가 남으면 반드시 틀렸다.</div>
+      <div class="caution"><strong>실수 2 — 위끝·아래끝 뒤집기.</strong> $\int_c^a f = F(a)-F(c)$ 이지 $F(c)-F(a)$ 가 아니다. 헷갈리면 $\int_c^a f = -\int_a^c f$ 로 바꿔 확인한다.</div>
+      <div class="caution"><strong>실수 3 — 절댓값 부호 확인 누락.</strong> $|F(a)|$ 를 벗길 때 $F(a)$ 가 음수인지 양수인지 문제 조건에서 반드시 확인한다. 도입 문제에서 $F(a)&lt;0$ 이라는 단서가 그래서 주어졌다.</div>
+      <div class="caution"><strong>실수 4 — 넓이와 정적분 동일시.</strong> $f&lt;0$ 인 구간의 정적분은 음수다. "넓이는 음수가 될 수 없으니 답이 틀렸다"고 생각하면 안 된다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>정의를 그대로 적용하기</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 세 가지를 즉시 말하기</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $F(x)=\displaystyle\int_1^x (3t^2-2)\,dt$ 에 대하여 다음을 구하시오.<br>(1) $F(1)$ &nbsp;&nbsp; (2) $F'(x)$ &nbsp;&nbsp; (3) $F(2)$</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>(1) 아래끝이 $1$ 이므로 $x=1$ 을 대입하면 $F(1)=\displaystyle\int_1^1 (3t^2-2)\,dt=0$.
+            <div class="why">위끝과 아래끝이 같으면 정적분은 무조건 $0$. 계산할 필요조차 없다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>(2) 미적분의 기본정리에 의해 $F'(x)=3x^2-2$.
+            <div class="why">피적분함수의 $t$ 자리에 $x$ 를 그대로 써 주면 끝. 적분과 미분이 서로를 상쇄한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>(3) $3t^2-2$ 의 부정적분은 $t^3-2t$ 이므로
+            $F(2)=\Big[t^3-2t\Big]_1^2=(8-4)-(1-2)=4-(-1)=5$.
+            <div class="why">$\int 3t^2 dt = t^3$, $\int (-2)dt = -2t$. 대입할 때 아래끝 값의 부호를 빼는 것이므로 $-(-1)=+1$ 이 된다.</div></div></div>
+          <p class="warn">오답 주의: (3)에서 $(1-2)=-1$ 을 빼는 과정을 $4-1=3$ 으로 잘못 계산하기 쉽다. 괄호를 반드시 씌우고 계산하라.</p>
+          <span class="answer-tag">정답: (1) $0$ &nbsp; (2) $3x^2-2$ &nbsp; (3) $5$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 함숫값 차이로 번역하기</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $F(x)=\displaystyle\int_2^x f(t)\,dt$ 에 대하여 $\displaystyle\int_2^5 f(t)\,dt=7$, $\displaystyle\int_2^3 f(t)\,dt=-2$ 일 때, $F(5)-F(3)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>정의에 따라 $F(5)=\displaystyle\int_2^5 f(t)\,dt=7$, $F(3)=\displaystyle\int_2^3 f(t)\,dt=-2$.
+            <div class="why">$F(x)$ 의 $x$ 자리에 그냥 숫자를 넣은 것뿐이다. 주어진 정적분 값이 곧 함숫값이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>따라서 $F(5)-F(3)=7-(-2)=9$.
+            <div class="why">이 값은 $\int_3^5 f(t)dt$ 와 같다. 구간을 이어 붙이는 정적분의 성질과 정확히 일치한다.</div></div></div>
+          <p class="warn">오답 주의: $F(3)=-2$ 인데 부호를 놓쳐 $7-2=5$ 로 답하는 경우가 많다. 음수 함숫값을 뺄 때는 부호가 뒤집혀 더해진다.</p>
+          <span class="answer-tag">정답: $9$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>극점과 개형 읽기</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 극댓값과 극솟값</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=3x^2-6x$ 이고 $F(x)=\displaystyle\int_0^x f(t)\,dt$ 일 때, $F(x)$ 의 극댓값과 극솟값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$F(x)=\displaystyle\int_0^x (3t^2-6t)\,dt=\Big[t^3-3t^2\Big]_0^x=x^3-3x^2$.
+            <div class="why">아래끝이 $0$ 이므로 $F(0)=0$ 이고, 대입해도 $0-0=0$ 이라 상수항이 없다. 태도 1과 일치한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$F'(x)=f(x)=3x^2-6x=3x(x-2)$ 이므로 극점 후보는 $x=0,\ 2$.
+            <div class="why">굳이 $F$ 를 다시 미분할 필요가 없다. $F'=f$ 는 이미 주어져 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f$ 는 아래로 볼록한 이차함수이므로 부호는 $x&lt;0$ 에서 $+$, $0&lt;x&lt;2$ 에서 $-$, $x&gt;2$ 에서 $+$.
+            따라서 $x=0$ 에서 <strong>극대</strong>, $x=2$ 에서 <strong>극소</strong>.
+            <div class="why">$+\to-$ 이면 극대, $-\to+$ 이면 극소. 개념 2의 표 그대로다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$F(0)=0$, $F(2)=8-12=-4$.
+            <div class="why">극점의 $x$좌표를 $F$ 에 대입해야 극"값"이 나온다. $f$ 에 대입하면 안 된다.</div></div></div>
+          <p class="warn">오답 주의: 극점의 $x$좌표($0,\ 2$)와 극값($0,\ -4$)을 혼동하지 말 것. 묻는 것은 <strong>값</strong>이다.</p>
+          <span class="answer-tag">정답: 극댓값 $0$, 극솟값 $-4$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 세 근에서의 극대·극소 판정</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 $1$ 인 삼차함수 $f(x)$ 에 대하여 $f(x)=0$ 의 세 실근이 $-1,\ 0,\ 3$ 이다. $F(x)=\displaystyle\int_3^x f(t)\,dt$ 일 때, $F(x)$ 가 극대가 되는 $x$ 의 값과 극소가 되는 $x$ 의 값을 모두 구하시오. 또 $F(3)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)=(x+1)x(x-3)$ 이고 최고차항 계수가 양수이다.
+            <div class="why">세 실근이 주어지고 최고차항 계수가 1이면 인수분해 형태가 바로 확정된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f$ 의 부호를 구간별로 확인한다. 근을 작은 순서로 $-1&lt;0&lt;3$ 이므로<br>
+            $x&lt;-1$: $(-)(-)(-)=-$ &nbsp;/&nbsp; $-1&lt;x&lt;0$: $(+)(-)(-)=+$ &nbsp;/&nbsp; $0&lt;x&lt;3$: $(+)(+)(-)=-$ &nbsp;/&nbsp; $x&gt;3$: $(+)(+)(+)=+$
+            <div class="why">각 인수에 구간 안의 아무 값이나 넣어 부호만 세면 된다. 예를 들어 $-1&lt;x&lt;0$ 구간은 $x=-0.5$ 로 확인.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$F'=f$ 의 부호가 $-,+,-,+$ 이므로 $F$ 는 감소 → 증가 → 감소 → 증가.
+            따라서 $x=-1$ 에서 극소, $x=0$ 에서 극대, $x=3$ 에서 극소.
+            <div class="why">부호가 $-$ 에서 $+$ 로 바뀌는 $x=-1,\ 3$ 이 극소, $+$ 에서 $-$ 로 바뀌는 $x=0$ 이 극대다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$F(3)=\displaystyle\int_3^3 f(t)\,dt=0$.
+            <div class="why">아래끝이 $3$ 이므로 태도 1에 의해 즉시 $0$. $F$ 를 전개할 필요가 전혀 없다.</div></div></div>
+          <p class="warn">오답 주의: $F$ 를 실제로 적분해 사차식으로 전개한 뒤 미분하는 학생이 많은데, 완전한 시간 낭비다. $F'=f$ 를 쓰면 전개 없이 끝난다.</p>
+          <span class="answer-tag">정답: 극대 $x=0$ / 극소 $x=-1,\ x=3$ / $F(3)=0$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>조건을 함숫값으로 옮기기</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 구간을 이어 붙여 함숫값 확정하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)$ 의 세 실근이 $a&lt;b&lt;c$ 이고, $F(x)=\displaystyle\int_a^x f(t)\,dt$ 이다. $\displaystyle\int_a^b f(t)\,dt=8$, $\displaystyle\int_b^c f(t)\,dt=-12$ 일 때 $F(a),\ F(b),\ F(c)$ 의 값을 각각 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>아래끝이 $a$ 이므로 $F(a)=0$.
+            <div class="why">태도 1. 미지수 하나를 공짜로 얻는다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\displaystyle\int_a^b f(t)\,dt=F(b)-F(a)=F(b)-0=F(b)=8$.
+            <div class="why">$F(a)=0$ 이므로 $\int_a^b f$ 가 곧 $F(b)$ 다. 아래끝을 $a$ 로 잡아 준 것은 출제자의 배려다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\displaystyle\int_b^c f(t)\,dt=F(c)-F(b)=-12$ 이므로 $F(c)=F(b)-12=8-12=-4$.
+            <div class="why">구간을 $a\to b\to c$ 로 이어 갈 때, 각 정적분은 "다음 함숫값 − 이전 함숫값" 이므로 계단을 하나씩 오르내리듯 누적하면 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>검산: $\displaystyle\int_a^c f(t)\,dt=F(c)-F(a)=-4-0=-4$ 이고, 이는 $8+(-12)=-4$ 와 일치한다.
+            <div class="why">$\int_a^c = \int_a^b + \int_b^c$ 라는 구간 분할 성질로 답을 자체 검증할 수 있다.</div></div></div>
+          <p class="warn">오답 주의: $\int_b^c f=-12$ 를 "$F(b)-F(c)$" 로 뒤집어 쓰면 $F(c)=20$ 이라는 틀린 답이 나온다. 위끝이 앞, 아래끝이 뒤다.</p>
+          <span class="answer-tag">정답: $F(a)=0,\ F(b)=8,\ F(c)=-4$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 내려갔다 올라오기 (정적분 항등식)</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 와 상수 $a$ 가 모든 실수 $x$ 에 대하여 $\displaystyle\int_1^x f(t)\,dt = x^3 + ax^2 - 2$ 를 만족한다. 상수 $a$ 와 함수 $f(x)$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div><strong>값 줍기(대입)</strong>: 양변에 $x=1$ 을 대입한다. 좌변은 $\displaystyle\int_1^1 f(t)\,dt=0$ 이므로
+            $0 = 1 + a - 2$, 즉 $a=1$.
+            <div class="why">아래끝이 $1$ 이므로 $x=1$ 대입이 좌변을 통째로 $0$ 으로 만든다. 상수를 결정하는 유일한 통로다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div><strong>내려가기(미분)</strong>: 양변을 $x$ 로 미분한다. 좌변은 미적분의 기본정리로 $f(x)$ 가 되고, 우변은 $3x^2+2ax$.
+            <div class="why">$\dfrac{d}{dx}\displaystyle\int_1^x f(t)dt=f(x)$. 적분 기호가 사라지는 순간이다. 우변의 상수 $-2$ 는 미분되어 사라진다 — 그래서 STEP 1이 먼저 필요했다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$a=1$ 을 대입하면 $f(x)=3x^2+2x$.
+            <div class="why">두 단계에서 얻은 정보를 합친다. 미분으로 얻은 형태 + 대입으로 얻은 상수.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>검산: $\displaystyle\int_1^x (3t^2+2t)\,dt=\Big[t^3+t^2\Big]_1^x=(x^3+x^2)-(1+1)=x^3+x^2-2$. 원래 식과 일치한다 ($a=1$).
+            <div class="why">항등식 문제는 반드시 되돌려 넣어 확인한다. 이것이 "올라오기" 단계다.</div></div></div>
+          <p class="warn">오답 주의: 미분만 하고 $x=1$ 대입을 건너뛰면 $a$ 를 구할 수 없어 답이 미완성으로 끝난다. <strong>대입과 미분은 반드시 세트</strong>다.</p>
+          <span class="answer-tag">정답: $a=1$, $f(x)=3x^2+2x$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>준킬러 유형 — 조건 번역 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 비(比) 조건을 함숫값으로</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 $1$ 인 삼차함수 $f(x)$ 에 대하여 방정식 $f(x)=0$ 의 세 실근이 $a,\ b,\ c$ ($a&lt;b&lt;c$) 이다. 함수 $F(x)=\displaystyle\int_c^x f(t)\,dt$ 가 $F(a)&lt;0&lt;F(b)$ 를 만족하고 $|F(a)| : |F(b)| = 3 : 1$ 이다. $\displaystyle\int_a^b f(t)\,dt=12$ 일 때, $\displaystyle\int_c^a f(t)\,dt$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>아래끝이 $c$ 이므로 $F(c)=0$.
+            <div class="why">태도 1. 도입 문제와 같은 구조이지만 조건이 "등차수열"에서 "비"로 바뀌었을 뿐이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$F(a)&lt;0&lt;F(b)$ 이므로 $|F(a)|=-F(a)$, $|F(b)|=F(b)$.
+            비 조건 $|F(a)|:|F(b)|=3:1$ 은 $|F(a)|=3|F(b)|$, 즉 $-F(a)=3F(b)$ 이므로 $F(a)=-3F(b)$.
+            <div class="why">$p:q=3:1$ 은 $p=3q$ 와 같다. 절댓값을 벗길 때 부호 조건을 반드시 사용한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\displaystyle\int_a^b f(t)\,dt=F(b)-F(a)=12$ 에 대입:
+            $F(b)-(-3F(b))=4F(b)=12$ 이므로 $F(b)=3$, 따라서 $F(a)=-9$.
+            <div class="why">미지수가 $F(b)$ 하나로 줄어들어 일차방정식이 된다. 넓이를 계산하려 했다면 $f$ 의 계수를 전부 구해야 했을 것이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$\displaystyle\int_c^a f(t)\,dt=F(a)-F(c)=-9-0=-9$.
+            <div class="why">위끝 $a$, 아래끝 $c$ 이므로 $F(a)-F(c)$. $F(c)=0$ 이라 $F(a)$ 가 그대로 답이다.</div></div></div>
+          <p class="warn">오답 주의: $|F(a)|:|F(b)|=3:1$ 을 $F(a)=3F(b)$ 로 (절댓값 없이) 쓰면 $F(a)&lt;0$ 조건과 모순이 생긴다. 부호를 먼저 정리한 뒤 대입하라.</p>
+          <span class="answer-tag">정답: $-9$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 사차 개형 완성과 정적분 계산</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=4x^3-12x^2+8x$ 이고 $F(x)=\displaystyle\int_0^x f(t)\,dt$ 이다.<br>(1) $F(x)$ 를 구하시오. &nbsp; (2) $F(x)$ 의 극댓값과 극솟값을 모두 구하시오. &nbsp; (3) $\displaystyle\int_1^2 f(t)\,dt$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>먼저 $f$ 를 인수분해한다: $f(x)=4x(x^2-3x+2)=4x(x-1)(x-2)$. 세 실근은 $0,\ 1,\ 2$.
+            <div class="why">$4x$ 를 묶으면 남는 이차식 $x^2-3x+2$ 는 합이 3, 곱이 2인 두 수 1, 2로 인수분해된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>(1) $F(x)=\displaystyle\int_0^x (4t^3-12t^2+8t)\,dt=\Big[t^4-4t^3+4t^2\Big]_0^x=x^4-4x^3+4x^2$.
+            <div class="why">$\int 4t^3=t^4$, $\int(-12t^2)=-4t^3$, $\int 8t=4t^2$. 아래끝이 0이라 대입값이 모두 0이므로 상수항이 없다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>(2) $F'=f$ 의 부호: 최고차항 계수 $4&gt;0$ 이고 근이 $0&lt;1&lt;2$ 이므로
+            $x&lt;0$ 에서 $-$, $0&lt;x&lt;1$ 에서 $+$, $1&lt;x&lt;2$ 에서 $-$, $x&gt;2$ 에서 $+$.
+            따라서 $x=0$ 극소, $x=1$ 극대, $x=2$ 극소.
+            <div class="why">삼차함수 $f$ 의 최고차항이 양수이고 서로 다른 세 근을 가지면 부호는 $-,+,-,+$. 개념 2의 "W 모양" 그대로다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$F(0)=0$, $F(1)=1-4+4=1$, $F(2)=16-32+16=0$.
+            따라서 극댓값 $1$ (at $x=1$), 극솟값 $0$ (at $x=0$ 과 $x=2$).
+            <div class="why">참고로 $F(x)=x^2(x-2)^2$ 로 인수분해되므로 $x=0,\ 2$ 에서 $x$축에 접한다. 극솟값이 둘 다 0인 것이 자연스럽다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>(3) $\displaystyle\int_1^2 f(t)\,dt=F(2)-F(1)=0-1=-1$.
+            <div class="why">넓이를 구하려 그래프를 칠할 필요가 없다. 이미 구해 둔 함숫값 두 개를 빼기만 하면 된다. 구간 $(1,2)$ 에서 $f&lt;0$ 이므로 정적분이 음수인 것도 자연스럽다.</div></div></div>
+          <p class="warn">오답 주의: (3)에서 "넓이니까 양수여야 한다"고 생각해 $1$ 로 답하면 틀린다. 구간 $1&lt;x&lt;2$ 에서 $f(x)&lt;0$ 이므로 정적분 값은 반드시 음수다.</p>
+          <span class="answer-tag">정답: (1) $F(x)=x^4-4x^3+4x^2$ &nbsp; (2) 극댓값 $1$, 극솟값 $0$ &nbsp; (3) $-1$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「적분을 넓이로 본다? 당신은 하수입니다.」</strong>(수능 수학은 이동준, 약 7분)의 요약본을 근거로 재구성했습니다. 영상의 핵심 주장인 ① "정적분 = 넓이"라는 고정관념 제거 ② $F(x)=\int_c^x f(t)dt$ 를 $(n+1)$차 <strong>주인공 함수</strong>로 격상 ③ 피적분함수의 실근을 $F$ 의 극점으로 번역 ④ "내려갔다 올라오기" 전략을 개념 1~4로 나누어 서술했습니다. 도입 문제는 영상에서 제시된 수치($F(c)=0$, $F(b)=2$, $F(a)=-4$, $\int_a^b f=6$, 답 $-4$)를 그대로 사용했으며, 등차수열 조건과 답이 서로 모순 없이 맞아떨어지는지 자체 검산했습니다.</p>
+      <p style="margin-top:8px">한계: 영상 자막 전문이 아닌 <strong>요약본</strong>을 근거로 했으므로, 강사가 板書로만 설명한 중간 과정이나 추가 예제는 반영되지 않았을 수 있습니다. 문항 8개는 영상의 기법을 훈련하기 위해 <strong>새로 출제</strong>한 것입니다. 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아닙니다.</strong> 학생 배포 전 교사 검토를 권장합니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 본 자료는 다항함수의 정적분·미분만 사용하며, 고3 선택 「미적분」 영역(치환적분, 부분적분, 삼각함수의 극한·미분 등)은 <strong>일절 사용하지 않았습니다</strong>. 현 고2 미적분Ⅰ 범위 내에서 완결됩니다.</p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html">넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ) (xA9JGa0t)</a> · <a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260817_적분넓이팩토리얼일반화공식_X-cjFae.html">적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법 (X-cjFae)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-18 · 영상 출처: <a href="https://youtu.be/ihZz5SwynTM" style="color:var(--primary)">수능 수학은 이동준</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>

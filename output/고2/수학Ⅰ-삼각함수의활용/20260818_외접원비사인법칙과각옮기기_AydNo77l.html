@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 대수 — 삼각함수의 활용</div>
+    <h1>삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기</h1>
+    <p class="sub">보조선을 아무 데나 긋기 전에: <strong>비례식이 보이면 사인법칙</strong>, <strong>접선·평행선이 보이면 각 옮기기</strong>. 1등급이 문제를 읽자마자 작동시키는 두 개의 스위치</p>
+    <div class="quote">"접선과 평행선이라는 핵심 소재가 결국 얘기하려고 하는 것은 '각에 대한 관찰(각 옮기기)'입니다." — 강사 인용 [00:01:44]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/AydNo77l7JA" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/AydNo77l7JA/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">도형 문제, 수학 1등급은 '이 생각'부터 합니다. (ft. 저스트 모의고사)</div>
+        <div class="v-meta">📺 YouTube · 약 9분 · 수능 수학은 이동준</div>
+        <a class="v-link" href="https://youtu.be/AydNo77l7JA" target="_blank" rel="noopener">https://youtu.be/AydNo77l7JA</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① 길이·반지름의 비례식을 보면 사인법칙을 즉시 떠올린다 ② 두 삼각형의 공통각·공통현을 찾아 대변의 비를 뽑는다 ③ 접현각과 평행선 엇각으로 각을 옮겨 이등변삼각형을 포착한다 ④ 코사인법칙으로 특수각을 확인해 마무리한다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 비(比)로 시작해 특수각으로 끝내기</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 삼각형 $\mathrm{ABC}$ 에서 $\angle\mathrm{BAC}=\theta$ 이고 $\cos\theta=-\dfrac{1}{7}$ 이다. $\overline{\mathrm{AB}}:\overline{\mathrm{AC}}=3:7$ 이고 $\overline{\mathrm{AB}}+\overline{\mathrm{BC}}=11$ 일 때, 다음을 구하시오.<br>
+        (1) $\overline{\mathrm{AB}},\ \overline{\mathrm{AC}},\ \overline{\mathrm{BC}}$ &nbsp;&nbsp; (2) $\angle\mathrm{ABC}$ 의 크기 &nbsp;&nbsp; (3) 삼각형 $\mathrm{ABC}$ 의 외접원의 반지름 $R$</div>
+      <div class="visual">              A
+             /θ\
+        3k  /   \  7k        cos θ = −1/7  (θ 는 둔각)
+           /     \
+          B───────C
+             8k
+</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>비가 주어졌으니 <strong>문자 $k$ 로 통일</strong>한다. $\overline{\mathrm{AB}}=3k$, $\overline{\mathrm{AC}}=7k$ ($k&gt;0$).
+            <div class="why">비례식 $3:7$ 은 "$3k$ 와 $7k$" 로 쓰는 순간 미지수가 두 개에서 <strong>하나</strong>로 줄어든다. 도형 문제의 첫 수순이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>두 변과 낀각을 알므로 <strong>코사인법칙</strong>으로 나머지 한 변을 구한다.
+            $$\overline{\mathrm{BC}}^2=(3k)^2+(7k)^2-2(3k)(7k)\cos\theta=9k^2+49k^2-42k^2\cdot\left(-\tfrac17\right)$$
+            $$=58k^2+6k^2=64k^2\ \Longrightarrow\ \overline{\mathrm{BC}}=8k$$
+            <div class="why">$-42k^2\times(-\frac17)=+6k^2$. <strong>음수 곱하기 음수는 양수</strong>라 값이 커진다 — $\theta$ 가 둔각이면 마주 보는 변이 길어진다는 사실과 일치한다. 길이는 양수이므로 $\sqrt{64k^2}=8k$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>(1) 주어진 조건 $\overline{\mathrm{AB}}+\overline{\mathrm{BC}}=3k+8k=11k=11$ 이므로 $k=1$.
+            따라서 $\overline{\mathrm{AB}}=3$, $\overline{\mathrm{AC}}=7$, $\overline{\mathrm{BC}}=8$.
+            <div class="why">$k$ 하나만 구하면 세 변이 한꺼번에 결정된다. 이것이 STEP 1에서 문자를 통일한 보상이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>(2) 다시 <strong>코사인법칙</strong>으로 $\angle\mathrm{ABC}$ 를 구한다. $\angle\mathrm{B}$ 를 낀 두 변은 $\overline{\mathrm{AB}}=3$, $\overline{\mathrm{BC}}=8$ 이고 마주 보는 변은 $\overline{\mathrm{AC}}=7$ 이다.
+            $$\cos(\angle\mathrm{ABC})=\frac{3^2+8^2-7^2}{2\cdot3\cdot8}=\frac{9+64-49}{48}=\frac{24}{48}=\frac12$$
+            따라서 $\angle\mathrm{ABC}=\dfrac{\pi}{3}\ (60^\circ)$.
+            <div class="why">$\cos B=\frac{c^2+a^2-b^2}{2ca}$ — 분자는 "낀 두 변의 제곱합 − 마주 보는 변의 제곱". $\cos$ 값이 $\frac12$ 라는 <strong>특수각</strong>이 나왔다는 것은 출제자가 의도한 길이라는 신호다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>(3) <strong>사인법칙</strong>을 쓴다. $\angle\mathrm{B}$ 에 마주 보는 변이 $\overline{\mathrm{AC}}=7$ 이므로
+            $$\frac{\overline{\mathrm{AC}}}{\sin(\angle\mathrm{B})}=2R\ \Longrightarrow\ \frac{7}{\sin 60^\circ}=\frac{7}{\frac{\sqrt3}{2}}=\frac{14}{\sqrt3}=2R$$
+            $$R=\frac{7}{\sqrt3}=\frac{7\sqrt3}{3}$$
+            <div class="why">$\sin 60^\circ=\frac{\sqrt3}{2}$ 는 특수각 값. 분모의 무리수는 유리화해서 $\frac{7\sqrt3}{3}$ 로 정리한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>검산: $\sin\theta=\sqrt{1-\cos^2\theta}=\sqrt{1-\frac1{49}}=\frac{4\sqrt3}{7}$ 이므로
+            $\dfrac{\overline{\mathrm{BC}}}{\sin\theta}=\dfrac{8}{\frac{4\sqrt3}{7}}=\dfrac{56}{4\sqrt3}=\dfrac{14}{\sqrt3}=2R$. STEP 5와 일치한다.
+            <div class="why">사인법칙은 <strong>세 쌍 모두</strong> 같은 값 $2R$ 을 준다. 다른 변·각 쌍으로 계산해 같은 값이 나오는지 확인하면 자체 검산이 된다.</div></div></div>
+          <span class="answer-tag">정답: (1) $3,\ 7,\ 8$ &nbsp; (2) $\dfrac{\pi}{3}$ &nbsp; (3) $R=\dfrac{7\sqrt3}{3}$</span>
+        </div>
+      </details>
+      <div class="tip">비례식 → 문자 통일 → 코사인법칙 → 특수각 확인 → 사인법칙. 이 순서가 도형 문항의 <strong>기본 골격</strong>이다. 그림을 아무리 노려봐도 안 보이던 것이 이 순서로 손을 움직이면 나온다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 사인법칙·코사인법칙·원의 성질</div>
+      <p>이 자료에서 쓰는 도구는 딱 네 개다. 새 공식은 없다.</p>
+      <div class="formula-box">
+        <p><strong>사인법칙</strong></p>
+        $$\frac{a}{\sin A}=\frac{b}{\sin B}=\frac{c}{\sin C}=2R$$
+      </div>
+      <div class="formula-box">
+        <p><strong>코사인법칙</strong> (두 변과 낀각 → 나머지 변 / 세 변 → 각)</p>
+        $$a^2=b^2+c^2-2bc\cos A \qquad\Longleftrightarrow\qquad \cos A=\frac{b^2+c^2-a^2}{2bc}$$
+      </div>
+      <div class="formula-box">
+        <p><strong>원주각의 성질</strong> (중3) — 같은 호에 대한 원주각의 크기는 모두 같다</p>
+      </div>
+      <div class="formula-box">
+        <p><strong>평행선의 성질</strong> (중2) — 엇각은 같다, 동위각은 같다</p>
+      </div>
+      <div class="caution">$a$ 는 $\angle A$ 에 <strong>마주 보는</strong> 변이다. 사인법칙·코사인법칙에서 변과 각의 짝을 잘못 맞추는 것이 가장 흔한 실수다. 식을 쓰기 전에 "이 각의 맞은편 변은 무엇인가"를 손가락으로 짚어 확인하라.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>스위치 1 — 비례식이 보이면 사인법칙</div>
+      <p>사인법칙을 $2R$ 쪽에서 읽으면 다음과 같이 <strong>변을 각으로 번역하는 장치</strong>가 된다.</p>
+      <div class="formula-box">$$a=2R\sin A$$</div>
+      <p>이 한 줄에서 다음 두 가지가 바로 따라 나온다.</p>
+      <table class="grid">
+        <tr><th>주어진 것</th><th>결론</th><th>이유</th></tr>
+        <tr><td>두 삼각형의 <strong>각이 같음</strong>($\theta$ 공통), 외접원 반지름 $R_1:R_2$</td><td>대변의 비 $=R_1:R_2$</td><td>$a_i=2R_i\sin\theta$ 에서 $\sin\theta$ 가 공통이라 약분됨</td></tr>
+        <tr><td>두 삼각형이 <strong>변을 공유</strong>(공통현, 비 $1:1$), 반지름 $R_1:R_2$</td><td>마주 보는 각의 $\sin$ 비 $=R_2:R_1$</td><td>$c=2R_1\sin\alpha=2R_2\sin\beta$ 이므로 $\sin$ 이 반지름에 반비례</td></tr>
+      </table>
+      <div class="concept-box">"출제자가 주지 않아도 됐던 숨겨진 비(1:1 공통 요소)를 발견해야 합니다. 그것이 사인법칙의 본질입니다." — 강사 인용 [00:00:00]</div>
+      <p>즉 문제에 <strong>외접원의 반지름 비</strong>가 등장하면, 그것은 "원의 중심을 찾아 보조선을 그으라"는 뜻이 아니라 <strong>"사인법칙을 쓰라"는 신호</strong>다. 중심을 찍는 순간 문제가 어려워진다.</p>
+      <div class="caution">첫 줄과 둘째 줄의 <strong>비가 서로 반대</strong>임에 주의하라. 각이 공통이면 변의 비는 반지름 비와 <strong>같은 방향</strong>, 변이 공통이면 $\sin$ 의 비는 반지름 비와 <strong>반대 방향</strong>이다. 무엇이 공통인지 먼저 확인하는 습관이 필요하다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>스위치 2 — 접선·평행선이 보이면 각 옮기기</div>
+      <p>도형 문제에서 접선과 평행선은 길이를 주려고 나온 것이 아니다. <strong>각을 다른 자리로 옮기라</strong>는 지시문이다.</p>
+      <div class="formula-box">
+        <p><strong>접현각 정리</strong> (중3)</p>
+        <p>원의 접선과, 접점을 지나는 현이 이루는 각의 크기는<br>그 각 안쪽의 호에 대한 <strong>원주각</strong>의 크기와 같다.</p>
+      </div>
+      <div class="concept-box"><strong>파인만식으로:</strong> 당구대 쿠션(접선)에 공이 부딪혀 튕겨 나갈 때 생기는 각도는, 반대편에서 그 현을 바라보는 원주각의 시선과 정확히 같은 크기다. 접선은 "원주각을 원 바깥으로 복사해 주는 복사기"라고 생각하면 된다.</p></div>
+      <div class="visual">    접선 l
+   ────────●────────      ← A 에서 접함
+          / \ α
+         /   \             α (접현각) = ∠ACB (원주각)
+        /     \
+       B       \
+        \       \
+         \       C
+          ───────
+</div>
+      <p><strong>각 옮기기 실전 순서:</strong></p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">그림에서 <strong>접선</strong>을 찾는다 → 접점에서 나가는 현마다 접현각 = 원주각으로 각을 복사한다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">그림에서 <strong>평행선</strong>을 찾는다 → 두 평행선을 <strong>가로지르는 선</strong>을 찾아 엇각·동위각으로 각을 복사한다.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">복사한 각들 중 <strong>같은 크기끼리 만나는 삼각형</strong>이 있으면 그것이 <strong>이등변삼각형</strong>이다.</div></div>
+      <div class="concept-box">"평행선의 엇각과 접현각을 옮겨주면 이 삼각형이 이등변삼각형이라는 게 너무 당연하게 보입니다." — 강사 인용 [00:07:51]</div>
+      <div class="caution">각을 옮길 때 <strong>같은 표시</strong>(●, ×, △ 등)를 그림에 직접 그려 넣어라. 머릿속으로만 옮기면 세 번째 각쯤에서 반드시 꼬인다. 손으로 표시하는 것이 실력이다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>대표 결과 — 접선이 밑변과 평행하면 이등변삼각형</div>
+      <p>스위치 2를 두 번 쓰면 나오는 가장 자주 출제되는 결론이다. <strong>증명을 한 번 직접 따라가 보자.</strong></p>
+      <div class="concept-box"><strong>명제.</strong> 원 $O$ 에 내접하는 삼각형 $\mathrm{ABC}$ 에서, 점 $\mathrm{A}$ 에서의 접선 $l$ 이 $\overline{\mathrm{BC}}$ 와 평행하면 $\overline{\mathrm{AB}}=\overline{\mathrm{AC}}$ 이다.</div>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">접선 $l$ 과 현 $\overline{\mathrm{AB}}$ 가 이루는 각을 $\alpha$ 라 하자. <strong>접현각 정리</strong>에 의해 $\alpha=\angle\mathrm{ACB}$.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">한편 $l\parallel\overline{\mathrm{BC}}$ 이고 직선 $\mathrm{AB}$ 가 이 둘을 가로지른다. <strong>엇각</strong>이 같으므로 $\alpha=\angle\mathrm{ABC}$.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">따라서 $\angle\mathrm{ACB}=\angle\mathrm{ABC}$. 두 밑각이 같으므로 삼각형 $\mathrm{ABC}$ 는 <strong>이등변삼각형</strong>이고 $\overline{\mathrm{AB}}=\overline{\mathrm{AC}}$ 이다. ∎</div></div>
+      <div class="tip">이 명제는 <strong>역방향도 성립</strong>한다. 즉 $\overline{\mathrm{AB}}=\overline{\mathrm{AC}}$ 이면 꼭짓점 $\mathrm{A}$ 에서의 접선은 $\overline{\mathrm{BC}}$ 와 평행하다. 문제에서 "접선이 평행하다"와 "이등변이다"는 <strong>같은 말</strong>이라고 생각해도 좋다.</div>
+      <div class="caution">접현각을 잡을 때 <strong>어느 쪽 각인지</strong> 주의하라. 접선은 접점에서 양쪽으로 뻗으므로 현 하나에 대해 각이 두 개(합이 $180^\circ$) 생긴다. 항상 <strong>그 각 안쪽의 호</strong>를 바라보는 원주각과 짝을 맞춘다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>마무리 스위치 — 코사인법칙과 특수각</div>
+      <p>각을 옮겨 이등변을 찾고 길이 비를 확보했다면, 마지막은 거의 항상 코사인법칙이다. 그리고 <strong>답으로 나온 $\cos$ 값이 특수각이면 제대로 푼 것</strong>이다.</p>
+      <table class="grid">
+        <tr><th>$\theta$</th><th>$30^\circ\ (\frac\pi6)$</th><th>$45^\circ\ (\frac\pi4)$</th><th>$60^\circ\ (\frac\pi3)$</th><th>$120^\circ\ (\frac{2\pi}3)$</th><th>$135^\circ\ (\frac{3\pi}4)$</th></tr>
+        <tr><td>$\sin\theta$</td><td>$\frac12$</td><td>$\frac{\sqrt2}2$</td><td>$\frac{\sqrt3}2$</td><td>$\frac{\sqrt3}2$</td><td>$\frac{\sqrt2}2$</td></tr>
+        <tr><td>$\cos\theta$</td><td>$\frac{\sqrt3}2$</td><td>$\frac{\sqrt2}2$</td><td>$\frac12$</td><td>$-\frac12$</td><td>$-\frac{\sqrt2}2$</td></tr>
+      </table>
+      <div class="tip"><strong>$\cos$ 의 부호가 각의 종류를 알려준다.</strong> $\cos\theta&gt;0$ 이면 예각, $\cos\theta=0$ 이면 직각, $\cos\theta&lt;0$ 이면 둔각. 도입 문제에서 $\cos\theta=-\frac17&lt;0$ 이므로 $\theta$ 가 둔각임을 계산 전에 알 수 있었다.</div>
+      <p>또 $\sin$ 과 $\cos$ 사이는 다음 관계로 오간다. 삼각형의 내각은 $0&lt;\theta&lt;\pi$ 이므로 $\sin\theta&gt;0$ 이고, 따라서 근호 앞 부호는 항상 $+$ 다.</p>
+      <div class="formula-box">$$\sin^2\theta+\cos^2\theta=1\ \Longrightarrow\ \sin\theta=\sqrt{1-\cos^2\theta}\quad(0&lt;\theta&lt;\pi)$$</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — 변과 각의 짝 어긋남.</strong> 사인법칙 $\frac{a}{\sin A}$ 에서 $a$ 는 반드시 $\angle A$ 의 <strong>맞은편</strong> 변이다. 인접한 변을 넣으면 처음부터 틀린다.</div>
+      <div class="caution"><strong>실수 2 — 코사인법칙 부호 처리.</strong> $\cos A$ 가 음수일 때 $-2bc\cos A$ 는 <strong>양수</strong>가 되어 더해진다. 도입 문제 STEP 2에서 $58k^2$ 이 $64k^2$ 로 커진 이유다.</div>
+      <div class="caution"><strong>실수 3 — 접현각을 반대쪽으로.</strong> 접선의 양쪽 두 각 중 잘못된 쪽을 잡으면 $180^\circ-\alpha$ 를 쓰게 된다. "각 안쪽의 호"를 확인하라.</div>
+      <div class="caution"><strong>실수 4 — 외접원 반지름을 $R$ 이 아니라 $2R$ 로.</strong> 사인법칙의 값은 $\frac{a}{\sin A}=2R$ 이다. 여기서 나온 값을 그대로 $R$ 이라 답하면 <strong>2배 틀린다</strong>. 마지막에 반드시 $2$ 로 나눴는지 확인하라.</div>
+      <div class="caution"><strong>실수 5 — 비례식을 그대로 길이로.</strong> $\overline{\mathrm{AB}}:\overline{\mathrm{AC}}=3:7$ 은 "$\overline{\mathrm{AB}}=3$" 이라는 뜻이 아니다. 반드시 $3k,\ 7k$ 로 두고 $k$ 를 조건에서 구해야 한다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>공식과 정리 하나씩</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 사인법칙의 $2R$ 꼴</div>
+        <div class="problem-body"><strong>문제:</strong> 삼각형 $\mathrm{ABC}$ 의 외접원의 반지름이 $5$ 이고 $\angle\mathrm{A}=30^\circ$ 일 때, $\overline{\mathrm{BC}}$ 의 길이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$\overline{\mathrm{BC}}$ 는 $\angle\mathrm{A}$ 의 맞은편 변이므로 $a=\overline{\mathrm{BC}}$ 이다.
+            <div class="why">삼각형에서 꼭짓점 $\mathrm{A}$ 의 반대편 변이 $\overline{\mathrm{BC}}$. 이 짝짓기를 먼저 확인하는 습관이 실수를 막는다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>사인법칙 $a=2R\sin A$ 에 대입: $\overline{\mathrm{BC}}=2\cdot5\cdot\sin30^\circ=10\cdot\dfrac12=5$.
+            <div class="why">$\sin30^\circ=\frac12$ 은 특수각 값. $\frac{a}{\sin A}=2R$ 를 $a$ 에 대해 정리한 것이 $a=2R\sin A$ 이다.</div></div></div>
+          <p class="warn">오답 주의: $\frac{a}{\sin A}=R$ 로 착각해 $a=5\cdot\frac12=2.5$ 로 답하면 절반이 된다. 사인법칙의 값은 <strong>$2R$</strong> 이다.</p>
+          <span class="answer-tag">정답: $5$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 접현각 읽기</div>
+        <div class="problem-body"><strong>문제:</strong> 삼각형 $\mathrm{ABC}$ 가 원 $O$ 에 내접한다. 점 $\mathrm{A}$ 에서 원 $O$ 에 그은 접선과 현 $\overline{\mathrm{AB}}$ 가 이루는 각(호 $\mathrm{AB}$ 쪽)의 크기가 $50^\circ$ 일 때, $\angle\mathrm{ACB}$ 의 크기를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>접현각 정리: 접선과 현 $\overline{\mathrm{AB}}$ 가 이루는 각은 그 각 안쪽의 호 $\mathrm{AB}$ 에 대한 <strong>원주각</strong>과 같다.
+            <div class="why">개념 2의 정리 그대로. 접선이 원주각을 원 바깥으로 복사해 준다고 생각하면 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>점 $\mathrm{C}$ 는 원 위의 점이고 $\angle\mathrm{ACB}$ 가 바로 호 $\mathrm{AB}$ 에 대한 원주각이므로
+            $\angle\mathrm{ACB}=50^\circ$.
+            <div class="why">같은 호에 대한 원주각은 어느 위치에서 보든 크기가 같다(중3). 그래서 점 $\mathrm{C}$ 의 정확한 위치를 몰라도 답이 정해진다.</div></div></div>
+          <p class="warn">오답 주의: 접선의 반대쪽 각($130^\circ$)을 잡으면 답이 틀린다. 문제에서 "호 $\mathrm{AB}$ 쪽"이라고 지정한 이유가 이것이다.</p>
+          <span class="answer-tag">정답: $50^\circ$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>두 스위치 개별 훈련</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 공통각에서 대변의 비 뽑기</div>
+        <div class="problem-body"><strong>문제:</strong> 두 삼각형 $\mathrm{T}_1$, $\mathrm{T}_2$ 가 크기가 같은 각 $\theta$ 를 각각 하나씩 가지고 있고, 두 삼각형의 외접원의 반지름은 각각 $R_1=7$, $R_2=3$ 이다. 각 삼각형에서 $\theta$ 에 마주 보는 변의 길이를 $a_1$, $a_2$ 라 할 때 $a_1:a_2$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>각 삼각형에 사인법칙 $a=2R\sin\theta$ 를 적용한다.
+            $$a_1=2R_1\sin\theta=14\sin\theta,\qquad a_2=2R_2\sin\theta=6\sin\theta$$
+            <div class="why">두 삼각형이 <strong>같은 각 $\theta$</strong> 를 가지므로 $\sin\theta$ 가 두 식에 공통으로 등장한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>비를 만들면 $\sin\theta$ 가 약분된다.
+            $$a_1:a_2=14\sin\theta:6\sin\theta=14:6=7:3$$
+            <div class="why">$\sin\theta\neq0$ 이다 ($0&lt;\theta&lt;\pi$ 인 삼각형의 내각이므로). 따라서 안심하고 약분할 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>결론: $a_1:a_2=R_1:R_2=7:3$.
+            <div class="why">각이 공통이면 <strong>대변의 비는 외접원 반지름의 비와 같다</strong>. 개념 1 표의 첫째 줄이 바로 이것이다.</div></div></div>
+          <p class="warn">오답 주의: 이 결과를 "공통<strong>현</strong>" 상황과 혼동하지 말 것. 변이 공통일 때는 $\sin$ 의 비가 반지름에 <strong>반비례</strong>($3:7$)한다. 무엇이 공통인지 먼저 확인하라.</p>
+          <span class="answer-tag">정답: $7:3$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 접선 평행 → 이등변 → 각 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 원 $O$ 에 내접하는 삼각형 $\mathrm{ABC}$ 에서, 점 $\mathrm{A}$ 에서의 접선 $l$ 이 $\overline{\mathrm{BC}}$ 와 평행하다. $\angle\mathrm{BAC}=40^\circ$ 일 때 $\angle\mathrm{ABC}$ 의 크기를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>접선 $l$ 과 현 $\overline{\mathrm{AB}}$ 가 이루는 각을 $\alpha$ 라 하면, <strong>접현각 정리</strong>로 $\alpha=\angle\mathrm{ACB}$.
+            <div class="why">개념 3의 증명 1단계. 접선이 원주각을 복사해 준다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$l\parallel\overline{\mathrm{BC}}$ 이고 직선 $\mathrm{AB}$ 가 두 평행선을 가로지르므로 <strong>엇각</strong>에 의해 $\alpha=\angle\mathrm{ABC}$.
+            <div class="why">개념 3의 증명 2단계. 평행선을 보면 "가로지르는 선"을 찾는 것이 핵심 동작이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>STEP 1·2에서 $\angle\mathrm{ACB}=\angle\mathrm{ABC}$ 이므로 삼각형 $\mathrm{ABC}$ 는 $\overline{\mathrm{AB}}=\overline{\mathrm{AC}}$ 인 <strong>이등변삼각형</strong>이다.
+            <div class="why">두 밑각이 같으면 이등변삼각형(중2). 각을 두 번 옮긴 것만으로 도형의 정체가 밝혀졌다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>삼각형의 내각의 합은 $180^\circ$ 이고 두 밑각이 같으므로
+            $$\angle\mathrm{ABC}=\frac{180^\circ-40^\circ}{2}=\frac{140^\circ}{2}=70^\circ$$
+            <div class="why">$\angle\mathrm{ABC}+\angle\mathrm{ACB}=180^\circ-40^\circ=140^\circ$ 이고 둘이 같으므로 각각 $70^\circ$.</div></div></div>
+          <p class="warn">오답 주의: 접선이 평행하다는 조건을 "길이 조건"으로 해석하려 하면 아무것도 안 나온다. 접선·평행선은 <strong>각을 옮기라는 지시</strong>임을 기억하라.</p>
+          <span class="answer-tag">정답: $70^\circ$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>두 법칙 연계</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 코사인법칙 → 사인법칙 연결</div>
+        <div class="problem-body"><strong>문제:</strong> 삼각형 $\mathrm{ABC}$ 에서 $\overline{\mathrm{AB}}=5$, $\overline{\mathrm{AC}}=8$, $\angle\mathrm{BAC}=60^\circ$ 이다. $\overline{\mathrm{BC}}$ 의 길이와 외접원의 반지름 $R$ 을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>두 변과 낀각을 알므로 코사인법칙을 쓴다. $\cos60^\circ=\dfrac12$ 이므로
+            $$\overline{\mathrm{BC}}^2=5^2+8^2-2\cdot5\cdot8\cdot\tfrac12=25+64-40=49$$
+            $$\overline{\mathrm{BC}}=7$$
+            <div class="why">$2\cdot5\cdot8=80$ 이고 여기에 $\frac12$ 을 곱하면 $40$. 길이는 양수이므로 $\sqrt{49}=7$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\overline{\mathrm{BC}}$ 는 $\angle\mathrm{A}$ 의 맞은편 변이므로 사인법칙을 적용한다.
+            $$\frac{\overline{\mathrm{BC}}}{\sin(\angle\mathrm{A})}=2R\ \Longrightarrow\ \frac{7}{\sin60^\circ}=\frac{7}{\frac{\sqrt3}{2}}=\frac{14}{\sqrt3}=2R$$
+            <div class="why">방금 구한 변과 이미 아는 각이 <strong>마주 보는 짝</strong>이므로 바로 쓸 수 있다. 이 짝을 만들어 두는 것이 STEP 1의 숨은 목적이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$R=\dfrac{7}{\sqrt3}=\dfrac{7\sqrt3}{3}$.
+            <div class="why">$2R=\frac{14}{\sqrt3}$ 이므로 양변을 $2$ 로 나눈다. 분모를 유리화하려면 분모·분자에 $\sqrt3$ 을 곱한다.</div></div></div>
+          <p class="warn">오답 주의: $2R=\frac{14}{\sqrt3}$ 에서 멈추고 이 값을 $R$ 이라 답하는 실수가 매우 잦다. <strong>반드시 2로 나눠라.</strong></p>
+          <span class="answer-tag">정답: $\overline{\mathrm{BC}}=7$, $R=\dfrac{7\sqrt3}{3}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 이등변 + 사인법칙 + 코사인법칙</div>
+        <div class="problem-body"><strong>문제:</strong> 원 $O$ (반지름 $5$) 에 내접하는 삼각형 $\mathrm{ABC}$ 에서 점 $\mathrm{A}$ 에서의 접선이 $\overline{\mathrm{BC}}$ 와 평행하다. $\overline{\mathrm{BC}}=6$ 이고 $\angle\mathrm{BAC}$ 가 예각일 때 $\overline{\mathrm{AB}}$ 의 길이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>접선이 $\overline{\mathrm{BC}}$ 와 평행하므로 개념 3에 의해 $\overline{\mathrm{AB}}=\overline{\mathrm{AC}}$ (이등변삼각형). 이 길이를 $b$ 라 하자.
+            <div class="why">각을 옮기는 과정(접현각 + 엇각)을 개념 3에서 이미 증명했으므로 결론만 가져다 쓴다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>사인법칙으로 $\angle\mathrm{A}$ 의 $\sin$ 값을 구한다. $\overline{\mathrm{BC}}$ 가 $\angle\mathrm{A}$ 의 맞은편 변이므로
+            $$\overline{\mathrm{BC}}=2R\sin(\angle\mathrm{A})\ \Longrightarrow\ 6=10\sin(\angle\mathrm{A})\ \Longrightarrow\ \sin(\angle\mathrm{A})=\frac35$$
+            <div class="why">반지름과 대변이 주어졌으니 사인법칙이 곧바로 각의 정보를 준다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\angle\mathrm{A}$ 가 예각이므로 $\cos(\angle\mathrm{A})&gt;0$ 이고
+            $$\cos(\angle\mathrm{A})=\sqrt{1-\left(\tfrac35\right)^2}=\sqrt{1-\tfrac9{25}}=\sqrt{\tfrac{16}{25}}=\frac45$$
+            <div class="why">$\sin^2+\cos^2=1$. "예각" 조건이 없으면 $\cos=-\frac45$ 인 둔각 경우도 가능하므로, 이 조건이 답을 하나로 정해 준다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$\overline{\mathrm{AB}}=\overline{\mathrm{AC}}=b$ 이므로 코사인법칙에서
+            $$6^2=b^2+b^2-2b^2\cos(\angle\mathrm{A})=2b^2\left(1-\tfrac45\right)=2b^2\cdot\tfrac15=\frac{2b^2}{5}$$
+            $$36=\frac{2b^2}{5}\ \Longrightarrow\ b^2=90\ \Longrightarrow\ b=3\sqrt{10}$$
+            <div class="why">이등변이라 두 변이 같은 문자 $b$ 이므로 $b^2$ 로 묶인다. $\sqrt{90}=\sqrt{9\cdot10}=3\sqrt{10}$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>검산: $\overline{\mathrm{AB}}=3\sqrt{10}\approx9.49$ 이므로 세 변은 약 $9.49,\ 9.49,\ 6$ 으로 삼각형이 성립한다. 또 사인법칙으로 $\sin(\angle\mathrm{C})=\frac{\overline{\mathrm{AB}}}{2R}=\frac{3\sqrt{10}}{10}\approx0.949$ 이고, 이는 밑각 약 $71.6^\circ$ 에 해당해 $\angle\mathrm{A}\approx36.9^\circ$ 와 합이 $180^\circ$ 가 된다.
+            <div class="why">길이를 구했으면 삼각부등식과 내각의 합으로 반드시 자체 검산한다.</div></div></div>
+          <p class="warn">오답 주의: "예각" 조건을 놓치면 $\cos(\angle\mathrm{A})=-\frac45$ 도 가능해져 $b^2=10$, 즉 $b=\sqrt{10}$ 이라는 <strong>다른 답</strong>이 나온다. 이때는 $\sqrt{10}+\sqrt{10}\approx6.3&gt;6$ 이라 삼각형은 성립하지만 문제 조건에 어긋난다.</p>
+          <span class="answer-tag">정답: $\overline{\mathrm{AB}}=3\sqrt{10}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>준킬러 유형 — 두 스위치 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 숨은 정삼각형 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> 반지름의 길이가 $7$ 인 원 $O$ 에 삼각형 $\mathrm{ABC}$ 가 내접한다. $\overline{\mathrm{BC}}=7\sqrt3$ 이고 $\angle\mathrm{BAC}$ 는 예각이며, 점 $\mathrm{A}$ 에서 원 $O$ 에 그은 접선이 $\overline{\mathrm{BC}}$ 와 평행하다. $\overline{\mathrm{AB}}$ 의 길이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>사인법칙으로 $\angle\mathrm{A}$ 를 확정한다.
+            $$\overline{\mathrm{BC}}=2R\sin(\angle\mathrm{A})\ \Longrightarrow\ 7\sqrt3=14\sin(\angle\mathrm{A})\ \Longrightarrow\ \sin(\angle\mathrm{A})=\frac{\sqrt3}{2}$$
+            <div class="why">$\frac{7\sqrt3}{14}=\frac{\sqrt3}{2}$. 특수각 값이 나왔다는 것은 출제 의도대로 왔다는 신호다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\sin(\angle\mathrm{A})=\frac{\sqrt3}{2}$ 를 만족하는 각은 $60^\circ$ 또는 $120^\circ$ 인데, $\angle\mathrm{A}$ 가 예각이므로 $\angle\mathrm{A}=60^\circ$.
+            <div class="why">$\sin$ 값만으로는 각이 하나로 정해지지 않는다 ($\sin$ 은 $90^\circ$ 를 기준으로 대칭). "예각"이라는 조건이 이 갈림길을 정리해 준다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>접선이 $\overline{\mathrm{BC}}$ 와 평행하므로 개념 3에 의해 $\overline{\mathrm{AB}}=\overline{\mathrm{AC}}$ 인 <strong>이등변삼각형</strong>이다.
+            <div class="why">접현각 + 엇각으로 두 밑각이 같아진다. 접선·평행선 조건의 유일한 용도다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>꼭지각이 $60^\circ$ 인 이등변삼각형이므로 두 밑각은 각각 $\dfrac{180^\circ-60^\circ}{2}=60^\circ$. 즉 세 각이 모두 $60^\circ$ 인 <strong>정삼각형</strong>이다.
+            <div class="why">이 문제의 결정적 관찰. "이등변 + 꼭지각 $60^\circ$ = 정삼각형" 은 자주 쓰이는 사실이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>정삼각형이므로 $\overline{\mathrm{AB}}=\overline{\mathrm{BC}}=7\sqrt3$.
+            <div class="why">세 변이 모두 같다. 코사인법칙을 쓸 필요조차 없어졌다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>검산: 한 변이 $s$ 인 정삼각형의 외접원 반지름은 $R=\dfrac{s}{\sqrt3}$ 이므로 $R=\dfrac{7\sqrt3}{\sqrt3}=7$. 주어진 반지름과 일치한다.
+            <div class="why">사인법칙 $s=2R\sin60^\circ=2R\cdot\frac{\sqrt3}{2}=R\sqrt3$ 에서 $R=\frac{s}{\sqrt3}$. 조건과 맞아떨어지므로 답이 옳다.</div></div></div>
+          <p class="warn">오답 주의: STEP 2에서 $\angle\mathrm{A}=120^\circ$ 를 택하면 밑각이 각각 $30^\circ$ 인 이등변삼각형이 되어 $\overline{\mathrm{AB}}=7$ 이라는 <strong>다른 답</strong>이 나온다. "예각" 조건을 반드시 사용하라.</p>
+          <span class="answer-tag">정답: $\overline{\mathrm{AB}}=7\sqrt3$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 세 변에서 각·반지름·접현각까지</div>
+        <div class="problem-body"><strong>문제:</strong> 삼각형 $\mathrm{ABC}$ 에서 $\overline{\mathrm{AB}}=3$, $\overline{\mathrm{AC}}=7$, $\overline{\mathrm{BC}}=8$ 이다.<br>
+          (1) $\cos(\angle\mathrm{BAC})$ 의 값을 구하시오.<br>
+          (2) 삼각형 $\mathrm{ABC}$ 의 외접원의 반지름 $R$ 을 구하시오.<br>
+          (3) 점 $\mathrm{A}$ 를 지나고 이 외접원에 접하는 직선과 현 $\overline{\mathrm{AB}}$ 가 이루는 각(호 $\mathrm{AB}$ 쪽)을 $\alpha$ 라 할 때, $\cos\alpha$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>(1) 세 변을 알므로 코사인법칙의 <strong>각 구하는 꼴</strong>을 쓴다. $\angle\mathrm{A}$ 를 낀 두 변은 $3,\ 7$ 이고 맞은편 변은 $8$ 이다.
+            $$\cos(\angle\mathrm{BAC})=\frac{3^2+7^2-8^2}{2\cdot3\cdot7}=\frac{9+49-64}{42}=\frac{-6}{42}=-\frac17$$
+            <div class="why">$\cos A=\frac{b^2+c^2-a^2}{2bc}$. 값이 음수이므로 $\angle\mathrm{A}$ 는 둔각이다 — 가장 긴 변 $8$ 의 맞은편이니 자연스럽다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>(2) 사인법칙을 쓰려면 $\sin(\angle\mathrm{A})$ 이 필요하다. 삼각형의 내각이므로 $\sin&gt;0$ 이고
+            $$\sin(\angle\mathrm{A})=\sqrt{1-\left(-\tfrac17\right)^2}=\sqrt{1-\tfrac1{49}}=\sqrt{\tfrac{48}{49}}=\frac{4\sqrt3}{7}$$
+            <div class="why">$\sqrt{48}=\sqrt{16\cdot3}=4\sqrt3$. $\cos$ 이 음수여도 $\sin$ 은 양수임에 주의 (둔각도 $\sin&gt;0$).</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\overline{\mathrm{BC}}=8$ 이 $\angle\mathrm{A}$ 의 맞은편 변이므로
+            $$2R=\frac{8}{\sin(\angle\mathrm{A})}=\frac{8}{\frac{4\sqrt3}{7}}=\frac{8\cdot7}{4\sqrt3}=\frac{56}{4\sqrt3}=\frac{14}{\sqrt3}$$
+            $$R=\frac{7}{\sqrt3}=\frac{7\sqrt3}{3}$$
+            <div class="why">분수의 나눗셈은 역수를 곱한다. 마지막에 $2$ 로 나누는 것을 잊지 말 것.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>(3) <strong>접현각 정리</strong>: 접선과 현 $\overline{\mathrm{AB}}$ 가 이루는 각 $\alpha$ 는 호 $\mathrm{AB}$ 에 대한 원주각, 즉 $\angle\mathrm{ACB}$ 와 같다.
+            <div class="why">각을 옮기는 순간 문제가 "$\cos(\angle\mathrm{C})$ 를 구하라"로 바뀐다. 이것이 각 옮기기의 힘이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$\angle\mathrm{C}$ 를 낀 두 변은 $\overline{\mathrm{AC}}=7$, $\overline{\mathrm{BC}}=8$ 이고 맞은편 변은 $\overline{\mathrm{AB}}=3$ 이므로
+            $$\cos\alpha=\cos(\angle\mathrm{ACB})=\frac{7^2+8^2-3^2}{2\cdot7\cdot8}=\frac{49+64-9}{112}=\frac{104}{112}=\frac{13}{14}$$
+            <div class="why">$\frac{104}{112}$ 을 $8$ 로 약분하면 $\frac{13}{14}$. 양수이므로 $\angle\mathrm{C}$ 는 예각 — 가장 짧은 변의 맞은편이니 타당하다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>검산: $\sin(\angle\mathrm{C})=\sqrt{1-\frac{169}{196}}=\sqrt{\frac{27}{196}}=\frac{3\sqrt3}{14}$ 이므로
+            $\dfrac{\overline{\mathrm{AB}}}{\sin(\angle\mathrm{C})}=\dfrac{3}{\frac{3\sqrt3}{14}}=\dfrac{14}{\sqrt3}=2R$. STEP 3과 정확히 일치한다.
+            <div class="why">사인법칙은 세 쌍 모두 같은 $2R$ 를 준다. 다른 쌍으로 검산해 값이 맞으면 전체 계산이 옳다는 강력한 증거다.</div></div></div>
+          <p class="warn">오답 주의: (3)에서 접현각을 $\angle\mathrm{ABC}$ 로 잘못 옮기면 $\cos=\frac12$ 이라는 다른 값이 나온다. 접현각은 <strong>그 현($\overline{\mathrm{AB}}$)을 마주 보는 원주각</strong>과 짝이므로 반드시 나머지 꼭짓점 $\mathrm{C}$ 에서의 각이다.</p>
+          <span class="answer-tag">정답: (1) $-\dfrac17$ &nbsp; (2) $\dfrac{7\sqrt3}{3}$ &nbsp; (3) $\dfrac{13}{14}$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「도형 문제, 수학 1등급은 '이 생각'부터 합니다. (ft. 저스트 모의고사)」</strong>(수능 수학은 이동준, 약 9분)의 요약본을 근거로 재구성했습니다. 영상이 제시한 사고 알고리즘 — ① 외접원 반지름 비 같은 비례식은 "사인법칙을 쓰라"는 신호 ② 두 삼각형의 공통각·공통현에서 대변의 비를 추출 ③ 평행선의 엇각·동위각과 접현각으로 "각 옮기기"를 수행해 이등변삼각형 포착 ④ 코사인법칙과 특수각으로 종결 — 을 개념 1~4에 대응시켰습니다. 도입 문제는 요약본에 언급된 수치($\cos=-\frac17$, 길이 조건 $11$, 길이 비 $3:7$, 특수각 $\cos B=\frac12\to\frac\pi3$)가 모두 <strong>모순 없이 성립하도록</strong> 삼각형 $3,7,8$ 로 구성했으며, 사인법칙의 세 쌍이 모두 같은 $2R$ 을 주는지 교차 검산했습니다.</p>
+      <p style="margin-top:8px">한계: 영상 자막 전문이 아닌 <strong>요약본</strong>을 근거로 했으므로, 강사가 실제 다룬 문항의 도형 배치(두 원의 위치 관계, 공통현의 구체적 형태 등)는 본 자료의 도입 문제와 다를 수 있습니다. 도입 문제와 문항 8개는 요약본에 기술된 <strong>기법을 훈련하기 위해 새로 구성한 것</strong>입니다. 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아니며</strong>, 영상에 언급된 "저스트 모의고사" 문항을 그대로 옮긴 것도 아닙니다. 학생 배포 전 교사 검토를 권장합니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 본 자료는 사인법칙·코사인법칙(고2 대수 — 삼각함수의 활용), 특수각의 삼각비, $\sin^2\theta+\cos^2\theta=1$, 그리고 중학교 과정의 원주각·접현각·평행선 성질만 사용합니다. 고3 선택 「미적분」 영역인 <strong>삼각함수의 덧셈정리·배각·반각 공식은 일절 사용하지 않았습니다</strong>. 현 고2 수능 범위 내에서 완결됩니다.</p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../../고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html">사인법칙·코사인법칙 — 삼각형 해석의 본질 (W9ReLryy)</a> · <a href="20260515_사인코사인외접원성질연계심화_xuzuEsxr.html">삼각함수 활용 고난도 (xuzuEsxr)</a> · <a href="20260506_사인법칙비례식과외접원변환_sbmMPmSY.html">사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2RsinA) (sbmMPmSY)</a> · <a href="20260520_원주각접현각내접사각형등현_SBihdCW0.html">원주각·접현각·내접사각형·등현사각형 10초컷 풀이 (SBihdCW0)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-18 · 영상 출처: <a href="https://youtu.be/AydNo77l7JA" style="color:var(--primary)">수능 수학은 이동준</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>

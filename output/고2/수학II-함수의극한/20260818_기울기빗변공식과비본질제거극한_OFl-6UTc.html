@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ — 함수의 극한</div>
+    <h1>좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수</h1>
+    <p class="sub">거리 공식 대신 <strong>밑변 × √(1+m²)</strong>, 극한 앞에서 <strong>안 죽는 항 먼저 버리기</strong>, 분모 1차 부정형은 <strong>미분계수</strong>로 — 계산 지옥을 없애는 3가지 행동 강령</p>
+    <div class="quote">"좌표가 주어졌다고 점과 점 사이 거리 공식을 쓰고 있는 것이 바로 여러분들의 문제입니다." — 강사 인용 [00:00:00]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/OFl-6UTc_1E" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/OFl-6UTc_1E/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">수학1등급이 간절한 사람만 들어오세요 | 이동준은 이렇게 푼다 [뜯어고침 시리즈]</div>
+        <div class="v-meta">📺 YouTube · 약 7분 · 수능 수학은 이동준</div>
+        <a class="v-link" href="https://youtu.be/OFl-6UTc_1E" target="_blank" rel="noopener">https://youtu.be/OFl-6UTc_1E</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① 좌표평면 선분을 직각삼각형 3요소로 보고 빗변을 1줄에 세운다 ② 극한에서 0이 아닌 값으로 수렴하는 인수를 먼저 분리해 없앤다 ③ 분모가 1차인 $0/0$ 꼴을 미분계수로 즉시 처리한다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 거리 공식으로 풀면 반드시 막히는 문제</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 곡선 $y=x^2$ 위에 세 점 $\mathrm{A}(1,\,1)$, $\mathrm{P}(t,\,t^2)$, $\mathrm{Q}(t^3,\,t^6)$ 이 있다 ($t&gt;1$). 다음 극한값을 구하시오.
+        $$\lim_{t\to 1+}\frac{\overline{\mathrm{AQ}}}{\overline{\mathrm{AP}}}$$</div>
+      <div class="visual">  선분을 "직각삼각형"으로 보기
+                              Q(t³, t⁶)
+                             /|
+                            / | 높이 Δy = m·Δx
+              P(t,t²)      /  |
+                /|        /   |
+   A(1,1) ─────┘ |  ─────┘────┘
+              밑변 Δx      밑변 Δx
+
+     빗변 = 밑변 × √(1 + m²)      (m = 기울기)
+</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>먼저 두 선분의 <strong>기울기</strong>를 구한다.
+            $$m_{\mathrm{AP}}=\frac{t^2-1}{t-1}=\frac{(t-1)(t+1)}{t-1}=t+1,\qquad
+              m_{\mathrm{AQ}}=\frac{t^6-1}{t^3-1}=\frac{(t^3-1)(t^3+1)}{t^3-1}=t^3+1$$
+            <div class="why">$a^2-b^2=(a-b)(a+b)$ 를 두 번 썼다. $t^6-1=(t^3)^2-1^2=(t^3-1)(t^3+1)$. 기울기는 $\dfrac{\Delta y}{\Delta x}$ 이므로 약분이 자연스럽게 일어난다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div><strong>빗변 공식</strong>으로 두 길이를 1줄에 쓴다. $t&gt;1$ 이므로 밑변 $t-1&gt;0$, $t^3-1&gt;0$ 이다.
+            $$\overline{\mathrm{AP}}=(t-1)\sqrt{1+(t+1)^2},\qquad
+              \overline{\mathrm{AQ}}=(t^3-1)\sqrt{1+(t^3+1)^2}$$
+            <div class="why">거리 공식 $\sqrt{\Delta x^2+\Delta y^2}$ 를 쓰면 $\Delta y$ 를 다시 $m\Delta x$ 로 바꿔 묶어내는 중복 작업이 생긴다. 개념 1에서 이 공식을 직접 유도한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>비를 세우고 <strong>구조를 두 덩어리로 분리</strong>한다.
+            $$\frac{\overline{\mathrm{AQ}}}{\overline{\mathrm{AP}}}
+            =\underbrace{\frac{t^3-1}{t-1}}_{\text{본질}(0/0\ \text{꼴})}\times
+             \underbrace{\frac{\sqrt{1+(t^3+1)^2}}{\sqrt{1+(t+1)^2}}}_{\text{비본질}(\text{그냥 수렴})}$$
+            <div class="why">분수의 곱셈으로 쪼갠 것뿐이다. 왼쪽은 $t\to1$ 일 때 $\frac{0}{0}$ 이 되지만, 오른쪽은 대입만 하면 값이 나온다 — 성질이 완전히 다르므로 갈라 놓는다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div><strong>비본질 먼저 처리</strong>: $t\to1$ 이면 $t^3+1\to2$, $t+1\to2$ 이므로
+            $$\frac{\sqrt{1+2^2}}{\sqrt{1+2^2}}=\frac{\sqrt5}{\sqrt5}=1$$
+            <div class="why">두 근호 안이 모두 $0$ 이 아닌 값 $5$ 로 수렴한다. 이렇게 "안 죽는" 항은 극한의 기본 성질(수렴끼리는 분배 가능)에 의해 미리 계산해 치워도 된다. 여기서는 아예 $1$ 이 되어 통째로 사라진다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div><strong>남은 본질을 미분계수로</strong>: $g(t)=t^3$ 이라 하면 $g(1)=1$ 이므로
+            $$\lim_{t\to1}\frac{t^3-1}{t-1}=\lim_{t\to1}\frac{g(t)-g(1)}{t-1}=g'(1)=3\cdot1^2=3$$
+            <div class="why">이것이 <strong>미분계수의 정의</strong> 그 자체다. 인수분해($t^3-1=(t-1)(t^2+t+1)$)해도 같은 답 $3$ 이 나오지만, 분자가 복잡해질수록 미분이 압도적으로 빠르다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>두 결과를 곱한다: $3\times1=3$.
+            <div class="why">STEP 3에서 곱으로 쪼갰으므로, 각각의 극한값을 곱하면 전체 극한값이다 (둘 다 수렴하므로 정당하다 — 개념 2 참조).</div></div></div>
+          <span class="answer-tag">정답: $3$</span>
+        </div>
+      </details>
+      <div class="tip">거리 공식으로 시작했다면 $\sqrt{(t^3-1)^2+(t^6-1)^2}$ 같은 식을 전개하다 시간을 다 썼을 것이다. <strong>기울기를 먼저 보는 것</strong>만으로 문제가 반으로 줄었다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 두 점 사이의 거리와 기울기</div>
+      <p>고1에서 배운 두 가지를 그대로 쓴다. 새로운 공식은 하나도 없다.</p>
+      <div class="formula-box">
+        $$\overline{\mathrm{AB}}=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}\ ,\qquad
+          m=\frac{y_2-y_1}{x_2-x_1}=\frac{\Delta y}{\Delta x}$$
+      </div>
+      <p>여기서 $\Delta x = x_2-x_1$ (가로 변화량, <strong>밑변</strong>), $\Delta y = y_2-y_1$ (세로 변화량, <strong>높이</strong>) 이라 부르기로 한다. 기울기의 정의를 옮기면 <strong>$\Delta y = m\,\Delta x$</strong> 라는 관계가 나오는데, 이 한 줄이 다음 개념의 전부다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>빗변 공식 — 밑변 × √(1+m²)</div>
+      <p>좌표평면 위의 선분은 언제나 <strong>가로·세로·빗변으로 이루어진 직각삼각형</strong>이다. 이 삼각형의 3요소는 밑변 $\Delta x$, 높이 $\Delta y$, 기울기 $m$ 이고, 셋 중 <strong>둘만 알면 나머지가 따라온다</strong>.</p>
+      <div class="formula-box">$$\overline{\mathrm{AB}}=|\Delta x|\sqrt{1+m^2}$$</div>
+      <p><strong>유도 (한 번은 직접 보자):</strong></p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">거리 공식에서 출발: $\overline{\mathrm{AB}}=\sqrt{\Delta x^2+\Delta y^2}$</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">$\Delta y=m\,\Delta x$ 를 대입: $\sqrt{\Delta x^2+(m\Delta x)^2}=\sqrt{\Delta x^2+m^2\Delta x^2}$</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">공통인수 $\Delta x^2$ 을 묶는다: $\sqrt{\Delta x^2\,(1+m^2)}$</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body">근호 밖으로: $\sqrt{\Delta x^2}\cdot\sqrt{1+m^2}=|\Delta x|\sqrt{1+m^2}$</div></div>
+      <div class="concept-box">"좌표평면의 선분은 항상 직각삼각형으로 보여야 하며, 빗변은 밑변에 $\sqrt{1+m^2}$ 을 곱하는 것으로 끝납니다." — 강사 인용 [00:01:35]</div>
+      <div class="caution"><strong>절댓값을 잊지 마라.</strong> $\sqrt{\Delta x^2}=|\Delta x|$ 이지 $\Delta x$ 가 아니다. 길이는 항상 $0$ 이상이어야 한다. 문제에서 $t&gt;1$ 처럼 부호를 정해 주면 그때 절댓값을 벗긴다.</div>
+      <div class="tip">기울기가 $1$ 이면 $\sqrt{1+1^2}=\sqrt2$, 기울기가 $2$ 이면 $\sqrt5$, 기울기가 $3$ 이면 $\sqrt{10}$. 자주 나오는 값이니 눈에 익혀 두면 좋다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>극한의 기본 성질 — 수렴하는 것끼리만 분배된다</div>
+      <p>다음 성질은 교과서에 "기본 성질"로 실려 있지만, 조건이 핵심이다. <strong>$\lim f(x)=\alpha$, $\lim g(x)=\beta$ 로 두 극한이 모두 존재(수렴)할 때에만</strong> 성립한다.</p>
+      <div class="formula-box">
+        $$\lim\{f\pm g\}=\alpha\pm\beta,\qquad
+          \lim\{f\cdot g\}=\alpha\beta,\qquad
+          \lim\frac{f}{g}=\frac{\alpha}{\beta}\ \ (\beta\neq0)$$
+      </div>
+      <div class="concept-box"><strong>파인만식으로:</strong> 두 사람이 모두 땅에 발을 딛고 서 있어야(수렴) 손을 잡거나 밀고 당길 수 있다(사칙연산). 한 사람이 공중으로 날아가 버리면(발산) 손을 잡을 방법이 없다.</div>
+      <div class="caution">그래서 $\dfrac{0}{0}$ 이나 $\infty-\infty$ 같은 <strong>부정형에서는 이 성질을 바로 쓸 수 없다</strong>. 분모가 $0$ 으로 가면 세 번째 식의 조건 $\beta\neq0$ 이 깨지기 때문이다. 부정형은 반드시 <strong>변형해서 수렴 형태로 만든 뒤</strong> 성질을 적용한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>비본질 제거 — 안 죽는 항은 먼저 버린다</div>
+      <p>복잡한 극한식을 만나면 각 인수를 두 종류로 분류한다.</p>
+      <table class="grid">
+        <tr><th>종류</th><th>정체</th><th>처리법</th></tr>
+        <tr><td><strong>본질</strong></td><td>$0$ 또는 $\infty$ 로 가는 부분 (부정형을 만드는 범인)</td><td>끝까지 남겨 두고 변형·미분계수로 처리</td></tr>
+        <tr><td><strong>비본질</strong></td><td>$0$ 이 아닌 유한한 값으로 그냥 수렴하는 부분</td><td><strong>미리 대입해 숫자로 바꾸고 치운다</strong></td></tr>
+      </table>
+      <div class="concept-box">개념 2의 곱셈 성질 덕분에 이 분리가 정당하다. 식을 (본질) × (비본질) 로 쪼개면, 비본질 쪽은 이미 수렴하므로 먼저 극한을 취해도 전체 값이 바뀌지 않는다.</div>
+      <p><strong>예:</strong> $\displaystyle\lim_{x\to1}\frac{(x^2-1)(x+3)}{(x-1)(x^2+5)}$ 에서 $(x+3)\to4$, $(x^2+5)\to6$ 은 비본질이므로 먼저 $\dfrac46$ 으로 확정하고, 본질인 $\dfrac{x^2-1}{x-1}=x+1\to2$ 만 남겨 계산한다. 답은 $2\times\dfrac46=\dfrac43$.</p>
+      <div class="caution">비본질로 분류하려면 반드시 <strong>$0$ 이 아닌 값</strong>으로 수렴해야 한다. $x\to1$ 일 때 $(x-1)$ 은 $0$ 으로 가므로 절대 비본질이 아니다 — 이걸 먼저 대입해 버리면 식 전체가 망가진다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>분모 1차 0/0 꼴 = 미분계수</div>
+      <p>미분계수의 정의를 <strong>거꾸로 읽는 것</strong>이 이 기법의 전부다.</p>
+      <div class="formula-box">$$g'(a)=\lim_{x\to a}\frac{g(x)-g(a)}{x-a}
+        \qquad\Longleftrightarrow\qquad
+        \lim_{x\to a}\frac{g(x)-g(a)}{x-a}=g'(a)$$</div>
+      <p>즉 <strong>분모가 $(x-a)$ 이고 분자가 $x=a$ 에서 $0$ 이 되는</strong> 부정형을 만나면, 인수분해·조립제법 없이 곧바로 "분자를 미분해서 $a$ 를 대입"하면 된다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>확인</strong>: 분모가 $(x-a)$ 꼴인가? 분자에 $x=a$ 를 넣으면 $0$ 인가? (둘 다 예 → 사용 가능)</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>맞추기</strong>: 분자를 $g(x)-g(a)$ 형태로 본다. 예를 들어 $t^3-1$ 은 $g(t)=t^3$, $g(1)=1$ 이므로 $g(t)-g(1)$ 이다.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body"><strong>미분</strong>: $g'(x)$ 를 구해 $x=a$ 를 대입한다. 끝.</div></div>
+      <div class="concept-box">"분모가 1차인 0분의 0 꼴 극한은 조립제법 할 필요 없이 분자를 미분해서 1을 대입하는 '미분계수'입니다." — 강사 인용 [00:05:55]</div>
+      <div class="caution"><strong>조건을 반드시 확인하라.</strong> 분자에 $a$ 를 대입했을 때 $0$ 이 아니면 이 방법을 쓸 수 없다 (애초에 부정형이 아니라 그냥 대입하면 된다). 또 분모가 $(x-a)^2$ 처럼 <strong>2차 이상</strong>이면 미분계수 정의와 형태가 맞지 않으므로 그대로 쓸 수 없다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — 절댓값 누락.</strong> $\overline{\mathrm{AB}}=\Delta x\sqrt{1+m^2}$ 로 쓰면 $\Delta x&lt;0$ 일 때 길이가 음수가 된다. 부호 조건($t&gt;1$ 등)을 확인하고 벗겨야 한다.</div>
+      <div class="caution"><strong>실수 2 — 비본질 판정 실수.</strong> $0$ 으로 수렴하는 항을 비본질로 착각해 먼저 대입하면 답이 통째로 틀린다. "$0$ 이 아닌 값으로" 가 조건이다.</div>
+      <div class="caution"><strong>실수 3 — 부정형에 기본 성질 남용.</strong> $\lim\frac{f}{g}=\frac{\lim f}{\lim g}$ 는 $\lim g\neq0$ 일 때만 쓸 수 있다. $0/0$ 에 그냥 적용하면 안 된다.</div>
+      <div class="caution"><strong>실수 4 — 미분계수 대상 착각.</strong> $\lim_{x\to a}\frac{g(x)-g(a)}{x-a}$ 에서 미분하는 것은 <strong>분자 $g$</strong> 이지 분모가 아니다. 분자와 분모를 각각 미분해 나누는 것은 고2 미적분Ⅰ 범위 밖의 다른 정리이므로 이 자료에서는 사용하지 않는다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>공식 하나씩 따로 익히기</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 빗변 공식 첫걸음</div>
+        <div class="problem-body"><strong>문제:</strong> 기울기가 $2$ 인 직선 위의 두 점 $\mathrm{A}(1,\,2)$, $\mathrm{B}(4,\,8)$ 에 대하여 선분 $\mathrm{AB}$ 의 길이를 <strong>빗변 공식</strong>으로 구하시오. 또 거리 공식으로 구한 값과 같은지 확인하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>밑변 $\Delta x = 4-1 = 3$, 기울기 $m=2$.
+            <div class="why">기울기가 문제에 주어져 있으므로 따로 계산할 필요가 없다. 실제로 확인하면 $\frac{8-2}{4-1}=\frac63=2$ 로 일치한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>빗변 공식: $\overline{\mathrm{AB}}=|\Delta x|\sqrt{1+m^2}=3\sqrt{1+2^2}=3\sqrt5$.
+            <div class="why">$\Delta x=3&gt;0$ 이므로 절댓값을 그냥 벗긴다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>검산(거리 공식): $\sqrt{(4-1)^2+(8-2)^2}=\sqrt{9+36}=\sqrt{45}=3\sqrt5$. 일치한다.
+            <div class="why">$\sqrt{45}=\sqrt{9\cdot5}=3\sqrt5$. 두 방법의 답이 같음을 한 번 확인해 두면 공식을 믿고 쓸 수 있다.</div></div></div>
+          <p class="warn">오답 주의: $\sqrt{45}$ 를 $\sqrt5\cdot\sqrt9$ 로 쪼갤 때 $9\to3$ 이지 $9$ 가 그대로 나오지 않는다. $9\sqrt5$ 는 틀린 답이다.</p>
+          <span class="answer-tag">정답: $3\sqrt5$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 미분계수로 부정형 처리</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to2}\frac{x^3-8}{x-2}$ 의 값을 <strong>미분계수의 정의</strong>를 이용하여 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>먼저 부정형인지 확인한다. $x=2$ 를 대입하면 분자 $8-8=0$, 분모 $2-2=0$ 이므로 $\frac00$ 꼴이다.
+            <div class="why">부정형이 아니면 그냥 대입하면 되므로, 이 확인이 첫 단계여야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$g(x)=x^3$ 으로 두면 $g(2)=8$ 이므로 주어진 식은 $\displaystyle\lim_{x\to2}\frac{g(x)-g(2)}{x-2}$, 즉 $g'(2)$ 이다.
+            <div class="why">분자의 $-8$ 이 정확히 $g(2)$ 와 같고 분모가 $(x-2)$ 이므로 미분계수 정의와 형태가 완벽히 일치한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$g'(x)=3x^2$ 이므로 $g'(2)=3\cdot4=12$.
+            <div class="why">다항함수 미분: $(x^n)'=nx^{n-1}$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>검산(인수분해): $x^3-8=(x-2)(x^2+2x+4)$ 이므로 약분하면 $x^2+2x+4\to4+4+4=12$. 일치한다.
+            <div class="why">$a^3-b^3=(a-b)(a^2+ab+b^2)$. 답이 같음을 확인하면 미분계수 방법을 안심하고 쓸 수 있다.</div></div></div>
+          <p class="warn">오답 주의: 분모 $(x-2)$ 까지 미분해서 $\frac{3x^2}{1}$ 로 계산하는 것은 <strong>고2 범위 밖의 다른 정리</strong>다. 여기서는 분자만 미분하는 미분계수 정의를 쓴다 (결과는 우연히 같지만 근거가 다르다).</p>
+          <span class="answer-tag">정답: $12$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>비본질 분리 연습</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 본질과 비본질 가려내기</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to1}\frac{(x^2-1)(x+3)}{(x-1)(x^2+5)}$ 의 값을 구하시오. 풀이 과정에서 어떤 인수가 비본질인지 밝히시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>각 인수에 $x=1$ 을 넣어 분류한다.<br>
+            $x^2-1\to0$ (본질) &nbsp;/&nbsp; $x+3\to4$ (비본질) &nbsp;/&nbsp; $x-1\to0$ (본질) &nbsp;/&nbsp; $x^2+5\to6$ (비본질)
+            <div class="why">$0$ 으로 가는 것이 본질(부정형의 원인), $0$ 이 아닌 값으로 수렴하는 것이 비본질이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>본질끼리, 비본질끼리 묶는다.
+            $$\frac{(x^2-1)(x+3)}{(x-1)(x^2+5)}=\underbrace{\frac{x^2-1}{x-1}}_{\text{본질}}\times\underbrace{\frac{x+3}{x^2+5}}_{\text{비본질}}$$
+            <div class="why">분수의 곱셈으로 자리를 바꾼 것뿐이므로 값은 그대로다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>비본질 처리: $\dfrac{x+3}{x^2+5}\to\dfrac{4}{6}=\dfrac23$.
+            <div class="why">분모가 $0$ 이 아닌 $6$ 으로 수렴하므로 극한의 기본 성질(개념 2)을 그대로 적용할 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>본질 처리: $\dfrac{x^2-1}{x-1}=\dfrac{(x-1)(x+1)}{x-1}=x+1\to2$.
+            <div class="why">약분으로 부정형이 풀린다. 미분계수로 봐도 같다: $g(x)=x^2$, $g'(1)=2$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>두 값을 곱한다: $2\times\dfrac23=\dfrac43$.
+            <div class="why">둘 다 수렴하므로 곱의 극한 = 극한의 곱.</div></div></div>
+          <p class="warn">오답 주의: 처음부터 통째로 $x=1$ 을 대입하면 $\frac{0\cdot4}{0\cdot6}=\frac00$ 이라 아무 정보도 못 얻는다. 반드시 <strong>본질을 먼저 약분한 뒤</strong> 대입한다.</p>
+          <span class="answer-tag">정답: $\dfrac43$ (비본질: $x+3$, $x^2+5$)</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 곡선 위 선분과 극한</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=x^2$ 위의 두 점 $\mathrm{A}(1,\,1)$, $\mathrm{P}(t,\,t^2)$ 에 대하여 ($t&gt;1$) 다음 값을 구하시오.
+          $$\lim_{t\to1+}\frac{\overline{\mathrm{AP}}}{t-1}$$</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>직선 $\mathrm{AP}$ 의 기울기: $m=\dfrac{t^2-1}{t-1}=t+1$.
+            <div class="why">$t^2-1=(t-1)(t+1)$ 로 인수분해되어 약분된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>밑변 $\Delta x=t-1&gt;0$ 이므로 빗변 공식에서
+            $\overline{\mathrm{AP}}=(t-1)\sqrt{1+(t+1)^2}$.
+            <div class="why">$t&gt;1$ 조건 덕분에 절댓값을 바로 벗길 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\dfrac{\overline{\mathrm{AP}}}{t-1}=\dfrac{(t-1)\sqrt{1+(t+1)^2}}{t-1}=\sqrt{1+(t+1)^2}$.
+            <div class="why">밑변 $(t-1)$ 이 그대로 약분된다. 부정형이 사라졌다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$t\to1$ 이면 $t+1\to2$ 이므로 $\sqrt{1+4}=\sqrt5$.
+            <div class="why">남은 식은 연속함수이므로 그냥 대입하면 된다.</div></div></div>
+          <p class="warn">오답 주의: 거리 공식으로 $\sqrt{(t-1)^2+(t^2-1)^2}$ 을 세운 뒤 $(t-1)$ 로 나누려면 근호 안에서 $(t-1)^2$ 을 묶어내는 추가 작업이 필요하다. 빗변 공식으로 시작하면 이 과정이 통째로 생략된다.</p>
+          <span class="answer-tag">정답: $\sqrt5$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>세 기법 조합</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 인수분해가 어려운 분자</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to1}\frac{x^4+2x-3}{x-1}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$x=1$ 대입: 분자 $1+2-3=0$, 분모 $0$ → $\frac00$ 부정형이고 <strong>분모가 1차</strong>이다. 미분계수를 쓸 조건이 갖춰졌다.
+            <div class="why">개념 4의 사용 조건 두 가지(분모 1차, 분자가 그 점에서 0)를 모두 만족한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$g(x)=x^4+2x-3$ 이라 하면 $g(1)=0$ 이므로 주어진 식은
+            $\displaystyle\lim_{x\to1}\frac{g(x)-g(1)}{x-1}=g'(1)$.
+            <div class="why">$g(1)=0$ 이라 분자에서 $-g(1)$ 을 빼도 식이 변하지 않는다. 그래서 형태를 맞출 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$g'(x)=4x^3+2$ 이므로 $g'(1)=4+2=6$.
+            <div class="why">각 항을 미분: $(x^4)'=4x^3$, $(2x)'=2$, $(-3)'=0$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>검산(조립제법): $x^4+2x-3=(x-1)(x^3+x^2+x+3)$ 이고 $x=1$ 대입하면 $1+1+1+3=6$. 일치한다.
+            <div class="why">조립제법으로도 풀리지만 4차식을 나누는 계산이 필요하다. 미분계수 쪽이 두 줄 짧다.</div></div></div>
+          <p class="warn">오답 주의: 분자를 인수분해하려고 $x^4+2x-3$ 에서 억지로 $x^2-1$ 을 찾으려 하면 시간을 크게 낭비한다. <strong>분모가 1차면 미분계수를 먼저 떠올려라.</strong></p>
+          <span class="answer-tag">정답: $6$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 비본질 + 미분계수 동시 적용</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to2}\frac{(x^3-8)\sqrt{x^2+5}}{(x-2)(x+1)}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>인수별 분류 ($x\to2$):<br>
+            $x^3-8\to0$ (본질) / $\sqrt{x^2+5}\to\sqrt9=3$ (비본질) / $x-2\to0$ (본질) / $x+1\to3$ (비본질)
+            <div class="why">근호가 있어도 겁먹을 필요 없다. 안이 $0$ 이 아닌 $9$ 로 수렴하므로 그냥 대입하면 되는 비본질이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>본질·비본질로 쪼갠다.
+            $$\frac{(x^3-8)\sqrt{x^2+5}}{(x-2)(x+1)}=\underbrace{\frac{x^3-8}{x-2}}_{\text{본질}}\times\underbrace{\frac{\sqrt{x^2+5}}{x+1}}_{\text{비본질}}$$
+            <div class="why">부정형을 만드는 인수만 한쪽에 모아 두는 것이 요령이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>비본질: $\dfrac{\sqrt{x^2+5}}{x+1}\to\dfrac{3}{3}=1$.
+            <div class="why">$\sqrt{2^2+5}=\sqrt9=3$, $2+1=3$. 마침 $1$ 이 되어 통째로 사라진다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>본질: $g(x)=x^3$, $g(2)=8$ 이므로 $\displaystyle\lim_{x\to2}\frac{g(x)-g(2)}{x-2}=g'(2)=3\cdot2^2=12$.
+            <div class="why">기초 2에서 이미 구한 값과 같다. 미분계수 정의 그대로.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$12\times1=12$.
+            <div class="why">둘 다 수렴하므로 곱의 극한 = 극한의 곱 (개념 2).</div></div></div>
+          <p class="warn">오답 주의: $\sqrt{x^2+5}$ 를 유리화하려고 켤레를 곱하는 학생이 있는데, 여기서는 <strong>부정형의 원인이 아니므로</strong> 그럴 필요가 전혀 없다. 유리화는 근호가 $0$ 으로 갈 때만 쓴다.</p>
+          <span class="answer-tag">정답: $12$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>준킬러 유형 — 조건 해석 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 추상함수 조건으로 주어진 미분계수</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 $f(2)=3$, $f'(2)=4$ 를 만족할 때, 다음 극한값을 구하시오.
+          $$\lim_{x\to2}\frac{\{f(x)-3\}(x^2+2)}{(x-2)(x+1)}$$</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(2)=3$ 이므로 분자의 $f(x)-3$ 은 곧 $f(x)-f(2)$ 이고, $x\to2$ 일 때 $0$ 으로 간다. 즉 $\frac00$ 부정형.
+            <div class="why">문제가 $f(2)=3$ 을 준 이유가 바로 이것이다. 상수 $3$ 을 $f(2)$ 로 바꿔 읽는 순간 미분계수 형태가 보인다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>본질·비본질 분리:
+            $$\frac{\{f(x)-f(2)\}(x^2+2)}{(x-2)(x+1)}=\underbrace{\frac{f(x)-f(2)}{x-2}}_{\text{본질}}\times\underbrace{\frac{x^2+2}{x+1}}_{\text{비본질}}$$
+            <div class="why">$f$ 의 구체적인 식을 몰라도 상관없다. 형태만 맞으면 미분계수 값을 쓸 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>비본질: $\dfrac{x^2+2}{x+1}\to\dfrac{4+2}{3}=\dfrac63=2$.
+            <div class="why">분모 $x+1\to3\neq0$ 이므로 그대로 대입 가능.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>본질: $\displaystyle\lim_{x\to2}\frac{f(x)-f(2)}{x-2}=f'(2)=4$ (조건에서 주어짐).
+            <div class="why">미분계수의 정의를 그대로 읽은 것. $f$ 가 무슨 함수인지 알 필요가 없다는 점이 핵심이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$4\times2=8$.
+            <div class="why">두 극한이 모두 수렴하므로 곱해서 마무리.</div></div></div>
+          <p class="warn">오답 주의: $f$ 를 구체적으로 정해서 풀려고 시도하면 조건이 부족해 막힌다. $f(2)$ 와 $f'(2)$ 두 값만으로 답이 결정되도록 설계된 문제다.</p>
+          <span class="answer-tag">정답: $8$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 곡선 위 두 선분의 길이 비</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=x^3$ 위에 세 점 $\mathrm{A}(1,\,1)$, $\mathrm{P}(t,\,t^3)$, $\mathrm{Q}(t^2,\,t^6)$ 이 있다 ($t&gt;1$). 다음 극한값을 구하시오.
+          $$\lim_{t\to1+}\frac{\overline{\mathrm{AQ}}}{\overline{\mathrm{AP}}}$$</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>세 점이 모두 곡선 위에 있는지 확인한다. $\mathrm{Q}$ 의 $y$좌표는 $(t^2)^3=t^6$ 이므로 맞다.
+            <div class="why">$\mathrm{P},\mathrm{Q}$ 의 $x$좌표가 각각 $t,\ t^2$ 로 다르다는 점이 이 문제의 포인트다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>두 기울기를 구한다.
+            $$m_{\mathrm{AP}}=\frac{t^3-1}{t-1}=t^2+t+1,\qquad
+              m_{\mathrm{AQ}}=\frac{t^6-1}{t^2-1}=t^4+t^2+1$$
+            <div class="why">$a^3-b^3=(a-b)(a^2+ab+b^2)$ 를 이용. 두 번째는 $t^2=s$ 로 보면 $\frac{s^3-1}{s-1}=s^2+s+1=t^4+t^2+1$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>빗변 공식 ($t&gt;1$ 이므로 두 밑변 모두 양수):
+            $$\overline{\mathrm{AP}}=(t-1)\sqrt{1+(t^2+t+1)^2},\qquad
+              \overline{\mathrm{AQ}}=(t^2-1)\sqrt{1+(t^4+t^2+1)^2}$$
+            <div class="why">$\mathrm{AQ}$ 의 밑변은 $t^2-1$ 임에 주의. $\mathrm{Q}$ 의 $x$좌표가 $t^2$ 이기 때문이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>본질·비본질로 분리한다.
+            $$\frac{\overline{\mathrm{AQ}}}{\overline{\mathrm{AP}}}
+            =\underbrace{\frac{t^2-1}{t-1}}_{\text{본질}}\times
+             \underbrace{\frac{\sqrt{1+(t^4+t^2+1)^2}}{\sqrt{1+(t^2+t+1)^2}}}_{\text{비본질}}$$
+            <div class="why">밑변끼리, 근호끼리 짝지어 묶는다. 이 정리가 이 문제의 전부다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>비본질: $t\to1$ 일 때 $t^2+t+1\to3$, $t^4+t^2+1\to3$ 이므로
+            $$\frac{\sqrt{1+3^2}}{\sqrt{1+3^2}}=\frac{\sqrt{10}}{\sqrt{10}}=1$$
+            <div class="why">두 기울기가 같은 값 $3$ 으로 수렴한다 — 당연하다. $\mathrm{P},\mathrm{Q}$ 가 둘 다 $\mathrm{A}$ 로 다가가므로 두 할선이 모두 같은 접선에 가까워지기 때문이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>본질: $\dfrac{t^2-1}{t-1}=t+1\to2$. 따라서 답은 $2\times1=2$.
+            <div class="why">$t^2-1=(t-1)(t+1)$ 로 약분. 미분계수로 봐도 $g(t)=t^2$, $g'(1)=2$ 로 같다.</div></div></div>
+          <p class="warn">오답 주의: $\overline{\mathrm{AQ}}$ 의 밑변을 $t-1$ 로 착각하면 답이 $1$ 이 되어 틀린다. 각 점의 $x$좌표를 정확히 확인하고 밑변을 세워라.</p>
+          <span class="answer-tag">정답: $2$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「수학1등급이 간절한 사람만 들어오세요 | 이동준은 이렇게 푼다 [뜯어고침 시리즈]」</strong>(수능 수학은 이동준, 약 7분)의 요약본을 근거로 재구성했습니다. 영상이 제시한 3가지 행동 강령 — ① 좌표평면 선분을 직각삼각형 3요소(밑변·높이·기울기)로 보고 빗변을 $\Delta x\sqrt{1+m^2}$ 로 세우기 ② 극한에서 $0$ 이 아닌 값으로 수렴하는 비본질 인수를 먼저 제거하기 ③ 분모 1차 $0/0$ 꼴을 미분계수로 처리하기 — 를 개념 1·3·4에 대응시켰습니다. 도입 문제는 영상의 구조(두 선분 길이의 비 → 근호 인수 소거 → $\lim_{t\to1}\frac{t^3-1}{t-1}=3$)를 그대로 살려 좌표를 구성했으며, 모든 문항의 답을 인수분해·거리공식 등 <strong>다른 방법으로 교차 검산</strong>했습니다.</p>
+      <p style="margin-top:8px">한계: 영상 자막 전문이 아닌 <strong>요약본</strong>을 근거로 했으므로 강사가 실제 사용한 문항의 좌표·수치는 다를 수 있으며, 도입 문제는 요약본에 기술된 구조를 바탕으로 <strong>재구성한 것</strong>입니다. 문항 8개는 새로 출제했습니다. 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아닙니다.</strong> 학생 배포 전 교사 검토를 권장합니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 본 자료는 다항함수의 극한·미분계수와 고1 도형의 방정식(두 점 사이 거리, 기울기)만 사용합니다. 고3 선택 「미적분」 영역(로피탈 정리, 삼각함수의 극한, 치환적분 등)은 <strong>사용하지 않았습니다</strong>. 심화 2와 기초 2의 오답 주의에서 "분모까지 미분하는 방법"을 범위 밖으로 명시했습니다.</p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) (NCqmA7ui)</a> · <a href="20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260719_영분의영극한무한소비율과자유도특수화_lCtDaQQn.html">0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ) (lCtDaQQn)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-18 · 영상 출처: <a href="https://youtu.be/OFl-6UTc_1E" style="color:var(--primary)">수능 수학은 이동준</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ — 함수의 극한</div>
+    <h1>함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화</h1>
+    <p class="sub">교과서의 "기본 성질"은 Basic이 아니라 <strong>Fundamental</strong>이다. 수렴 2개를 손에 쥐어야 새 극한이 나오고, 발산은 <strong>역수</strong>로 수렴으로 바꾼다</p>
+    <div class="quote">"네가 극한이란 녀석으로 연산을 하려면 내 손에 수렴이 최소 2개는 있어야 새로운 극한값을 파생시킬 수 있습니다." — 강사 인용 [00:04:13]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/4r8gcTscLuE" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/4r8gcTscLuE/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">극한 고정관념 박살내는 서울대 수교과의 발상. (ft. 이동준 시그니처 '수수성')</div>
+        <div class="v-meta">📺 YouTube · 약 11분 · 수능 수학은 이동준</div>
+        <a class="v-link" href="https://youtu.be/4r8gcTscLuE" target="_blank" rel="noopener">https://youtu.be/4r8gcTscLuE</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① 극한의 기본 성질이 "각각 수렴할 때만" 성립함을 이해하고 조건을 확인한다 ② 분모가 0으로 갈 때 분자도 0이어야 하는 이유를 스스로 설명한다 ③ 발산 조건을 역수로 바꿔 수렴을 확보한다 ④ 치환(대상화)으로 복잡한 식을 한 덩어리로 본다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — "분자도 0이어야 한다"를 증명하며 푸는 문제</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 다음 두 조건을 모두 만족한다.
+        $$\lim_{x\to\infty}\frac{f(x)}{x^2}=3,\qquad \lim_{x\to1}\frac{f(x)}{x-1}=4$$
+        이때 $f(x)$ 를 구하시오.</div>
+      <div class="visual">   조건 1 → 차수와 최고차항 계수를 잡는다
+   조건 2 → (분모 → 0) + (극한값 유한)  ⟹  분자도 → 0
+                                          [수수성의 힘]
+</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>첫 조건 $\displaystyle\lim_{x\to\infty}\frac{f(x)}{x^2}=3$ 에서 $f$ 의 <strong>차수와 최고차항 계수</strong>가 결정된다. 값이 $0$ 도 $\infty$ 도 아닌 유한한 수 $3$ 이므로 $f$ 는 <strong>이차함수</strong>이고 최고차항 계수는 $3$ 이다.
+            $$f(x)=3x^2+bx+c$$
+            <div class="why">$f$ 의 차수가 $2$ 보다 크면 $\frac{f}{x^2}\to\pm\infty$ 로 발산하고, $2$ 보다 작으면 $\to0$ 이 된다. 유한한 $0$ 이 아닌 값이 나오려면 차수가 정확히 $2$ 여야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>둘째 조건을 보자. $x\to1$ 일 때 분모 $x-1\to0$ 이다. 그런데 극한값이 $4$ 로 <strong>유한</strong>하다. 여기서 $f(1)=0$ 임을 <strong>수수성으로 증명</strong>한다.
+            $$f(x)=\underbrace{\frac{f(x)}{x-1}}_{\to\,4\ (\text{수렴})}\times\underbrace{(x-1)}_{\to\,0\ (\text{수렴})}$$
+            두 인수가 <u>모두 수렴</u>하므로 곱의 극한 성질을 쓸 수 있다:
+            $$\lim_{x\to1}f(x)=4\times0=0$$
+            $f$ 는 다항함수라 연속이므로 $f(1)=\displaystyle\lim_{x\to1}f(x)=0$.
+            <div class="why">이것이 영상이 말하는 "수렴 2개가 있어야 새 극한값을 파생시킨다"의 실제 사용 장면이다. $\frac{f(x)}{x-1}$ 과 $(x-1)$ 이 각각 수렴하니 곱해서 $f(x)$ 의 극한을 <strong>만들어 낼 수 있었다</strong>. 흔히 "분모가 0이면 분자도 0"이라고 외우는 규칙의 근거가 바로 이것이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f(1)=0$ 을 STEP 1의 식에 대입한다.
+            $$3+b+c=0 \quad\cdots\ (\ast)$$
+            <div class="why">$f(1)=3\cdot1^2+b\cdot1+c=3+b+c$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(1)=0$ 이므로 둘째 조건의 좌변은 <strong>미분계수의 정의</strong>가 된다.
+            $$\lim_{x\to1}\frac{f(x)}{x-1}=\lim_{x\to1}\frac{f(x)-f(1)}{x-1}=f'(1)=4$$
+            $f'(x)=6x+b$ 이므로 $f'(1)=6+b=4$, 즉 $b=-2$.
+            <div class="why">$f(1)=0$ 이라 분자에서 $-f(1)$ 을 빼도 식이 안 변한다. 그래서 미분계수 정의와 형태를 맞출 수 있다. STEP 2가 없었다면 이 변형이 불가능했다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$b=-2$ 를 $(\ast)$ 에 넣으면 $3-2+c=0$ 이므로 $c=-1$.
+            $$f(x)=3x^2-2x-1$$
+            <div class="why">두 조건에서 미지수 $b,\ c$ 를 각각 하나씩 얻어 연립이 끝났다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>검산: $f(1)=3-2-1=0$ ✓. 인수분해하면 $f(x)=(3x+1)(x-1)$ 이므로
+            $\displaystyle\lim_{x\to1}\frac{(3x+1)(x-1)}{x-1}=\lim_{x\to1}(3x+1)=4$ ✓.
+            또 $\displaystyle\lim_{x\to\infty}\frac{3x^2-2x-1}{x^2}=3$ ✓.
+            <div class="why">약분으로 직접 확인하면 미분계수를 쓴 STEP 4의 결과와 일치한다. 두 조건이 모두 만족되므로 답이 맞다.</div></div></div>
+          <span class="answer-tag">정답: $f(x)=3x^2-2x-1$</span>
+        </div>
+      </details>
+      <div class="tip">STEP 2를 "규칙이니까 그렇다"가 아니라 <strong>곱의 극한 성질로 유도</strong>했다는 점이 핵심이다. 근거를 알면 조건이 조금만 바뀌어도 스스로 대응할 수 있다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 수렴과 발산</div>
+      <p>용어부터 정확히 하자. $x\to a$ 일 때 $f(x)$ 가 <strong>일정한 값 $\alpha$ 에 한없이 가까워지면 "수렴"</strong>한다고 하고 $\lim_{x\to a}f(x)=\alpha$ 로 쓴다. 수렴하지 않으면 전부 <strong>발산</strong>이다.</p>
+      <table class="grid">
+        <tr><th>상태</th><th>예</th><th>극한값 존재?</th></tr>
+        <tr><td><strong>수렴</strong></td><td>$\lim_{x\to1}(2x+1)=3$</td><td>있음 ($=3$)</td></tr>
+        <tr><td>발산 (양의 무한대)</td><td>$\lim_{x\to0}\dfrac{1}{x^2}=\infty$</td><td><strong>없음</strong></td></tr>
+        <tr><td>발산 (진동 등)</td><td>좌극한 $\ne$ 우극한</td><td><strong>없음</strong></td></tr>
+      </table>
+      <div class="caution">$\lim f(x)=\infty$ 라고 <strong>쓰기는 하지만 이것은 수렴이 아니다.</strong> "$\infty$ 라는 값으로 수렴한다"가 아니라 "한없이 커지는 방식으로 발산한다"는 상태 설명일 뿐이다. 이 구분이 다음 개념의 전부다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>수수성 — 수렴 + 수렴이라야 연산이 된다</div>
+      <p>교과서에 "함수의 극한의 기본 성질"로 실린 내용이다. <strong>조건절을 절대 지우지 말고</strong> 통째로 외워야 한다.</p>
+      <div class="formula-box">
+        <p><strong>$\displaystyle\lim_{x\to a}f(x)=\alpha$, $\displaystyle\lim_{x\to a}g(x)=\beta$ 로 두 극한이 <u>모두 수렴</u>할 때</strong></p>
+        $$\lim\{f\pm g\}=\alpha\pm\beta,\qquad \lim\{kf\}=k\alpha,$$
+        $$\lim\{f\cdot g\}=\alpha\beta,\qquad \lim\frac{f}{g}=\frac{\alpha}{\beta}\ \ (\text{단 }\beta\neq0)$$
+      </div>
+      <div class="concept-box">"기본이라고 써져 있는 것은 베이직(Basic)이 아니라 펀더멘탈(Fundamental), 근본입니다." — 강사 인용 [00:00:14]</div>
+      <p>강사는 이 조건을 <strong>"수수성"(수렴 + 수렴 성질)</strong> 이라 부른다. 이름을 붙이는 이유는, 문제를 풀 때마다 "내 손에 수렴이 두 개 있는가?"를 <strong>의식적으로 확인</strong>하게 만들기 위해서다.</p>
+      <div class="concept-box"><strong>파인만식으로:</strong> 두 사람이 모두 땅에 발을 딛고 서 있어야(수렴) 서로 손을 잡거나 밀고 당길 수 있다(사칙연산). 한 사람이 공중으로 날아가 버리면(발산) 손을 잡을 방법이 없다. 그래서 발산하는 녀석은 먼저 <strong>땅으로 끌어내려야</strong> 한다(개념 3).</p></div>
+      <div class="caution">역은 성립하지 않는다. $\lim\{f+g\}$ 가 존재한다고 해서 $\lim f$, $\lim g$ 가 각각 존재하는 것은 아니다. 예를 들어 $f(x)=\frac1x$, $g(x)=-\frac1x$ 는 $x\to0$ 에서 각각 발산하지만 합은 항상 $0$ 이다. <strong>분배는 한 방향으로만 안전하다.</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>수수성의 대표 활용 — "분모가 0이면 분자도 0"</div>
+      <p>가장 자주 쓰는 도구인데, 대부분 근거 없이 외우고 있다. <strong>수수성으로 직접 유도해 보자.</strong></p>
+      <div class="concept-box"><strong>명제.</strong> $\displaystyle\lim_{x\to a}\frac{f(x)}{g(x)}$ 가 유한한 값으로 수렴하고 $\displaystyle\lim_{x\to a}g(x)=0$ 이면, $\displaystyle\lim_{x\to a}f(x)=0$ 이다.</div>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">항등식을 하나 세운다: $f(x)=\dfrac{f(x)}{g(x)}\times g(x)$ (단 $g(x)\neq0$ 인 근방에서).</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">오른쪽의 두 인수를 확인한다. 첫째는 가정에 의해 어떤 값 $L$ 로 <strong>수렴</strong>, 둘째는 $0$ 으로 <strong>수렴</strong>. → 수수성 조건 충족!</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">곱의 극한 성질을 적용: $\displaystyle\lim_{x\to a}f(x)=L\times0=0$. ∎</div></div>
+      <div class="formula-box">
+        $$\left.\begin{array}{l}\displaystyle\lim_{x\to a}\frac{f(x)}{g(x)}=L\ (\text{유한})\\[6pt] \displaystyle\lim_{x\to a}g(x)=0\end{array}\right\}\ \Longrightarrow\ \lim_{x\to a}f(x)=0$$
+      </div>
+      <div class="tip">$f$ 가 다항함수처럼 <strong>연속</strong>이면 $\lim_{x\to a}f(x)=f(a)$ 이므로 곧바로 <strong>$f(a)=0$</strong> 을 얻는다. 도입 문제 STEP 2가 정확히 이 흐름이었다.</div>
+      <div class="caution">조건을 뒤집어 쓰지 마라. <strong>"분자가 0이면 분모도 0"은 거짓</strong>이다. 예: $\lim_{x\to0}\frac{x}{2}=0$ 인데 분모는 $2$ 로 멀쩡하다. 이 명제는 "분모 $\to0$ + 극한값 유한"이라는 두 조건이 모두 있을 때만 쓸 수 있다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>발산은 역수로 — 땅으로 끌어내리기</div>
+      <p>문제에 $\displaystyle\lim_{x\to a}g(x)=\infty$ 같은 <strong>발산 조건</strong>이 주어지면 수수성을 쓸 수 없다. 이때의 정해진 대응은 <strong>역수를 취하는 것</strong>이다.</p>
+      <div class="formula-box">$$\lim_{x\to a}g(x)=\infty\ \Longrightarrow\ \lim_{x\to a}\frac{1}{g(x)}=0$$</div>
+      <p>발산하던 녀석이 $0$ 이라는 <strong>확실한 수렴값</strong>으로 바뀌었다. 이제 손에 수렴이 하나 생겼으므로 다른 수렴과 짝을 지어 연산할 수 있다.</p>
+      <p><strong>실전 예:</strong> $\displaystyle\lim_{x\to\infty}g(x)=\infty$ 일 때 $\displaystyle\lim_{x\to\infty}\frac{3g(x)+2}{g(x)-1}$ 을 구해 보자.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">분자·분모를 $g(x)$ 로 나눈다: $\dfrac{3+\frac{2}{g(x)}}{1-\frac{1}{g(x)}}$</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">$\frac{1}{g(x)}\to0$ 이므로 분자 $\to3+0=3$, 분모 $\to1-0=1$. 둘 다 수렴하고 분모의 극한 $1\neq0$.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">수수성 적용: $\dfrac{3}{1}=3$.</div></div>
+      <div class="caution">$\frac{\infty}{\infty}$ 를 보고 그냥 "$1$" 이라고 하면 안 된다. $\infty$ 는 값이 아니라 상태이므로 약분할 수 있는 대상이 아니다. <strong>반드시 역수를 만들어 수렴 형태로 바꾼 뒤</strong> 계산한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>치환은 문자 바꾸기가 아니라 대상화</div>
+      <p>치환은 "$x$ 를 $t$ 로 바꾸는 기술"이 아니다. <strong>복잡한 식 덩어리 하나를 통째로 새로운 주인공으로 승격</strong>시키는 관점의 전환이다.</p>
+      <div class="concept-box">"치환은 단순한 문자 바꾸기가 아닙니다. 고급진 용어로 '대상화'이며, 복잡한 식을 한 덩어리로 싸잡아 어디로 향하는지 보는 것입니다." — 강사 인용 [00:08:12]</div>
+      <p><strong>치환 3단계 (순서를 지켜라):</strong></p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>덩어리 지정</strong>: 반복해서 나타나는 식을 $t$ 로 놓는다. 예) $t=x^2$, $t=2x$, $t=x-1$.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>보내는 곳 확인</strong>: 원래 변수가 갈 때 $t$ 는 어디로 가는가? 예) $x\to1$ 이면 $t=x^2\to1$. <span style="color:var(--accent)">이 단계를 건너뛰면 거의 항상 틀린다.</span></div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body"><strong>식 전체 번역</strong>: 남아 있는 $x$ 를 전부 $t$ 로 바꾼다. 안 바뀌는 부분이 있으면 따로 떼어 <strong>수렴하는 짝</strong>으로 만든다.</div></div>
+      <div class="formula-box">
+        <p>덩어리를 만들려면 <strong>곱하고 나누기</strong>를 쓴다 (값은 그대로, 형태만 바뀜)</p>
+        $$\frac{f(x^2)}{x-1}=\frac{f(x^2)}{x^2-1}\times\frac{x^2-1}{x-1}
+          =\underbrace{\frac{f(x^2)}{x^2-1}}_{t=x^2\text{ 로 치환}}\times\underbrace{(x+1)}_{\text{수렴하는 짝}}$$
+      </div>
+      <div class="caution">치환 후 <strong>$t$ 가 가는 곳을 원래 변수 기준으로 착각</strong>하는 실수가 가장 많다. $x\to0$ 일 때 $t=2x$ 도 $0$ 으로 가지만, $t=x+3$ 이면 $t\to3$ 이다. 매번 확인하라.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — 조건 확인 없이 분배.</strong> $\lim\frac{f}{g}=\frac{\lim f}{\lim g}$ 는 <strong>$\lim g\neq0$</strong> 일 때만 쓸 수 있다. $\frac00$ 부정형에 그대로 쓰면 안 된다.</div>
+      <div class="caution"><strong>실수 2 — 명제를 거꾸로.</strong> "분모 $\to0$ ⟹ 분자 $\to0$" 은 <strong>극한값이 유한할 때만</strong> 성립한다. 극한값이 $\infty$ 라면 분자는 $0$ 이 아닐 수 있다.</div>
+      <div class="caution"><strong>실수 3 — $\infty$ 를 수처럼 취급.</strong> $\infty-\infty=0$, $\frac{\infty}{\infty}=1$ 은 모두 틀렸다. 이런 꼴은 <strong>부정형</strong>이라 변형해 봐야 값을 알 수 있다.</div>
+      <div class="caution"><strong>실수 4 — 치환 후 목적지 미확인.</strong> $t$ 가 어디로 가는지 쓰지 않고 넘어가면, 주어진 극한 조건($t\to1$ 에서의 정보)을 엉뚱한 지점에 적용하게 된다.</div>
+      <div class="caution"><strong>실수 5 — 차수 판정 착각.</strong> $\lim_{x\to\infty}\frac{f(x)}{x^n}$ 이 $0$ 이 아닌 유한값이면 $f$ 는 정확히 $n$차다. 값이 $0$ 이면 $n$차 미만, 발산하면 $n$차 초과다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>성질을 조건과 함께 익히기</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 기본 성질 직접 적용</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to a}f(x)=3$, $\displaystyle\lim_{x\to a}g(x)=-2$ 일 때 다음 값을 구하시오.<br>
+          (1) $\displaystyle\lim_{x\to a}\{2f(x)-g(x)\}$ &nbsp;&nbsp; (2) $\displaystyle\lim_{x\to a}\{f(x)g(x)\}$ &nbsp;&nbsp; (3) $\displaystyle\lim_{x\to a}\dfrac{f(x)}{g(x)}$</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 0</span><div>먼저 <strong>조건 확인</strong>: $f$, $g$ 가 각각 수렴한다고 주어졌으므로 수수성 조건을 만족한다. 분배해도 좋다.
+            <div class="why">이 확인을 습관화하는 것이 이 단원의 핵심이다. 조건이 없으면 아래 계산은 전부 무효다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>(1) $2\cdot3-(-2)=6+2=8$.
+            <div class="why">상수배와 차에 대한 분배. $-(-2)=+2$ 임에 주의.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>(2) $3\times(-2)=-6$.
+            <div class="why">곱의 극한 = 극한의 곱.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>(3) 분모의 극한 $-2\neq0$ 이므로 나눗셈 성질을 쓸 수 있다: $\dfrac{3}{-2}=-\dfrac32$.
+            <div class="why">$\beta\neq0$ 조건을 확인하고 넘어가는 것이 정석이다. 만약 $\lim g=0$ 이었다면 이 성질을 쓸 수 없다.</div></div></div>
+          <p class="warn">오답 주의: (3)에서 조건 $\beta\neq0$ 을 확인하지 않고 기계적으로 나누는 습관이 들면, 나중에 $\frac00$ 부정형에서도 똑같이 나눠 버려 틀린다.</p>
+          <span class="answer-tag">정답: (1) $8$ &nbsp; (2) $-6$ &nbsp; (3) $-\dfrac32$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 분모가 0이면 분자도 0</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 $\displaystyle\lim_{x\to2}\frac{f(x)}{x-2}=5$ 를 만족할 때 $f(2)$ 의 값을 구하고, 그 근거를 수수성으로 설명하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>항등식을 세운다: $f(x)=\dfrac{f(x)}{x-2}\times(x-2)$.
+            <div class="why">$x\neq2$ 인 근방에서 성립한다. 극한은 $x=2$ 에서의 값과 무관하므로 문제없다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>두 인수를 확인한다. $\dfrac{f(x)}{x-2}\to5$ (수렴), $(x-2)\to0$ (수렴). <strong>수렴이 2개</strong>이므로 곱의 극한 성질을 쓸 수 있다.
+            <div class="why">여기가 핵심. "수렴 2개"를 확보했기에 새로운 극한 $\lim f(x)$ 를 파생시킬 자격이 생겼다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\displaystyle\lim_{x\to2}f(x)=5\times0=0$.
+            <div class="why">두 극한값을 그대로 곱한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f$ 는 다항함수이므로 연속이고, 따라서 $f(2)=\displaystyle\lim_{x\to2}f(x)=0$.
+            <div class="why">연속의 정의가 "극한값 = 함숫값"이다. 다항함수는 모든 실수에서 연속이므로 이 단계가 정당하다.</div></div></div>
+          <p class="warn">오답 주의: 극한값 $5$ 를 $f(2)$ 라고 답하는 실수가 흔하다. $5$ 는 $\frac{f(x)}{x-2}$ 의 극한(=$f'(2)$)이지 $f(2)$ 가 아니다.</p>
+          <span class="answer-tag">정답: $f(2)=0$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>발산 처리와 치환</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 발산을 역수로 끌어내리기</div>
+        <div class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to\infty}g(x)=\infty$ 일 때 $\displaystyle\lim_{x\to\infty}\frac{3g(x)+2}{g(x)-1}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>현재 상태는 $\dfrac{\infty}{\infty}$ 부정형이다. $g$ 가 발산하므로 수수성을 <strong>바로 쓸 수 없다</strong>.
+            <div class="why">발산하는 대상끼리는 손을 잡을 수 없다. 먼저 수렴으로 바꿔야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>분자·분모를 $g(x)$ 로 나눈다 (충분히 큰 $x$ 에서 $g(x)\neq0$).
+            $$\frac{3g(x)+2}{g(x)-1}=\frac{3+\dfrac{2}{g(x)}}{1-\dfrac{1}{g(x)}}$$
+            <div class="why">분자·분모를 같은 것으로 나누면 값은 변하지 않는다. 이 조작으로 $g$ 가 <strong>분모 자리로 내려가</strong> 역수 형태가 만들어진다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$g(x)\to\infty$ 이므로 $\dfrac{1}{g(x)}\to0$. 따라서 분자 $\to3+2\cdot0=3$, 분모 $\to1-0=1$.
+            <div class="why">개념 3의 핵심 변환. 발산이 $0$ 이라는 확실한 수렴값으로 바뀌었다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>이제 분자·분모가 각각 수렴하고 분모의 극한 $1\neq0$ 이므로 수수성 적용 가능: $\dfrac{3}{1}=3$.
+            <div class="why">조건이 갖춰진 뒤에야 분배했다. 순서가 중요하다.</div></div></div>
+          <p class="warn">오답 주의: $\frac{\infty}{\infty}$ 를 보고 $1$ 이라 답하면 틀린다. $\infty$ 는 값이 아니라 상태이므로 약분 대상이 아니다.</p>
+          <span class="answer-tag">정답: $3$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 치환으로 형태 맞추기</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 $f(0)=0$ 이고 $\displaystyle\lim_{x\to0}\frac{f(2x)}{x}=6$ 을 만족할 때, $\displaystyle\lim_{x\to0}\frac{f(x)}{x}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div><strong>덩어리 지정</strong>: $t=2x$ 로 놓는다. 그러면 $x=\dfrac{t}{2}$.
+            <div class="why">$f$ 의 괄호 안이 $2x$ 이므로 이것을 통째로 새 주인공으로 삼는다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div><strong>보내는 곳 확인</strong>: $x\to0$ 이면 $t=2x\to0$.
+            <div class="why">이 단계를 반드시 명시한다. 여기서는 둘 다 $0$ 으로 가지만, 습관을 들여야 다른 문제에서 실수하지 않는다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div><strong>식 전체 번역</strong>:
+            $$\frac{f(2x)}{x}=\frac{f(t)}{\ t/2\ }=2\cdot\frac{f(t)}{t}$$
+            따라서 $\displaystyle\lim_{t\to0}2\cdot\frac{f(t)}{t}=6$.
+            <div class="why">분모의 $x$ 를 $\frac t2$ 로 바꾸면 나눗셈이 $\times2$ 가 된다. $\frac{A}{t/2}=\frac{2A}{t}$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>상수 $2$ 는 극한 밖으로 빼낼 수 있으므로 $\displaystyle\lim_{t\to0}\frac{f(t)}{t}=3$.
+            변수 이름은 아무래도 상관없으므로 $\displaystyle\lim_{x\to0}\frac{f(x)}{x}=3$.
+            <div class="why">치환에 쓴 문자 $t$ 는 계산이 끝나면 의미가 없다. 답을 원래 문자로 되돌려 쓴다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>검산: $f(x)=3x$ 로 두면 $f(0)=0$ ✓ 이고 $\dfrac{f(2x)}{x}=\dfrac{6x}{x}=6$ ✓, $\dfrac{f(x)}{x}=3$ ✓.
+            <div class="why">조건을 만족하는 구체적인 예를 하나 만들어 대입해 보면 답을 확실히 검증할 수 있다.</div></div></div>
+          <p class="warn">오답 주의: $f(2x)=2f(x)$ 라고 착각해 $6\div2=3$ 으로 "우연히" 맞히는 경우가 있는데, 이는 <strong>틀린 논리</strong>다. $f$ 가 일차함수가 아니면 $f(2x)\ne2f(x)$ 이다. 반드시 치환으로 풀어야 한다.</p>
+          <span class="answer-tag">정답: $3$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>차수·계수 결정</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 두 극한 조건으로 다항함수 결정</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 $\displaystyle\lim_{x\to\infty}\frac{f(x)}{x^3}=2$, $\displaystyle\lim_{x\to0}\frac{f(x)}{x}=-5$, $f(1)=0$ 을 모두 만족할 때 $f(x)$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>첫 조건에서 값이 $0$ 이 아닌 유한값 $2$ 이므로 $f$ 는 <strong>삼차함수</strong>이고 최고차항 계수는 $2$.
+            $$f(x)=2x^3+bx^2+cx+d$$
+            <div class="why">개념 5의 실수 5 참조. 차수가 $3$ 보다 크면 발산, 작으면 $0$ 이 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>둘째 조건에서 분모 $x\to0$ 이고 극한값 $-5$ 가 유한하므로, 개념 2에 의해 $f(0)=0$. 즉 $d=0$.
+            $$f(x)=2x^3+bx^2+cx$$
+            <div class="why">$f(x)=\frac{f(x)}{x}\cdot x$ 에서 두 인수가 각각 $-5$ 와 $0$ 으로 수렴하므로 $\lim f(x)=0$. 연속이므로 $f(0)=0$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$d=0$ 이므로 $x$ 를 묶어낼 수 있다: $\dfrac{f(x)}{x}=\dfrac{x(2x^2+bx+c)}{x}=2x^2+bx+c$.
+            $x\to0$ 을 대입하면 $c=-5$.
+            <div class="why">약분으로 부정형이 사라져 그냥 대입할 수 있게 되었다. 미분계수로 봐도 같다: $f'(0)=c$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(1)=0$ 조건: $2+b-5=0$ 이므로 $b=3$.
+            $$f(x)=2x^3+3x^2-5x$$
+            <div class="why">$f(1)=2\cdot1+b\cdot1+(-5)\cdot1=2+b-5$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>검산: $f(0)=0$ ✓, $f(1)=2+3-5=0$ ✓, $\dfrac{f(x)}{x}=2x^2+3x-5\to-5$ ✓, $\dfrac{f(x)}{x^3}\to2$ ✓. 세 조건 모두 만족.
+            <div class="why">참고로 $f(x)=x(2x+5)(x-1)$ 로 인수분해되어 $f(1)=0$ 이 눈으로 확인된다.</div></div></div>
+          <p class="warn">오답 주의: STEP 2에서 $d=0$ 을 구하지 않고 바로 $\frac{f(x)}{x}$ 에 $x=0$ 을 대입하려 하면 $\frac{d}{0}$ 이라 계산이 불가능하다. <strong>순서가 정해져 있다</strong> — 상수항을 먼저 없애야 약분이 된다.</p>
+          <span class="answer-tag">정답: $f(x)=2x^3+3x^2-5x$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 차(差)의 극한이 유한한 경우</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 $\displaystyle\lim_{x\to\infty}\{f(x)-2x^2\}=3$ 을 만족한다.<br>
+          (1) $f(x)$ 를 구하시오. &nbsp;&nbsp; (2) $\displaystyle\lim_{x\to1}\frac{f(x)-5}{x-1}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$h(x)=f(x)-2x^2$ 이라 하자. $f$ 가 다항함수이므로 $h$ 도 <strong>다항함수</strong>이다.
+            <div class="why">다항식에서 다항식을 뺐으니 결과도 다항식이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x\to\infty$ 일 때 다항함수 $h(x)$ 가 유한한 값 $3$ 으로 수렴하려면, $h$ 는 <strong>상수함수</strong>여야 한다. 즉 $h(x)=3$.
+            <div class="why">일차 이상의 다항함수는 $x\to\infty$ 에서 반드시 $\pm\infty$ 로 발산한다. 수렴하는 유일한 경우가 상수함수다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>(1) 따라서 $f(x)-2x^2=3$, 즉 $f(x)=2x^2+3$.
+            <div class="why">$h$ 의 정의를 되돌린 것뿐이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>(2) 먼저 $f(1)=2+3=5$ 임을 확인한다. 그러면 분자 $f(x)-5=f(x)-f(1)$ 이므로 주어진 식은 <strong>미분계수의 정의</strong>다.
+            $$\lim_{x\to1}\frac{f(x)-f(1)}{x-1}=f'(1)$$
+            <div class="why">문제가 하필 $-5$ 를 뺀 이유가 이것이다. $f(1)$ 과 정확히 같은 값이라 형태가 맞아떨어진다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$f'(x)=4x$ 이므로 $f'(1)=4$.
+            <div class="why">$(2x^2)'=4x$, $(3)'=0$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>검산(직접 약분): $\dfrac{f(x)-5}{x-1}=\dfrac{2x^2-2}{x-1}=\dfrac{2(x-1)(x+1)}{x-1}=2(x+1)\to4$ ✓.
+            <div class="why">두 방법의 답이 일치하므로 확실하다.</div></div></div>
+          <p class="warn">오답 주의: STEP 2를 건너뛰고 "$f(x)=2x^2$" 이라 답하면 상수항 $3$ 을 잃는다. $\lim\{f(x)-2x^2\}=3$ 은 "$f$ 가 $2x^2$ 과 거의 같다"가 아니라 "차이가 정확히 $3$ 으로 남는다"는 뜻이다.</p>
+          <span class="answer-tag">정답: (1) $f(x)=2x^2+3$ &nbsp; (2) $4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>준킬러 유형 — 수수성·치환 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 두 조건 연립으로 함수 확정</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 $\displaystyle\lim_{x\to\infty}\frac{f(x)}{x^2}=1$, $\displaystyle\lim_{x\to2}\frac{f(x)}{x-2}=3$ 을 만족할 때 $f(4)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>첫 조건에서 $f$ 는 이차함수이고 최고차항 계수는 $1$.
+            $$f(x)=x^2+bx+c$$
+            <div class="why">$0$ 이 아닌 유한값 $1$ 로 수렴 ⟹ 차수는 정확히 $2$, 최고차항 계수는 그 극한값 $1$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>둘째 조건: 분모 $x-2\to0$ 이고 극한값 $3$ 이 유한하므로 수수성에 의해 $f(2)=0$.
+            $$4+2b+c=0 \quad\cdots\ (\ast)$$
+            <div class="why">$f(x)=\frac{f(x)}{x-2}\cdot(x-2)$ 에서 두 인수가 각각 $3$, $0$ 으로 수렴 ⟹ $\lim f(x)=0$ ⟹ (연속이므로) $f(2)=0$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f(2)=0$ 이므로 둘째 조건은 미분계수 $f'(2)=3$ 을 뜻한다.
+            $f'(x)=2x+b$ 이므로 $f'(2)=4+b=3$, 즉 $b=-1$.
+            <div class="why">$\lim_{x\to2}\frac{f(x)-f(2)}{x-2}=f'(2)$. $f(2)=0$ 을 먼저 확보했기에 이 변형이 가능하다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$(\ast)$ 에 $b=-1$ 대입: $4-2+c=0$ 이므로 $c=-2$.
+            $$f(x)=x^2-x-2$$
+            <div class="why">인수분해하면 $f(x)=(x-2)(x+1)$ 이라 $f(2)=0$ 이 눈으로 확인된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$f(4)=16-4-2=10$.
+            <div class="why">구한 식에 $x=4$ 를 대입. 인수분해 형태로 확인하면 $(4-2)(4+1)=2\cdot5=10$ ✓.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>검산: $\displaystyle\lim_{x\to2}\frac{(x-2)(x+1)}{x-2}=\lim_{x\to2}(x+1)=3$ ✓, $\displaystyle\lim_{x\to\infty}\frac{x^2-x-2}{x^2}=1$ ✓.
+            <div class="why">두 조건 모두 만족하므로 답이 옳다.</div></div></div>
+          <p class="warn">오답 주의: STEP 2를 생략하고 곧바로 $f'(2)=3$ 만 쓰면 미지수 두 개에 식이 하나뿐이라 답이 정해지지 않는다. <strong>$f(2)=0$ 이 두 번째 식</strong>이며, 이를 얻는 근거가 수수성이다.</p>
+          <span class="answer-tag">정답: $f(4)=10$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 치환(대상화)과 수렴 짝 만들기</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 $\displaystyle\lim_{x\to1}\frac{f(x)}{x-1}=2$ 를 만족할 때, $\displaystyle\lim_{x\to1}\frac{f(x^2)}{x-1}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>주어진 조건에서 수수성에 의해 $f(1)=0$ 이다.
+            <div class="why">$f(x)=\frac{f(x)}{x-1}\cdot(x-1)$ 에서 두 인수가 각각 $2$, $0$ 으로 수렴하므로 $\lim_{x\to1}f(x)=0$. 다항함수라 연속이므로 $f(1)=0$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>구하려는 식의 분자는 $f(x^2)$ 인데 분모는 $x-1$ 이라 형태가 맞지 않는다. <strong>덩어리 $t=x^2$ 에 맞는 분모 $x^2-1$ 을 인위적으로 만들어 준다.</strong>
+            $$\frac{f(x^2)}{x-1}=\frac{f(x^2)}{x^2-1}\times\frac{x^2-1}{x-1}$$
+            <div class="why">같은 것으로 곱하고 나눴으므로 값은 그대로다 ($x\neq\pm1$ 인 근방에서). 개념 4의 "곱하고 나누기"로 덩어리를 만드는 기술이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>오른쪽 인수를 정리한다: $\dfrac{x^2-1}{x-1}=\dfrac{(x-1)(x+1)}{x-1}=x+1\to2$.
+            <div class="why">이것이 "수렴하는 짝"이다. 부정형이 약분으로 풀려 $2$ 라는 확실한 값이 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>왼쪽 인수를 치환한다. $t=x^2$ 로 놓으면 $x\to1$ 일 때 $t\to1$ 이므로
+            $$\lim_{x\to1}\frac{f(x^2)}{x^2-1}=\lim_{t\to1}\frac{f(t)}{t-1}=2$$
+            <div class="why">치환 3단계를 그대로 밟았다. 목적지가 $t\to1$ 이므로 주어진 조건($x\to1$ 에서의 정보)을 <strong>그대로</strong> 쓸 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>두 인수가 각각 $2$ 와 $2$ 로 수렴하므로 수수성에 의해 곱해도 된다: $2\times2=4$.
+            <div class="why">마지막까지 "수렴 2개"를 확인하고 분배한다. 이 문제는 수수성을 세 번(STEP 1, 4, 5) 사용했다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>검산: 조건을 만족하는 $f(x)=2(x-1)=2x-2$ 로 확인하면
+            $\dfrac{f(x^2)}{x-1}=\dfrac{2x^2-2}{x-1}=\dfrac{2(x-1)(x+1)}{x-1}=2(x+1)\to4$ ✓.
+            <div class="why">구체적인 예로 검증하면 확실하다. 다른 $f$ (예: $f(x)=2(x-1)+5(x-1)^2$) 로 해도 같은 답 $4$ 가 나온다.</div></div></div>
+          <p class="warn">오답 주의: $f(x^2)$ 를 $\{f(x)\}^2$ 이나 $2f(x)$ 로 착각하면 완전히 다른 답이 나온다. $f(x^2)$ 은 <strong>$f$ 의 입력에 $x^2$ 을 넣은 것</strong>일 뿐이다. 또 $t\to1$ 확인을 건너뛰면 조건을 엉뚱한 지점에 적용하게 된다.</p>
+          <span class="answer-tag">정답: $4$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「극한 고정관념 박살내는 서울대 수교과의 발상. (ft. 이동준 시그니처 '수수성')」</strong>(수능 수학은 이동준, 약 11분)의 요약본을 근거로 재구성했습니다. 영상의 두 기둥 — ① <strong>수수성</strong>(수렴+수렴일 때만 리미트 분배 가능, 발산은 역수로 수렴 확보) ② <strong>치환=대상화</strong>(복잡한 식을 한 덩어리로 승격시키고 수렴하는 짝을 맞춤) — 을 개념 1~4에 대응시켰습니다. 특히 강사가 강조한 "기본 성질은 Basic이 아니라 Fundamental"이라는 메시지를 살려, 흔히 암기로 넘어가는 <strong>"분모가 0이면 분자도 0"을 곱의 극한 성질로 직접 유도</strong>했습니다(개념 2). 모든 문항은 구체적인 함수를 대입하거나 인수분해로 <strong>교차 검산</strong>했습니다.</p>
+      <p style="margin-top:8px">한계: 영상 자막 전문이 아닌 <strong>요약본</strong>을 근거로 했으므로, 강사가 실제 다룬 기출 문항(요약본에 $\lim\frac{f(x^2)-f(t)}{x^2}$ 형태로 단편적으로 언급됨)의 정확한 형태는 확인할 수 없어 <strong>동일 기법을 훈련하는 문항으로 새로 구성</strong>했습니다. 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아닙니다.</strong> 학생 배포 전 교사 검토를 권장합니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 본 자료는 함수의 극한의 기본 성질, 다항함수의 극한·연속, 미분계수의 정의만 사용합니다. 고3 선택 「미적분」 영역인 <strong>수열의 극한·급수, 삼각함수의 극한, 로피탈 정리는 일절 사용하지 않았습니다</strong>. 현 고2 미적분Ⅰ 범위 내에서 완결됩니다.</p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260511_함수극한매뉴얼6유형_Uc4Yv70i.html">함수의 극한 (Uc4Yv70i)</a> · <a href="20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) (NCqmA7ui)</a> · <a href="20260708_함수의극한계산꿀팁과오개념_개념.html">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260708_함수의연속꿀팁과오개념_개념.html">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-18 · 영상 출처: <a href="https://youtu.be/4r8gcTscLuE" style="color:var(--primary)">수능 수학은 이동준</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
