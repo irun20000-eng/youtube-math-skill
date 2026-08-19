@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이차함수 접선과 외접 직사각형 1/3 공식 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ — 다항함수의 적분법</div>
+    <h1>이차함수의 접선과 외접 직사각형 $\dfrac{1}{3}$ 공식</h1>
+    <p class="sub">접선의 방정식을 구해 정적분을 전개하는 대신, <strong>곡선 − 접선 $=a(x-t)^2$</strong> 라는 사실 하나로 이차함수와 접선이 만드는 넓이를 <strong>가로 × 세로 ÷ 3</strong> 암산으로 끝내는 법</p>
+    <div class="quote">"접선의 방정식을 찾아서 적분하는 게 아닙니다. 그냥 외접 직사각형 넓이에 $\frac13$을 곱하는 것으로 끝납니다." — 강사 인용 [00:08:29]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/y09MDHC_DCo" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/y09MDHC_DCo/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">이 영상만 제대로 이해하면 이차함수는 끝입니다. (ft. 수능 수학)</div>
+        <div class="v-meta">📺 YouTube · 약 9분 · 수학강사 이정환</div>
+        <a class="v-link" href="https://youtu.be/y09MDHC_DCo" target="_blank" rel="noopener">https://youtu.be/y09MDHC_DCo</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① 이차함수에서 곡선과 접선의 차가 항상 $a(x-t)^2$ 꼴임을 유도하고 쓸 수 있다 ② 곡선·접선·세로선으로 둘러싸인 넓이를 $\frac13\times$가로$\times$세로 공식으로 계산한다 ③ 대칭인 두 접선이 만드는 높이차가 꼭짓점 깊이와 항상 같음을 설명한다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 접선의 방정식부터 구하면 계산이 길어지는 문제</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 곡선 $y=x^2$ 위의 점 $\mathrm{P}(2,\,4)$ 에서의 접선을 $l$ 이라 하자. 곡선 $y=x^2$, 접선 $l$, 그리고 $y$축($x=0$)으로 둘러싸인 부분의 넓이를 구하시오.</div>
+      <div class="visual">        y
+        │        곡선 y=x²
+      4 ┤              ●P(2,4)
+        │            ／│
+        │          ／  │  ← 이 사이(빗금)가 구하는 넓이
+        │        ／    │
+        │      ／      │
+      0 ┼────╱─────────┼──── x
+        │  ／           2
+     -4 ┤／  ← 접선 l 이 y축과 만나는 점 (0,-4)
+        접선 l: y=4x-4
+</div>
+      <details open>
+        <summary>풀이 보기 (정공법으로 직접 유도)</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>접선의 방정식을 구한다. $f(x)=x^2$ 이므로 $f'(x)=2x$, $f'(2)=4$, $f(2)=4$.
+            $$l:\ y=4(x-2)+4=4x-4$$
+            <div class="why">접선의 방정식 공식 $y=f'(a)(x-a)+f(a)$ 는 고1~고2에서 이미 배운 것을 그대로 쓴 것이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>곡선이 접선보다 항상 위에 있는지 확인한다. $x=0$ 에서 곡선값은 $0$, 접선값은 $-4$ 이므로 곡선이 위에 있다.
+            <div class="why">아래로 볼록한 이차함수는 어떤 점에서 접선을 그어도 접선이 곡선의 아래쪽(또는 접점에서만 만남)에 있다. 그래서 "곡선 $-$ 접선"이 항상 $0$ 이상이 되어 넓이 계산에 바로 쓸 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>넓이를 정적분으로 세운다.
+            $$S=\int_0^2 \{x^2-(4x-4)\}\,dx=\int_0^2 (x^2-4x+4)\,dx$$
+            <div class="why">"곡선 $-$ 접선"을 접점 $x=2$ 를 기준으로 정리하면 $x^2-4x+4=(x-2)^2$ 로 완전제곱식이 된다 — 우연이 아니라 이차함수의 성질이다. 개념 1에서 이것을 일반적으로 증명한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>완전제곱식으로 적분한다.
+            $$S=\int_0^2 (x-2)^2\,dx=\left[\frac{(x-2)^3}{3}\right]_0^2=\frac{0^3}{3}-\frac{(-2)^3}{3}=0-\left(-\frac{8}{3}\right)=\frac{8}{3}$$
+            <div class="why">$(x-2)^2$ 은 이미 완전제곱식이므로 전개하지 않고 $u=x-2$ 로 생각해 바로 적분할 수 있다. $\int u^2\,du=\frac{u^3}{3}$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>지름길로 검산: 가로(접점의 $x$좌표) $=2$, 세로($x=0$ 에서 곡선과 접선의 차) $=0-(-4)=4$. 직사각형 넓이 $=2\times4=8$, 그 $\frac13$ 은 $\dfrac83$. 일치한다!
+            <div class="why">가로 $2$, 세로 $4$ 인 직사각형을 그리면 구하는 영역은 정확히 그 직사각형의 $\frac13$ 을 차지한다. 개념 2에서 이 공식을 일반적으로 증명한다.</div></div></div>
+          <span class="answer-tag">정답: $\dfrac{8}{3}$</span>
+        </div>
+      </details>
+      <div class="tip">STEP 1~4 처럼 접선의 방정식을 구하고 전개해서 적분하면 5줄이 필요하다. 개념 1·2 를 익히면 STEP 5 처럼 <strong>가로·세로만 확인하고 3으로 나누는 한 줄</strong>로 끝난다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 접선의 방정식과 정적분</div>
+      <p>고1~고2에서 배운 두 가지를 그대로 쓴다. 새로운 공식은 하나도 없다.</p>
+      <div class="formula-box">
+        $$l:\ y=f'(t)(x-t)+f(t)\ \ (\text{점 }(t,f(t))\text{에서의 접선}),\qquad
+          \int_p^q g(x)\,dx = \left[G(x)\right]_p^q\ \ (G'(x)=g(x))$$
+      </div>
+      <p>두 곡선 $y=f(x)$, $y=g(x)$ 사이의 넓이는 <strong>(위쪽 함수 $-$ 아래쪽 함수)를 구간에서 정적분</strong>한 값이다. 접선도 결국 하나의 직선(1차함수)이므로 이 원리를 그대로 적용할 수 있다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>핵심 보조정리 — 이차함수 $-$ 접선 $=a(x-t)^2$</div>
+      <p>이차함수 $f(x)=ax^2+bx+c$ 위의 점 $(t,f(t))$ 에서의 접선을 $L(x)$ 라 하면, <strong>둘의 차는 항상 완전제곱식</strong>이 된다.</p>
+      <div class="formula-box">$$f(x)-L(x)=a(x-t)^2$$</div>
+      <p><strong>유도 (한 번은 직접 보자):</strong></p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">접선 $L(x)=f'(t)(x-t)+f(t)$, 그리고 $f'(t)=2at+b$.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">$f(x)-f(t)=a(x^2-t^2)+b(x-t)=(x-t)\{a(x+t)+b\}$ (인수분해).</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">따라서 $f(x)-L(x)=\{f(x)-f(t)\}-f'(t)(x-t)=(x-t)\{a(x+t)+b-(2at+b)\}$.</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body">중괄호 안을 정리: $a(x+t)+b-2at-b=ax+at-2at=a(x-t)$. 그러므로 $f(x)-L(x)=(x-t)\cdot a(x-t)=a(x-t)^2$.</div></div>
+      <div class="concept-box">이 보조정리가 뜻하는 것: <strong>이차함수는 어느 접선에서 봐도 접점을 기준으로 "포물선 모양의 틈"만큼만 벌어진다</strong>. 그 틈의 폭은 정확히 최고차항 계수 $a$ 를 곱한 완전제곱식이다.</div>
+      <div class="caution">$a&gt;0$ (아래로 볼록)이면 $f(x)-L(x)\ge0$, 즉 <strong>곡선이 항상 접선 위(또는 접점에서 만남)</strong>에 있다. $a&lt;0$ 이면 반대로 곡선이 항상 접선 아래에 있다. 넓이를 정적분으로 세울 때 어느 쪽이 위인지는 부호로 미리 확인해야 한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>넓이 공식 — 외접 직사각형의 $\dfrac13$</div>
+      <p>곡선 $y=f(x)$, 접점 $x=t$ 에서의 접선 $l$, 그리고 세로선 $x=p$ ($p\neq t$) 로 둘러싸인 부분의 넓이를 구해보자.</p>
+      <div class="formula-box">$$S=\int_p^t |f(x)-L(x)|\,dx=\int_p^t a(x-t)^2\,dx=\left|\frac{a}{3}(t-p)^3\right|=\frac13\times|t-p|\times a(t-p)^2$$</div>
+      <p><strong>유도:</strong> 개념 1의 보조정리 $f(x)-L(x)=a(x-t)^2$ 를 그대로 적분하면 된다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">$\displaystyle\int_p^t a(x-t)^2\,dx=a\left[\frac{(x-t)^3}{3}\right]_p^t=a\left(0-\frac{(p-t)^3}{3}\right)=\frac{a}{3}(t-p)^3$ (부호 정리: $(p-t)^3=-(t-p)^3$).</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">여기서 $|t-p|$ 는 접점과 경계선 사이의 <strong>가로</strong> 길이, $a(t-p)^2=f(p)-L(p)$ 는 경계선 $x=p$ 에서 곡선과 접선의 <strong>세로</strong> 간격(직사각형의 높이)이다.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">따라서 $S=\dfrac13\times(\text{가로})\times(\text{세로})$, 즉 <strong>가로 × 세로로 만든 직사각형 넓이의 $\dfrac13$</strong>이다.</div></div>
+      <div class="concept-box">$p=0$ ($y$축이 경계)이면 가로 $=t$, 세로 $=at^2$ 이 되어 $S=\dfrac13 t\cdot at^2=\dfrac{a}{3}t^3$ — 도입 문제·영상에서 쓴 형태가 바로 이것이다.</div>
+      <div class="tip">이 공식은 접점이 어디든, 경계선이 $y$축이 아니어도 그대로 성립한다. <strong>"가로 = 접점과 경계 사이 $x$거리, 세로 = 경계에서 곡선-접선 간격"</strong> 두 가지만 확인하면 된다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>대칭인 두 접선의 높이 일치 성질</div>
+      <p>이차함수 $f(x)=x^2-k^2$ ($k&gt;0$, 두 $x$절편 $\pm k$)을 생각하자. 두 절편에서 그은 접선의 성질을 확인해보자.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">꼭짓점은 $(0,-k^2)$ 이므로, <strong>$x$축에서 꼭짓점까지의 깊이는 $k^2$</strong>.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">$x=k$ 에서의 접선: $f'(x)=2x$, $f'(k)=2k$, $f(k)=0$ 이므로 $y=2k(x-k)$. $x=0$ 을 대입하면 $y=-2k^2$.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">대칭성에 의해 $x=-k$ 에서의 접선도 같은 점 $(0,-2k^2)$ 을 지난다(직접 계산해도 동일하게 나온다).</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body"><strong>꼭짓점에서 두 접선의 교점까지의 깊이</strong> $=|-2k^2-(-k^2)|=k^2$.</div></div>
+      <div class="concept-box">결론: <strong>$x$축 → 꼭짓점 깊이($k^2$)</strong>와 <strong>꼭짓점 → 두 접선 교점 깊이($k^2$)</strong>가 정확히 같다. 즉 꼭짓점은 $x$축과 두 접선의 교점의 <strong>정중앙</strong>에 있다. — 이것이 "함숫값의 폭과 접선 교점의 $y$값 차이는 항상 같다"는 영상 속 발언의 근거다.</div>
+      <div class="caution">이 성질은 <strong>두 접점이 $x$절편(대칭축 기준 $\pm k$)일 때</strong>만 이런 깔끔한 형태로 성립한다. 접점이 $x$절편이 아니면 개념 1·2 의 일반 공식으로 직접 계산해야 한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — 부호 확인 없이 넓이 세우기.</strong> $a&lt;0$(위로 볼록)인데 "곡선 $-$ 접선"을 그대로 적분하면 넓이가 음수로 나온다. 항상 절댓값을 씌우거나 위·아래를 먼저 확인한다.</div>
+      <div class="caution"><strong>실수 2 — 세로(높이)를 접점에서의 값으로 착각.</strong> 공식의 "세로"는 <strong>경계선 $x=p$ 에서</strong>의 곡선-접선 간격이지, 접점 $x=t$ 에서의 값이 아니다. 접점에서는 간격이 $0$ 이다.</div>
+      <div class="caution"><strong>실수 3 — 완전제곱식을 억지로 전개.</strong> $f(x)-L(x)=a(x-t)^2$ 은 이미 적분하기 가장 쉬운 형태다. 굳이 전개해서 $ax^2+\cdots$ 로 만들면 계산만 늘어난다.</div>
+      <div class="caution"><strong>실수 4 — 할선(두 점을 잇는 직선)과 접선을 혼동.</strong> 이 공식은 <strong>접선</strong> 전용이다. 곡선 위 두 점을 잇는 <strong>할선</strong>과 곡선이 이루는 넓이는 다른 공식($\frac{|a|}{6}(\beta-\alpha)^3$)을 쓰며, 이 자료에서는 다루지 않는다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>보조정리 $f(x)-L(x)=a(x-t)^2$ 직접 적용</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 계수 1일 때 차 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=x^2-4x+1$ 위의 점 $x=3$ 에서의 접선을 $L(x)$ 라 할 때, $f(x)-L(x)$ 를 인수분해된 꼴로 나타내시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>최고차항 계수 $a=1$, 접점의 $x$좌표 $t=3$.
+            <div class="why">$f(x)=x^2-4x+1$ 에서 $x^2$ 의 계수를 그대로 읽으면 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 1의 보조정리 $f(x)-L(x)=a(x-t)^2$ 에 대입한다.
+            $$f(x)-L(x)=1\cdot(x-3)^2=(x-3)^2$$
+            <div class="why">접선의 방정식을 따로 구하지 않아도 $a$ 와 $t$ 만 알면 바로 답이 나온다 — 이것이 보조정리의 힘이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>검산: $f'(x)=2x-4$, $f'(3)=2$, $f(3)=9-12+1=-2$. $L(x)=2(x-3)-2=2x-8$. $f(x)-L(x)=(x^2-4x+1)-(2x-8)=x^2-6x+9=(x-3)^2$. 일치한다.
+            <div class="why">직접 접선을 구해 빼도 같은 결과가 나온다. 보조정리를 처음 쓸 때는 이렇게 한 번 검산해 보면 확신이 생긴다.</div></div></div>
+          <span class="answer-tag">정답: $(x-3)^2$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 계수가 있을 때 차 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=2x^2+x-1$ 위의 점 $x=-1$ 에서의 접선을 $L(x)$ 라 할 때, $f(x)-L(x)$ 를 인수분해된 꼴로 나타내시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>최고차항 계수 $a=2$, 접점의 $x$좌표 $t=-1$.
+            <div class="why">계수가 있어도 방법은 똑같다 — $a$ 값만 그대로 앞에 곱해 주면 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>보조정리에 대입한다.
+            $$f(x)-L(x)=2\{x-(-1)\}^2=2(x+1)^2$$
+            <div class="why">$t=-1$ 이므로 $(x-t)=(x-(-1))=(x+1)$ 이 된다. 부호 실수가 가장 많이 나오는 지점이다.</div></div></div>
+          <p class="warn">오답 주의: $t=-1$ 을 그대로 $(x-1)$ 에 넣는 실수가 흔하다. $x-t=x-(-1)=x+1$ 임을 꼭 확인하자.</p>
+          <span class="answer-tag">정답: $2(x+1)^2$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>넓이 공식 — $y$축이 경계인 기본형</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 계수 1, 가장 단순한 형태</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=x^2$ 위의 점 $(1,1)$ 에서의 접선과 곡선, $y$축($x=0$)으로 둘러싸인 부분의 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>가로 $=$ 접점과 $y$축 사이의 거리 $=1-0=1$.
+            <div class="why">접점의 $x$좌표가 $1$, 경계선이 $x=0$ 이므로 그 차이가 가로다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>세로 $=$ $x=0$ 에서 곡선-접선의 간격 $=a\cdot(1-0)^2=1\cdot1^2=1$.
+            <div class="why">개념 1의 보조정리에서 $x=0$, $t=1$, $a=1$ 을 대입한 값이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>공식 적용: $S=\dfrac13\times1\times1=\dfrac13$.
+            <div class="why">가로 × 세로로 만든 직사각형(넓이 $1$)의 $\dfrac13$이다.</div></div></div>
+          <span class="answer-tag">정답: $\dfrac13$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 계수가 있는 경우</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=3x^2$ 위의 점 $(2,12)$ 에서의 접선과 곡선, $y$축($x=0$)으로 둘러싸인 부분의 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>가로 $=2-0=2$, 최고차항 계수 $a=3$.
+            <div class="why">접점 $x$좌표는 $2$, 경계선은 $x=0$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>세로 $=a\cdot(\text{가로})^2=3\times2^2=12$.
+            <div class="why">경계에서 곡선-접선 간격은 $a(x-t)^2$ 에 $x=0,\,t=2$ 를 넣은 값이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>공식 적용: $S=\dfrac13\times2\times12=\dfrac{24}{3}=8$.
+            <div class="why">직사각형 넓이 $2\times12=24$ 의 $\dfrac13$.</div></div></div>
+          <p class="warn">오답 주의: 세로를 $a\times(\text{가로})$ 로 계산해 $3\times2=6$ 으로 잘못 쓰는 경우가 많다. 세로는 <strong>제곱</strong>이 들어간 $a(\text{가로})^2$ 임을 잊지 말자.</p>
+          <span class="answer-tag">정답: $8$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>경계가 $y$축이 아닌 일반형 · 두 개념 결합</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 꼭짓점이 원점이 아니고 경계도 $y$축이 아닌 경우</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=(x-1)^2+2$ 위의 점 $(4,11)$ 에서의 접선과 곡선, 직선 $x=1$ 로 둘러싸인 부분의 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>최고차항 계수 $a=1$, 접점 $t=4$, 경계 $p=1$.
+            <div class="why">꼭짓점이 $(1,2)$ 로 원점이 아니어도 <strong>$a$ 와 $(t-p)$ 만 알면 공식이 그대로 적용</strong>된다 — 평행이동은 넓이(간격의 크기)를 바꾸지 않기 때문이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>가로 $=|t-p|=|4-1|=3$.
+            <div class="why">접점과 경계선 사이의 $x$거리.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>세로 $=a(t-p)^2=1\times3^2=9$.
+            <div class="why">$x=1$ 에서 곡선값과 접선값의 차이가 바로 이 값이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>공식 적용: $S=\dfrac13\times3\times9=\dfrac{27}{3}=9$.
+            <div class="why">직사각형 넓이 $3\times9=27$ 의 $\dfrac13$.</div></div></div>
+          <p class="warn">오답 주의: 꼭짓점 좌표 $(1,2)$ 나 접점의 $y$좌표 $11$ 은 답에 전혀 쓰이지 않는다. 넓이는 <strong>$a$ 와 가로 거리($t-p$)만으로</strong> 결정된다.</p>
+          <span class="answer-tag">정답: $9$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 높이 일치 성질 + 넓이 공식 종합</div>
+        <div class="problem-body"><strong>문제:</strong> 이차함수 $f(x)=x^2-9$ 의 그래프에서 $x=3$ 에서의 접선을 $l$ 이라 하자.<br>(1) 접선 $l$ 이 $y$축과 만나는 점의 $y$좌표를 구하시오.<br>(2) 곡선 $y=f(x)$, 접선 $l$, $y$축으로 둘러싸인 부분의 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1 (1)</span><div>$k=3$ 이므로 개념 3의 성질을 쓴다. 꼭짓점 $(0,-9)$, 꼭짓점 깊이 $=k^2=9$.
+            <div class="why">$f(x)=x^2-9=x^2-3^2$ 이므로 $k=3$, 두 $x$절편은 $\pm3$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2 (1)</span><div>접선 교점까지의 추가 깊이도 $k^2=9$ 이므로, 접선이 $y$축과 만나는 점의 $y$좌표는 $-9-9=-18$.
+            <div class="why">개념 3에서 "$x$축→꼭짓점"과 "꼭짓점→접선 교점"의 깊이가 같음을 증명했다. 직접 계산으로도 검산 가능: $f'(3)=6$, $f(3)=0$, $L(x)=6(x-3)$, $L(0)=-18$. 일치.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3 (2)</span><div>가로 $=3-0=3$, 세로 $=f(0)-L(0)=-9-(-18)=9$.
+            <div class="why">세로는 $x=0$ 에서 곡선값과 접선값의 차이. 개념 1의 보조정리로도 확인된다: $a(0-3)^2=1\times9=9$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4 (2)</span><div>공식 적용: $S=\dfrac13\times3\times9=9$.
+            <div class="why">직사각형 넓이 $3\times9=27$ 의 $\dfrac13$.</div></div></div>
+          <span class="answer-tag">정답: (1) $-18$ &nbsp; (2) $9$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>준킬러 유형 — 조건 해석 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 불필요한 조건 가려내기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 $1$ 인 이차함수 $f(x)$ 가 $f(2)=1$, $f'(2)=4$ 를 만족시킨다. 곡선 $y=f(x)$ 위의 점 $(2,f(2))$ 에서의 접선을 $l$ 이라 할 때, 곡선과 접선 $l$, 직선 $x=0$ 으로 둘러싸인 부분의 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 1의 보조정리를 떠올린다: $f(x)-L(x)=a(x-t)^2$ 은 <strong>최고차항 계수 $a$ 와 접점의 $x$좌표 $t$ 에만 의존</strong>한다.
+            <div class="why">$f(2)$ 나 $f'(2)$ 의 구체적인 값은 접선의 위치(식)를 결정할 뿐, 곡선과 접선의 "간격"의 크기와는 무관하다 — 간격은 애초에 $f(t)$, $f'(t)$ 가 소거되면서 사라진다(개념 1 STEP 3~4 참조).</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>이 문제에서 필요한 것은 $a=1$ (최고차항 계수)과 $t=2$ (접점의 $x$좌표), $p=0$ (경계선) 뿐이다.
+            <div class="why">$f(2)=1$, $f'(2)=4$ 는 접선의 정확한 식을 알려 주지만, 넓이 계산에는 등장하지 않는다 — 수능에서 자주 쓰는 "그럴듯해 보이지만 불필요한 조건" 유형이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>가로 $=|t-p|=2$, 세로 $=a(t-p)^2=1\times4=4$.
+            <div class="why">개념 2의 일반 공식을 그대로 적용.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>공식 적용: $S=\dfrac13\times2\times4=\dfrac83$.
+            <div class="why">직사각형 넓이 $2\times4=8$ 의 $\dfrac13$.</div></div></div>
+          <p class="warn">오답 주의: $f(2)=1$, $f'(2)=4$ 를 이용해 $f(x)$ 를 구체적으로 결정하려 하면 시간만 낭비한다(애초에 정보가 부족해 $f$ 는 유일하게 결정되지 않는다). 넓이는 $a,\,t,\,p$ 만으로 결정됨을 기억하자.</p>
+          <span class="answer-tag">정답: $\dfrac83$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 넓이가 주어졌을 때 계수 역산</div>
+        <div class="problem-body"><strong>문제:</strong> $a&gt;0$ 인 이차함수 $y=ax^2$ 의 그래프 위의 점 $(2,4a)$ 에서의 접선과 곡선, $y$축($x=0$)으로 둘러싸인 부분의 넓이가 $\dfrac{16}{3}$ 일 때, $a$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>가로 $=2-0=2$, 접점 $t=2$, 경계 $p=0$.
+            <div class="why">문제에서 접점의 $x$좌표가 $2$ 로 주어졌다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>세로 $=a(2-0)^2=4a$.
+            <div class="why">개념 2 공식의 세로 부분을 그대로 대입.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>넓이 식을 세운다: $S=\dfrac13\times2\times4a=\dfrac{8a}{3}$.
+            <div class="why">가로 × 세로 ÷ 3 공식.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>조건 $\dfrac{8a}{3}=\dfrac{16}{3}$ 을 푼다: $8a=16$, $a=2$.
+            <div class="why">양변에 $3$ 을 곱해 분모를 없애고 $a$ 에 대해 정리했다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>검산: $a=2$ 이면 세로 $=4\times2=8$, 넓이 $=\dfrac13\times2\times8=\dfrac{16}{3}$. 일치한다.
+            <div class="why">역산 문제는 구한 값을 처음 조건에 대입해 확인하는 습관이 중요하다.</div></div></div>
+          <span class="answer-tag">정답: $a=2$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「이 영상만 제대로 이해하면 이차함수는 끝입니다. (ft. 수능 수학)」</strong>(수학강사 이정환, 약 9분)의 요약본을 근거로 재구성했습니다. 자막 트랙이 제공되지 않아 상세 요약본(타임스탬프 인용·섹션별 분석·핵심 개념·복습 퀴즈 포함)을 대체 입력으로 사용했습니다. 영상이 제시한 두 핵심 결과 — ① 대칭인 두 접선의 교점과 꼭짓점 사이 높이차가 항상 $k^2$ 로 일치하는 성질, ② 곡선·접선·세로선으로 둘러싸인 넓이가 외접 직사각형의 $\frac13$ 이라는 공식 — 를 각각 개념 3, 개념 1·2 에 대응시켰습니다. 공식은 이 자료에서 <strong>일반적인 형태($a$, 접점 $t$, 임의의 경계선 $p$)로 직접 증명</strong>했고, 모든 문항의 답을 정적분 직접 계산 또는 검산 단계로 <strong>교차 확인</strong>했습니다.</p>
+      <p style="margin-top:8px">한계: 영상 자막 전문이 아닌 <strong>상세 요약본</strong>을 근거로 했으므로 강사가 실제 사용한 예제의 정확한 좌표·수치와 다를 수 있습니다. 도입 문제와 문항 8개는 요약본에 기술된 원리를 바탕으로 <strong>새로 출제</strong>한 것입니다. 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아닙니다.</strong> 학생 배포 전 교사 검토를 권장합니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 본 자료는 다항함수(이차함수)의 미분·정적분과 넓이만 사용합니다(현 고2 미적분Ⅰ 범위). 고3 선택 「미적분」 영역(삼각함수의 덧셈정리·극한·미분, 부분적분·치환적분 등)은 <strong>사용하지 않았습니다.</strong> 실수 4 에서 "할선과 접선의 차이"를 명시해 범위 밖 공식과의 혼동을 방지했습니다.</p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> · <a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-19 · 영상 출처: <a href="https://youtu.be/y09MDHC_DCo" style="color:var(--primary)">수학강사 이정환</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
