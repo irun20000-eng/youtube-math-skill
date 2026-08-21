@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>역함수의 미분법 — g'(c)=1/f'(a)로 3초 만에 잡는 법 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3 · 미적분(선택) — 여러 가지 함수의 미분법(역함수)</div>
+    <h1>역함수의 미분법<br>"=$t$"만 보이면 3초 만에 관계 잡기</h1>
+    <p class="sub">음함수 노가다 계산 대신, $g'(c)=\dfrac{1}{f'(a)}$ 공식 하나로 킬러 문항의 역함수 관계를 즉시 간파하는 법.</p>
+    <div class="quote">"미적분 문제를 보는데 '=$t$'가 나오면 그냥 무조건 역함수입니다." — 강사 인용 [03:51]</div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/lHmHtmBH2ug" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/lHmHtmBH2ug/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">이 5가지만 알면 역함수 문제는 다 풀려</div>
+        <div class="v-meta">📺 YouTube · 약 21분 · 수수컷</div>
+        <a class="v-link" href="https://youtu.be/lHmHtmBH2ug" target="_blank" rel="noopener">https://youtu.be/lHmHtmBH2ug</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 역함수의 미분법 공식 $g'(c)=\dfrac{1}{f'(a)}$ ($f(a)=c$)을 직접 유도하고, 문제 속 "=$t$" 표현에서 역함수 관계를 즉시 포착해 합성함수·비다항함수 상황에서도 정확히 적용한다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — "'=$t$'가 보이면 역함수부터 의심하라"</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 곡선 $y=f(x)$와 직선 $y=t$가 만나는 점의 $x$좌표를 $x=g(t)$라 하자(즉 항등식 $f(g(t))=t$가 성립). $f(x)=x^3+2x$이고 $f$가 일대일함수일 때, $t=3$에서 $g'(3)$을 구하시오.</div>
+      <div class="visual">      y
+      │        y=x
+      │       ╱
+      │      ╱      y=f(x)
+      │     ╱    ⟋
+    c ┼────★────────   f(a)=c 인 점 (a,c), 접선 기울기 f'(a)
+      │   ╱│⟍
+      │  ╱ │  ⟍     y=g(x)=f⁻¹(x)
+      │ ╱  │    ★   대칭점 (c,a), 접선 기울기는 그 역수 1/f'(a)
+      └────┴──────── x
+           a         c
+
+두 그래프가 직선 y=x 에 대해 대칭 → 접선의 기울기는 서로 역수 관계</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(g(t))=t$ 이므로 $t=3$에서 $g(3)=a$라 하면 $f(a)=3$을 만족하는 $a$를 먼저 찾는다.<div class="why">$g$가 $t=3$에서 미분 가능하려면, 그 값 $g(3)$을 원함수 $f$ 위에서 먼저 찾아야 기울기를 잡을 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(x)=x^3+2x$에 $x=1$을 대입: $f(1)=1+2=3$. 따라서 $a=1$, 즉 $g(3)=1$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f(g(t))=t$의 양변을 $t$로 미분(연쇄법칙): $f'(g(t))\cdot g'(t)=1 \;\Rightarrow\; g'(t)=\dfrac{1}{f'(g(t))}$.<div class="why">역함수 미분법 공식은 결국 이 한 줄의 연쇄법칙에서 나온다 — 암기가 아니라 유도할 수 있어야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f'(x)=3x^2+2$이므로 $f'(1)=3+2=5$. 따라서 $g'(3)=\dfrac{1}{f'(g(3))}=\dfrac{1}{f'(1)}=\dfrac{1}{5}$.</div></div>
+          <span class="answer-tag">정답: $\dfrac{1}{5}$</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <p><strong>역함수</strong> $g=f^{-1}$의 그래프는 $y=f(x)$의 그래프를 직선 $y=x$에 대해 대칭이동한 것이다(그래서 $f(a)=c \iff g(c)=a$).</p>
+      <p style="margin-top:6px"><strong>합성함수의 미분법(연쇄법칙)</strong>: $y=h(u),\ u=k(x)$이면 $\dfrac{dy}{dx}=\dfrac{dy}{du}\cdot\dfrac{du}{dx}$. 그리고 로그함수의 미분 $(\ln x)'=\dfrac1x$, 지수함수의 미분 $(e^x)'=e^x$만 알면 이 단원의 계산은 모두 처리된다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>역함수의 미분법 공식 — 암기 대신 유도</div>
+      <p>$g=f^{-1}$이면 정의상 <strong>모든 $x$에 대해</strong> $f(g(x))=x$가 성립한다. 이 항등식의 양변을 $x$로 미분하면 된다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$f(g(x))=x$의 양변을 $x$로 미분(연쇄법칙 적용): $f'(g(x))\cdot g'(x)=1$.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">양변을 $f'(g(x))$로 나누면: $g'(x)=\dfrac{1}{f'(g(x))}$.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">$x=c$에서 $g(c)=a$ (즉 $f(a)=c$)라 하면: $g'(c)=\dfrac{1}{f'(a)}$.</div></div>
+      <div class="formula-box">$g'(c)=\dfrac{1}{f'(a)} \quad (\text{단, } f(a)=c,\ f'(a)\ne0)$</div>
+      <div class="concept-box">기하학적 이미지: $g'(c)$는 <strong>$c$ 자체에서의 기울기가 아니라</strong>, $c$가 원함수의 높이가 되는 지점 $a$(즉 $f(a)=c$)에서의 접선 기울기 $f'(a)$의 <strong>역수</strong>다. 두 그래프가 $y=x$ 대칭이라 접선도 서로 대칭이고, 대칭이동된 직선의 기울기는 원래 기울기의 역수이기 때문이다.</div>
+      <div class="caution"><strong>가장 흔한 착각</strong>: $g'(c)$를 구하는데 $f'(c)$를 계산해버리는 것. 반드시 <strong>"$f(a)=c$인 $a$"를 먼저 찾고</strong> $f'(a)$의 역수를 취해야 한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>발문 속 "=$t$" 3총사 — 문제에 "역함수"란 말이 없어도</div>
+      <p>강사가 강조한 것처럼, 아래 세 형태는 <strong>"역함수"라는 단어 없이도</strong> 두 함수가 역함수 관계임을 알려주는 신호다. 모두 "$f(\square)=t$" 꼴의 항등식이 숨어 있다는 공통점이 있다.</p>
+      <div class="step-row"><span class="step-num">①</span><div class="step-body"><strong>교점형</strong>: $y=f(x)$와 $y=t$의 교점의 $x$좌표가 $x=g(t)$ ⟹ $f(g(t))=t$ ($f,g$ 역함수).</div></div>
+      <div class="step-row"><span class="step-num">②</span><div class="step-body"><strong>접선 기울기형</strong>: 접선의 기울기가 $t$인 점의 $x$좌표가 $x=s(t)$ ⟹ $f'(s(t))=t$ ($f',s$ 역함수).</div></div>
+      <div class="step-row"><span class="step-num">③</span><div class="step-body"><strong>정적분형</strong>: $\displaystyle\int_0^{s} f(x)\,dx=t$의 해가 $s=s(t)$ ⟹ $f$의 한 부정적분 $F$에 대해 $F(s(t))=t$ ($F,s$ 역함수).</div></div>
+      <div class="tip">도입 문제가 정확히 ①번 패턴이었다. "$=t$"가 나오는 순간 <strong>"이 관계식이 곧 $f(\text{무언가})=t$ 항등식"</strong>임을 의심하는 습관을 들이자.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>합성함수의 역함수 — 바깥부터 거꾸로 풀어낸다</div>
+      <p>$(f\circ g)^{-1}=g^{-1}\circ f^{-1}$이 성립한다(순서가 뒤집힌다). "$y=$식" 형태에서 $x$를 $y$의 식으로 정리해가는 것과 원리는 같다 — 바깥 연산부터 하나씩 반대로 풀어낸다.</p>
+      <div class="concept-box"><strong>예</strong>: $h(x)=f(\ln x-1)+4$의 역함수를 구해보자. $y=f(\ln x-1)+4$에서 $x$를 $y$로 정리하면:<br>
+        $y-4=f(\ln x-1) \;\Rightarrow\; f^{-1}(y-4)=\ln x-1 \;\Rightarrow\; \ln x=f^{-1}(y-4)+1 \;\Rightarrow\; x=e^{\,f^{-1}(y-4)+1}$.</div>
+      <div class="formula-box">$h^{-1}(x)=e^{\,f^{-1}(x-4)+1}$</div>
+      <div class="caution">$f^{-1}$가 구체적인 식으로 안 나와도 상관없다. $f(0)=3$처럼 <strong>점 하나</strong>만 주어져도 $h^{-1}(7)=e^{f^{-1}(3)+1}=e^{0+1}=e$처럼 <strong>특정 값</strong>은 계산할 수 있다 (심화 1번에서 직접 다룬다).</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>편의성 치환 — $f^{-1}$를 아예 안 쓰고 미분하기</div>
+      <p>$y=f^{-1}(g(x))$의 도함수가 필요할 때, $f^{-1}$를 직접 미분하려 하면 복잡해진다. 대신 <strong>양변에 $f$를 씌워서 $f^{-1}$를 지워버리는</strong> 치환을 쓴다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$y=f^{-1}(g(x))$ 이면, 양변에 $f$를 적용해도 등식은 유지된다: $f(y)=g(x)$.<div class="why">$f$와 $f^{-1}$는 서로를 상쇄하므로 $f(f^{-1}(g(x)))=g(x)$가 되어 인버스 기호가 사라진다.</div></div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$f(y)=g(x)$의 양변을 $x$로 미분(음함수 미분, $y$가 $x$의 함수): $f'(y)\cdot y'=g'(x)$.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">정리: $y'=\dfrac{g'(x)}{f'(y)}=\dfrac{g'(x)}{f'\!\big(f^{-1}(g(x))\big)}$.</div></div>
+      <div class="formula-box">$y=f^{-1}(g(x)) \;\Longleftrightarrow\; f(y)=g(x) \;\Rightarrow\; y'=\dfrac{g'(x)}{f'(y)}$</div>
+      <div class="tip">이렇게 하면 <strong>$f^{-1}$의 도함수를 따로 구할 필요 없이</strong>, 원함수 $f$의 도함수만으로 계산이 끝난다. 인버스가 중첩될수록 이 치환의 효과가 커진다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>국소 구간 역함수화 — 전구간 단조가 아니어도 괜찮다</div>
+      <p>역함수는 원래 <strong>일대일함수</strong>에만 존재한다. 그런데 $f(x)=x^3-3x$처럼 극대·극소가 있는 함수는 전구간에서 일대일이 아니다.</p>
+      <div class="concept-box">해결법: 관심 있는 교점을 포함하는 <strong>구간만 떼어내어</strong>, 그 구간에서 $f$가 증가(또는 감소)하는 일대일함수라면 그 구간에 한해서 역함수 미분법을 <strong>똑같이</strong> 적용한다.</div>
+      <div class="caution">"국소 구간에서만 정의된 역함수"이므로, 공식 $g'(c)=\dfrac{1}{f'(a)}$의 $a$도 <strong>그 구간 안의 값</strong>이어야 한다 — 구간 밖에서 $f(a)=c$를 만족하는 다른 $a$를 쓰면 안 된다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">6</span>자주 하는 실수</div>
+      <div class="caution">
+        ① $g'(c)$를 구하는데 $c$에서의 $f'(c)$를 계산 → 반드시 <strong>$f(a)=c$인 $a$</strong>를 먼저 찾고 $f'(a)$의 역수를 취해야 한다.<br>
+        ② $f'(a)=0$인 지점 → 역함수의 접선이 수직(기울기 무한대)이 되어 $g'(c)$가 <strong>정의되지 않는다</strong>. 분모가 0이 아닌지 반드시 확인.<br>
+        ③ "=$t$"가 보인다고 무조건 원함수 $f$ 자체가 역함수 관계인 것은 아니다 — <strong>어떤 관계식이 항등식을 만드는지</strong>(교점형·접선형·정적분형) 정확히 구분해야 한다.
+      </div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 공식 바로 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=x^3+2x-1$의 역함수를 $g$라 하자. $g'(2)$를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(a)=2$인 $a$를 찾는다: $f(1)=1+2-1=2$이므로 $a=1$.</p>
+          <p>$f'(x)=3x^2+2$이므로 $f'(1)=3+2=5$.</p>
+          <p class="warn">오답 주의: $g'(2)$를 구하는데 $f'(2)$를 계산하지 않도록 — $f(1)=2$이지 $f(2)=2$가 아니다.</p>
+          <span class="answer-tag">정답: $g'(2)=\dfrac{1}{5}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 접선 기울기에서 바로 뒤집기</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $y=f(x)$ 위의 점 $(3,7)$에서 접선의 기울기가 $4$이다. $f$의 역함수를 $g$라 할 때, $g'(7)$을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>점 $(3,7)$이 $y=f(x)$ 위에 있으므로 $f(3)=7$, 즉 $g(7)=3$이고 $f'(3)=4$.</p>
+          <p>$g'(7)=\dfrac{1}{f'(3)}=\dfrac{1}{4}$.</p>
+          <span class="answer-tag">정답: $g'(7)=\dfrac{1}{4}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 로그가 섞인 함수</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=\ln x+x$ ($x>0$)의 역함수를 $g$라 하자. $g'(1)$을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(1)=\ln 1+1=0+1=1$이므로 $a=1$.</p>
+          <p>$f'(x)=\dfrac1x+1$이므로 $f'(1)=1+1=2$.</p>
+          <p class="why">$f$가 다항함수가 아니어도 공식 $g'(c)=\dfrac{1}{f'(a)}$는 그대로 성립한다 — $f$가 미분가능하고 $f'(a)\ne0$이면 된다.</p>
+          <span class="answer-tag">정답: $g'(1)=\dfrac{1}{2}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 교점형 "=$t$" 패턴</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=f(x)$와 직선 $y=t$가 만나는 점의 $x$좌표를 $x=g(t)$라 하자(즉 $f(g(t))=t$, $f$는 일대일함수). $f(x)=x^3+3x$일 때, $t=4$에서 $g'(4)$를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(a)=4$인 $a$: $f(1)=1+3=4$이므로 $g(4)=1$.</p>
+          <p>$f'(x)=3x^2+3$이므로 $f'(1)=3+3=6$.</p>
+          <p class="warn">오답 주의: "=$t$"가 있다고 바로 답을 구하려 하지 말고, 먼저 $f(a)=t$의 $a$부터 구하는 순서를 지킬 것.</p>
+          <span class="answer-tag">정답: $g'(4)=\dfrac{1}{6}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 합성함수의 역함수 + 미분</div>
+        <div class="problem-body"><strong>문제:</strong> $h(x)=f(\ln x-1)+4$이고, $f(0)=3,\ f'(0)=2$이다. $h^{-1}(7)$과 $(h^{-1})'(7)$을 각각 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 3에서 유도한 $h^{-1}(x)=e^{\,f^{-1}(x-4)+1}$을 이용. $x=7$: $h^{-1}(7)=e^{\,f^{-1}(3)+1}$.<div class="why">$h^{-1}$을 처음부터 다시 유도하지 않고, 이미 만든 관계식을 재사용한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(0)=3$이므로 $f^{-1}(3)=0$. 따라서 $h^{-1}(7)=e^{0+1}=e$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>미분계수는 $(h^{-1})'(7)=\dfrac{1}{h'(h^{-1}(7))}=\dfrac{1}{h'(e)}$ (개념 1의 공식).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$h(x)=f(\ln x-1)+4$이므로 연쇄법칙으로 $h'(x)=f'(\ln x-1)\cdot\dfrac1x$. $x=e$: $h'(e)=f'(\ln e-1)\cdot\dfrac1e=f'(0)\cdot\dfrac1e=\dfrac{2}{e}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>따라서 $(h^{-1})'(7)=\dfrac{1}{2/e}=\dfrac{e}{2}$.</div></div>
+          <span class="answer-tag">정답: $h^{-1}(7)=e$, $(h^{-1})'(7)=\dfrac{e}{2}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 국소 구간 역함수화</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3-3x$는 $x=-1$에서 극댓값, $x=1$에서 극솟값을 가져 전구간에서 일대일이 아니다. $x\ge1$ 구간으로 정의역을 제한한 $f$(이 구간에서는 증가함수)의 역함수를 $g$라 하자. $g'(2)$를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$x\ge1$에서 $f(a)=2$인 $a$를 찾는다: $f(2)=8-6=2$이므로 $a=2$ ($a\ge1$ 조건 만족).</p>
+          <p>$f'(x)=3x^2-3$이므로 $f'(2)=12-3=9$.</p>
+          <p class="why">$x=-1$ 쪽에도 $f(a)=2$를 만족하는 다른 $a$가 있을 수 있지만, 정의역을 $x\ge1$로 제한했으므로 그 구간 안의 $a=2$만 사용해야 한다.</p>
+          <span class="answer-tag">정답: $g'(2)=\dfrac{1}{9}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 단답형 (미분계수)</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=2x^3+x$의 역함수를 $g$라 하자. $g'(3)=\dfrac{q}{p}$ ($p,q$는 서로소인 자연수)일 때 $p+q$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(1)=2+1=3$이므로 $a=1$. $f'(x)=6x^2+1$이므로 $f'(1)=6+1=7$.</p>
+          <p>$g'(3)=\dfrac{1}{7}$이므로 $p=7,\ q=1$ (서로소).</p>
+          <span class="answer-tag">정답: $p+q=8$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 단답형 (교점형 "=$t$")</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=x^3+x$의 역함수를 $g$라 하자. 방정식 $f(x)=t$의 해를 $x=g(t)$라 할 때, 곡선 $y=g(t)$ 위의 점 $(2,\,g(2))$에서의 접선의 기울기를 $\dfrac{q}{p}$ ($p,q$는 서로소인 자연수)라 하자. $p+q$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(1)=1+1=2$이므로 $g(2)=1$. $f'(x)=3x^2+1$이므로 $f'(1)=3+1=4$.</p>
+          <p>구하는 접선의 기울기는 $g'(2)=\dfrac{1}{4}$이므로 $p=4,\ q=1$ (서로소).</p>
+          <span class="answer-tag">정답: $p+q=5$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상의 핵심 5대 도구(역함수 미분 공식의 기하학적 이미지, "=$t$" 발견 3총사, 합성함수의 역함수, 편의성 치환, 국소 구간 역함수화)를 모두 반영했습니다. 모든 문항은 함수와 수치를 직접 설계·재계산하여 정답을 검산했습니다.</p>
+      <p style="margin-top:8px">이 영상은 자막 트랙이 없어(yt-dlp·innertube 모두 실패) <strong>스파크(Spark) 요약본을 대체 입력</strong>으로 사용했습니다. 특히 개념 3의 예시(합성함수의 역함수)는 요약본의 표현이 불명확해 <strong>동일한 기법을 보여주는 자체 검증 예시</strong>로 재구성했습니다.</p>
+      <p style="margin-top:8px">이 단원(역함수의 미분법)은 2022 개정 교육과정 기준 고2 필수 "미적분Ⅰ"이 아니라 <strong>선택과목 "미적분"(구 미적분Ⅱ)</strong>의 "여러 가지 함수의 미분법"에 해당합니다. 고3 진로선택 또는 심화·교양 학습용 자료이며, 사용 전 학생의 실제 수강 과목을 확인해 주세요. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260614_다변수실제변수연쇄법칙_10NhvK7s.html">다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략 (10NhvK7s)</a> · <a href="../미적분-적분법/20260710_역함수적분과치환적분역함수미분_mBc94D-3.html">역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) (mBc94D-3)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-21 · 영상 출처: <a href="https://youtu.be/lHmHtmBH2ug" style="color:var(--primary)">수수컷</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
