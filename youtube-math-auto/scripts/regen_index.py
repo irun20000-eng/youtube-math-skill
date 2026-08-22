@@ -483,6 +483,27 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
             .replace("__ITEMS_JSON__", json.dumps(items, ensure_ascii=False)))
 
 
+def render_manifest(rows: list[dict]) -> str:
+    """이룬 서재(허브)가 편수를 읽어 가는 조회표를 만든다.
+
+    허브는 같은 오리진의 /youtube-math-skill/manifest.json 을 런타임에 fetch 해
+    편수를 채우고, 없거나 실패하면 조용히 '바로가기'로 남긴다.
+    생성 시각 같은 가변값을 넣지 않아 빌드는 결정적으로 유지된다.
+    """
+    items = []
+    for r in sorted(rows, key=lambda x: (x.get("grade") or "", x.get("unit") or "",
+                                         x.get("date") or "", x.get("rel_path") or "")):
+        items.append({
+            "title": r.get("title") or r.get("topic"),
+            "grade": r.get("grade"),
+            "unit": r.get("unit"),
+            "date": r.get("date"),
+            "source": r.get("source"),
+            "url": r.get("rel_path"),
+        })
+    return json.dumps({"count": len(items), "items": items},
+                      ensure_ascii=False, indent=1) + chr(10)
+
 def main() -> int:
     output_dir = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path("output").resolve()
     if not output_dir.is_dir():
@@ -497,7 +518,9 @@ def main() -> int:
     html = render_html(rows, dups)
     (output_dir / "index.html").write_text(html, encoding="utf-8")
 
-    msg = f"[OK] INDEX.md + index.html ({len(rows)}개 자료"
+    (output_dir / "manifest.json").write_text(render_manifest(rows), encoding="utf-8")
+
+    msg = f"[OK] INDEX.md + index.html + manifest.json ({len(rows)}개 자료"
     if dups:
         msg += f", ⚠️ 중복 {len(dups)}건"
     msg += ")"
