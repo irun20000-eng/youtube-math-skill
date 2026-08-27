@@ -13,6 +13,7 @@ from __future__ import annotations
 import html as html_mod
 import json
 import re
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -68,7 +69,52 @@ def extract_meta(html_path: Path) -> dict:
     return {"title": title, "url": url, "channel": channel}
 
 
+def git_added_map(output_dir: Path) -> dict[str, str]:
+    """파일별 '갤러리에 처음 추가된 시각'(git 최초 커밋)을 rel_path → ISO 로 반환.
+
+    갤러리 기본 정렬을 '영상 게시일'이 아니라 '자료 추가일'로 쓰기 위한 자료.
+    (옛날 영상으로 오늘 만든 자료가 목록 한참 아래에 묻히는 문제를 없앤다.)
+
+    git 이 없거나 저장소가 아니면 빈 dict → 호출부에서 영상 게시일로 폴백하므로
+    이 함수 실패가 카탈로그 생성 자체를 막지 않는다.
+    한 번의 git log 로 전부 훑어 파일 수만큼 git 을 호출하지 않는다.
+    """
+    try:
+        out = subprocess.run(
+            # core.quotepath=false: 이걸 안 끄면 git 이 한글 경로를
+            # "output/\352\263\2401/..." 처럼 8진수로 인용해 매칭이 전부 어긋난다.
+            # --no-renames: 이름이 바뀐 파일은 rename(R)로 잡혀 --diff-filter=A 에서
+            # 통째로 빠진다. 껐을 때 D+A 로 쪼개져 '현재 경로에 등장한 시점'이 잡힌다.
+            ["git", "-c", "core.quotepath=false",
+             "log", "--diff-filter=A", "--no-renames", "--name-only",
+             "--format=%H%x09%aI", "--", "."],
+            cwd=output_dir, capture_output=True, text=True, timeout=60,
+        )
+        if out.returncode != 0:
+            return {}
+    except (OSError, subprocess.SubprocessError):
+        return {}
+
+    added: dict[str, str] = {}
+    stamp = None
+    for line in out.stdout.splitlines():
+        if not line.strip():
+            continue
+        if "\t" in line:                      # "<sha>\t<iso>" 헤더 줄
+            stamp = line.split("\t", 1)[1].strip()
+            continue
+        if stamp is None:
+            continue
+        # git 은 저장소 루트 기준 경로를 준다 → output/ 기준으로 바꾼다
+        rel = line.strip()
+        rel = rel[len("output/"):] if rel.startswith("output/") else rel
+        # 최초 추가가 최종값이 되도록: git log 는 최신→과거 순이라 계속 덮어쓴다
+        added[rel] = stamp
+    return added
+
+
 def gather(output_dir: Path) -> list[dict]:
+    added_map = git_added_map(output_dir)
     rows = []
     for html in sorted(output_dir.rglob("*.html")):
         if html.name == "index.html":
@@ -88,12 +134,18 @@ def gather(output_dir: Path) -> list[dict]:
         meta = extract_meta(html)
         # URL에서 풀 11자 video_id 복구 (썸네일·중복 감지에 필요)
         full_vid = extract_video_id_from_url(meta["url"]) if meta["url"] else None
+        rel_posix = rel.as_posix()
+        d = parsed["date"]
         rows.append({
             **parsed,
             **meta,
             "video_id_full": full_vid,
-            "rel_path": rel.as_posix(),
+            "rel_path": rel_posix,
             "source": "concept" if is_concept else "video",
+            # 추가일(git 최초 커밋). 못 구하면 영상 게시일 자정으로 폴백해
+            # 정렬이 뒤섞이지 않게 한다.
+            "added": added_map.get(
+                rel_posix, f"{d[:4]}-{d[4:6]}-{d[6:8]}T00:00:00+00:00"),
         })
     return rows
 
@@ -232,6 +284,16 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
     background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px;
     border-radius: 4px; font-size: 0.78em;
   }
+  /* 최근 추가분 표시 — '언제 추가됐나'는 보는 시점 기준이라 JS가 켠다
+     (빌드 결과에 '지금'을 굽지 않아 재생성해도 파일이 안 흔들린다) */
+  .thumb-wrap .new-badge {
+    position: absolute; top: 8px; right: 8px;
+    background: #e53935; color: #fff; padding: 3px 8px;
+    border-radius: 4px; font-size: 0.78em; font-weight: 700;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .thumb-wrap .new-badge[hidden] { display: none; }
+  .result-count { font-size: 0.88em; opacity: 0.75; align-self: center; }
   .info { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
   .info h3 {
     margin: 0; font-size: 1.0em; line-height: 1.35;
@@ -300,6 +362,15 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
     </div>
   </div>
 
+  <div class="controls">
+    <div class="group" id="sortGroup">
+      <span class="label">정렬</span>
+      <button data-sort="added" class="active">🆕 최근 추가순</button>
+      <button data-sort="date">📅 영상 게시일순</button>
+    </div>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+
   <main class="gallery" id="gallery">
     __CARDS__
   </main>
@@ -311,7 +382,7 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
 const ITEMS = __ITEMS_JSON__;
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
-let state = { grade: 'all', unit: 'all', source: 'all', q: '' };
+let state = { grade: 'all', unit: 'all', source: 'all', q: '', sort: 'added' };
 
 function rebuildUnitFilter() {
   const units = new Set();
@@ -350,10 +421,42 @@ function apply() {
     if (ok) visible++;
   });
   $('#empty').style.display = visible === 0 ? 'block' : 'none';
+  const total = $$('.card').length;
+  $('#resultCount').textContent =
+    visible === total ? `${total}개 전체` : `${visible} / ${total}개 표시`;
+}
+
+// 정렬 — 카드를 실제로 재배치한다. 'added'(추가일)가 기본이고 'date'(영상 게시일)로 전환 가능.
+function applySort() {
+  const gallery = $('#gallery');
+  const cards = [...$$('.card')];
+  const key = state.sort === 'date' ? 'date' : 'added';
+  cards.sort((a, b) => {
+    const av = a.dataset[key] || '', bv = b.dataset[key] || '';
+    if (av !== bv) return av < bv ? 1 : -1;          // 최신순
+    // 동률이면 나머지 키로 갈라 순서가 흔들리지 않게 한다
+    const a2 = a.dataset[key === 'added' ? 'date' : 'added'] || '';
+    const b2 = b.dataset[key === 'added' ? 'date' : 'added'] || '';
+    return a2 === b2 ? 0 : (a2 < b2 ? 1 : -1);
+  });
+  cards.forEach(c => gallery.appendChild(c));
+}
+
+// 최근 7일 안에 추가된 자료에 🆕 — 보는 시점 기준으로 JS가 판단한다
+function markNew() {
+  const WEEK = 7 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  $$('.card').forEach(card => {
+    const t = Date.parse(card.dataset.added || '');
+    const badge = card.querySelector('.new-badge');
+    if (badge) badge.hidden = !(t && now - t < WEEK);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  $$('[data-grade]').forEach(b => {
+  // .controls 로 한정 — 카드(article)도 data-grade/data-source 를 갖고 있어서
+  // 범위를 안 좁히면 카드를 누르는 것만으로 필터가 바뀐다.
+  $$('.controls [data-grade]').forEach(b => {
     b.onclick = () => {
       state.grade = b.dataset.grade;
       setActive(b.parentElement, b);
@@ -361,14 +464,24 @@ document.addEventListener('DOMContentLoaded', () => {
       apply();
     };
   });
-  $$('[data-source]').forEach(b => {
+  $$('.controls [data-source]').forEach(b => {
     b.onclick = () => {
       state.source = b.dataset.source;
       setActive(b.parentElement, b);
       apply();
     };
   });
+  $$('[data-sort]').forEach(b => {
+    b.onclick = () => {
+      state.sort = b.dataset.sort;
+      setActive(b.parentElement, b);
+      applySort();
+    };
+  });
   rebuildUnitFilter();
+  markNew();
+  applySort();
+  apply();
   $('#q').oninput = e => { state.q = e.target.value; apply(); };
   $('#darkBtn').onclick = () => {
     document.body.classList.toggle('dark');
@@ -402,7 +515,9 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
 
     cards = []
     items = []
-    for r in sorted(rows, key=lambda x: (x["date"], x["grade"]), reverse=True):
+    # 기본 정렬 = 자료 추가일(최신순). 영상 게시일순은 갤러리에서 토글로 전환한다.
+    for r in sorted(rows, key=lambda x: (x["added"], x["date"], x["grade"]),
+                    reverse=True):
         vid = r.get("video_id_full")
         thumb = (
             f"https://img.youtube.com/vi/{vid}/mqdefault.jpg"
@@ -430,10 +545,11 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
             f'<a href="{_esc(url)}" target="_blank" rel="noopener">▶ 원본</a>'
             if url else ''
         )
-        cards.append(f'''<article class="card" data-grade="{_esc(r["grade"])}" data-unit="{_esc(r["unit"])}" data-source="{_esc(r.get("source","video"))}" data-search="{_esc(search_text + " " + src_badge)}">
+        cards.append(f'''<article class="card" data-grade="{_esc(r["grade"])}" data-unit="{_esc(r["unit"])}" data-source="{_esc(r.get("source","video"))}" data-added="{_esc(r["added"])}" data-date="{_esc(r["date"])}" data-search="{_esc(search_text + " " + src_badge)}">
   <a href="{_esc(rel_path)}" class="thumb-wrap">
     {thumb_html}
     <span class="badge">{_esc(r["grade"])}</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
     <span class="date">{date_fmt}</span>
   </a>
   <div class="info">
