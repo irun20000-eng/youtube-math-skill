@@ -36,14 +36,62 @@ _BACK_LINK = (
     "갤러리로 돌아가기</a>"
 )
 
-# 스티키 툴바가 margin-top:-24px 로 위로 끌려 올라와 브랜드 바를 덮는다.
-# (툴바가 body 의 첫 요소라는 전제로 만든 값인데, 그 앞에 브랜드 바가 생겼다.)
-# 브랜드 바가 상단 여백을 대신하므로 음수 마진만 0 으로 되돌린다.
+# 주입 스타일 두 가지.
+#
+# (1) 스티키 툴바가 margin-top:-24px 로 위로 끌려 올라와 브랜드 바를 덮는다.
+#     (툴바가 body 의 첫 요소라는 전제로 만든 값인데, 그 앞에 브랜드 바가 생겼다.)
+#     브랜드 바가 상단 여백을 대신하므로 음수 마진만 0 으로 되돌린다.
+#
+# (2) 모바일 가로 밀림 방지. 긴 수식 한 줄이 문단 상자를 넘치면 그 넘침이
+#     페이지 전체로 번져 좌우로 흔들렸다(실측 40px). 넓은 콘텐츠는 자기 상자
+#     안에서만 스크롤시키고, 끊을 데 없는 긴 문자열은 강제로 줄바꿈한다.
+#     A형 자료가 .visual 에 이미 쓰던 방식(overflow-x:auto)을 전체로 넓힌 것.
 _STYLE = (
     "<style>.controls.hybrid-toolbar{margin-top:0!important}"
-    "@media print{#brand-bar .gb-link{display:none!important}"
+    ".katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}"
+    ".formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}"
+    # 표는 display:table 이라 overflow-x:auto 가 안 먹는다. block 으로 바꿔야
+    # 자기 상자 안에서 가로 스크롤된다(반응형 표의 표준 처리).
+    "table{display:block;overflow-x:auto;max-width:100%}"
+    # overflow-wrap 은 상속되는 속성이라 body 한 줄로 전 자손을 덮는다.
+    # 클래스를 일일이 나열하면(.why, .step-body …) 새 템플릿이 생길 때마다 또 샌다.
+    # 'anywhere' 가 아니라 'break-word' — 넘칠 때만 끊어 평소 줄바꿈은 그대로 둔다.
+    "body{overflow-wrap:break-word}"
+    # 진짜 원인: 풀이 단계가 flex 컨테이너(.sol-step, .step-row)인데 flex 아이템은
+    # 기본 min-width:auto 라 min-content 아래로 줄어들지 않는다. 긴 수식 한 줄이
+    # 그 하한을 키워 상자를 밀어냈다. div 는 컨트롤이 아니라 컨테이너뿐이므로
+    # min-width:0 을 넓게 줘도 버튼·입력폭에는 영향이 없고, 비플렉스 요소에서는
+    # min-width:auto 가 어차피 0 으로 계산돼 무해하다.
+    "body div{min-width:0}"
+    "@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}"
     "#brand-bar{padding-top:0!important;margin-bottom:6px}"
     "#brand-bar img{width:104px!important}}</style>"
+)
+
+
+# 링크 복사 — 학생에게 주소를 보내는 게 이 자료의 종착점인데,
+# 지금까지는 주소창에서 직접 긁어야 했다. 인쇄본에서는 숨긴다.
+_COPY_LINK = (
+    '<button class="gb-copy" type="button" '
+    'style="min-height:38px;padding:7px 14px;border-radius:8px;'
+    'border:1px solid #d0d7de;background:transparent;color:#57606a;'
+    'font:inherit;font-size:0.88em;cursor:pointer;">'
+    "🔗 링크 복사</button>"
+)
+
+_COPY_SCRIPT = (
+    "<script>(function(){var b=document.querySelector('#brand-bar .gb-copy');"
+    "if(!b)return;b.addEventListener('click',function(){"
+    "var u=location.href,done=function(ok){var t=b.textContent;"
+    "b.textContent=ok?'✅ 복사됨':'복사 실패';"
+    "setTimeout(function(){b.textContent=t;},1600);};"
+    "if(navigator.clipboard&&window.isSecureContext){"
+    "navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});"
+    "}else{"          # file:// 등 비보안 컨텍스트 폴백
+    "var ta=document.createElement('textarea');ta.value=u;"
+    "ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();"
+    "var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}"
+    "});})();</script>"
 )
 
 
@@ -60,7 +108,9 @@ def build_snippet(has_own_gallery_link: bool) -> str:
         'style="width:132px;height:auto;display:block;">'
         "</a>"
         + ("" if has_own_gallery_link else _BACK_LINK)
+        + _COPY_LINK
         + _STYLE
+        + _COPY_SCRIPT
         + "</nav>\n"
     )
 
