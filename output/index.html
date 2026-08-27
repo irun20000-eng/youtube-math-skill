@@ -75,6 +75,16 @@
     background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px;
     border-radius: 4px; font-size: 0.78em;
   }
+  /* 최근 추가분 표시 — '언제 추가됐나'는 보는 시점 기준이라 JS가 켠다
+     (빌드 결과에 '지금'을 굽지 않아 재생성해도 파일이 안 흔들린다) */
+  .thumb-wrap .new-badge {
+    position: absolute; top: 8px; right: 8px;
+    background: #e53935; color: #fff; padding: 3px 8px;
+    border-radius: 4px; font-size: 0.78em; font-weight: 700;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .thumb-wrap .new-badge[hidden] { display: none; }
+  .result-count { font-size: 0.88em; opacity: 0.75; align-self: center; }
   .info { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
   .info h3 {
     margin: 0; font-size: 1.0em; line-height: 1.35;
@@ -110,7 +120,7 @@
 <div class="wrap">
   <header>
     <h1>📚 학습자료 갤러리</h1>
-    <div class="stats">총 70개 자료 · 4개 학년 · 갱신 2026-08-27 12:46</div>
+    <div class="stats">총 70개 자료 · 4개 학년 · 갱신 2026-08-27 13:29</div>
   </header>
 
   
@@ -147,371 +157,21 @@
     </div>
   </div>
 
+  <div class="controls">
+    <div class="group" id="sortGroup">
+      <span class="label">정렬</span>
+      <button data-sort="added" class="active">🆕 최근 추가순</button>
+      <button data-sort="date">📅 영상 게시일순</button>
+    </div>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+
   <main class="gallery" id="gallery">
-    <article class="card" data-grade="고3" data-unit="수학Ⅱ-도함수의활용" data-source="video" data-search="고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용 고정함수와변동함수의경계해석 수학ⅱ-도함수의활용 고3 🎬 영상">
-  <a href="고3/수학Ⅱ-도함수의활용/20260827_고정함수와변동함수의경계해석_gg1q1Ga8.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/gg1q1Ga8Qnw/mqdefault.jpg" loading="lazy" alt="고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용">
-    <span class="badge">고3</span>
-    <span class="date">2026.08.27</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/수학Ⅱ-도함수의활용/20260827_고정함수와변동함수의경계해석_gg1q1Ga8.html" style="color:inherit;text-decoration:none">고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅱ-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/수학Ⅱ-도함수의활용/20260827_고정함수와변동함수의경계해석_gg1q1Ga8.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=gg1q1Ga8Qnw" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고3" data-unit="수학Ⅱ-다항함수의적분법" data-source="video" data-search="정적분 부호변화와 삼차함수 비율 관계 정적분부호변화와삼차함수비율 「묶어수학. 높은 점수 쉽게.」 수학ⅱ-다항함수의적분법 고3 🎬 영상">
-  <a href="고3/수학Ⅱ-다항함수의적분법/20260825_정적분부호변화와삼차함수비율_POOkxnRH.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/POOkxnRH4IU/mqdefault.jpg" loading="lazy" alt="정적분 부호변화와 삼차함수 비율 관계">
-    <span class="badge">고3</span>
-    <span class="date">2026.08.25</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/수학Ⅱ-다항함수의적분법/20260825_정적분부호변화와삼차함수비율_POOkxnRH.html" style="color:inherit;text-decoration:none">정적분 부호변화와 삼차함수 비율 관계</a></h3>
-    <div class="channel">📺 「묶어수학. 높은 점수 쉽게.」</div>
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅱ-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/수학Ⅱ-다항함수의적분법/20260825_정적분부호변화와삼차함수비율_POOkxnRH.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=POOkxnRH4IU" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의그래프" data-source="video" data-search="삼각함수 그래프 제곱합 공식과 탄젠트 반주기 곱 공식 그래프주기의분수배와제곱합탄젠트곱 수학ⅰ-삼각함수의그래프 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의그래프/20260824_그래프주기의분수배와제곱합탄젠트곱_A1hXoePzM.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/A1hXoePzMno/mqdefault.jpg" loading="lazy" alt="삼각함수 그래프 제곱합 공식과 탄젠트 반주기 곱 공식">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.24</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의그래프/20260824_그래프주기의분수배와제곱합탄젠트곱_A1hXoePzM.html" style="color:inherit;text-decoration:none">삼각함수 그래프 제곱합 공식과 탄젠트 반주기 곱 공식</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의그래프</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의그래프/20260824_그래프주기의분수배와제곱합탄젠트곱_A1hXoePzM.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=A1hXoePzMno" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고3" data-unit="미적분-여러가지미분법" data-source="video" data-search="역함수의 미분법 — g&#x27;(c)=1/f&#x27;(a)로 3초 만에 잡는 법 역함수미분법과t형태발견법 미적분-여러가지미분법 고3 🎬 영상">
-  <a href="고3/미적분-여러가지미분법/20260821_역함수미분법과t형태발견법_lHmHtmBH.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/lHmHtmBH2ug/mqdefault.jpg" loading="lazy" alt="역함수의 미분법 — g&#x27;(c)=1/f&#x27;(a)로 3초 만에 잡는 법">
-    <span class="badge">고3</span>
-    <span class="date">2026.08.21</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/미적분-여러가지미분법/20260821_역함수미분법과t형태발견법_lHmHtmBH.html" style="color:inherit;text-decoration:none">역함수의 미분법 — g&#x27;(c)=1/f&#x27;(a)로 3초 만에 잡는 법</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">미적분-여러가지미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/미적분-여러가지미분법/20260821_역함수미분법과t형태발견법_lHmHtmBH.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/lHmHtmBH2ug" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-search="이차함수 접선과 외접 직사각형 1/3 공식 이차함수접선외접직사각형공식 수학ii-다항함수의적분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의적분법/20260819_이차함수접선외접직사각형공식_y09MDHC_.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/y09MDHC_DCo/mqdefault.jpg" loading="lazy" alt="이차함수 접선과 외접 직사각형 1/3 공식">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.19</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260819_이차함수접선외접직사각형공식_y09MDHC_.html" style="color:inherit;text-decoration:none">이차함수 접선과 외접 직사각형 1/3 공식</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260819_이차함수접선외접직사각형공식_y09MDHC_.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/y09MDHC_DCo" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-search="삼각함수 도형 3단계 풀이법: 사인법칙과 코사인법칙 삼각함수도형사인법칙코사인법칙3단계 수학ⅰ-삼각함수의활용 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의활용/20260819_삼각함수도형사인법칙코사인법칙3단계_9nITuT4n.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/9nITuT4ngY8/mqdefault.jpg" loading="lazy" alt="삼각함수 도형 3단계 풀이법: 사인법칙과 코사인법칙">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.19</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260819_삼각함수도형사인법칙코사인법칙3단계_9nITuT4n.html" style="color:inherit;text-decoration:none">삼각함수 도형 3단계 풀이법: 사인법칙과 코사인법칙</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의활용/20260819_삼각함수도형사인법칙코사인법칙3단계_9nITuT4n.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=9nITuT4ngY8" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-search="정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기 정적분함숫값환원과사차개형 수학ii-다항함수의적분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의적분법/20260818_정적분함숫값환원과사차개형_ihZz5Swy.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/ihZz5SwynTM/mqdefault.jpg" loading="lazy" alt="정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.18</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260818_정적분함숫값환원과사차개형_ihZz5Swy.html" style="color:inherit;text-decoration:none">정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260818_정적분함숫값환원과사차개형_ihZz5Swy.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/ihZz5SwynTM" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수 기울기빗변공식과비본질제거극한 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260818_기울기빗변공식과비본질제거극한_OFl-6UTc.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/OFl-6UTc_1E/mqdefault.jpg" loading="lazy" alt="좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.18</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260818_기울기빗변공식과비본질제거극한_OFl-6UTc.html" style="color:inherit;text-decoration:none">좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260818_기울기빗변공식과비본질제거극한_OFl-6UTc.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/OFl-6UTc_1E" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화 수수성수렴분배와치환대상화 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260818_수수성수렴분배와치환대상화_4r8gcTsc.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/4r8gcTscLuE/mqdefault.jpg" loading="lazy" alt="함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.18</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260818_수수성수렴분배와치환대상화_4r8gcTsc.html" style="color:inherit;text-decoration:none">함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260818_수수성수렴분배와치환대상화_4r8gcTsc.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/4r8gcTscLuE" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-search="삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기 외접원비사인법칙과각옮기기 수학ⅰ-삼각함수의활용 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의활용/20260818_외접원비사인법칙과각옮기기_AydNo77l.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/AydNo77l7JA/mqdefault.jpg" loading="lazy" alt="삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.18</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260818_외접원비사인법칙과각옮기기_AydNo77l.html" style="color:inherit;text-decoration:none">삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의활용/20260818_외접원비사인법칙과각옮기기_AydNo77l.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/AydNo77l7JA" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-search="원시함수가 주인공 — 세 근의 합으로 미지수 찾기 원시함수주인공과세근의합 수학ii-다항함수의적분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의적분법/20260817_원시함수주인공과세근의합_YGatl9Xm.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/YGatl9XmkUQ/mqdefault.jpg" loading="lazy" alt="원시함수가 주인공 — 세 근의 합으로 미지수 찾기">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.17</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260817_원시함수주인공과세근의합_YGatl9Xm.html" style="color:inherit;text-decoration:none">원시함수가 주인공 — 세 근의 합으로 미지수 찾기</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260817_원시함수주인공과세근의합_YGatl9Xm.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=YGatl9XmkUQ" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-search="적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법 적분넓이팩토리얼일반화공식 수학ii-다항함수의적분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의적분법/20260817_적분넓이팩토리얼일반화공식_X-cjFae.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/X-cjFaepunU/mqdefault.jpg" loading="lazy" alt="적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.17</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260817_적분넓이팩토리얼일반화공식_X-cjFae.html" style="color:inherit;text-decoration:none">적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260817_적분넓이팩토리얼일반화공식_X-cjFae.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/X-cjFaepunU" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-search="차함수 일체화 해석법 - 교점 접점과 세 근의 합 차함수일체화해석과세근의합 수학ii-도함수의활용 고2 🎬 영상">
-  <a href="고2/수학II-도함수의활용/20260817_차함수일체화해석과세근의합_32pyEez.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/_32pyEezkZc/mqdefault.jpg" loading="lazy" alt="차함수 일체화 해석법 - 교점 접점과 세 근의 합">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.17</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-도함수의활용/20260817_차함수일체화해석과세근의합_32pyEez.html" style="color:inherit;text-decoration:none">차함수 일체화 해석법 - 교점 접점과 세 근의 합</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-도함수의활용/20260817_차함수일체화해석과세근의합_32pyEez.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/_32pyEezkZc" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분ⅰ) 극한식의미분계수변환과변곡접선 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/hhWJZheDv1k/mqdefault.jpg" loading="lazy" alt="극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.17</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html" style="color:inherit;text-decoration:none">극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=hhWJZheDv1k" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-search="3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이 3차함수비율관계와특수점활용 수학ii-도함수의활용 고2 🎬 영상">
-  <a href="고2/수학II-도함수의활용/20260808_3차함수비율관계와특수점활용_5WEbC1T5.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/5WEbC1T5E80/mqdefault.jpg" loading="lazy" alt="3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.08</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-도함수의활용/20260808_3차함수비율관계와특수점활용_5WEbC1T5.html" style="color:inherit;text-decoration:none">3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-도함수의활용/20260808_3차함수비율관계와특수점활용_5WEbC1T5.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/5WEbC1T5E80" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-지수함수와로그함수" data-source="video" data-search="지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율 지수로그함수확대축소원점직선 수학ⅰ-지수함수와로그함수 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-지수함수와로그함수/20260808_지수로그함수확대축소원점직선_G6iWQpMu.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/G6iWQpMuTsU/mqdefault.jpg" loading="lazy" alt="지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.08</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-지수함수와로그함수/20260808_지수로그함수확대축소원점직선_G6iWQpMu.html" style="color:inherit;text-decoration:none">지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-지수함수와로그함수</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-지수함수와로그함수/20260808_지수로그함수확대축소원점직선_G6iWQpMu.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/G6iWQpMuTsU" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학ⅱ) 극한으로정의된함수의위치선점과연속성 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260807_극한으로정의된함수의위치선점과연속성_ypjQWLb1.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/ypjQWLb1uic/mqdefault.jpg" loading="lazy" alt="극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학Ⅱ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.07</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260807_극한으로정의된함수의위치선점과연속성_ypjQWLb1.html" style="color:inherit;text-decoration:none">극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학Ⅱ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260807_극한으로정의된함수의위치선점과연속성_ypjQWLb1.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/ypjQWLb1uic" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="0/0 부정형 극한 — 영인수 개수로 판정하기 (수학ⅱ) 영인수개수로보는부정형극한 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260807_영인수개수로보는부정형극한_fyrw3nqg.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/fyrw3nqgang/mqdefault.jpg" loading="lazy" alt="0/0 부정형 극한 — 영인수 개수로 판정하기 (수학Ⅱ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.08.07</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260807_영인수개수로보는부정형극한_fyrw3nqg.html" style="color:inherit;text-decoration:none">0/0 부정형 극한 — 영인수 개수로 판정하기 (수학Ⅱ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260807_영인수개수로보는부정형극한_fyrw3nqg.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/fyrw3nqgang" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고1" data-unit="수학Ⅰ-도형의방정식" data-source="video" data-search="시소 이론(질량점)으로 넓이비 내분점 구하기 (도형의 방정식) 시소이론질량점으로넓이비내분점구하기 수학ⅰ-도형의방정식 고1 🎬 영상">
+    <article class="card" data-grade="고1" data-unit="수학Ⅰ-도형의방정식" data-source="video" data-added="2026-08-27T12:45:37+00:00" data-date="20260806" data-search="시소 이론(질량점)으로 넓이비 내분점 구하기 (도형의 방정식) 시소이론질량점으로넓이비내분점구하기 수학ⅰ-도형의방정식 고1 🎬 영상">
   <a href="고1/수학Ⅰ-도형의방정식/20260806_시소이론질량점으로넓이비내분점구하기_mUGapt8h.html" class="thumb-wrap">
     <img src="https://img.youtube.com/vi/mUGapt8hXXQ/mqdefault.jpg" loading="lazy" alt="시소 이론(질량점)으로 넓이비 내분점 구하기 (도형의 방정식)">
     <span class="badge">고1</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
     <span class="date">2026.08.06</span>
   </a>
   <div class="info">
@@ -528,10 +188,389 @@
     <a href="https://youtu.be/mUGapt8hXXQ" target="_blank" rel="noopener">▶ 원본</a>
   </div>
 </article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-search="축 분리 기법으로 방정식의 실근 개수 추적 (수학ⅱ) 축분리기법으로방정식실근개수추적 수학ii-다항함수의미분법 고2 🎬 영상">
+    <article class="card" data-grade="고3" data-unit="수학Ⅱ-도함수의활용" data-source="video" data-added="2026-08-27T00:29:24+00:00" data-date="20260827" data-search="고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용 고정함수와변동함수의경계해석 수학ⅱ-도함수의활용 고3 🎬 영상">
+  <a href="고3/수학Ⅱ-도함수의활용/20260827_고정함수와변동함수의경계해석_gg1q1Ga8.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/gg1q1Ga8Qnw/mqdefault.jpg" loading="lazy" alt="고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.27</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/수학Ⅱ-도함수의활용/20260827_고정함수와변동함수의경계해석_gg1q1Ga8.html" style="color:inherit;text-decoration:none">고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅱ-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/수학Ⅱ-도함수의활용/20260827_고정함수와변동함수의경계해석_gg1q1Ga8.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=gg1q1Ga8Qnw" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고3" data-unit="수학Ⅱ-다항함수의적분법" data-source="video" data-added="2026-08-25T00:25:16+00:00" data-date="20260825" data-search="정적분 부호변화와 삼차함수 비율 관계 정적분부호변화와삼차함수비율 「묶어수학. 높은 점수 쉽게.」 수학ⅱ-다항함수의적분법 고3 🎬 영상">
+  <a href="고3/수학Ⅱ-다항함수의적분법/20260825_정적분부호변화와삼차함수비율_POOkxnRH.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/POOkxnRH4IU/mqdefault.jpg" loading="lazy" alt="정적분 부호변화와 삼차함수 비율 관계">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.25</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/수학Ⅱ-다항함수의적분법/20260825_정적분부호변화와삼차함수비율_POOkxnRH.html" style="color:inherit;text-decoration:none">정적분 부호변화와 삼차함수 비율 관계</a></h3>
+    <div class="channel">📺 「묶어수학. 높은 점수 쉽게.」</div>
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅱ-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/수학Ⅱ-다항함수의적분법/20260825_정적분부호변화와삼차함수비율_POOkxnRH.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=POOkxnRH4IU" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의그래프" data-source="video" data-added="2026-08-24T00:21:47+00:00" data-date="20260824" data-search="삼각함수 그래프 제곱합 공식과 탄젠트 반주기 곱 공식 그래프주기의분수배와제곱합탄젠트곱 수학ⅰ-삼각함수의그래프 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의그래프/20260824_그래프주기의분수배와제곱합탄젠트곱_A1hXoePzM.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/A1hXoePzMno/mqdefault.jpg" loading="lazy" alt="삼각함수 그래프 제곱합 공식과 탄젠트 반주기 곱 공식">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.24</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의그래프/20260824_그래프주기의분수배와제곱합탄젠트곱_A1hXoePzM.html" style="color:inherit;text-decoration:none">삼각함수 그래프 제곱합 공식과 탄젠트 반주기 곱 공식</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의그래프</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의그래프/20260824_그래프주기의분수배와제곱합탄젠트곱_A1hXoePzM.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=A1hXoePzMno" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고3" data-unit="미적분-여러가지미분법" data-source="video" data-added="2026-08-21T00:33:09+00:00" data-date="20260821" data-search="역함수의 미분법 — g&#x27;(c)=1/f&#x27;(a)로 3초 만에 잡는 법 역함수미분법과t형태발견법 미적분-여러가지미분법 고3 🎬 영상">
+  <a href="고3/미적분-여러가지미분법/20260821_역함수미분법과t형태발견법_lHmHtmBH.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/lHmHtmBH2ug/mqdefault.jpg" loading="lazy" alt="역함수의 미분법 — g&#x27;(c)=1/f&#x27;(a)로 3초 만에 잡는 법">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.21</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/미적분-여러가지미분법/20260821_역함수미분법과t형태발견법_lHmHtmBH.html" style="color:inherit;text-decoration:none">역함수의 미분법 — g&#x27;(c)=1/f&#x27;(a)로 3초 만에 잡는 법</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">미적분-여러가지미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/미적분-여러가지미분법/20260821_역함수미분법과t형태발견법_lHmHtmBH.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/lHmHtmBH2ug" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-added="2026-08-20T00:38:11+00:00" data-date="20260819" data-search="삼각함수 도형 3단계 풀이법: 사인법칙과 코사인법칙 삼각함수도형사인법칙코사인법칙3단계 수학ⅰ-삼각함수의활용 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의활용/20260819_삼각함수도형사인법칙코사인법칙3단계_9nITuT4n.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/9nITuT4ngY8/mqdefault.jpg" loading="lazy" alt="삼각함수 도형 3단계 풀이법: 사인법칙과 코사인법칙">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.19</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260819_삼각함수도형사인법칙코사인법칙3단계_9nITuT4n.html" style="color:inherit;text-decoration:none">삼각함수 도형 3단계 풀이법: 사인법칙과 코사인법칙</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의활용/20260819_삼각함수도형사인법칙코사인법칙3단계_9nITuT4n.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=9nITuT4ngY8" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-added="2026-08-19T00:20:09+00:00" data-date="20260819" data-search="이차함수 접선과 외접 직사각형 1/3 공식 이차함수접선외접직사각형공식 수학ii-다항함수의적분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의적분법/20260819_이차함수접선외접직사각형공식_y09MDHC_.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/y09MDHC_DCo/mqdefault.jpg" loading="lazy" alt="이차함수 접선과 외접 직사각형 1/3 공식">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.19</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260819_이차함수접선외접직사각형공식_y09MDHC_.html" style="color:inherit;text-decoration:none">이차함수 접선과 외접 직사각형 1/3 공식</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260819_이차함수접선외접직사각형공식_y09MDHC_.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/y09MDHC_DCo" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-added="2026-08-18T02:17:37+00:00" data-date="20260818" data-search="정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기 정적분함숫값환원과사차개형 수학ii-다항함수의적분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의적분법/20260818_정적분함숫값환원과사차개형_ihZz5Swy.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/ihZz5SwynTM/mqdefault.jpg" loading="lazy" alt="정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.18</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260818_정적분함숫값환원과사차개형_ihZz5Swy.html" style="color:inherit;text-decoration:none">정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260818_정적분함숫값환원과사차개형_ihZz5Swy.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/ihZz5SwynTM" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-08-18T02:17:37+00:00" data-date="20260818" data-search="좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수 기울기빗변공식과비본질제거극한 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260818_기울기빗변공식과비본질제거극한_OFl-6UTc.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/OFl-6UTc_1E/mqdefault.jpg" loading="lazy" alt="좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.18</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260818_기울기빗변공식과비본질제거극한_OFl-6UTc.html" style="color:inherit;text-decoration:none">좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260818_기울기빗변공식과비본질제거극한_OFl-6UTc.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/OFl-6UTc_1E" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-08-18T02:17:37+00:00" data-date="20260818" data-search="함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화 수수성수렴분배와치환대상화 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260818_수수성수렴분배와치환대상화_4r8gcTsc.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/4r8gcTscLuE/mqdefault.jpg" loading="lazy" alt="함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.18</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260818_수수성수렴분배와치환대상화_4r8gcTsc.html" style="color:inherit;text-decoration:none">함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260818_수수성수렴분배와치환대상화_4r8gcTsc.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/4r8gcTscLuE" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-added="2026-08-18T02:17:37+00:00" data-date="20260818" data-search="삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기 외접원비사인법칙과각옮기기 수학ⅰ-삼각함수의활용 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의활용/20260818_외접원비사인법칙과각옮기기_AydNo77l.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/AydNo77l7JA/mqdefault.jpg" loading="lazy" alt="삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.18</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260818_외접원비사인법칙과각옮기기_AydNo77l.html" style="color:inherit;text-decoration:none">삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의활용/20260818_외접원비사인법칙과각옮기기_AydNo77l.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/AydNo77l7JA" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-08-17T00:39:43+00:00" data-date="20260817" data-search="극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분ⅰ) 극한식의미분계수변환과변곡접선 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/hhWJZheDv1k/mqdefault.jpg" loading="lazy" alt="극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.17</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html" style="color:inherit;text-decoration:none">극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=hhWJZheDv1k" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-added="2026-08-17T00:35:57+00:00" data-date="20260817" data-search="차함수 일체화 해석법 - 교점 접점과 세 근의 합 차함수일체화해석과세근의합 수학ii-도함수의활용 고2 🎬 영상">
+  <a href="고2/수학II-도함수의활용/20260817_차함수일체화해석과세근의합_32pyEez.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/_32pyEezkZc/mqdefault.jpg" loading="lazy" alt="차함수 일체화 해석법 - 교점 접점과 세 근의 합">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.17</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-도함수의활용/20260817_차함수일체화해석과세근의합_32pyEez.html" style="color:inherit;text-decoration:none">차함수 일체화 해석법 - 교점 접점과 세 근의 합</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-도함수의활용/20260817_차함수일체화해석과세근의합_32pyEez.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/_32pyEezkZc" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-added="2026-08-17T00:34:53+00:00" data-date="20260817" data-search="원시함수가 주인공 — 세 근의 합으로 미지수 찾기 원시함수주인공과세근의합 수학ii-다항함수의적분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의적분법/20260817_원시함수주인공과세근의합_YGatl9Xm.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/YGatl9XmkUQ/mqdefault.jpg" loading="lazy" alt="원시함수가 주인공 — 세 근의 합으로 미지수 찾기">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.17</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260817_원시함수주인공과세근의합_YGatl9Xm.html" style="color:inherit;text-decoration:none">원시함수가 주인공 — 세 근의 합으로 미지수 찾기</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260817_원시함수주인공과세근의합_YGatl9Xm.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=YGatl9XmkUQ" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-added="2026-08-17T00:32:37+00:00" data-date="20260817" data-search="적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법 적분넓이팩토리얼일반화공식 수학ii-다항함수의적분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의적분법/20260817_적분넓이팩토리얼일반화공식_X-cjFae.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/X-cjFaepunU/mqdefault.jpg" loading="lazy" alt="적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.17</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260817_적분넓이팩토리얼일반화공식_X-cjFae.html" style="color:inherit;text-decoration:none">적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260817_적분넓이팩토리얼일반화공식_X-cjFae.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/X-cjFaepunU" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-지수함수와로그함수" data-source="video" data-added="2026-08-10T00:22:05+00:00" data-date="20260808" data-search="지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율 지수로그함수확대축소원점직선 수학ⅰ-지수함수와로그함수 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-지수함수와로그함수/20260808_지수로그함수확대축소원점직선_G6iWQpMu.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/G6iWQpMuTsU/mqdefault.jpg" loading="lazy" alt="지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.08</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-지수함수와로그함수/20260808_지수로그함수확대축소원점직선_G6iWQpMu.html" style="color:inherit;text-decoration:none">지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-지수함수와로그함수</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-지수함수와로그함수/20260808_지수로그함수확대축소원점직선_G6iWQpMu.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/G6iWQpMuTsU" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-added="2026-08-08T00:20:09+00:00" data-date="20260808" data-search="3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이 3차함수비율관계와특수점활용 수학ii-도함수의활용 고2 🎬 영상">
+  <a href="고2/수학II-도함수의활용/20260808_3차함수비율관계와특수점활용_5WEbC1T5.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/5WEbC1T5E80/mqdefault.jpg" loading="lazy" alt="3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.08</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-도함수의활용/20260808_3차함수비율관계와특수점활용_5WEbC1T5.html" style="color:inherit;text-decoration:none">3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-도함수의활용/20260808_3차함수비율관계와특수점활용_5WEbC1T5.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/5WEbC1T5E80" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-08-07T00:15:37+00:00" data-date="20260807" data-search="극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학ⅱ) 극한으로정의된함수의위치선점과연속성 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260807_극한으로정의된함수의위치선점과연속성_ypjQWLb1.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/ypjQWLb1uic/mqdefault.jpg" loading="lazy" alt="극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학Ⅱ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.07</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260807_극한으로정의된함수의위치선점과연속성_ypjQWLb1.html" style="color:inherit;text-decoration:none">극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학Ⅱ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260807_극한으로정의된함수의위치선점과연속성_ypjQWLb1.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/ypjQWLb1uic" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-08-07T00:15:37+00:00" data-date="20260807" data-search="0/0 부정형 극한 — 영인수 개수로 판정하기 (수학ⅱ) 영인수개수로보는부정형극한 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260807_영인수개수로보는부정형극한_fyrw3nqg.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/fyrw3nqgang/mqdefault.jpg" loading="lazy" alt="0/0 부정형 극한 — 영인수 개수로 판정하기 (수학Ⅱ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.08.07</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260807_영인수개수로보는부정형극한_fyrw3nqg.html" style="color:inherit;text-decoration:none">0/0 부정형 극한 — 영인수 개수로 판정하기 (수학Ⅱ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260807_영인수개수로보는부정형극한_fyrw3nqg.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/fyrw3nqgang" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-added="2026-08-06T16:09:05+00:00" data-date="20260803" data-search="축 분리 기법으로 방정식의 실근 개수 추적 (수학ⅱ) 축분리기법으로방정식실근개수추적 수학ii-다항함수의미분법 고2 🎬 영상">
   <a href="고2/수학II-다항함수의미분법/20260803_축분리기법으로방정식실근개수추적_Eb6jcawu.html" class="thumb-wrap">
     <img src="https://img.youtube.com/vi/Eb6jcawud3s/mqdefault.jpg" loading="lazy" alt="축 분리 기법으로 방정식의 실근 개수 추적 (수학Ⅱ)">
     <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
     <span class="date">2026.08.03</span>
   </a>
   <div class="info">
@@ -548,810 +587,11 @@
     <a href="https://www.youtube.com/watch?v=Eb6jcawud3s" target="_blank" rel="noopener">▶ 원본</a>
   </div>
 </article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-search="절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학ⅱ) 절댓값미분가능성교차상태로판단 수학ii-다항함수의미분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의미분법/20260731_절댓값미분가능성교차상태로판단_ZjU-KOUB.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/ZjU-KOUBS80/mqdefault.jpg" loading="lazy" alt="절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.31</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의미분법/20260731_절댓값미분가능성교차상태로판단_ZjU-KOUB.html" style="color:inherit;text-decoration:none">절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의미분법/20260731_절댓값미분가능성교차상태로판단_ZjU-KOUB.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/ZjU-KOUBS80" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학ⅱ) 절댓값극한과미분계수로인수개수추론 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260731_절댓값극한과미분계수로인수개수추론_PNV2lKCg.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/PNV2lKCgQjg/mqdefault.jpg" loading="lazy" alt="절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학Ⅱ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.31</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260731_절댓값극한과미분계수로인수개수추론_PNV2lKCg.html" style="color:inherit;text-decoration:none">절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학Ⅱ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260731_절댓값극한과미분계수로인수개수추론_PNV2lKCg.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtube.com/shorts/PNV2lKCgQjg" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="확률과통계-통계" data-source="video" data-search="이항분포 고난도 — 관계식 세워 e(x제곱) 구하기 (확률과 통계) 이항분포관계식과확률변수제곱평균 확률과통계-통계 고2 🎬 영상">
-  <a href="고2/확률과통계-통계/20260727_이항분포관계식과확률변수제곱평균_YGoi6Pv.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/YGoi6Pv-IkQ/mqdefault.jpg" loading="lazy" alt="이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.27</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/확률과통계-통계/20260727_이항분포관계식과확률변수제곱평균_YGoi6Pv.html" style="color:inherit;text-decoration:none">이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">확률과통계-통계</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/확률과통계-통계/20260727_이항분포관계식과확률변수제곱평균_YGoi6Pv.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/YGoi6Pv-IkQ" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고3" data-unit="미적분-적분법" data-source="video" data-search="대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분) 대칭성이용한정적분치환과기하풀이 미적분-적분법 고3 🎬 영상">
-  <a href="고3/미적분-적분법/20260725_대칭성이용한정적분치환과기하풀이_rqxFJ4J8.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/rqxFJ4J84P0/mqdefault.jpg" loading="lazy" alt="대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분)">
-    <span class="badge">고3</span>
-    <span class="date">2026.07.25</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/미적분-적분법/20260725_대칭성이용한정적분치환과기하풀이_rqxFJ4J8.html" style="color:inherit;text-decoration:none">대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">미적분-적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/미적분-적분법/20260725_대칭성이용한정적분치환과기하풀이_rqxFJ4J8.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtube.com/shorts/rqxFJ4J84P0" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고3" data-unit="미적분-적분법" data-source="video" data-search="정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분) 정적분정의함수미분과넓이최적화 미적분-적분법 고3 🎬 영상">
-  <a href="고3/미적분-적분법/20260723_정적분정의함수미분과넓이최적화_xoaRbvzQ.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/xoaRbvzQUNI/mqdefault.jpg" loading="lazy" alt="정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분)">
-    <span class="badge">고3</span>
-    <span class="date">2026.07.23</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/미적분-적분법/20260723_정적분정의함수미분과넓이최적화_xoaRbvzQ.html" style="color:inherit;text-decoration:none">정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">미적분-적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/미적분-적분법/20260723_정적분정의함수미분과넓이최적화_xoaRbvzQ.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtube.com/shorts/xoaRbvzQUNI" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-등차수열과등비수열" data-source="video" data-search="등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학ⅰ) 등차등비절댓값부등식여집합과인수분해 수학ⅰ-등차수열과등비수열 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-등차수열과등비수열/20260723_등차등비절댓값부등식여집합과인수분해_hmR7jQjL.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/hmR7jQjL5oQ/mqdefault.jpg" loading="lazy" alt="등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학Ⅰ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.23</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-등차수열과등비수열/20260723_등차등비절댓값부등식여집합과인수분해_hmR7jQjL.html" style="color:inherit;text-decoration:none">등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학Ⅰ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-등차수열과등비수열</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-등차수열과등비수열/20260723_등차등비절댓값부등식여집합과인수분해_hmR7jQjL.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/hmR7jQjL5oQ" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학ⅱ) 영분의영극한무한소비율과자유도특수화 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260719_영분의영극한무한소비율과자유도특수화_lCtDaQQn.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/lCtDaQQnBYc/mqdefault.jpg" loading="lazy" alt="0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.19</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260719_영분의영극한무한소비율과자유도특수화_lCtDaQQn.html" style="color:inherit;text-decoration:none">0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260719_영분의영극한무한소비율과자유도특수화_lCtDaQQn.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/lCtDaQQnBYc" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-search="절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학ⅱ) 절댓값극한과미분계수접선해석 수학ii-다항함수의미분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/1D2zCNqf8DE/mqdefault.jpg" loading="lazy" alt="절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.17</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html" style="color:inherit;text-decoration:none">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/1D2zCNqf8DE" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-search="정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학ⅱ) 정수조건부등식과곱의미분정수결정 수학ii-도함수의활용 고2 🎬 영상">
-  <a href="고2/수학II-도함수의활용/20260716_정수조건부등식과곱의미분정수결정_FZTeYWax.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/FZTeYWaxktc/mqdefault.jpg" loading="lazy" alt="정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학Ⅱ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.16</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-도함수의활용/20260716_정수조건부등식과곱의미분정수결정_FZTeYWax.html" style="color:inherit;text-decoration:none">정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학Ⅱ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-도함수의활용/20260716_정수조건부등식과곱의미분정수결정_FZTeYWax.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/FZTeYWaxktc" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-search="넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학ⅱ) 넓이비와부정적분함숫값차비율관계 수학ii-다항함수의적분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/xA9JGa0tRxQ/mqdefault.jpg" loading="lazy" alt="넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.14</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html" style="color:inherit;text-decoration:none">넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtube.com/shorts/xA9JGa0tRxQ" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고3" data-unit="미적분-적분법" data-source="video" data-search="역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) 역함수적분과치환적분역함수미분 미적분-적분법 고3 🎬 영상">
-  <a href="고3/미적분-적분법/20260710_역함수적분과치환적분역함수미분_mBc94D-3.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/mBc94D-3Zo4/mqdefault.jpg" loading="lazy" alt="역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분)">
-    <span class="badge">고3</span>
-    <span class="date">2026.07.10</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/미적분-적분법/20260710_역함수적분과치환적분역함수미분_mBc94D-3.html" style="color:inherit;text-decoration:none">역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">미적분-적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/미적분-적분법/20260710_역함수적분과치환적분역함수미분_mBc94D-3.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/mBc94D-3Zo4" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="concept" data-search="미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 미분계수와도함수꿀팁과오개념 수학ii-다항함수의미분법 고2 📘 개념">
-  <a href="고2/수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html" class="thumb-wrap">
-    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
-    <span class="badge">고2</span>
-    <span class="date">2026.07.08</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">📘 개념</span>
-      <span class="tag">수학II-다항함수의미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
-    
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="concept" data-search="부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 부정적분과정적분꿀팁과오개념 수학ii-다항함수의적분법 고2 📘 개념">
-  <a href="고2/수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html" class="thumb-wrap">
-    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
-    <span class="badge">고2</span>
-    <span class="date">2026.07.08</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">📘 개념</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
-    
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="concept" data-search="정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 정적분의활용넓이속도거리꿀팁과오개념 수학ii-다항함수의적분법 고2 📘 개념">
-  <a href="고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html" class="thumb-wrap">
-    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
-    <span class="badge">고2</span>
-    <span class="date">2026.07.08</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">📘 개념</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
-    
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="concept" data-search="도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 도함수의활용꿀팁과오개념 수학ii-도함수의활용 고2 📘 개념">
-  <a href="고2/수학II-도함수의활용/20260708_도함수의활용꿀팁과오개념_개념.html" class="thumb-wrap">
-    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
-    <span class="badge">고2</span>
-    <span class="date">2026.07.08</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-도함수의활용/20260708_도함수의활용꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">📘 개념</span>
-      <span class="tag">수학II-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-도함수의활용/20260708_도함수의활용꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
-    
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="concept" data-search="함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 함수의극한계산꿀팁과오개념 수학ii-함수의극한 고2 📘 개념">
-  <a href="고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html" class="thumb-wrap">
-    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
-    <span class="badge">고2</span>
-    <span class="date">2026.07.08</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">📘 개념</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
-    
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="concept" data-search="함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 함수의연속꿀팁과오개념 수학ii-함수의극한 고2 📘 개념">
-  <a href="고2/수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html" class="thumb-wrap">
-    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
-    <span class="badge">고2</span>
-    <span class="date">2026.07.08</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">📘 개념</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
-    
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="확률과통계-순열과조합" data-source="video" data-search="원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계) 원순열구별안됨과기준점자리종류 확률과통계-순열과조합 고2 🎬 영상">
-  <a href="고2/확률과통계-순열과조합/20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/QsWeZRoPQXg/mqdefault.jpg" loading="lazy" alt="원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계)">
-    <span class="badge">고2</span>
-    <span class="date">2026.07.03</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/확률과통계-순열과조합/20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html" style="color:inherit;text-decoration:none">원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">확률과통계-순열과조합</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/확률과통계-순열과조합/20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/QsWeZRoPQXg" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-search="실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기 실근개수홀짝성으로극값판별 수학ii-도함수의활용 고2 🎬 영상">
-  <a href="고2/수학II-도함수의활용/20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/OJyw8C5kZAs/mqdefault.jpg" loading="lazy" alt="실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기">
-    <span class="badge">고2</span>
-    <span class="date">2026.06.29</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-도함수의활용/20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html" style="color:inherit;text-decoration:none">실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-도함수의활용/20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/shorts/OJyw8C5kZAs" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) 극한꼴파악과좌극한부호처리 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/NCqmA7uieT8/mqdefault.jpg" loading="lazy" alt="함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근)">
-    <span class="badge">고2</span>
-    <span class="date">2026.06.25</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html" style="color:inherit;text-decoration:none">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=NCqmA7uieT8" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="확률과통계-경우의수" data-source="video" data-search="순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기) 순열조합본질배열된결과구별가능성 확률과통계-경우의수 고2 🎬 영상">
-  <a href="고2/확률과통계-경우의수/20260619_순열조합본질배열된결과구별가능성_h3yT9Foy.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/h3yT9FoyZ5E/mqdefault.jpg" loading="lazy" alt="순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기)">
-    <span class="badge">고2</span>
-    <span class="date">2026.06.19</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/확률과통계-경우의수/20260619_순열조합본질배열된결과구별가능성_h3yT9Foy.html" style="color:inherit;text-decoration:none">순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">확률과통계-경우의수</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/확률과통계-경우의수/20260619_순열조합본질배열된결과구별가능성_h3yT9Foy.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=h3yT9FoyZ5E" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의방정식" data-source="video" data-search="삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단) 삼각함수방부등식함수통일과각변환 수학ⅰ-삼각함수의방정식 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의방정식/20260617_삼각함수방부등식함수통일과각변환_EIGRJsSk.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/EIGRJsSkyWE/mqdefault.jpg" loading="lazy" alt="삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단)">
-    <span class="badge">고2</span>
-    <span class="date">2026.06.17</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의방정식/20260617_삼각함수방부등식함수통일과각변환_EIGRJsSk.html" style="color:inherit;text-decoration:none">삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의방정식</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의방정식/20260617_삼각함수방부등식함수통일과각변환_EIGRJsSk.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=EIGRJsSkyWE" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-등차수열과등비수열" data-source="concept" data-search="등차수열의 합과 이차함수 관련성과 함정 등차수열의합이차함수관련성과함정 수학ⅰ-등차수열과등비수열 고2 📘 개념">
-  <a href="고2/수학Ⅰ-등차수열과등비수열/20260616_등차수열의합이차함수관련성과함정_개념.html" class="thumb-wrap">
-    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
-    <span class="badge">고2</span>
-    <span class="date">2026.06.16</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-등차수열과등비수열/20260616_등차수열의합이차함수관련성과함정_개념.html" style="color:inherit;text-decoration:none">등차수열의 합과 이차함수 관련성과 함정</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">📘 개념</span>
-      <span class="tag">수학Ⅰ-등차수열과등비수열</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-등차수열과등비수열/20260616_등차수열의합이차함수관련성과함정_개념.html" class="primary">📖 학습자료 열기</a>
-    
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-수열의귀납적정의" data-source="concept" data-search="수열의 귀납적 정의 · 특성방정식 · 점화식 수열의귀납적정의와특성방정식 수학ⅰ-수열의귀납적정의 고2 📘 개념">
-  <a href="고2/수학Ⅰ-수열의귀납적정의/20260615_수열의귀납적정의와특성방정식_개념.html" class="thumb-wrap">
-    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
-    <span class="badge">고2</span>
-    <span class="date">2026.06.15</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-수열의귀납적정의/20260615_수열의귀납적정의와특성방정식_개념.html" style="color:inherit;text-decoration:none">수열의 귀납적 정의 · 특성방정식 · 점화식</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">📘 개념</span>
-      <span class="tag">수학Ⅰ-수열의귀납적정의</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-수열의귀납적정의/20260615_수열의귀납적정의와특성방정식_개념.html" class="primary">📖 학습자료 열기</a>
-    
-  </div>
-</article>
-    <article class="card" data-grade="고3" data-unit="미적분-여러가지미분법" data-source="video" data-search="다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략 다변수실제변수연쇄법칙 미적분-여러가지미분법 고3 🎬 영상">
-  <a href="고3/미적분-여러가지미분법/20260614_다변수실제변수연쇄법칙_10NhvK7s.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/10NhvK7sghM/mqdefault.jpg" loading="lazy" alt="다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략">
-    <span class="badge">고3</span>
-    <span class="date">2026.06.14</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/미적분-여러가지미분법/20260614_다변수실제변수연쇄법칙_10NhvK7s.html" style="color:inherit;text-decoration:none">다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">미적분-여러가지미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/미적분-여러가지미분법/20260614_다변수실제변수연쇄법칙_10NhvK7s.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/10NhvK7sghM" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고3" data-unit="수학Ⅱ-도함수의활용" data-source="video" data-search="정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용 정수조건과근의논리적확정 수학ⅱ-도함수의활용 고3 🎬 영상">
-  <a href="고3/수학Ⅱ-도함수의활용/20260614_정수조건과근의논리적확정_arsZnxqP.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/arsZnxqP53c/mqdefault.jpg" loading="lazy" alt="정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용">
-    <span class="badge">고3</span>
-    <span class="date">2026.06.14</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/수학Ⅱ-도함수의활용/20260614_정수조건과근의논리적확정_arsZnxqP.html" style="color:inherit;text-decoration:none">정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅱ-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/수학Ⅱ-도함수의활용/20260614_정수조건과근의논리적확정_arsZnxqP.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/arsZnxqP53c" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-search="다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율 이차삼차넓이공식과도함수비율 수학ii-다항함수의적분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/n3s7P4y3RfE/mqdefault.jpg" loading="lazy" alt="다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.20</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html" style="color:inherit;text-decoration:none">다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/n3s7P4y3RfE" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-search="교점 개수 함수와 3차함수 높이차 2대1 공식 교점개수함수와높이차2대1공식 수학ii-도함수의활용 고2 🎬 영상">
-  <a href="고2/수학II-도함수의활용/20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/ONHx5OaSStk/mqdefault.jpg" loading="lazy" alt="교점 개수 함수와 3차함수 높이차 2대1 공식">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.20</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-도함수의활용/20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html" style="color:inherit;text-decoration:none">교점 개수 함수와 3차함수 높이차 2대1 공식</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-도함수의활용/20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/ONHx5OaSStk" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-search="다항함수의 비율 관계와 직각삼각형 3요소 다항함수비율관계와직각삼각형 수학ii-도함수의활용 고2 🎬 영상">
-  <a href="고2/수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/Jw8F2akj_T0/mqdefault.jpg" loading="lazy" alt="다항함수의 비율 관계와 직각삼각형 3요소">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.20</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html" style="color:inherit;text-decoration:none">다항함수의 비율 관계와 직각삼각형 3요소</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/Jw8F2akj_T0" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-search="차함수 특강 - 관계·내리기·보정의 3박자 차함수특강관계내리기와보정 수학ii-도함수의활용 고2 🎬 영상">
-  <a href="고2/수학II-도함수의활용/20260520_차함수특강관계내리기와보정_WhojOfqC.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/WhojOfqCAFo/mqdefault.jpg" loading="lazy" alt="차함수 특강 - 관계·내리기·보정의 3박자">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.20</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-도함수의활용/20260520_차함수특강관계내리기와보정_WhojOfqC.html" style="color:inherit;text-decoration:none">차함수 특강 - 관계·내리기·보정의 3박자</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-도함수의활용/20260520_차함수특강관계내리기와보정_WhojOfqC.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/WhojOfqCAFo" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-등차수열과등비수열" data-source="video" data-search="등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피 등차수열시그마변형과합공식회피 수학ⅰ-등차수열과등비수열 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-등차수열과등비수열/20260520_등차수열시그마변형과합공식회피_b2XZHgdA_v2.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/b2XZHgdA0SM/mqdefault.jpg" loading="lazy" alt="등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.20</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-등차수열과등비수열/20260520_등차수열시그마변형과합공식회피_b2XZHgdA_v2.html" style="color:inherit;text-decoration:none">등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-등차수열과등비수열</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-등차수열과등비수열/20260520_등차수열시그마변형과합공식회피_b2XZHgdA_v2.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtube.com/shorts/b2XZHgdA0SM" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의그래프" data-source="video" data-search="삼각함수의 주기 비율과 반의 반주기 대칭성 삼각함수주기비율과반의반주기대칭 수학ⅰ-삼각함수의그래프 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의그래프/20260520_삼각함수주기비율과반의반주기대칭_gahk4DSO.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/gahk4DSOh8I/mqdefault.jpg" loading="lazy" alt="삼각함수의 주기 비율과 반의 반주기 대칭성">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.20</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의그래프/20260520_삼각함수주기비율과반의반주기대칭_gahk4DSO.html" style="color:inherit;text-decoration:none">삼각함수의 주기 비율과 반의 반주기 대칭성</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의그래프</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의그래프/20260520_삼각함수주기비율과반의반주기대칭_gahk4DSO.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/gahk4DSOh8I" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-search="원주각·접현각·내접사각형·등현사각형 10초컷 풀이 원주각접현각내접사각형등현 수학ⅰ-삼각함수의활용 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의활용/20260520_원주각접현각내접사각형등현_SBihdCW0.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/SBihdCW078k/mqdefault.jpg" loading="lazy" alt="원주각·접현각·내접사각형·등현사각형 10초컷 풀이">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.20</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260520_원주각접현각내접사각형등현_SBihdCW0.html" style="color:inherit;text-decoration:none">원주각·접현각·내접사각형·등현사각형 10초컷 풀이</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의활용/20260520_원주각접현각내접사각형등현_SBihdCW0.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/SBihdCW078k" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-search="미분 기호의 본질과 미적분 제1기본정리 미분기호본질해석과미적분기본정리 수학ii-다항함수의미분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/eBKyLDKZTx4/mqdefault.jpg" loading="lazy" alt="미분 기호의 본질과 미적분 제1기본정리">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.15</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html" style="color:inherit;text-decoration:none">미분 기호의 본질과 미적분 제1기본정리</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/eBKyLDKZTx4" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-search="항등식의 본질 - 근·차수·인수정리로 식 세우기 항등식근차수인수정리태도 수학ii-다항함수의미분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의미분법/20260515_항등식근차수인수정리태도_XT-SSrkl.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/XT-SSrklV8Y/mqdefault.jpg" loading="lazy" alt="항등식의 본질 - 근·차수·인수정리로 식 세우기">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.15</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의미분법/20260515_항등식근차수인수정리태도_XT-SSrkl.html" style="color:inherit;text-decoration:none">항등식의 본질 - 근·차수·인수정리로 식 세우기</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의미분법/20260515_항등식근차수인수정리태도_XT-SSrkl.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/XT-SSrklV8Y" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-search="삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용 삼차함수점대칭적분차함수관점 수학ii-다항함수의적분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/C3o6VJbnHvU/mqdefault.jpg" loading="lazy" alt="삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.15</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html" style="color:inherit;text-decoration:none">삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의적분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/C3o6VJbnHvU" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-합성함수의활용" data-source="video" data-search="합성함수의 본질 - 개형 추적·성질 전이·역추적 합성함수본질개형성질역추적 수학ii-합성함수의활용 고2 🎬 영상">
-  <a href="고2/수학II-합성함수의활용/20260515_합성함수본질개형성질역추적_qGmymKVv.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/qGmymKVvGUw/mqdefault.jpg" loading="lazy" alt="합성함수의 본질 - 개형 추적·성질 전이·역추적">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.15</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-합성함수의활용/20260515_합성함수본질개형성질역추적_qGmymKVv.html" style="color:inherit;text-decoration:none">합성함수의 본질 - 개형 추적·성질 전이·역추적</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-합성함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-합성함수의활용/20260515_합성함수본질개형성질역추적_qGmymKVv.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/qGmymKVvGUw" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-search="삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원 사인코사인외접원성질연계심화 수학ⅰ-삼각함수의활용 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/xuzuEsxr--Q/mqdefault.jpg" loading="lazy" alt="삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.15</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html" style="color:inherit;text-decoration:none">삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/xuzuEsxr--Q" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-search="함수의 극한 - 하나의 매뉴얼 6유형 완전정복 함수극한매뉴얼6유형 수학ii-함수의극한 고2 🎬 영상">
-  <a href="고2/수학II-함수의극한/20260511_함수극한매뉴얼6유형_Uc4Yv70i.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/Uc4Yv70i5a8/mqdefault.jpg" loading="lazy" alt="함수의 극한 - 하나의 매뉴얼 6유형 완전정복">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.11</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-함수의극한/20260511_함수극한매뉴얼6유형_Uc4Yv70i.html" style="color:inherit;text-decoration:none">함수의 극한 - 하나의 매뉴얼 6유형 완전정복</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-함수의극한</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-함수의극한/20260511_함수극한매뉴얼6유형_Uc4Yv70i.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=Uc4Yv70i5a8" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-등차수열과등비수열" data-source="video" data-search="등차수열 1등급 풀이법 - 항의차·등차중항·기준항 이동 등차수열일등급풀이팁 수학ⅰ-등차수열과등비수열 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/b2XZHgdA0SM/mqdefault.jpg" loading="lazy" alt="등차수열 1등급 풀이법 - 항의차·등차중항·기준항 이동">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.10</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html" style="color:inherit;text-decoration:none">등차수열 1등급 풀이법 - 항의차·등차중항·기준항 이동</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-등차수열과등비수열</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtube.com/shorts/b2XZHgdA0SM" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-지수함수와로그함수" data-source="video" data-search="지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학ⅰ) 지수함수점근선차이비율사다리꼴 수학ⅰ-지수함수와로그함수 고2 🎬 영상">
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-지수함수와로그함수" data-source="video" data-added="2026-07-31T21:22:02+00:00" data-date="20260509" data-search="지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학ⅰ) 지수함수점근선차이비율사다리꼴 수학ⅰ-지수함수와로그함수 고2 🎬 영상">
   <a href="고2/수학Ⅰ-지수함수와로그함수/20260509_지수함수점근선차이비율사다리꼴_DArDb6p7.html" class="thumb-wrap">
     <img src="https://img.youtube.com/vi/DArDb6p7N0M/mqdefault.jpg" loading="lazy" alt="지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ)">
     <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
     <span class="date">2026.05.09</span>
   </a>
   <div class="info">
@@ -1368,150 +608,11 @@
     <a href="https://www.youtube.com/watch?v=DArDb6p7N0M" target="_blank" rel="noopener">▶ 원본</a>
   </div>
 </article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-search="거리곱 완전정복 1탄 - 함숫값·미분계수·도함수까지 거리곱완전정복도함수까지 수학ii-다항함수의미분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의미분법/20260507_거리곱완전정복도함수까지_M3TGprau.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/M3TGprauGxY/mqdefault.jpg" loading="lazy" alt="거리곱 완전정복 1탄 - 함숫값·미분계수·도함수까지">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.07</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의미분법/20260507_거리곱완전정복도함수까지_M3TGprau.html" style="color:inherit;text-decoration:none">거리곱 완전정복 1탄 - 함숫값·미분계수·도함수까지</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의미분법/20260507_거리곱완전정복도함수까지_M3TGprau.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/M3TGprauGxY" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-search="사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2rsina) 사인법칙비례식과외접원변환 수학ⅰ-삼각함수의활용 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의활용/20260506_사인법칙비례식과외접원변환_sbmMPmSY.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/sbmMPmSYYTA/mqdefault.jpg" loading="lazy" alt="사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2RsinA)">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.06</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260506_사인법칙비례식과외접원변환_sbmMPmSY.html" style="color:inherit;text-decoration:none">사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2RsinA)</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의활용/20260506_사인법칙비례식과외접원변환_sbmMPmSY.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/sbmMPmSYYTA" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고3" data-unit="수학Ⅱ-도함수의활용" data-source="video" data-search="3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 3차함수극값2대1분할 수학ⅱ-도함수의활용 고3 🎬 영상">
-  <a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/00ByGXdH-mI/mqdefault.jpg" loading="lazy" alt="3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이">
-    <span class="badge">고3</span>
-    <span class="date">2026.05.05</span>
-  </a>
-  <div class="info">
-    <h3><a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" style="color:inherit;text-decoration:none">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고3</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅱ-도함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=00ByGXdH-mI" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-search="다항함수 거리곱(distance product) — 함숫값·미분계수를 눈으로 푸는 법 거리곱으로함숫값미분계수 수학ii-다항함수의미분법 고2 🎬 영상">
-  <a href="고2/수학II-다항함수의미분법/20260505_거리곱으로함숫값미분계수_9XCRS9gd.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/9XCRS9gd0XQ/mqdefault.jpg" loading="lazy" alt="다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.05</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학II-다항함수의미분법/20260505_거리곱으로함숫값미분계수_9XCRS9gd.html" style="color:inherit;text-decoration:none">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학II-다항함수의미분법</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학II-다항함수의미분법/20260505_거리곱으로함숫값미분계수_9XCRS9gd.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://youtu.be/9XCRS9gd0XQ" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의그래프" data-source="video" data-search="일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기 일반형삼각함수출발지점속도 수학ⅰ-삼각함수의그래프 고2 🎬 영상">
-  <a href="고2/수학Ⅰ-삼각함수의그래프/20260505_일반형삼각함수출발지점속도_LDxBveuk.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/LDxBveuksBw/mqdefault.jpg" loading="lazy" alt="일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기">
-    <span class="badge">고2</span>
-    <span class="date">2026.05.05</span>
-  </a>
-  <div class="info">
-    <h3><a href="고2/수학Ⅰ-삼각함수의그래프/20260505_일반형삼각함수출발지점속도_LDxBveuk.html" style="color:inherit;text-decoration:none">일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고2</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의그래프</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고2/수학Ⅰ-삼각함수의그래프/20260505_일반형삼각함수출발지점속도_LDxBveuk.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=LDxBveuksBw" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고1" data-unit="수학Ⅰ-삼각함수의방정식" data-source="video" data-search="삼각함수 방정식 sin a = cos b — 세 관점 통합 정리 삼각함수방정식세관점 수학ⅰ-삼각함수의방정식 고1 🎬 영상">
-  <a href="고1/수학Ⅰ-삼각함수의방정식/20260505_삼각함수방정식세관점_4Z2CnsDM.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/4Z2CnsDMIG4/mqdefault.jpg" loading="lazy" alt="삼각함수 방정식 sin A = cos B — 세 관점 통합 정리">
-    <span class="badge">고1</span>
-    <span class="date">2026.05.05</span>
-  </a>
-  <div class="info">
-    <h3><a href="고1/수학Ⅰ-삼각함수의방정식/20260505_삼각함수방정식세관점_4Z2CnsDM.html" style="color:inherit;text-decoration:none">삼각함수 방정식 sin A = cos B — 세 관점 통합 정리</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고1</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의방정식</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고1/수학Ⅰ-삼각함수의방정식/20260505_삼각함수방정식세관점_4Z2CnsDM.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/watch?v=4Z2CnsDMIG4" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고1" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-search="사인법칙·코사인법칙 — 삼각형 해석의 본질 사인법칙코사인법칙 수학ⅰ-삼각함수의활용 고1 🎬 영상">
-  <a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" class="thumb-wrap">
-    <img src="https://img.youtube.com/vi/W9ReLryydQg/mqdefault.jpg" loading="lazy" alt="사인법칙·코사인법칙 — 삼각형 해석의 본질">
-    <span class="badge">고1</span>
-    <span class="date">2026.05.05</span>
-  </a>
-  <div class="info">
-    <h3><a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" style="color:inherit;text-decoration:none">사인법칙·코사인법칙 — 삼각형 해석의 본질</a></h3>
-    
-    <div class="tags">
-      <span class="tag grade">고1</span>
-      <span class="tag">🎬 영상</span>
-      <span class="tag">수학Ⅰ-삼각함수의활용</span>
-    </div>
-  </div>
-  <div class="actions">
-    <a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" class="primary">📖 학습자료 열기</a>
-    <a href="https://www.youtube.com/live/W9ReLryydQg" target="_blank" rel="noopener">▶ 원본</a>
-  </div>
-</article>
-    <article class="card" data-grade="고2" data-unit="수학Ⅰ-지수함수와로그함수" data-source="video" data-search="지수함수 차이·비율 공식과 도형 우선 해석 (수학ⅰ) 지수함수차이비율공식과도형우선해석 수학ⅰ-지수함수와로그함수 고2 🎬 영상">
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-지수함수와로그함수" data-source="video" data-added="2026-07-31T21:14:16+00:00" data-date="20260427" data-search="지수함수 차이·비율 공식과 도형 우선 해석 (수학ⅰ) 지수함수차이비율공식과도형우선해석 수학ⅰ-지수함수와로그함수 고2 🎬 영상">
   <a href="고2/수학Ⅰ-지수함수와로그함수/20260427_지수함수차이비율공식과도형우선해석_MJWwaaju.html" class="thumb-wrap">
     <img src="https://img.youtube.com/vi/MJWwaajugnU/mqdefault.jpg" loading="lazy" alt="지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ)">
     <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
     <span class="date">2026.04.27</span>
   </a>
   <div class="info">
@@ -1528,10 +629,389 @@
     <a href="https://www.youtube.com/watch?v=MJWwaajugnU" target="_blank" rel="noopener">▶ 원본</a>
   </div>
 </article>
-    <article class="card" data-grade="미분류" data-unit="교양심화-행렬과케일리해밀턴" data-source="video" data-search="케일리-해밀턴 정리와 단위행렬 예외 (교양·심화, 현 교육과정 외) 케일리해밀턴정리와단위행렬예외 교양심화-행렬과케일리해밀턴 미분류 🎬 영상">
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-added="2026-07-31T20:58:19+00:00" data-date="20260714" data-search="넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학ⅱ) 넓이비와부정적분함숫값차비율관계 수학ii-다항함수의적분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/xA9JGa0tRxQ/mqdefault.jpg" loading="lazy" alt="넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.14</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html" style="color:inherit;text-decoration:none">넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtube.com/shorts/xA9JGa0tRxQ" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-added="2026-07-31T16:24:06+00:00" data-date="20260731" data-search="절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학ⅱ) 절댓값미분가능성교차상태로판단 수학ii-다항함수의미분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의미분법/20260731_절댓값미분가능성교차상태로판단_ZjU-KOUB.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/ZjU-KOUBS80/mqdefault.jpg" loading="lazy" alt="절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.31</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의미분법/20260731_절댓값미분가능성교차상태로판단_ZjU-KOUB.html" style="color:inherit;text-decoration:none">절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의미분법/20260731_절댓값미분가능성교차상태로판단_ZjU-KOUB.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/ZjU-KOUBS80" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-07-31T16:24:06+00:00" data-date="20260731" data-search="절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학ⅱ) 절댓값극한과미분계수로인수개수추론 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260731_절댓값극한과미분계수로인수개수추론_PNV2lKCg.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/PNV2lKCgQjg/mqdefault.jpg" loading="lazy" alt="절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학Ⅱ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.31</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260731_절댓값극한과미분계수로인수개수추론_PNV2lKCg.html" style="color:inherit;text-decoration:none">절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학Ⅱ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260731_절댓값극한과미분계수로인수개수추론_PNV2lKCg.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtube.com/shorts/PNV2lKCgQjg" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="확률과통계-순열과조합" data-source="video" data-added="2026-07-31T16:24:06+00:00" data-date="20260703" data-search="원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계) 원순열구별안됨과기준점자리종류 확률과통계-순열과조합 고2 🎬 영상">
+  <a href="고2/확률과통계-순열과조합/20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/QsWeZRoPQXg/mqdefault.jpg" loading="lazy" alt="원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.03</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/확률과통계-순열과조합/20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html" style="color:inherit;text-decoration:none">원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">확률과통계-순열과조합</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/확률과통계-순열과조합/20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/QsWeZRoPQXg" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="확률과통계-통계" data-source="video" data-added="2026-07-27T23:36:25+00:00" data-date="20260727" data-search="이항분포 고난도 — 관계식 세워 e(x제곱) 구하기 (확률과 통계) 이항분포관계식과확률변수제곱평균 확률과통계-통계 고2 🎬 영상">
+  <a href="고2/확률과통계-통계/20260727_이항분포관계식과확률변수제곱평균_YGoi6Pv.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/YGoi6Pv-IkQ/mqdefault.jpg" loading="lazy" alt="이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.27</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/확률과통계-통계/20260727_이항분포관계식과확률변수제곱평균_YGoi6Pv.html" style="color:inherit;text-decoration:none">이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">확률과통계-통계</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/확률과통계-통계/20260727_이항분포관계식과확률변수제곱평균_YGoi6Pv.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/YGoi6Pv-IkQ" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고3" data-unit="미적분-적분법" data-source="video" data-added="2026-07-25T12:47:07+00:00" data-date="20260725" data-search="대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분) 대칭성이용한정적분치환과기하풀이 미적분-적분법 고3 🎬 영상">
+  <a href="고3/미적분-적분법/20260725_대칭성이용한정적분치환과기하풀이_rqxFJ4J8.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/rqxFJ4J84P0/mqdefault.jpg" loading="lazy" alt="대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분)">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.25</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/미적분-적분법/20260725_대칭성이용한정적분치환과기하풀이_rqxFJ4J8.html" style="color:inherit;text-decoration:none">대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">미적분-적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/미적분-적분법/20260725_대칭성이용한정적분치환과기하풀이_rqxFJ4J8.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtube.com/shorts/rqxFJ4J84P0" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-등차수열과등비수열" data-source="video" data-added="2026-07-25T12:47:07+00:00" data-date="20260723" data-search="등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학ⅰ) 등차등비절댓값부등식여집합과인수분해 수학ⅰ-등차수열과등비수열 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-등차수열과등비수열/20260723_등차등비절댓값부등식여집합과인수분해_hmR7jQjL.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/hmR7jQjL5oQ/mqdefault.jpg" loading="lazy" alt="등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학Ⅰ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.23</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-등차수열과등비수열/20260723_등차등비절댓값부등식여집합과인수분해_hmR7jQjL.html" style="color:inherit;text-decoration:none">등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학Ⅰ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-등차수열과등비수열</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-등차수열과등비수열/20260723_등차등비절댓값부등식여집합과인수분해_hmR7jQjL.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/hmR7jQjL5oQ" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고3" data-unit="미적분-적분법" data-source="video" data-added="2026-07-24T13:30:11+00:00" data-date="20260723" data-search="정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분) 정적분정의함수미분과넓이최적화 미적분-적분법 고3 🎬 영상">
+  <a href="고3/미적분-적분법/20260723_정적분정의함수미분과넓이최적화_xoaRbvzQ.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/xoaRbvzQUNI/mqdefault.jpg" loading="lazy" alt="정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분)">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.23</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/미적분-적분법/20260723_정적분정의함수미분과넓이최적화_xoaRbvzQ.html" style="color:inherit;text-decoration:none">정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">미적분-적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/미적분-적분법/20260723_정적분정의함수미분과넓이최적화_xoaRbvzQ.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtube.com/shorts/xoaRbvzQUNI" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-07-20T22:55:48+00:00" data-date="20260719" data-search="0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학ⅱ) 영분의영극한무한소비율과자유도특수화 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260719_영분의영극한무한소비율과자유도특수화_lCtDaQQn.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/lCtDaQQnBYc/mqdefault.jpg" loading="lazy" alt="0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.19</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260719_영분의영극한무한소비율과자유도특수화_lCtDaQQn.html" style="color:inherit;text-decoration:none">0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260719_영분의영극한무한소비율과자유도특수화_lCtDaQQn.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/lCtDaQQnBYc" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-added="2026-07-18T05:34:03+00:00" data-date="20260716" data-search="정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학ⅱ) 정수조건부등식과곱의미분정수결정 수학ii-도함수의활용 고2 🎬 영상">
+  <a href="고2/수학II-도함수의활용/20260716_정수조건부등식과곱의미분정수결정_FZTeYWax.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/FZTeYWaxktc/mqdefault.jpg" loading="lazy" alt="정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학Ⅱ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.16</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-도함수의활용/20260716_정수조건부등식과곱의미분정수결정_FZTeYWax.html" style="color:inherit;text-decoration:none">정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학Ⅱ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-도함수의활용/20260716_정수조건부등식과곱의미분정수결정_FZTeYWax.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/FZTeYWaxktc" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-added="2026-07-18T01:14:43+00:00" data-date="20260717" data-search="절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학ⅱ) 절댓값극한과미분계수접선해석 수학ii-다항함수의미분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/1D2zCNqf8DE/mqdefault.jpg" loading="lazy" alt="절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.17</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html" style="color:inherit;text-decoration:none">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/1D2zCNqf8DE" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고3" data-unit="미적분-적분법" data-source="video" data-added="2026-07-10T12:53:35+00:00" data-date="20260710" data-search="역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) 역함수적분과치환적분역함수미분 미적분-적분법 고3 🎬 영상">
+  <a href="고3/미적분-적분법/20260710_역함수적분과치환적분역함수미분_mBc94D-3.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/mBc94D-3Zo4/mqdefault.jpg" loading="lazy" alt="역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분)">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.10</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/미적분-적분법/20260710_역함수적분과치환적분역함수미분_mBc94D-3.html" style="color:inherit;text-decoration:none">역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">미적분-적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/미적분-적분법/20260710_역함수적분과치환적분역함수미분_mBc94D-3.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/mBc94D-3Zo4" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="concept" data-added="2026-07-08T09:15:11+00:00" data-date="20260708" data-search="부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 부정적분과정적분꿀팁과오개념 수학ii-다항함수의적분법 고2 📘 개념">
+  <a href="고2/수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html" class="thumb-wrap">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.08</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">📘 개념</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260708_부정적분과정적분꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
+    
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="concept" data-added="2026-07-08T09:15:11+00:00" data-date="20260708" data-search="정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 정적분의활용넓이속도거리꿀팁과오개념 수학ii-다항함수의적분법 고2 📘 개념">
+  <a href="고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html" class="thumb-wrap">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.08</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">📘 개념</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
+    
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="concept" data-added="2026-07-08T09:09:26+00:00" data-date="20260708" data-search="미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 미분계수와도함수꿀팁과오개념 수학ii-다항함수의미분법 고2 📘 개념">
+  <a href="고2/수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html" class="thumb-wrap">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.08</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">📘 개념</span>
+      <span class="tag">수학II-다항함수의미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의미분법/20260708_미분계수와도함수꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
+    
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="concept" data-added="2026-07-08T09:09:26+00:00" data-date="20260708" data-search="도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 도함수의활용꿀팁과오개념 수학ii-도함수의활용 고2 📘 개념">
+  <a href="고2/수학II-도함수의활용/20260708_도함수의활용꿀팁과오개념_개념.html" class="thumb-wrap">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.08</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-도함수의활용/20260708_도함수의활용꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">📘 개념</span>
+      <span class="tag">수학II-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-도함수의활용/20260708_도함수의활용꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
+    
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="concept" data-added="2026-07-08T07:10:57+00:00" data-date="20260708" data-search="함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 함수의극한계산꿀팁과오개념 수학ii-함수의극한 고2 📘 개념">
+  <a href="고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html" class="thumb-wrap">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.08</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">📘 개념</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260708_함수의극한계산꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
+    
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="concept" data-added="2026-07-08T07:10:57+00:00" data-date="20260708" data-search="함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분ⅰ) 함수의연속꿀팁과오개념 수학ii-함수의극한 고2 📘 개념">
+  <a href="고2/수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html" class="thumb-wrap">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.07.08</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html" style="color:inherit;text-decoration:none">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">📘 개념</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html" class="primary">📖 학습자료 열기</a>
+    
+  </div>
+</article>
+    <article class="card" data-grade="미분류" data-unit="교양심화-행렬과케일리해밀턴" data-source="video" data-added="2026-07-08T01:39:30+00:00" data-date="20131115" data-search="케일리-해밀턴 정리와 단위행렬 예외 (교양·심화, 현 교육과정 외) 케일리해밀턴정리와단위행렬예외 교양심화-행렬과케일리해밀턴 미분류 🎬 영상">
   <a href="미분류/교양심화-행렬과케일리해밀턴/20131115_케일리해밀턴정리와단위행렬예외_8g_MpsYq.html" class="thumb-wrap">
     <img src="https://img.youtube.com/vi/8g_MpsYqLf8/mqdefault.jpg" loading="lazy" alt="케일리-해밀턴 정리와 단위행렬 예외 (교양·심화, 현 교육과정 외)">
     <span class="badge">미분류</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
     <span class="date">2013.11.15</span>
   </a>
   <div class="info">
@@ -1548,16 +1028,625 @@
     <a href="https://youtu.be/8g_MpsYqLf8" target="_blank" rel="noopener">▶ 원본</a>
   </div>
 </article>
+    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-added="2026-06-30T14:21:55+00:00" data-date="20260629" data-search="실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기 실근개수홀짝성으로극값판별 수학ii-도함수의활용 고2 🎬 영상">
+  <a href="고2/수학II-도함수의활용/20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/OJyw8C5kZAs/mqdefault.jpg" loading="lazy" alt="실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.06.29</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-도함수의활용/20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html" style="color:inherit;text-decoration:none">실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-도함수의활용/20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/shorts/OJyw8C5kZAs" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-06-27T15:09:18+00:00" data-date="20260625" data-search="함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근) 극한꼴파악과좌극한부호처리 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/NCqmA7uieT8/mqdefault.jpg" loading="lazy" alt="함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.06.25</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html" style="color:inherit;text-decoration:none">함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260625_극한꼴파악과좌극한부호처리_NCqmA7ui.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=NCqmA7uieT8" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="확률과통계-경우의수" data-source="video" data-added="2026-06-19T13:13:31+00:00" data-date="20260619" data-search="순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기) 순열조합본질배열된결과구별가능성 확률과통계-경우의수 고2 🎬 영상">
+  <a href="고2/확률과통계-경우의수/20260619_순열조합본질배열된결과구별가능성_h3yT9Foy.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/h3yT9FoyZ5E/mqdefault.jpg" loading="lazy" alt="순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.06.19</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/확률과통계-경우의수/20260619_순열조합본질배열된결과구별가능성_h3yT9Foy.html" style="color:inherit;text-decoration:none">순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">확률과통계-경우의수</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/확률과통계-경우의수/20260619_순열조합본질배열된결과구별가능성_h3yT9Foy.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=h3yT9FoyZ5E" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의방정식" data-source="video" data-added="2026-06-19T13:13:31+00:00" data-date="20260617" data-search="삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단) 삼각함수방부등식함수통일과각변환 수학ⅰ-삼각함수의방정식 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의방정식/20260617_삼각함수방부등식함수통일과각변환_EIGRJsSk.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/EIGRJsSkyWE/mqdefault.jpg" loading="lazy" alt="삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.06.17</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의방정식/20260617_삼각함수방부등식함수통일과각변환_EIGRJsSk.html" style="color:inherit;text-decoration:none">삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의방정식</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의방정식/20260617_삼각함수방부등식함수통일과각변환_EIGRJsSk.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=EIGRJsSkyWE" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-등차수열과등비수열" data-source="concept" data-added="2026-06-16T00:14:55+00:00" data-date="20260616" data-search="등차수열의 합과 이차함수 관련성과 함정 등차수열의합이차함수관련성과함정 수학ⅰ-등차수열과등비수열 고2 📘 개념">
+  <a href="고2/수학Ⅰ-등차수열과등비수열/20260616_등차수열의합이차함수관련성과함정_개념.html" class="thumb-wrap">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.06.16</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-등차수열과등비수열/20260616_등차수열의합이차함수관련성과함정_개념.html" style="color:inherit;text-decoration:none">등차수열의 합과 이차함수 관련성과 함정</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">📘 개념</span>
+      <span class="tag">수학Ⅰ-등차수열과등비수열</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-등차수열과등비수열/20260616_등차수열의합이차함수관련성과함정_개념.html" class="primary">📖 학습자료 열기</a>
+    
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-수열의귀납적정의" data-source="concept" data-added="2026-06-15T20:11:43+09:00" data-date="20260615" data-search="수열의 귀납적 정의 · 특성방정식 · 점화식 수열의귀납적정의와특성방정식 수학ⅰ-수열의귀납적정의 고2 📘 개념">
+  <a href="고2/수학Ⅰ-수열의귀납적정의/20260615_수열의귀납적정의와특성방정식_개념.html" class="thumb-wrap">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.06.15</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-수열의귀납적정의/20260615_수열의귀납적정의와특성방정식_개념.html" style="color:inherit;text-decoration:none">수열의 귀납적 정의 · 특성방정식 · 점화식</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">📘 개념</span>
+      <span class="tag">수학Ⅰ-수열의귀납적정의</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-수열의귀납적정의/20260615_수열의귀납적정의와특성방정식_개념.html" class="primary">📖 학습자료 열기</a>
+    
+  </div>
+</article>
+    <article class="card" data-grade="고3" data-unit="미적분-여러가지미분법" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260614" data-search="다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략 다변수실제변수연쇄법칙 미적분-여러가지미분법 고3 🎬 영상">
+  <a href="고3/미적분-여러가지미분법/20260614_다변수실제변수연쇄법칙_10NhvK7s.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/10NhvK7sghM/mqdefault.jpg" loading="lazy" alt="다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.06.14</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/미적분-여러가지미분법/20260614_다변수실제변수연쇄법칙_10NhvK7s.html" style="color:inherit;text-decoration:none">다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">미적분-여러가지미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/미적분-여러가지미분법/20260614_다변수실제변수연쇄법칙_10NhvK7s.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/10NhvK7sghM" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260520" data-search="다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율 이차삼차넓이공식과도함수비율 수학ii-다항함수의적분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/n3s7P4y3RfE/mqdefault.jpg" loading="lazy" alt="다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.20</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html" style="color:inherit;text-decoration:none">다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/n3s7P4y3RfE" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260520" data-search="교점 개수 함수와 3차함수 높이차 2대1 공식 교점개수함수와높이차2대1공식 수학ii-도함수의활용 고2 🎬 영상">
+  <a href="고2/수학II-도함수의활용/20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/ONHx5OaSStk/mqdefault.jpg" loading="lazy" alt="교점 개수 함수와 3차함수 높이차 2대1 공식">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.20</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-도함수의활용/20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html" style="color:inherit;text-decoration:none">교점 개수 함수와 3차함수 높이차 2대1 공식</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-도함수의활용/20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/ONHx5OaSStk" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260520" data-search="다항함수의 비율 관계와 직각삼각형 3요소 다항함수비율관계와직각삼각형 수학ii-도함수의활용 고2 🎬 영상">
+  <a href="고2/수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/Jw8F2akj_T0/mqdefault.jpg" loading="lazy" alt="다항함수의 비율 관계와 직각삼각형 3요소">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.20</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html" style="color:inherit;text-decoration:none">다항함수의 비율 관계와 직각삼각형 3요소</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-도함수의활용/20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/Jw8F2akj_T0" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-도함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260520" data-search="차함수 특강 - 관계·내리기·보정의 3박자 차함수특강관계내리기와보정 수학ii-도함수의활용 고2 🎬 영상">
+  <a href="고2/수학II-도함수의활용/20260520_차함수특강관계내리기와보정_WhojOfqC.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/WhojOfqCAFo/mqdefault.jpg" loading="lazy" alt="차함수 특강 - 관계·내리기·보정의 3박자">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.20</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-도함수의활용/20260520_차함수특강관계내리기와보정_WhojOfqC.html" style="color:inherit;text-decoration:none">차함수 특강 - 관계·내리기·보정의 3박자</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-도함수의활용/20260520_차함수특강관계내리기와보정_WhojOfqC.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/WhojOfqCAFo" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-등차수열과등비수열" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260520" data-search="등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피 등차수열시그마변형과합공식회피 수학ⅰ-등차수열과등비수열 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-등차수열과등비수열/20260520_등차수열시그마변형과합공식회피_b2XZHgdA_v2.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/b2XZHgdA0SM/mqdefault.jpg" loading="lazy" alt="등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.20</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-등차수열과등비수열/20260520_등차수열시그마변형과합공식회피_b2XZHgdA_v2.html" style="color:inherit;text-decoration:none">등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-등차수열과등비수열</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-등차수열과등비수열/20260520_등차수열시그마변형과합공식회피_b2XZHgdA_v2.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtube.com/shorts/b2XZHgdA0SM" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의그래프" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260520" data-search="삼각함수의 주기 비율과 반의 반주기 대칭성 삼각함수주기비율과반의반주기대칭 수학ⅰ-삼각함수의그래프 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의그래프/20260520_삼각함수주기비율과반의반주기대칭_gahk4DSO.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/gahk4DSOh8I/mqdefault.jpg" loading="lazy" alt="삼각함수의 주기 비율과 반의 반주기 대칭성">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.20</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의그래프/20260520_삼각함수주기비율과반의반주기대칭_gahk4DSO.html" style="color:inherit;text-decoration:none">삼각함수의 주기 비율과 반의 반주기 대칭성</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의그래프</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의그래프/20260520_삼각함수주기비율과반의반주기대칭_gahk4DSO.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/gahk4DSOh8I" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260520" data-search="원주각·접현각·내접사각형·등현사각형 10초컷 풀이 원주각접현각내접사각형등현 수학ⅰ-삼각함수의활용 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의활용/20260520_원주각접현각내접사각형등현_SBihdCW0.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/SBihdCW078k/mqdefault.jpg" loading="lazy" alt="원주각·접현각·내접사각형·등현사각형 10초컷 풀이">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.20</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260520_원주각접현각내접사각형등현_SBihdCW0.html" style="color:inherit;text-decoration:none">원주각·접현각·내접사각형·등현사각형 10초컷 풀이</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의활용/20260520_원주각접현각내접사각형등현_SBihdCW0.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/SBihdCW078k" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260515" data-search="미분 기호의 본질과 미적분 제1기본정리 미분기호본질해석과미적분기본정리 수학ii-다항함수의미분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/eBKyLDKZTx4/mqdefault.jpg" loading="lazy" alt="미분 기호의 본질과 미적분 제1기본정리">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.15</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html" style="color:inherit;text-decoration:none">미분 기호의 본질과 미적분 제1기본정리</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의미분법/20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/eBKyLDKZTx4" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260515" data-search="항등식의 본질 - 근·차수·인수정리로 식 세우기 항등식근차수인수정리태도 수학ii-다항함수의미분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의미분법/20260515_항등식근차수인수정리태도_XT-SSrkl.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/XT-SSrklV8Y/mqdefault.jpg" loading="lazy" alt="항등식의 본질 - 근·차수·인수정리로 식 세우기">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.15</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의미분법/20260515_항등식근차수인수정리태도_XT-SSrkl.html" style="color:inherit;text-decoration:none">항등식의 본질 - 근·차수·인수정리로 식 세우기</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의미분법/20260515_항등식근차수인수정리태도_XT-SSrkl.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/XT-SSrklV8Y" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의적분법" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260515" data-search="삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용 삼차함수점대칭적분차함수관점 수학ii-다항함수의적분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/C3o6VJbnHvU/mqdefault.jpg" loading="lazy" alt="삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.15</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html" style="color:inherit;text-decoration:none">삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의적분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/C3o6VJbnHvU" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-합성함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260515" data-search="합성함수의 본질 - 개형 추적·성질 전이·역추적 합성함수본질개형성질역추적 수학ii-합성함수의활용 고2 🎬 영상">
+  <a href="고2/수학II-합성함수의활용/20260515_합성함수본질개형성질역추적_qGmymKVv.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/qGmymKVvGUw/mqdefault.jpg" loading="lazy" alt="합성함수의 본질 - 개형 추적·성질 전이·역추적">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.15</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-합성함수의활용/20260515_합성함수본질개형성질역추적_qGmymKVv.html" style="color:inherit;text-decoration:none">합성함수의 본질 - 개형 추적·성질 전이·역추적</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-합성함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-합성함수의활용/20260515_합성함수본질개형성질역추적_qGmymKVv.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/qGmymKVvGUw" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260515" data-search="삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원 사인코사인외접원성질연계심화 수학ⅰ-삼각함수의활용 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/xuzuEsxr--Q/mqdefault.jpg" loading="lazy" alt="삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.15</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html" style="color:inherit;text-decoration:none">삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의활용/20260515_사인코사인외접원성질연계심화_xuzuEsxr.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/xuzuEsxr--Q" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-함수의극한" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260511" data-search="함수의 극한 - 하나의 매뉴얼 6유형 완전정복 함수극한매뉴얼6유형 수학ii-함수의극한 고2 🎬 영상">
+  <a href="고2/수학II-함수의극한/20260511_함수극한매뉴얼6유형_Uc4Yv70i.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/Uc4Yv70i5a8/mqdefault.jpg" loading="lazy" alt="함수의 극한 - 하나의 매뉴얼 6유형 완전정복">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.11</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-함수의극한/20260511_함수극한매뉴얼6유형_Uc4Yv70i.html" style="color:inherit;text-decoration:none">함수의 극한 - 하나의 매뉴얼 6유형 완전정복</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-함수의극한</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-함수의극한/20260511_함수극한매뉴얼6유형_Uc4Yv70i.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=Uc4Yv70i5a8" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-등차수열과등비수열" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260510" data-search="등차수열 1등급 풀이법 - 항의차·등차중항·기준항 이동 등차수열일등급풀이팁 수학ⅰ-등차수열과등비수열 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/b2XZHgdA0SM/mqdefault.jpg" loading="lazy" alt="등차수열 1등급 풀이법 - 항의차·등차중항·기준항 이동">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.10</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html" style="color:inherit;text-decoration:none">등차수열 1등급 풀이법 - 항의차·등차중항·기준항 이동</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-등차수열과등비수열</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-등차수열과등비수열/20260510_등차수열일등급풀이팁_b2XZHgdA.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtube.com/shorts/b2XZHgdA0SM" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260507" data-search="거리곱 완전정복 1탄 - 함숫값·미분계수·도함수까지 거리곱완전정복도함수까지 수학ii-다항함수의미분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의미분법/20260507_거리곱완전정복도함수까지_M3TGprau.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/M3TGprauGxY/mqdefault.jpg" loading="lazy" alt="거리곱 완전정복 1탄 - 함숫값·미분계수·도함수까지">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.07</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의미분법/20260507_거리곱완전정복도함수까지_M3TGprau.html" style="color:inherit;text-decoration:none">거리곱 완전정복 1탄 - 함숫값·미분계수·도함수까지</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의미분법/20260507_거리곱완전정복도함수까지_M3TGprau.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/M3TGprauGxY" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260506" data-search="사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2rsina) 사인법칙비례식과외접원변환 수학ⅰ-삼각함수의활용 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의활용/20260506_사인법칙비례식과외접원변환_sbmMPmSY.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/sbmMPmSYYTA/mqdefault.jpg" loading="lazy" alt="사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2RsinA)">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.06</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의활용/20260506_사인법칙비례식과외접원변환_sbmMPmSY.html" style="color:inherit;text-decoration:none">사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2RsinA)</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의활용/20260506_사인법칙비례식과외접원변환_sbmMPmSY.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/sbmMPmSYYTA" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고3" data-unit="수학Ⅱ-도함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260505" data-search="3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 3차함수극값2대1분할 수학ⅱ-도함수의활용 고3 🎬 영상">
+  <a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/00ByGXdH-mI/mqdefault.jpg" loading="lazy" alt="3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.05</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" style="color:inherit;text-decoration:none">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅱ-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/수학Ⅱ-도함수의활용/20260505_3차함수극값2대1분할_00ByGXdH.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=00ByGXdH-mI" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학II-다항함수의미분법" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260505" data-search="다항함수 거리곱(distance product) — 함숫값·미분계수를 눈으로 푸는 법 거리곱으로함숫값미분계수 수학ii-다항함수의미분법 고2 🎬 영상">
+  <a href="고2/수학II-다항함수의미분법/20260505_거리곱으로함숫값미분계수_9XCRS9gd.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/9XCRS9gd0XQ/mqdefault.jpg" loading="lazy" alt="다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.05</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학II-다항함수의미분법/20260505_거리곱으로함숫값미분계수_9XCRS9gd.html" style="color:inherit;text-decoration:none">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학II-다항함수의미분법</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학II-다항함수의미분법/20260505_거리곱으로함숫값미분계수_9XCRS9gd.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/9XCRS9gd0XQ" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고2" data-unit="수학Ⅰ-삼각함수의그래프" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260505" data-search="일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기 일반형삼각함수출발지점속도 수학ⅰ-삼각함수의그래프 고2 🎬 영상">
+  <a href="고2/수학Ⅰ-삼각함수의그래프/20260505_일반형삼각함수출발지점속도_LDxBveuk.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/LDxBveuksBw/mqdefault.jpg" loading="lazy" alt="일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기">
+    <span class="badge">고2</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.05</span>
+  </a>
+  <div class="info">
+    <h3><a href="고2/수학Ⅰ-삼각함수의그래프/20260505_일반형삼각함수출발지점속도_LDxBveuk.html" style="color:inherit;text-decoration:none">일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고2</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의그래프</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고2/수학Ⅰ-삼각함수의그래프/20260505_일반형삼각함수출발지점속도_LDxBveuk.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=LDxBveuksBw" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고1" data-unit="수학Ⅰ-삼각함수의방정식" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260505" data-search="삼각함수 방정식 sin a = cos b — 세 관점 통합 정리 삼각함수방정식세관점 수학ⅰ-삼각함수의방정식 고1 🎬 영상">
+  <a href="고1/수학Ⅰ-삼각함수의방정식/20260505_삼각함수방정식세관점_4Z2CnsDM.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/4Z2CnsDMIG4/mqdefault.jpg" loading="lazy" alt="삼각함수 방정식 sin A = cos B — 세 관점 통합 정리">
+    <span class="badge">고1</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.05</span>
+  </a>
+  <div class="info">
+    <h3><a href="고1/수학Ⅰ-삼각함수의방정식/20260505_삼각함수방정식세관점_4Z2CnsDM.html" style="color:inherit;text-decoration:none">삼각함수 방정식 sin A = cos B — 세 관점 통합 정리</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고1</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의방정식</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고1/수학Ⅰ-삼각함수의방정식/20260505_삼각함수방정식세관점_4Z2CnsDM.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/watch?v=4Z2CnsDMIG4" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고1" data-unit="수학Ⅰ-삼각함수의활용" data-source="video" data-added="2026-06-14T22:13:12+09:00" data-date="20260505" data-search="사인법칙·코사인법칙 — 삼각형 해석의 본질 사인법칙코사인법칙 수학ⅰ-삼각함수의활용 고1 🎬 영상">
+  <a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/W9ReLryydQg/mqdefault.jpg" loading="lazy" alt="사인법칙·코사인법칙 — 삼각형 해석의 본질">
+    <span class="badge">고1</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.05.05</span>
+  </a>
+  <div class="info">
+    <h3><a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" style="color:inherit;text-decoration:none">사인법칙·코사인법칙 — 삼각형 해석의 본질</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고1</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅰ-삼각함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://www.youtube.com/live/W9ReLryydQg" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
+    <article class="card" data-grade="고3" data-unit="수학Ⅱ-도함수의활용" data-source="video" data-added="2026-06-14T13:49:04+00:00" data-date="20260614" data-search="정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용 정수조건과근의논리적확정 수학ⅱ-도함수의활용 고3 🎬 영상">
+  <a href="고3/수학Ⅱ-도함수의활용/20260614_정수조건과근의논리적확정_arsZnxqP.html" class="thumb-wrap">
+    <img src="https://img.youtube.com/vi/arsZnxqP53c/mqdefault.jpg" loading="lazy" alt="정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용">
+    <span class="badge">고3</span>
+    <span class="new-badge" hidden>🆕 NEW</span>
+    <span class="date">2026.06.14</span>
+  </a>
+  <div class="info">
+    <h3><a href="고3/수학Ⅱ-도함수의활용/20260614_정수조건과근의논리적확정_arsZnxqP.html" style="color:inherit;text-decoration:none">정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용</a></h3>
+    
+    <div class="tags">
+      <span class="tag grade">고3</span>
+      <span class="tag">🎬 영상</span>
+      <span class="tag">수학Ⅱ-도함수의활용</span>
+    </div>
+  </div>
+  <div class="actions">
+    <a href="고3/수학Ⅱ-도함수의활용/20260614_정수조건과근의논리적확정_arsZnxqP.html" class="primary">📖 학습자료 열기</a>
+    <a href="https://youtu.be/arsZnxqP53c" target="_blank" rel="noopener">▶ 원본</a>
+  </div>
+</article>
   </main>
 
   <div class="empty" id="empty" style="display:none">조건에 맞는 자료가 없습니다.</div>
 </div>
 
 <script>
-const ITEMS = [{"grade": "고3", "unit": "수학Ⅱ-도함수의활용", "title": "고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용"}, {"grade": "고3", "unit": "수학Ⅱ-다항함수의적분법", "title": "정적분 부호변화와 삼차함수 비율 관계"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의그래프", "title": "삼각함수 그래프 제곱합 공식과 탄젠트 반주기 곱 공식"}, {"grade": "고3", "unit": "미적분-여러가지미분법", "title": "역함수의 미분법 — g'(c)=1/f'(a)로 3초 만에 잡는 법"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "이차함수 접선과 외접 직사각형 1/3 공식"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "삼각함수 도형 3단계 풀이법: 사인법칙과 코사인법칙"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "원시함수가 주인공 — 세 근의 합으로 미지수 찾기"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "차함수 일체화 해석법 - 교점 접점과 세 근의 합"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이"}, {"grade": "고2", "unit": "수학Ⅰ-지수함수와로그함수", "title": "지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "0/0 부정형 극한 — 영인수 개수로 판정하기 (수학Ⅱ)"}, {"grade": "고1", "unit": "수학Ⅰ-도형의방정식", "title": "시소 이론(질량점)으로 넓이비 내분점 구하기 (도형의 방정식)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "축 분리 기법으로 방정식의 실근 개수 추적 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학Ⅱ)"}, {"grade": "고2", "unit": "확률과통계-통계", "title": "이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계)"}, {"grade": "고3", "unit": "미적분-적분법", "title": "대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분)"}, {"grade": "고3", "unit": "미적분-적분법", "title": "정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분)"}, {"grade": "고2", "unit": "수학Ⅰ-등차수열과등비수열", "title": "등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학Ⅰ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ)"}, {"grade": "고3", "unit": "미적분-적분법", "title": "역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "확률과통계-순열과조합", "title": "원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계)"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근)"}, {"grade": "고2", "unit": "확률과통계-경우의수", "title": "순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기)"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의방정식", "title": "삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단)"}, {"grade": "고2", "unit": "수학Ⅰ-등차수열과등비수열", "title": "등차수열의 합과 이차함수 관련성과 함정"}, {"grade": "고2", "unit": "수학Ⅰ-수열의귀납적정의", "title": "수열의 귀납적 정의 · 특성방정식 · 점화식"}, {"grade": "고3", "unit": "미적분-여러가지미분법", "title": "다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략"}, {"grade": "고3", "unit": "수학Ⅱ-도함수의활용", "title": "정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "교점 개수 함수와 3차함수 높이차 2대1 공식"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "다항함수의 비율 관계와 직각삼각형 3요소"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "차함수 특강 - 관계·내리기·보정의 3박자"}, {"grade": "고2", "unit": "수학Ⅰ-등차수열과등비수열", "title": "등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의그래프", "title": "삼각함수의 주기 비율과 반의 반주기 대칭성"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "원주각·접현각·내접사각형·등현사각형 10초컷 풀이"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "미분 기호의 본질과 미적분 제1기본정리"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "항등식의 본질 - 근·차수·인수정리로 식 세우기"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용"}, {"grade": "고2", "unit": "수학II-합성함수의활용", "title": "합성함수의 본질 - 개형 추적·성질 전이·역추적"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 극한 - 하나의 매뉴얼 6유형 완전정복"}, {"grade": "고2", "unit": "수학Ⅰ-등차수열과등비수열", "title": "등차수열 1등급 풀이법 - 항의차·등차중항·기준항 이동"}, {"grade": "고2", "unit": "수학Ⅰ-지수함수와로그함수", "title": "지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "거리곱 완전정복 1탄 - 함숫값·미분계수·도함수까지"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2RsinA)"}, {"grade": "고3", "unit": "수학Ⅱ-도함수의활용", "title": "3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의그래프", "title": "일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기"}, {"grade": "고1", "unit": "수학Ⅰ-삼각함수의방정식", "title": "삼각함수 방정식 sin A = cos B — 세 관점 통합 정리"}, {"grade": "고1", "unit": "수학Ⅰ-삼각함수의활용", "title": "사인법칙·코사인법칙 — 삼각형 해석의 본질"}, {"grade": "고2", "unit": "수학Ⅰ-지수함수와로그함수", "title": "지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ)"}, {"grade": "미분류", "unit": "교양심화-행렬과케일리해밀턴", "title": "케일리-해밀턴 정리와 단위행렬 예외 (교양·심화, 현 교육과정 외)"}];
+const ITEMS = [{"grade": "고1", "unit": "수학Ⅰ-도형의방정식", "title": "시소 이론(질량점)으로 넓이비 내분점 구하기 (도형의 방정식)"}, {"grade": "고3", "unit": "수학Ⅱ-도함수의활용", "title": "고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용"}, {"grade": "고3", "unit": "수학Ⅱ-다항함수의적분법", "title": "정적분 부호변화와 삼차함수 비율 관계"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의그래프", "title": "삼각함수 그래프 제곱합 공식과 탄젠트 반주기 곱 공식"}, {"grade": "고3", "unit": "미적분-여러가지미분법", "title": "역함수의 미분법 — g'(c)=1/f'(a)로 3초 만에 잡는 법"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "삼각함수 도형 3단계 풀이법: 사인법칙과 코사인법칙"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "이차함수 접선과 외접 직사각형 1/3 공식"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "정적분으로 정의된 함수 — 넓이 대신 함숫값 차이로 읽기"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "좌표평면 선분 길이와 극한 — 빗변 공식·비본질 제거·미분계수"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 극한 기본성질 — 수렴끼리만 분배, 치환은 대상화"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "삼각함수 도형 발상법 — 사인법칙 신호·공통각·각 옮기기"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "차함수 일체화 해석법 - 교점 접점과 세 근의 합"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "원시함수가 주인공 — 세 근의 합으로 미지수 찾기"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법"}, {"grade": "고2", "unit": "수학Ⅰ-지수함수와로그함수", "title": "지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "극한으로 정의된 함수 g(t)=lim f(x) 위치선점과 연속성 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "0/0 부정형 극한 — 영인수 개수로 판정하기 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "축 분리 기법으로 방정식의 실근 개수 추적 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학Ⅰ-지수함수와로그함수", "title": "지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ)"}, {"grade": "고2", "unit": "수학Ⅰ-지수함수와로그함수", "title": "지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ)"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "절댓값 극한 f(x)/|x| — 미분계수로 인수 개수 추론 (수학Ⅱ)"}, {"grade": "고2", "unit": "확률과통계-순열과조합", "title": "원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계)"}, {"grade": "고2", "unit": "확률과통계-통계", "title": "이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계)"}, {"grade": "고3", "unit": "미적분-적분법", "title": "대칭성을 이용한 정적분 — 치환으로 더하기 · 잘라 붙이기 (고3 미적분)"}, {"grade": "고2", "unit": "수학Ⅰ-등차수열과등비수열", "title": "등차·등비 절댓값 부등식 — 여집합 해석과 인수분해 식세우기 (수학Ⅰ)"}, {"grade": "고3", "unit": "미적분-적분법", "title": "정적분으로 정의된 함수의 미분 — 넓이 최적화와 역함수 (고3 미적분)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "0/0꼴 극한 치트키 — 무한소 비율과 자유도·특수화 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학Ⅱ)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ)"}, {"grade": "고3", "unit": "미적분-적분법", "title": "역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분)"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "도함수의 활용 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 극한 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ)"}, {"grade": "미분류", "unit": "교양심화-행렬과케일리해밀턴", "title": "케일리-해밀턴 정리와 단위행렬 예외 (교양·심화, 현 교육과정 외)"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 극한 — 유리화 전에 꼴부터, 좌극한 부호 처리 (상위권 접근)"}, {"grade": "고2", "unit": "확률과통계-경우의수", "title": "순열·조합의 본질 — 배열된 결과의 구별가능성 (다르면 곱하고 같으면 나누기)"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의방정식", "title": "삼각함수 방·부등식 — 함수의 통일과 각 변환 (처음 5초의 판단)"}, {"grade": "고2", "unit": "수학Ⅰ-등차수열과등비수열", "title": "등차수열의 합과 이차함수 관련성과 함정"}, {"grade": "고2", "unit": "수학Ⅰ-수열의귀납적정의", "title": "수열의 귀납적 정의 · 특성방정식 · 점화식"}, {"grade": "고3", "unit": "미적분-여러가지미분법", "title": "다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "다항함수의 넓이 공식 - 6분 12분 공식과 도함수 비율"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "교점 개수 함수와 3차함수 높이차 2대1 공식"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "다항함수의 비율 관계와 직각삼각형 3요소"}, {"grade": "고2", "unit": "수학II-도함수의활용", "title": "차함수 특강 - 관계·내리기·보정의 3박자"}, {"grade": "고2", "unit": "수학Ⅰ-등차수열과등비수열", "title": "등차수열 실전 풀이 v2 - 시그마 변형과 합 공식 회피"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의그래프", "title": "삼각함수의 주기 비율과 반의 반주기 대칭성"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "원주각·접현각·내접사각형·등현사각형 10초컷 풀이"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "미분 기호의 본질과 미적분 제1기본정리"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "항등식의 본질 - 근·차수·인수정리로 식 세우기"}, {"grade": "고2", "unit": "수학II-다항함수의적분법", "title": "삼차함수 점대칭 적분 - 차함수 관점과 변곡점 활용"}, {"grade": "고2", "unit": "수학II-합성함수의활용", "title": "합성함수의 본질 - 개형 추적·성질 전이·역추적"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "삼각함수 활용 고난도 - 사인 코사인 법칙 연계와 외접원"}, {"grade": "고2", "unit": "수학II-함수의극한", "title": "함수의 극한 - 하나의 매뉴얼 6유형 완전정복"}, {"grade": "고2", "unit": "수학Ⅰ-등차수열과등비수열", "title": "등차수열 1등급 풀이법 - 항의차·등차중항·기준항 이동"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "거리곱 완전정복 1탄 - 함숫값·미분계수·도함수까지"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의활용", "title": "사인법칙의 본질 — 비례식 관점과 외접원 즉시 치환 (a=2RsinA)"}, {"grade": "고3", "unit": "수학Ⅱ-도함수의활용", "title": "3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이"}, {"grade": "고2", "unit": "수학II-다항함수의미분법", "title": "다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법"}, {"grade": "고2", "unit": "수학Ⅰ-삼각함수의그래프", "title": "일반형 삼각함수 y=sin(ax+b) — 출발 지점과 진행 속도로 읽기"}, {"grade": "고1", "unit": "수학Ⅰ-삼각함수의방정식", "title": "삼각함수 방정식 sin A = cos B — 세 관점 통합 정리"}, {"grade": "고1", "unit": "수학Ⅰ-삼각함수의활용", "title": "사인법칙·코사인법칙 — 삼각형 해석의 본질"}, {"grade": "고3", "unit": "수학Ⅱ-도함수의활용", "title": "정수 조건과 근의 논리적 확정 - 수능 킬러 도함수활용"}];
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
-let state = { grade: 'all', unit: 'all', source: 'all', q: '' };
+let state = { grade: 'all', unit: 'all', source: 'all', q: '', sort: 'added' };
 
 function rebuildUnitFilter() {
   const units = new Set();
@@ -1596,10 +1685,42 @@ function apply() {
     if (ok) visible++;
   });
   $('#empty').style.display = visible === 0 ? 'block' : 'none';
+  const total = $$('.card').length;
+  $('#resultCount').textContent =
+    visible === total ? `${total}개 전체` : `${visible} / ${total}개 표시`;
+}
+
+// 정렬 — 카드를 실제로 재배치한다. 'added'(추가일)가 기본이고 'date'(영상 게시일)로 전환 가능.
+function applySort() {
+  const gallery = $('#gallery');
+  const cards = [...$$('.card')];
+  const key = state.sort === 'date' ? 'date' : 'added';
+  cards.sort((a, b) => {
+    const av = a.dataset[key] || '', bv = b.dataset[key] || '';
+    if (av !== bv) return av < bv ? 1 : -1;          // 최신순
+    // 동률이면 나머지 키로 갈라 순서가 흔들리지 않게 한다
+    const a2 = a.dataset[key === 'added' ? 'date' : 'added'] || '';
+    const b2 = b.dataset[key === 'added' ? 'date' : 'added'] || '';
+    return a2 === b2 ? 0 : (a2 < b2 ? 1 : -1);
+  });
+  cards.forEach(c => gallery.appendChild(c));
+}
+
+// 최근 7일 안에 추가된 자료에 🆕 — 보는 시점 기준으로 JS가 판단한다
+function markNew() {
+  const WEEK = 7 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  $$('.card').forEach(card => {
+    const t = Date.parse(card.dataset.added || '');
+    const badge = card.querySelector('.new-badge');
+    if (badge) badge.hidden = !(t && now - t < WEEK);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  $$('[data-grade]').forEach(b => {
+  // .controls 로 한정 — 카드(article)도 data-grade/data-source 를 갖고 있어서
+  // 범위를 안 좁히면 카드를 누르는 것만으로 필터가 바뀐다.
+  $$('.controls [data-grade]').forEach(b => {
     b.onclick = () => {
       state.grade = b.dataset.grade;
       setActive(b.parentElement, b);
@@ -1607,14 +1728,24 @@ document.addEventListener('DOMContentLoaded', () => {
       apply();
     };
   });
-  $$('[data-source]').forEach(b => {
+  $$('.controls [data-source]').forEach(b => {
     b.onclick = () => {
       state.source = b.dataset.source;
       setActive(b.parentElement, b);
       apply();
     };
   });
+  $$('[data-sort]').forEach(b => {
+    b.onclick = () => {
+      state.sort = b.dataset.sort;
+      setActive(b.parentElement, b);
+      applySort();
+    };
+  });
   rebuildUnitFilter();
+  markNew();
+  applySort();
+  apply();
   $('#q').oninput = e => { state.q = e.target.value; apply(); };
   $('#darkBtn').onclick = () => {
     document.body.classList.toggle('dark');
