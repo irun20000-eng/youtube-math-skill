@@ -336,6 +336,14 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
   }
   .thumb-wrap .new-badge[hidden] { display: none; }
   .result-count { font-size: 0.88em; opacity: 0.75; align-self: center; }
+  #toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px);
+    background: var(--text); color: var(--bg); padding: 11px 18px; border-radius: 8px;
+    font-size: 0.9em; z-index: 100; opacity: 0; pointer-events: none;
+    transition: opacity 0.18s, transform 0.18s; max-width: calc(100% - 32px);
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) { #toast { transition: none; } }
   .info { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
   .info h3 {
     margin: 0; font-size: 1.0em; line-height: 1.35;
@@ -348,15 +356,32 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
     background: var(--tag-bg); color: var(--tag-text);
   }
   .tag.grade { background: var(--grade-bg); color: var(--grade-text); font-weight: 600; }
-  .actions { display: flex; border-top: 1px solid var(--border); }
-  .actions a {
-    flex: 1; text-align: center; padding: 9px 8px;
-    text-decoration: none; color: var(--text); font-size: 0.88em; font-weight: 500;
-    transition: background 0.1s;
+  /* 카드 아래 버튼 위계 — 학생에게 주는 건 학습자료다.
+     이전엔 '학습자료 열기'와 '원본'이 같은 무게라 어느 쪽이 본론인지 안 보였다. */
+  .actions {
+    display: flex; align-items: stretch; gap: 8px;
+    border-top: 1px solid var(--border); padding: 10px 12px;
   }
-  .actions a:hover { background: var(--bg); }
-  .actions a.primary { color: var(--accent); }
-  .actions a + a { border-left: 1px solid var(--border); }
+  .actions a, .actions button {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 8px 12px; border-radius: 8px;
+    text-decoration: none; font-size: 0.88em; font-weight: 500;
+    font-family: inherit; cursor: pointer; border: 1px solid transparent;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  /* 주 CTA: 채운 버튼으로 시선을 먼저 잡는다 */
+  .actions a.primary {
+    flex: 1; background: var(--accent); color: #fff; font-weight: 600;
+  }
+  .actions a.primary:hover { filter: brightness(1.08); }
+  /* 보조: 원본 영상·링크 복사는 조용한 외곽선 */
+  .actions .ghost {
+    flex: 0 0 auto; color: var(--muted); border-color: var(--border); background: var(--bg);
+  }
+  .actions .ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .actions a:focus-visible, .actions button:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
   .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
   .duplicates {
     background: var(--warning-bg); color: var(--warning-text);
@@ -500,6 +525,21 @@ function applySort() {
   cards.forEach(c => gallery.appendChild(c));
 }
 
+// 결과를 말로 알려준다. aria-live 라 화면 낭독기도 읽는다.
+let toastTimer;
+function toast(msg) {
+  let el = $('#toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite');
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
 // 최근 7일 안에 추가된 자료에 🆕 — 보는 시점 기준으로 JS가 판단한다
 function markNew() {
   const WEEK = 7 * 24 * 60 * 60 * 1000;
@@ -536,6 +576,26 @@ document.addEventListener('DOMContentLoaded', () => {
       applySort();
     };
   });
+  // 링크 복사 — 절대 URL 로 만들어 붙여넣는 쪽에서 바로 열리게 한다
+  $('#gallery').addEventListener('click', async e => {
+    const btn = e.target.closest('.copy-link');
+    if (!btn) return;
+    const url = new URL(btn.dataset.path, location.href).href;
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(url);
+      ok = true;
+    } catch (_) {
+      // 구형 브라우저·비보안 컨텍스트(file://)에서는 clipboard API 가 막힌다
+      const ta = document.createElement('textarea');
+      ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
+      ta.remove();
+    }
+    toast(ok ? '링크를 복사했습니다' : '복사에 실패했습니다 — 주소창에서 복사해 주세요');
+  });
+
   $('#unitToggle').onclick = () => toggleUnitPanel();
   // 단원을 고르면 패널을 닫아 다시 카드가 바로 보이게 한다
   $('#unitList').addEventListener('click', e => {
@@ -605,8 +665,16 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
             thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999">썸네일 없음</div>'
         src_badge = '📘 개념' if is_concept else '🎬 영상'
         original_link = (
-            f'<a href="{_esc(url)}" target="_blank" rel="noopener">▶ 원본</a>'
+            f'<a class="ghost" href="{_esc(url)}" target="_blank" rel="noopener" '
+            f'title="원본 영상 열기">▶ 원본</a>'
             if url else ''
+        )
+        # 링크 복사 — 작업의 실제 종착점은 학생에게 주소를 보내는 일인데,
+        # 지금까지는 자료를 열고 주소창에서 직접 복사해야 했다.
+        copy_btn = (
+            f'<button class="ghost copy-link" type="button" '
+            f'data-path="{_esc(rel_path)}" title="이 자료 링크 복사" '
+            f'aria-label="{_esc(title)} 링크 복사">🔗</button>'
         )
         cards.append(f'''<article class="card" data-grade="{_esc(r["grade"])}" data-unit="{_esc(r["unit"])}" data-source="{_esc(r.get("source","video"))}" data-added="{_esc(r["added"])}" data-date="{_esc(r["date"])}" data-search="{_esc(search_text + " " + src_badge)}">
   <a href="{_esc(rel_path)}" class="thumb-wrap">
@@ -627,6 +695,7 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
   <div class="actions">
     <a href="{_esc(rel_path)}" class="primary">📖 학습자료 열기</a>
     {original_link}
+    {copy_btn}
   </div>
 </article>''')
         items.append({
