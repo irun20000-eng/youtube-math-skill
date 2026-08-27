@@ -212,7 +212,7 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📚 학습자료 갤러리</title>
+<title>aftermath — 수학 학습자료</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   :root {
@@ -235,7 +235,15 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
   }
   .wrap { max-width: 1200px; margin: 0 auto; }
   header { margin-bottom: 24px; }
-  header h1 { margin: 0 0 4px; font-size: 1.7em; }
+  /* 브랜드 워드마크 — aftermath. 파랑/회색이라 라이트·다크 양쪽에서 읽힌다 */
+  .brandbar { display:flex; align-items:baseline; gap:10px; margin:0 0 10px; flex-wrap:wrap; }
+  .wordmark { display:inline-block; line-height:0; }
+  .wordmark img { width:200px; height:auto; display:block; }
+  /* 핸들은 이미지가 아니라 텍스트 — 브랜드 자산의 핸들은 네이비라 다크에서 사라진다 */
+  .handle { font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+            font-size:.82em; color:var(--muted); letter-spacing:.02em; }
+  @media (max-width:600px){ .wordmark img { width:168px; } .handle{ font-size:.76em; } }
+  header h1 { margin: 0 0 4px; font-size: 1.35em; font-weight:600; letter-spacing:-.01em; }
   .stats { color: var(--muted); font-size: 0.95em; }
   .controls {
     display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
@@ -328,7 +336,11 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
 <body>
 <div class="wrap">
   <header>
-    <h1>📚 학습자료 갤러리</h1>
+    <div class="brandbar"><a class="wordmark" href="./index.html" aria-label="aftermath — 수학 학습자료 갤러리 홈">
+      <img src="assets/brand/wordmark.png" alt="aftermath" width="200" height="41">
+    </a>
+    <span class="handle">@irun20000</span></div>
+    <h1>수학 학습자료</h1>
     <div class="stats">__STATS__ · 갱신 __UPDATED__</div>
   </header>
 
