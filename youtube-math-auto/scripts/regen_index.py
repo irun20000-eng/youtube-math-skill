@@ -336,6 +336,50 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
   }
   .thumb-wrap .new-badge[hidden] { display: none; }
   .result-count { font-size: 0.88em; opacity: 0.75; align-self: center; }
+  /* 최근 본 자료 — 한 줄 칩. 가로로만 흐르게 해서 세로 공간을 거의 안 쓴다 */
+  .recent {
+    display: flex; align-items: center; gap: 10px;
+    margin: 0 0 14px; padding: 8px 12px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .recent[hidden] { display: none; }
+  .recent .label { color: var(--muted); font-size: 0.85em; white-space: nowrap; flex-shrink: 0; }
+  .recent-list {
+    display: flex; gap: 8px; overflow-x: auto; flex: 1;
+    scrollbar-width: thin; padding-bottom: 2px;
+  }
+  .recent-list a {
+    display: inline-flex; align-items: center; min-height: 36px;
+    padding: 5px 12px; border-radius: 999px; white-space: nowrap;
+    background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); text-decoration: none; font-size: 0.85em; max-width: 240px;
+  }
+  .recent-list a span { overflow: hidden; text-overflow: ellipsis; }
+  .recent-list a:hover { border-color: var(--accent); color: var(--accent); }
+  .recent #recentClear {
+    flex-shrink: 0; min-height: 36px; padding: 4px 10px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--muted);
+    cursor: pointer; font: inherit; font-size: 0.85em;
+  }
+  .recent #recentClear:hover { border-color: var(--accent); color: var(--accent); }
+  .recent a:focus-visible, .recent button:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
+  /* 검색어 강조 — 어디가 걸렸는지 눈으로 바로 보이게 */
+  .card-title mark {
+    background: #ffe58a; color: #3d2f00; border-radius: 3px; padding: 0 1px;
+  }
+  body.dark .card-title mark { background: #6b5a12; color: #ffeaa0; }
+
+  /* 학년 색 띠 — 카드가 전부 같은 회색 틀이라 훑을 때 구분이 안 됐다.
+     난이도는 카드가 가진 정보가 아니므로, 실제로 훑는 축인 '학년'으로 인코딩한다. */
+  .card { border-top: 3px solid var(--stripe, var(--border)); }
+  .card[data-grade="고1"] { --stripe: #22a06b; }
+  .card[data-grade="고2"] { --stripe: #2563eb; }
+  .card[data-grade="고3"] { --stripe: #d9760a; }
+  .card[data-grade="미분류"] { --stripe: #8698ab; }
+
   #toast {
     position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px);
     background: var(--text); color: var(--bg); padding: 11px 18px; border-radius: 8px;
@@ -383,6 +427,13 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
     outline: 2px solid var(--accent); outline-offset: 2px;
   }
   .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+  .empty p { margin: 0 0 14px; }
+  .empty #clearFilters {
+    min-height: 44px; padding: 8px 18px; border-radius: 8px;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    font: inherit; font-size: 0.9em; font-weight: 600; cursor: pointer;
+  }
+  .empty #clearFilters:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   .duplicates {
     background: var(--warning-bg); color: var(--warning-text);
     border: 1px solid var(--warning-border); border-radius: 8px;
@@ -441,11 +492,22 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
     <span class="result-count" id="resultCount"></span>
   </div>
 
+  <!-- 최근 본 자료 — 기록이 있을 때만 JS 가 채운다(없으면 빈 자리도 안 남는다).
+       세로 공간을 다시 잡아먹지 않도록 카드가 아니라 한 줄 칩으로. -->
+  <nav class="recent" id="recent" hidden aria-label="최근 본 자료">
+    <span class="label">최근 본 자료</span>
+    <div class="recent-list" id="recentList"></div>
+    <button type="button" id="recentClear" title="최근 목록 지우기" aria-label="최근 목록 지우기">✕</button>
+  </nav>
+
   <main class="gallery" id="gallery">
     __CARDS__
   </main>
 
-  <div class="empty" id="empty" style="display:none">조건에 맞는 자료가 없습니다.</div>
+  <div class="empty" id="empty" style="display:none">
+    <p id="emptyMsg">조건에 맞는 자료가 없습니다.</p>
+    <button type="button" id="clearFilters">필터 모두 해제</button>
+  </div>
 </div>
 
 <script>
@@ -507,6 +569,32 @@ function apply() {
   const total = $$('.card').length;
   $('#resultCount').textContent =
     visible === total ? `${total}개 전체` : `${visible} / ${total}개 표시`;
+  highlight(q);
+
+  // 0건일 때 "왜 없는지"를 말해준다. 학년이 기억돼 있으면 검색어는 맞는데도
+  // 0건이 나올 수 있어, 무엇을 풀면 되는지 짚어주지 않으면 막막해진다.
+  if (visible === 0) {
+    const on = [];
+    if (state.grade !== 'all') on.push(`학년 "${state.grade}"`);
+    if (state.unit !== 'all') on.push(`단원 "${state.unit}"`);
+    if (state.source !== 'all') on.push('출처');
+    $('#emptyMsg').textContent = on.length
+      ? `조건에 맞는 자료가 없습니다. ${on.join(', ')} 필터가 걸려 있습니다.`
+      : '조건에 맞는 자료가 없습니다. 다른 검색어로 찾아보세요.';
+    $('#clearFilters').style.display = on.length ? '' : 'none';
+  }
+}
+
+// 필터만 풀고 검색어는 남긴다 — 찾던 말은 그대로 두는 쪽이 자연스럽다
+function clearFilters() {
+  state.grade = 'all'; state.unit = 'all'; state.source = 'all';
+  lsSet('gallery-grade', 'all');
+  $$('.controls [data-grade]').forEach(b =>
+    b.classList.toggle('active', b.dataset.grade === 'all'));
+  $$('.controls [data-source]').forEach(b =>
+    b.classList.toggle('active', b.dataset.source === 'all'));
+  rebuildUnitFilter();
+  apply();
 }
 
 // 정렬 — 카드를 실제로 재배치한다. 'added'(추가일)가 기본이고 'date'(영상 게시일)로 전환 가능.
@@ -523,6 +611,63 @@ function applySort() {
     return a2 === b2 ? 0 : (a2 < b2 ? 1 : -1);
   });
   cards.forEach(c => gallery.appendChild(c));
+}
+
+// 저장소는 사생활 보호 모드·차단 설정에서 접근만 해도 예외를 던진다.
+// 갤러리가 그걸로 죽으면 안 되므로 전부 감싼다.
+function lsGet(k, fallback) {
+  try { const v = localStorage.getItem(k); return v === null ? fallback : v; }
+  catch (_) { return fallback; }
+}
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
+
+const RECENT_KEY = 'gallery-recent';
+const RECENT_MAX = 5;
+
+function readRecent() {
+  try { const a = JSON.parse(lsGet(RECENT_KEY, '[]')); return Array.isArray(a) ? a : []; }
+  catch (_) { return []; }
+}
+
+// 카드를 열면 기록한다. 같은 자료를 다시 열면 맨 앞으로 끌어올린다.
+function pushRecent(path, title) {
+  const list = readRecent().filter(it => it && it.path !== path);
+  list.unshift({ path, title });
+  lsSet(RECENT_KEY, JSON.stringify(list.slice(0, RECENT_MAX)));
+}
+
+function renderRecent() {
+  const list = readRecent();
+  const wrap = $('#recent');
+  if (!list.length) { wrap.hidden = true; return; }
+  const box = $('#recentList');
+  box.textContent = '';
+  list.forEach(it => {
+    const a = document.createElement('a');
+    a.href = it.path;                       // textContent 로만 넣어 주입 여지를 없앤다
+    const s = document.createElement('span');
+    s.textContent = it.title;
+    a.appendChild(s);
+    a.title = it.title;
+    box.appendChild(a);
+  });
+  wrap.hidden = false;
+}
+
+// 검색어 강조 — 제목을 텍스트로만 다시 조립하므로 HTML 주입이 생기지 않는다.
+function highlight(q) {
+  $$('.card-title').forEach(el => {
+    const text = el.dataset.plain || (el.dataset.plain = el.textContent);
+    if (!q) { el.textContent = text; return; }
+    const i = text.toLowerCase().indexOf(q);
+    if (i < 0) { el.textContent = text; return; }
+    el.textContent = '';
+    el.appendChild(document.createTextNode(text.slice(0, i)));
+    const m = document.createElement('mark');
+    m.textContent = text.slice(i, i + q.length);
+    el.appendChild(m);
+    el.appendChild(document.createTextNode(text.slice(i + q.length)));
+  });
 }
 
 // 결과를 말로 알려준다. aria-live 라 화면 낭독기도 읽는다.
@@ -557,6 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $$('.controls [data-grade]').forEach(b => {
     b.onclick = () => {
       state.grade = b.dataset.grade;
+      lsSet('gallery-grade', state.grade);   // 다음에 열 때도 같은 학년으로
       setActive(b.parentElement, b);
       rebuildUnitFilter();
       apply();
@@ -601,6 +747,30 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#unitList').addEventListener('click', e => {
     if (e.target.tagName === 'BUTTON') toggleUnitPanel(false);
   });
+  // 카드를 열면 최근 목록에 남긴다(자료 링크·주 버튼 어느 쪽으로 들어가든).
+  $('#gallery').addEventListener('click', e => {
+    const a = e.target.closest('.card a[href]');
+    if (!a || a.target === '_blank') return;          // 원본 영상은 제외
+    const card = a.closest('.card');
+    const t = card.querySelector('.card-title');
+    pushRecent(a.getAttribute('href'), (t.dataset.plain || t.textContent).trim());
+  });
+  $('#clearFilters').onclick = clearFilters;
+  $('#recentClear').onclick = () => {
+    lsSet(RECENT_KEY, '[]');
+    renderRecent();
+    toast('최근 목록을 지웠습니다');
+  };
+
+  // 지난 학년 선택 복원 — 매번 '전체'로 시작하지 않게. 버튼이 없으면 조용히 무시.
+  const savedGrade = lsGet('gallery-grade', 'all');
+  const gradeBtn = document.querySelector(`.controls [data-grade="${CSS.escape(savedGrade)}"]`);
+  if (gradeBtn) {
+    state.grade = savedGrade;
+    setActive(gradeBtn.parentElement, gradeBtn);
+  }
+
+  renderRecent();
   rebuildUnitFilter();
   markNew();
   applySort();
@@ -684,7 +854,7 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
     <span class="date">{date_fmt}</span>
   </a>
   <div class="info">
-    <h3><a href="{_esc(rel_path)}" style="color:inherit;text-decoration:none">{_esc(title)}</a></h3>
+    <h3><a class="card-title" href="{_esc(rel_path)}" style="color:inherit;text-decoration:none">{_esc(title)}</a></h3>
     {f'<div class="channel">📺 {_esc(channel)}</div>' if channel else ''}
     <div class="tags">
       <span class="tag grade">{_esc(r["grade"])}</span>
