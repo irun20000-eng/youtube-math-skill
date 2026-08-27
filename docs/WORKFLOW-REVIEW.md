@@ -96,6 +96,7 @@
 | ⑧ | 트랙 A "09:00 KST INBOX 루틴"이 문서엔 있는데 실제 Routine 이 계정에 없었음(확인: 2026-08-06, `list_triggers`에 youtube-math-skill 대상 트리거 0건) | A | ✅ 신규 Routine 생성(§본 파일 트랙 A) |
 | ⑨ | 옛 GAS INBOX 경로가 죽어 있었음(GAS가 더 이상 안 채움) → `process_inbox.py`가 로컬 평문 `.md`만 파싱 가능해 스파크의 Google Docs·inline frontmatter를 못 읽음 | A | ✅ 스파크 입력원 전환 + `process_inbox.py` 파싱 로직 재작성(이스케이프 해제 + inline 필드 추출) |
 | ⑩ | `_queue` 폴더가 문서에만 언급되고 실제 로직에서 쓰인 적 없음(죽은 개념) | A | ✅ 대체 없이 삭제 |
+| ⑪ | PDF 인쇄 모드가 `.problem-card`(A형)만 보고 있어 B형 29편은 해설 재배치가 안 되는데도 배너는 "뒷장에 모았습니다"라고 표시 — 설명과 실제 불일치 | 공통 | ✅ 셀렉터를 양 템플릿으로 넓히고, 출력 방식(해설 뒤로/함께) 선택 UI 추가. 배너 문구도 선택을 따라감 |
 
 ## 4. 검증 체크리스트 (트랙 B 종료 직전)
 
@@ -114,7 +115,8 @@
 | `scripts/add_back_button.py` | 어디서나 | 갤러리 복귀 버튼 패치 |
 | `scripts/add_related.py` | 어디서나 | 관련 자료 카드 |
 | `youtube-math-auto/scripts/regen_index.py` | 어디서나 | 갤러리 index 재생성 |
-| `youtube-math-auto/scripts/patch_pdf_mode.py` | 어디서나 | PDF 인쇄 모드 |
+| `youtube-math-auto/scripts/patch_pdf_mode.py` | 어디서나 | PDF 인쇄 모드 **링크 주입** |
+| `output/pdf-mode.css` · `output/pdf-mode.js` | 공유 | **인쇄 동작 본체.** 70편이 상대경로로 참조하므로 인쇄 서식은 여기만 고치면 전 자료에 반영된다. 문항 셀렉터는 `.problem-card`(A형)와 `article.problem`(B형)을 **둘 다** 잡아야 한다 |
 | **Drive MCP `create_file`** | 세션·클라우드 | **옵시디언 스텁 작성 (일상 경로)** |
 | `scripts/make_math_stubs.py` | **PC(Windows) 전용** | 갤러리→옵시디언 **백필**(과거 자료 일괄) 용. 비Windows 에선 자동 dry-run |
 | `scripts/post_process.py` | 어디서나 | 후처리 5단계 통합 — 단 ③ 스텁은 비Windows 자동 dry-run. 일상 트랙 A·B 에선 4단계 개별 호출 권장 |

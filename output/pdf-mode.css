@@ -40,6 +40,33 @@
 .pdf-toolbar button:hover { background: #0d47a1; }
 .pdf-toolbar button.exit { background: #c62828; }
 .pdf-toolbar button.exit:hover { background: #8e0000; }
+.pdf-toolbar button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* 출력 방식 선택 — 인쇄 버튼 왼쪽에 붙는 2지 선다.
+   흰 알약 안에서 고른 쪽만 채워져, 지금 무엇으로 나갈지가 눈에 보인다. */
+.pdf-modes {
+  display: flex;
+  background: #fff;
+  border-radius: 24px;
+  padding: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.pdf-toolbar .pdf-mode-btn {
+  background: transparent;
+  color: #445;
+  box-shadow: none;
+  padding: 7px 14px;
+  font-size: 13px;
+  border-radius: 20px;
+}
+.pdf-toolbar .pdf-mode-btn:hover { background: #eef2f7; color: #1976d2; }
+.pdf-toolbar .pdf-mode-btn.active { background: #1976d2; color: #fff; }
+.pdf-toolbar .pdf-mode-btn.active:hover { background: #0d47a1; }
+
+@media (max-width: 600px) {
+  .pdf-toolbar { flex-wrap: wrap; justify-content: flex-end; max-width: calc(100vw - 32px); }
+  .pdf-toolbar .pdf-mode-btn { padding: 7px 10px; font-size: 12px; }
+}
 
 /* ===== 인쇄 모드 화면 미리보기 ===== */
 body.print-mode {
@@ -81,31 +108,43 @@ body.print-mode {
   line-height: 1.55;
 }
 
-/* 문제 카드 — 풀이 공간 확보 + 단절 방지 */
-body.print-mode .problem-card {
+/* 문제 카드 — 풀이 공간 확보 + 단절 방지
+   .problem-card 는 A형(스켈레톤), article.problem 은 B형(최근 템플릿).
+   예전엔 A형만 적었던 탓에 B형 29편은 인쇄 서식이 통째로 안 걸렸다. */
+body.print-mode .problem-card,
+body.print-mode article.problem {
   page-break-inside: avoid;
   break-inside: avoid;
-  margin-bottom: 2.5cm; /* 손글씨 풀이 공간 */
   border: 1.5pt solid #333;
   border-radius: 6px;
   box-shadow: none;
   padding: 12pt 14pt;
 }
-body.print-mode .problem-card .problem-num {
+/* 손글씨 풀이 공간은 '해설 뒤로'일 때만 — 해설을 함께 찍으면 그 자리가 답이다 */
+body.print-mode.answers-back .problem-card,
+body.print-mode.answers-back article.problem { margin-bottom: 2.5cm; }
+body.print-mode.answers-inline .problem-card,
+body.print-mode.answers-inline article.problem { margin-bottom: 14pt; }
+
+body.print-mode .problem-card .problem-num,
+body.print-mode article.problem h3 {
   font-size: 12pt;
   font-weight: 700;
   margin-bottom: 6pt;
 }
-body.print-mode .problem-card .problem-body {
+body.print-mode .problem-card .problem-body,
+body.print-mode article.problem .problem-body {
   font-size: 11pt;
   line-height: 1.6;
 }
 
-/* 인쇄 모드에서 해설(details) 카드에서 숨김 (재배치된 답안만 표시) */
-body.print-mode .problem-card details { display: none; }
+/* ===== ① 해설 뒤로 — 원래 자리에서는 감추고 맨 뒤에 모은다 =====
+   JS 가 옮긴 details 에 .pdf-relocated 를 달아준다. 조상 클래스로 잡으면
+   도입 예시(div.card)처럼 다른 컨테이너에 담긴 풀이가 빠져나간다. */
+body.print-mode.answers-back details.pdf-relocated { display: none !important; }
 
 /* "정답은 뒷장 참고" placeholder */
-body.print-mode .problem-card .answer-ref {
+body.print-mode .answer-ref {
   font-size: 9pt;
   color: #888;
   margin-top: 6pt;
@@ -114,9 +153,24 @@ body.print-mode .problem-card .answer-ref {
   padding-top: 4pt;
 }
 
+/* ===== ② 해설 함께 — 문항 바로 아래에 펼쳐 찍는다 =====
+   자료 템플릿의 자체 인쇄 CSS 가 details/summary 를 제 나름대로 다루므로
+   (B형은 .solution 에 display:block!important 를 건다) 여기서 확정해 준다. */
+body.print-mode.answers-inline details { display: block !important; border-top: none; }
+body.print-mode.answers-inline details > summary { display: none !important; }
+body.print-mode.answers-inline details > .solution,
+body.print-mode.answers-inline details:not([open]) > .solution {
+  display: block !important;
+  padding: 6pt 0 0 8pt;
+  border-left: 2pt solid #bbb;
+  margin-top: 6pt;
+}
+
 /* ===== 정답·풀이 별도 섹션 ===== */
 .answer-section { display: none; }
-body.print-mode .answer-section {
+/* '해설 함께'를 고르면 뒷장 답지는 통째로 빠진다 — 같은 내용을 두 번 찍지 않는다 */
+body.print-mode.answers-inline .answer-section { display: none !important; }
+body.print-mode.answers-back .answer-section {
   display: block;
   page-break-before: always;
   break-before: page;

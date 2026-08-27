@@ -37,8 +37,24 @@
 python scripts/add_back_button.py                              # ① 🏠 갤러리 복귀 버튼
 python scripts/add_related.py                                  # ② 관련 자료(REL 마커)
 python youtube-math-auto/scripts/regen_index.py output/        # ③ 갤러리 카탈로그 재생성
-python youtube-math-auto/scripts/patch_pdf_mode.py output/     # ④ PDF 인쇄 모드
+python youtube-math-auto/scripts/patch_pdf_mode.py output/     # ④ PDF 인쇄 모드 링크 주입
 ```
+## PDF 인쇄 모드 (2026-08-27 개편)
+
+인쇄 동작은 자료 파일이 아니라 **공유 파일 두 개**(`output/pdf-mode.css`, `output/pdf-mode.js`)에
+들어 있다. 70편이 모두 이 둘을 상대경로로 참조하므로, 인쇄 서식을 바꿀 때는
+**여기만 고치면 전 자료에 일관 적용**된다. 자료 파일을 일괄 수정하지 말 것.
+
+인쇄 전 두 가지 중 고른다(선택은 localStorage 에 기억된다):
+- **해설 뒤로** — 문항만 앞에, 정답·풀이는 맨 뒤 `[정답·풀이]` 섹션에 모음. 학생 배포용.
+  문항 아래에 손글씨 풀이 공간 2.5cm 확보.
+- **해설 함께** — 문항 바로 아래에 정답·풀이를 펼쳐 출력. 교사용·자습용.
+  뒷장 답지는 통째로 빠진다(같은 내용을 두 번 찍지 않음).
+
+**문항 셀렉터는 반드시 두 템플릿을 모두 잡을 것**: `.problem-card`(A형 스켈레톤) +
+`article.problem`(B형). 예전에 A형만 적혀 있어 B형 29편에서는 재배치가 아예 일어나지
+않았는데 배너만 "해설은 뒷장에 모았습니다"라고 말해, 설명과 실제가 어긋나 있었다.
+
 - `make_math_stubs.py`는 **PC(Windows) 백필 전용** — 세션·클라우드(비Windows)에선 호출 안 함(자동 dry-run으로 떨어지지만 애초에 부르지 않는다). 일상 옵시디언 스텁은 Drive MCP `create_file` 직접 호출(CLAUDE.md "옵시디언 = Drive" 섹션 참조).
 
 ## 배포
