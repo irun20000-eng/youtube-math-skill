@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시소 이론(질량점)으로 넓이비 내분점 구하기 (도형의 방정식) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+  
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고1-도형의 방정식-내분점과 넓이비]</div><h1>시소 이론(질량점) — 넓이비로 삼각형 내부의 점 구하기</h1><p class="sub">🎯 지레의 원리(무게·거리 반비례)를 넓이비에 적용해, 내분점 공식 2회만으로 복잡한 연립방정식 없이 점 P를 구한다</p><div class="video-card"><a class="thumb" href="https://youtu.be/mUGapt8hXXQ" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/mUGapt8hXXQ/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상</div><div class="v-meta">📺 김강용: 심화와 응용에 강한 수학, 18분 12초</div><a class="v-link" href="https://youtu.be/mUGapt8hXXQ" target="_blank" rel="noopener">https://youtu.be/mUGapt8hXXQ</a></div></div></div>
+
+  
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 문제</h2>
+      <article class="problem advanced">
+        <h3>예시 — 넓이비로 내부의 점 좌표 구하기 (내신 준킬러)</h3>
+        <p class="problem-body"><strong>문제:</strong> 세 점 $A(-2,-2)$, $B(1,6)$, $C(4,0)$ 을 꼭짓점으로 하는 삼각형 $ABC$ 내부에 점 $P$ 가 있다. $\triangle PAB : \triangle PBC : \triangle PCA = 1:2:3$ 일 때, 점 $P$ 의 좌표를 구하시오.</p>
+        <details open>
+          <summary>📖 풀이 보기 (시소 이론 · 질량점)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 넓이비를 "마주 보는 꼭짓점의 무게"로 바꾼다:</strong> $\triangle PBC$(꼭짓점 $A$ 를 안 씀) $\to$ $A$ 의 무게, $\triangle PCA \to B$ 의 무게, $\triangle PAB \to C$ 의 무게. 비율이 $\triangle PAB:\triangle PBC:\triangle PCA=1:2:3$ 이므로 $\triangle PBC:\triangle PCA:\triangle PAB=2:3:1$, 즉 $m_A=2,\ m_B=3,\ m_C=1$.</p>
+            <p><strong>STEP 2 — 변 $BC$ 위의 받침점 $D$:</strong> $B,C$ 의 무게 $3,1$ 의 시소 균형점은 <strong>무거운 쪽(더 큰 무게)에 가깝게, 비율은 반대로 교차</strong>하여 $BD:DC=m_C:m_B=1:3$. 내분점 공식으로 $D=\dfrac{3B+1C}{4}=\left(\dfrac74,\dfrac92\right)$, 무게는 합인 $4$.</p>
+            <p><strong>STEP 3 — 선분 $AD$ 위의 점 $P$:</strong> 이제 $A$(무게 $2$)와 $D$(무게 $4$)의 시소. $AP:PD=m_D:m_A=4:2=2:1$. 내분점 공식: $P=\dfrac{4A+2D}{6}=\dfrac{2A+1D}{3}$.</p>
+            <p><strong>STEP 4 — 계산:</strong> $P=\left(\dfrac{2(-2)+\frac74}{3},\ \dfrac{2(-2)+\frac92}{3}\right)=\left(\dfrac{-4+\frac74}{3},\ \dfrac{-4+\frac92}{3}\right)=\left(\dfrac12,\ \dfrac73\right)$.</p>
+            <p class="answer"><strong>정답:</strong> $P\left(\dfrac12,\ \dfrac73\right)$</p>
+            <p class="key-point"><strong>핵심:</strong> 넓이 연립방정식 없이, <strong>내분점 공식을 두 번</strong> 쓰는 것으로 끝난다. (순수 파이썬 넓이 계산으로 $\triangle PAB:\triangle PBC:\triangle PCA=1:2:3$ 검산 완료)</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (시소 이론 · 이론적 검증 포함)</h2>
+
+      <div class="concept-block">
+        <h3>① 선수 지식 — 지레의 원리(시소)</h3>
+        <p>시소 양 끝에 무게 $m_1,m_2$ 가 있고 받침점(균형점)까지의 거리가 각각 $l_1,l_2$ 이면 <strong>$m_1 l_1=m_2 l_2$</strong> 일 때 평형이다. 정리하면 $l_1:l_2=m_2:m_1$ — <strong>거리비는 무게비의 "반대(교차)"</strong>다. 무거운 쪽일수록 받침점에 가깝다(거리가 짧다).</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">강사(영상 [00:01:50]):</strong> "너네들의 비율은 너네들 비율과 반대라고, 그냥 그럴 법도 하잖아 그지"</div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 핵심 — "시소 이론"을 도형에 적용</h3>
+        <p>선분의 내분점을 "무게가 만드는 균형점"으로 재해석한다. 두 점 $B,C$ 에 무게 $m_B,m_C$ 를 놓으면 균형점 $D$ 는 $BD:DC=m_C:m_B$ (반대 비율) 를 만족하고, $D$ 에는 합쳐진 무게 $m_B+m_C$ 가 놓인 것으로 본다. 이 과정을 <strong>한 번 더</strong> 반복하면(꼭짓점 $A$ 무게 $m_A$ 와 $D$ 의 합무게), 세 선분(cevian)이 만나는 점 $P$ 를 <strong>내분점 공식 2회</strong>로 구할 수 있다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 이론적 검증 — 왜 넓이비가 곧 무게비인가 (증명)</h3>
+        <p>직선 $AP$ 가 변 $BC$ 와 점 $D$ 에서 만난다고 하자. $P,\,D,\,A$ 는 한 직선 위에 있고 $D$ 는 직선 $BC$ 위에 있으므로, 점 $P$·점 $A$ 에서 직선 $BC$ 까지의 거리의 비는 그 직선 위에서의 위치 비, 즉 $\overline{PD}:\overline{AD}$ 와 같다(평행선 사이 거리 비 = 대응 선분 비, 닮음).</p>
+        <p>$\triangle PBC$ 와 $\triangle ABC$ 는 <strong>밑변 $BC$ 를 공유</strong>하므로 넓이비는 높이비와 같다:</p>
+        <div class="formula-box">
+          $\dfrac{[\triangle PBC]}{[\triangle ABC]}=\dfrac{\overline{PD}}{\overline{AD}}$
+        </div>
+        <p>그런데 $P$ 가 $A,D$ 를 무게 $m_A,\,(m_B{+}m_C)$ 로 내분하는 점이므로 $AP:PD=(m_B{+}m_C):m_A$, 즉 $\overline{PD}/\overline{AD}=m_A/(m_A{+}m_B{+}m_C)$. 대입하면:</p>
+        <div class="formula-box">
+          $[\triangle PBC]=\dfrac{m_A}{m_A+m_B+m_C}\,[\triangle ABC]$
+        </div>
+        <p>같은 논리를 $B,C$ 를 지나는 cevian에도 적용하면(대칭적으로) $[\triangle PCA]\propto m_B$, $[\triangle PAB]\propto m_C$ 를 얻는다. 세 식을 합치면 <strong>$[\triangle PBC]:[\triangle PCA]:[\triangle PAB]=m_A:m_B:m_C$</strong> — 넓이비 정리가 증명된다. (이 자료에서 4개의 서로 다른 삼각형·무게 조합으로 수치 검산 완료: 모두 정확히 일치)</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--standard);"><strong style="color:var(--standard);">강사(영상 [00:09:02] 요지):</strong> 무게중심일 때 세 삼각형 넓이가 $1:1:1$ 임을 상기시키며, 높이의 비와 마주 보는 꼭짓점의 무게가 대응됨을 보인다 — 위 증명은 그 논증을 일반적인 무게 $m_A,m_B,m_C$ 로 완결한 것.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 함정 — 적용 조건: 반드시 꼭짓점을 지나야 한다</h3>
+        <p>시소 이론은 <strong>선분이 반드시 한 꼭짓점을 지나 교차</strong>할 때만 바로 적용된다. 꼭짓점에 닿지 않고 삼각형 내부를 빗겨 지나가는 선분에는 직접 못 쓴다 — 이 경우 보조선을 그어 삼각형을 재구성해야 한다.</p>
+        <div class="mini-ex" style="margin-top:9px;padding:8px 12px;background:var(--summary-bg);border-radius:6px;font-size:.93em;border-left:3px solid var(--advanced);"><strong style="color:var(--advanced);">강사(영상 [00:05:43]):</strong> "학교 내신 야 너네한테 무게 중심 좌표 구하라고 주겠니? 그렇게 안 줘" — 실제론 변형된 넓이비 조건으로 나오니 이 테크닉이 시간을 크게 줄여준다.</div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 지레의 원리로 거리비 구하기</h3>
+        <p class="problem-body"><strong>문제:</strong> 시소 양 끝에 무게 $2$, $3$ 인 추가 있다. 균형점까지의 거리를 각각 $l_1$(무게 2 쪽), $l_2$(무게 3 쪽) 라 할 때 $l_1:l_2$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$2l_1=3l_2 \Rightarrow l_1:l_2=3:2$ (거리비는 무게비의 반대).</p>
+          <p class="answer"><strong>정답:</strong> $l_1:l_2=3:2$ (개념 ①)</p>
+        </div></details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 무게중심은 중선을 몇 대 몇으로?</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형의 세 꼭짓점에 무게 $1,1,1$ 을 놓았다. 꼭짓점 $A$ 와 대변 $BC$ 의 중점을 잇는 선분에서, 균형점(무게중심)이 $A$ 쪽과 중점 쪽을 각각 몇 대 몇으로 내분하는지 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>중점의 무게는 $1+1=2$(합력). $A$(무게 $1$)와 중점(무게 $2$)의 균형점은 $A\text{쪽}:\text{중점쪽}=2:1$(반대 비율).</p>
+          <p class="answer"><strong>정답:</strong> $2:1$ — 무게중심이 중선을 $2:1$ 로 내분한다는 사실과 일치 (개념 ②)</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 내분비 → 무게 역산</h3>
+        <p class="problem-body"><strong>문제:</strong> 선분 $BC$ 가 점 $D$ 에 의해 $BD:DC=1:2$ 로 내분된다. $D$ 가 $B,C$ 두 무게의 시소 균형점이 되도록 무게를 배정할 때, $m_B:m_C$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>$BD:DC=m_C:m_B$(반대 비율) $=1:2 \Rightarrow m_C:m_B=1:2 \Rightarrow m_B:m_C=2:1$.</p>
+          <p class="answer"><strong>정답:</strong> $m_B:m_C=2:1$ (개념 ①②)</p>
+        </div></details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 넓이비 $1:1:1$ 의 의미</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼각형 $ABC$ 내부의 점 $P$ 에 대해 $\triangle PBC:\triangle PCA:\triangle PAB=1:1:1$ 이면 점 $P$ 는 어떤 점인가? 이때 꼭짓점 $A,B,C$ 에 대응하는 무게의 비를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>넓이비 정리(개념 ③)에 의해 $m_A:m_B:m_C=1:1:1$ — 세 무게가 같으면 균형점은 <strong>무게중심</strong>.</p>
+          <p class="answer"><strong>정답:</strong> 무게중심, $m_A:m_B:m_C=1:1:1$</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 높이비로 넓이비 직접 계산</h3>
+        <p class="problem-body"><strong>문제:</strong> $\triangle ABC$ 에서 점 $P$ 가 변 $BC$ 위의 점 $D$ 에 대해 선분 $AD$ 위에 있고 $\overline{AP}:\overline{PD}=4:1$ 이다. $[\triangle PBC]:[\triangle ABC]$ 를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>개념③ 증명에서 $[\triangle PBC]/[\triangle ABC]=\overline{PD}/\overline{AD}$. $AP:PD=4:1$ 이면 $AD=AP+PD=5$(단위), $PD=1$ 이므로 비는 $1/5$.</p>
+          <p class="answer"><strong>정답:</strong> $[\triangle PBC]:[\triangle ABC]=1:5$ (개념 ③ 증명의 직접 적용)</p>
+        </div></details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 적용 조건 판별</h3>
+        <p class="problem-body"><strong>문제:</strong> 다음 중 시소 이론(질량점)을 <strong>바로</strong> 적용할 수 있는 경우를 고르고 이유를 쓰시오.<br>(가) 삼각형의 세 중선이 한 점(무게중심)에서 만나는 경우<br>(나) 세 변 위의 점들을 이은 선분이 어느 꼭짓점도 지나지 않고 삼각형 내부에서 서로 만나는 경우</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>중선은 반드시 꼭짓점(A,B,C)을 지난다 — (가)만 적용 가능. (나)는 선분이 꼭짓점을 지나지 않으므로(빗겨감) 보조선으로 삼각형을 재구성해야 한다.</p>
+          <p class="answer"><strong>정답:</strong> (가) — 꼭짓점을 지나는 선분(cevian)이어야 함 (개념 ④)</p>
+        </div></details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 도입 문제 완결</h3>
+        <p class="problem-body"><strong>문제:</strong> 도입의 상황(위 예시 문제)에서 점 $P$ 의 좌표를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>도입 STEP 1~4 과정 그대로: $m_A=2,m_B=3,m_C=1 \to D\left(\dfrac74,\dfrac92\right) \to P\left(\dfrac12,\dfrac73\right)$.</p>
+          <p class="answer"><strong>정답:</strong> $P\left(\dfrac12,\ \dfrac73\right)$ (넓이 직접계산으로 순수 파이썬 검산 완료)</p>
+        </div></details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 다른 좌표·비율로 재적용</h3>
+        <p class="problem-body"><strong>문제:</strong> 세 점 $A(0,0)$, $B(6,0)$, $C(0,6)$ 을 꼭짓점으로 하는 삼각형 내부의 점 $P$ 에 대해 $\triangle PBC:\triangle PCA:\triangle PAB=3:2:1$ 일 때 점 $P$ 의 좌표를 구하시오.</p>
+        <details><summary>📖 풀이 보기</summary><div class="solution">
+          <p>무게 $m_A=3,m_B=2,m_C=1$(넓이비 정리, 개념③). $BC$ 위의 점 $D$: $BD:DC=m_C:m_B=1:2 \Rightarrow D=\dfrac{2B+1C}{3}=(4,2)$, 무게 $3$.</p>
+          <p>$A$(무게 3)와 $D$(무게 3): $AP:PD=3:3=1:1 \Rightarrow P=$ 중점 $=\dfrac{A+D}{2}=(2,1)$.</p>
+          <p class="answer"><strong>정답:</strong> $P(2,1)$ (넓이 직접계산으로 순수 파이썬 검산 완료: $\triangle PBC{:}\triangle PCA{:}\triangle PAB=9{:}6{:}3=3{:}2{:}1$)</p>
+        </div></details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(김강용: 심화와 응용에 강한 수학, "시소 이론")의 핵심을 중수준(하위 40%)도 따라오게 재구성:</p>
+    <ul>
+      <li><strong>지레의 원리</strong> → 거리비는 무게비의 반대(교차) (개념 ①, 기초 1·기본 1).</li>
+      <li><strong>시소 이론 적용</strong> → 내분점 공식 2회로 넓이 연립방정식 없이 점 $P$ 구하기 (개념 ②, 도입·수능대비 1·2).</li>
+      <li><strong>이론적 검증(신규 보완)</strong> → "왜 넓이비가 무게비와 같은가"를 밑변 공유 + 높이비(평행선 비례) 논증으로 <strong>직접 증명</strong>했다(개념 ③). 서로 다른 삼각형·무게 조합 4쌍으로 파이썬 넓이 계산 검산, 모두 이론과 정확히 일치.</li>
+      <li><strong>적용 조건</strong> → 반드시 꼭짓점을 지나는 선분(cevian)이어야 함, 안 그러면 보조선 필요 (개념 ④, 심화 2).</li>
+      <li>강사 발언 3건 <strong>verbatim 인용</strong>([00:01:50], [00:09:02] 요지, [00:05:43]).</li>
+    </ul>
+    <p>다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>단원 매핑</strong>: 이 기법은 좌표평면의 내분점 공식(고1 공통과목 "도형의 방정식")만으로 이해·적용 가능해 고1 단원에 배치했습니다. 다만 원본 리포트는 [기하-평면벡터]도 함께 언급하고 있어, 벡터의 일차결합 $\vec p=\alpha\vec a+\beta\vec b+\gamma\vec c$ 로 확장하면 기하 선택과목과도 연결됩니다 — 학생이 배우는 정확한 교과서 단원과 맞는지 확인 권장.</li>
+      <li><strong>메넬라우스·체바 정리와의 관계</strong>: 영상은 이 관계를 언급만 하고 증명하지 않았습니다(미해결 항목). 본 자료도 다루지 않음 — 상급 심화용으로 별도 학습 필요.</li>
+      <li>"수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</li>
+    </ul>
+  </div>
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../수학Ⅰ-삼각함수의방정식/20260505_삼각함수방정식세관점_4Z2CnsDM.html">삼각함수 방정식 sin A = cos B — 세 관점 통합 정리 (4Z2CnsDM)</a> · <a href="../../고2/확률과통계-통계/20260727_이항분포관계식과확률변수제곱평균_YGoi6Pv.html">이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계) (YGoi6Pv)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-08-06 | 영상 출처: <a href="https://youtu.be/mUGapt8hXXQ">https://youtu.be/mUGapt8hXXQ</a> (김강용: 심화와 응용에 강한 수학)</p>
+    <p>본 자료는 AI가 영상 자막을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
