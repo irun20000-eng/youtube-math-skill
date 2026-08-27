@@ -253,19 +253,53 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
   .controls .group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .controls .group .label { color: var(--muted); font-size: 0.9em; margin-right: 4px; }
   .controls input[type=search] {
-    flex: 1; min-width: 180px; padding: 8px 12px;
+    flex: 1; min-width: 180px; min-height: 44px; padding: 8px 12px;
     border: 1px solid var(--border); border-radius: 6px;
     background: var(--bg); color: var(--text); font: inherit;
   }
+  /* 터치 타겟 44px — 36px 이던 버튼은 옆 버튼을 잘못 누르기 쉬웠다 */
   .controls button {
-    padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px;
+    min-height: 44px; padding: 6px 14px;
+    border: 1px solid var(--border); border-radius: 6px;
     background: var(--bg); color: var(--text); cursor: pointer; font: inherit; font-size: 0.9em;
-    transition: all 0.15s;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
   }
   .controls button:hover { border-color: var(--accent); }
   .controls button.active {
     background: var(--accent); color: #fff; border-color: var(--accent);
   }
+  /* 키보드 포커스 — 정의가 없어서 탭으로 이동하면 현재 위치가 안 보였다 */
+  .controls button:focus-visible, #q:focus-visible, .unit-toggle:focus-visible,
+  .card a:focus-visible, .wordmark:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px;
+  }
+
+  /* 단원 필터 접기 — 버튼 21개가 731px(모바일 컨트롤의 57%)를 먹어
+     자료 카드가 첫 화면 밖으로 밀려나 있었다. 자료가 늘수록 더 심해진다. */
+  .unit-wrap { display: block; }
+  .unit-toggle {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+    padding: 6px 14px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg); color: var(--text); cursor: pointer; font: inherit; font-size: 0.9em;
+  }
+  .unit-toggle:hover { border-color: var(--accent); }
+  .unit-toggle .caret { transition: transform 0.15s; font-size: .8em; opacity: .7; }
+  .unit-wrap.open .unit-toggle .caret { transform: rotate(180deg); }
+  .unit-toggle .current { color: var(--muted); }
+  .unit-wrap.open .unit-toggle { border-color: var(--accent); }
+  #unitList { display: none; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .unit-wrap.open #unitList { display: flex; }
+  @media (prefers-reduced-motion: reduce) { .unit-toggle .caret { transition: none; } }
+
+  /* 검색은 스크롤 중에도 손에 닿게 — 목록이 길어 위로 되돌아가기 번거로웠다 */
+  .controls.search-bar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--card); backdrop-filter: saturate(1.4) blur(6px);
+  }
+  /* 한 상자에 모은 필터는 줄바꿈으로 흐르게 두고, 단원 패널만 폭 전체를 쓴다 */
+  .controls.filters { align-items: flex-start; row-gap: 8px; }
+  .controls.filters .unit-wrap.open { flex-basis: 100%; }
+  .controls.filters .result-count { margin-left: auto; }
   .gallery {
     display: grid; gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -346,35 +380,34 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
 
   __DUPLICATES_BLOCK__
 
-  <div class="controls">
-    <input type="search" id="q" placeholder="🔎 제목 · 주제 · 채널 검색">
-    <button id="darkBtn" type="button">🌙</button>
+  <div class="controls search-bar">
+    <input type="search" id="q" aria-label="자료 검색 — 제목, 주제, 채널"
+           placeholder="🔎 제목 · 주제 · 채널 검색">
+    <button id="darkBtn" type="button" aria-label="다크모드 전환">🌙</button>
   </div>
 
-  <div class="controls">
+  <!-- 필터는 한 상자에 모은다 — 네 상자로 나뉘어 있을 때 테두리·여백만으로
+       130px 넘게 먹어 카드가 첫 화면 밖으로 밀렸다 -->
+  <div class="controls filters">
     <div class="group">
       <span class="label">학년</span>
       __GRADE_BUTTONS__
     </div>
-  </div>
-
-  <div class="controls">
     <div class="group" id="sourceFilter">
       <span class="label">출처</span>
       <button data-source="all" class="active">전체</button>
       <button data-source="video">🎬 영상</button>
       <button data-source="concept">📘 개념</button>
     </div>
-  </div>
-
-  <div class="controls">
-    <div class="group" id="unitFilter">
-      <span class="label">단원</span>
-      <button data-unit="all" class="active">전체</button>
+    <div class="unit-wrap" id="unitWrap">
+      <button class="unit-toggle" id="unitToggle" type="button"
+              aria-expanded="false" aria-controls="unitList">
+        <span>단원</span><span class="current" id="unitCurrent">전체</span><span class="caret">▼</span>
+      </button>
+      <div class="group" id="unitList">
+        <button data-unit="all" class="active">전체</button>
+      </div>
     </div>
-  </div>
-
-  <div class="controls">
     <div class="group" id="sortGroup">
       <span class="label">정렬</span>
       <button data-sort="added" class="active">🆕 최근 추가순</button>
@@ -401,18 +434,31 @@ function rebuildUnitFilter() {
   ITEMS.forEach(it => {
     if (state.grade === 'all' || it.grade === state.grade) units.add(it.unit);
   });
-  const wrap = $('#unitFilter');
+  const wrap = $('#unitList');
   wrap.querySelectorAll('button:not([data-unit="all"])').forEach(b => b.remove());
   [...units].sort().forEach(u => {
     const b = document.createElement('button');
     b.dataset.unit = u; b.textContent = u;
-    b.onclick = () => { state.unit = u; setActive(wrap, b); apply(); };
+    b.onclick = () => { state.unit = u; setActive(wrap, b); syncUnitLabel(); apply(); };
     wrap.appendChild(b);
   });
   if (![...units].includes(state.unit)) {
     state.unit = 'all';
     wrap.querySelector('[data-unit="all"]').classList.add('active');
   }
+  syncUnitLabel();
+}
+
+// 접힌 상태에서도 무엇이 걸려 있는지 보이게 — 선택을 숨기면 '왜 자료가 적지?' 가 된다
+function syncUnitLabel() {
+  $('#unitCurrent').textContent = state.unit === 'all' ? '전체' : state.unit;
+}
+
+function toggleUnitPanel(force) {
+  const wrap = $('#unitWrap');
+  const open = force !== undefined ? force : !wrap.classList.contains('open');
+  wrap.classList.toggle('open', open);
+  $('#unitToggle').setAttribute('aria-expanded', String(open));
 }
 
 function setActive(group, btn) {
@@ -489,6 +535,11 @@ document.addEventListener('DOMContentLoaded', () => {
       setActive(b.parentElement, b);
       applySort();
     };
+  });
+  $('#unitToggle').onclick = () => toggleUnitPanel();
+  // 단원을 고르면 패널을 닫아 다시 카드가 바로 보이게 한다
+  $('#unitList').addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') toggleUnitPanel(false);
   });
   rebuildUnitFilter();
   markNew();
