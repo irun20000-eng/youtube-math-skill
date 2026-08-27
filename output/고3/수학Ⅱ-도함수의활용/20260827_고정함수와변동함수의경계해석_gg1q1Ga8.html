@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>고정함수와 변동함수의 경계 해석 - 수능 킬러 도함수활용 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3 · 수학Ⅱ — 도함수의 활용</div>
+    <h1>고정 함수 vs 변동 함수 —<br>수능 15번 킬러 문항 역설계 전략</h1>
+    <p class="sub">완전히 정해진 함수를 먼저 그리고, 미지수가 든 함수를 움직여 경계를 포착한다</p>
+    <div class="quote">"평가원 문제에서 함수가 여러 개 등장할 때는 고정된 함수와 변동되는 함수가 나옵니다. 고정된 함수를 기준 삼아 변동 함수를 움직여 관찰하는 것입니다." — 강사 인용</div>
+    <div class="video-card">
+      <a class="thumb" href="https://www.youtube.com/watch?v=gg1q1Ga8Qnw" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/gg1q1Ga8Qnw/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">그놈의 수학 15번, 꼭 맞히고 싶은 사람 보세요</div>
+        <div class="v-meta">📺 YouTube · 18분 16초 · 어피셜</div>
+        <a class="v-link" href="https://www.youtube.com/watch?v=gg1q1Ga8Qnw" target="_blank" rel="noopener">https://www.youtube.com/watch?v=gg1q1Ga8Qnw</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 여러 함수가 얽힌 킬러 문항에서 '완전히 결정된 고정 함수'와 '미지수가 남은 변동 함수'를 구분하고, 미분가능성·실근 개수·정적분 조건을 이용해 미지수를 역설계로 확정하기 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 뭐부터 봐야 할지 막막할 때</div>
+    <div class="card">
+      <div class="problem-body">
+        <strong>도입 문제:</strong> 함수 $f(x) = x^2 + 3$ (모든 미지수가 없는, 완전히 정해진 함수)과
+        $g(x) = x^2 + ax + b$ (미지수 $a, b$가 있는 함수)가 있다. 두 함수의 그래프가 $x=2$에서
+        <strong>같은 점을 지나고 같은 접선을 갖는다</strong>(즉, 그 점에서 매끄럽게 이어 붙는다)고 할 때,
+        $a+b$의 값을 구하시오.
+      </div>
+      <div class="visual">누가 '고정'이고 누가 '변동'인가?
+
+  f(x) = x² + 3        ← 미지수 없음 = 고정 함수 (이미 다 그려진 그래프)
+  g(x) = x² + ax + b   ← 미지수 a, b 있음 = 변동 함수 (아직 모양이 안 정해짐)
+
+전략: 고정 함수 f를 먼저 좌표평면에 그려두고,
+     변동 함수 g가 x=2에서 f와 '같은 값 + 같은 기울기'를 갖도록
+     a, b를 거꾸로(역설계로) 찾아낸다.</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 1</span>
+            <div>먼저 고정 함수 $f$의 $x=2$에서의 값과 기울기를 구한다: $f(2) = 4+3 = 7$, $f'(x)=2x$이므로 $f'(2) = 4$.
+              <div class="why">고정 함수는 미지수가 없으므로 숫자로 바로 계산 가능 — 항상 먼저 확정한다</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 2</span>
+            <div>"같은 점을 지난다"는 조건을 변동 함수 $g$에 적용: $g(2) = 4 + 2a + b = 7$, 즉 $2a+b=3$.
+              <div class="why">두 그래프가 만나려면 같은 x에서 함숫값이 같아야 한다</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 3</span>
+            <div>"같은 접선을 갖는다"는 조건을 적용: $g'(x) = 2x+a$이므로 $g'(2) = 4+a = 4$, 즉 $a=0$.
+              <div class="why">접선이 같다 = 그 점에서의 기울기(도함수 값)가 같다</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 4</span>
+            <div>$a=0$을 $2a+b=3$에 대입하면 $b=3$. 따라서 $a+b = 0+3 = 3$.
+              <div class="why">STEP 3에서 구한 값을 STEP 2의 식에 대입</div>
+            </div>
+          </div>
+          <span class="answer-tag">정답: a+b = 3</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <!-- 개념 1 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>수학의 역설계 3단계 프레임워크</div>
+      <p>발문이 길고 함수가 여러 개 나오는 킬러 문항을 보면 학생들은 어디서부터 손을 대야 할지 막막해집니다. 강사가 제시하는 해법은 <strong>"구하는 것을 먼저 본다"</strong>는 것, 즉 결과에서 거꾸로 필요한 것을 찾아 나가는 '역설계(Reverse Engineering)'입니다.</p>
+      <div class="concept-box">
+        <strong>역설계 3단계</strong><br>
+        ① <strong>목표 확인</strong>: 최종적으로 무엇을 구해야 하는지 먼저 보고, 그러려면 어떤 미지수를 알아야 하는지 파악한다.<br>
+        ② <strong>조건 넘버링</strong>: 문제의 조건을 (가), (나), (다)처럼 번호를 매겨 하나씩 쪼갠다.<br>
+        ③ <strong>고정 vs 변동 연결</strong>: 조건들을 '완전히 정해진 함수'와 '미지수가 남은 함수'로 나누어, 고정 함수를 기준으로 변동 함수의 조건을 좁혀 나간다.
+      </div>
+      <div class="caution">⚠️ 자주 하는 실수: 목표 확인 없이 조건 (가)부터 무작정 식을 전개하기 시작하면, 나중에 "이 계산이 왜 필요했지?"를 알 수 없게 됩니다. 항상 "내가 최종적으로 뭘 구해야 하지?"부터 확인하세요.</div>
+    </div>
+
+    <!-- 개념 2 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>고정 함수 vs 변동 함수 — 지형과 탐침</div>
+      <p>이 전략의 핵심 비유는 이렇습니다: <strong>고정 함수는 이미 확정된 '지형(land)'</strong>이고, <strong>변동 함수는 미지수(a, m, k 등)에 따라 위치나 기울기가 바뀌는 '탐침(sensor)'</strong>입니다. 지형은 이미 다 그려져 있으니 먼저 좌표평면 위에 그려두고, 탐침을 이리저리 움직여 지형과 만나는 지점·겹치는 조건을 찾는 것이 문제 풀이의 순서입니다.</p>
+      <div class="concept-box">
+        <strong>구분하는 방법:</strong><br>
+        • 계수가 전부 숫자로 주어졌다 → 고정 함수 (예: $f(x) = x^2+3$)<br>
+        • 미지수 $a, m, k$ 등이 남아 있다 → 변동 함수 (예: $g(x) = ax+b$)<br>
+        • 조건(미분가능성, 접선, 정적분 등)은 대부분 <strong>"변동 함수가 고정 함수에 어떻게 맞춰지는가"</strong>를 묻는 것이다.
+      </div>
+      <div class="tip">💡 고정 함수를 먼저 좌표평면(또는 머릿속)에 그려두면, 변동 함수의 궤적(자취)이 훨씬 잘 보입니다. 순서를 바꿔 변동 함수부터 손대면 미지수가 너무 많아 방향을 잃기 쉽습니다.</div>
+    </div>
+
+    <!-- 개념 3 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>미분가능성으로 고정 함수의 계수 확정하기</div>
+      <p>구간에 따라 다른 식으로 정의된 함수(구간별 함수)가 <strong>이어 붙는 경계점에서 미분가능</strong>하다는 조건이 주어지면, 그 조건은 "①연속(같은 값)"과 "②같은 기울기(도함수 값 일치)"라는 <strong>두 개의 식</strong>을 동시에 준다는 뜻입니다. 이 두 식을 연립하면 남아있던 미지수(계수)를 확정할 수 있습니다.</p>
+      <div class="formula-box">
+        $f(x) = \begin{cases} (\text{식 A}, x<c) \\ (\text{식 B}, x \geq c) \end{cases}$가 $x=c$에서 미분가능<br>
+        $\Leftrightarrow$ ① $\lim_{x\to c^-}(\text{식 A}) = (\text{식 B의 } x=c \text{ 값})$ (연속)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;② $(\text{식 A})'|_{x=c} = (\text{식 B})'|_{x=c}$ (기울기 일치)
+      </div>
+      <div class="caution">⚠️ 자주 하는 실수: "연속"과 "미분가능"을 같은 조건으로 착각해 하나만 확인하고 넘어가는 경우가 많습니다. 두 조건은 별개의 식이므로 <strong>반드시 둘 다</strong> 세워야 미지수 2개를 확정할 수 있습니다.</div>
+    </div>
+
+    <!-- 개념 4 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>근의 겹침 메커니즘과 조건 제거</div>
+      <p>변동 함수의 도함수 $g'(x)=0$의 실근을 평행이동시킨 것과 원래 실근의 개수 조건이 얽히면, <strong>"실근이 새로 늘어나지 않으려면 평행이동한 근이 기존 근과 반드시 겹쳐야 한다"</strong>는 논리가 생깁니다. 또한 "단, $a \neq k$" 같은 예외 조건이 나오면, 이는 그 값에서 판별식이 $0$이 되어(중근이 되어) 서로 다른 두 실근이라는 전제가 깨지는 경우를 <strong>미리 제거</strong>하라는 신호입니다.</p>
+      <div class="concept-box">
+        <strong>왜 겹쳐야 하는가:</strong> 만약 평행이동한 근이 기존 근과 겹치지 않고 새 위치에 생기면, 전체 실근의 개수가 조건에서 요구하는 개수보다 많아집니다. 개수를 정확히 맞추려면 "겹쳐서 하나로 세어지는" 구조가 되어야 합니다.
+      </div>
+      <div class="tip">💡 "단, $a \neq k$" 같은 조건이 보이면, 먼저 "판별식이 0이 되는 $a$ 값이 무엇인지"부터 계산해 보세요. 그 값이 바로 문제에서 제거하라고 알려주는 값과 연결됩니다.</div>
+    </div>
+
+    <!-- 개념 5 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>정적분으로 정의된 함수의 극값 개수 세기</div>
+      <p>$h(x) = \int_0^x \big(g(t)-f(t)\big)\,dt$ 꼴로 정의된 함수는, <strong>미적분의 기본정리</strong>에 의해 $h'(x) = g(x)-f(x)$입니다. 즉 "$h(x)$가 극값을 몇 개 갖는가"라는 질문은 결국 <strong>"$g(x)-f(x)$의 부호가 몇 번 바뀌는가"</strong>, 다시 말해 "$g$와 $f$의 그래프가 몇 번 교차하며 대소 관계가 바뀌는가"라는 질문으로 바뀝니다.</p>
+      <div class="formula-box">
+        $h(x) = \int_0^x \big(g(t)-f(t)\big)\,dt \implies h'(x) = g(x)-f(x)$<br>
+        $h$의 극값 개수 = $g(x)-f(x)$의 부호가 바뀌는 횟수 = $g$와 $f$의 교점에서 대소 관계가 뒤집히는 횟수
+      </div>
+      <div class="caution">⚠️ 자주 하는 실수: $h(x)$ 자체를 직접 미분하려 하거나, 적분식을 계산부터 하려는 경우가 많습니다. <strong>미적분의 기본정리로 $h'(x)=g(x)-f(x)$부터 얻고 시작</strong>하는 것이 핵심입니다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <!-- 기초 -->
+      <div class="level-header filterable basic">
+        <span class="level-badge badge-basic">기초</span>
+        <span style="font-size:.95em;color:var(--sub)">미분가능성 조건 · 정적분으로 정의된 함수의 극값 기본 확인</span>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 미분가능성으로 계수 두 개 확정</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 함수 $f(x) = \begin{cases} x^2+ax+b & (x<1) \\ 3x+2 & (x \geq 1) \end{cases}$가
+          $x=1$에서 미분가능할 때, $f(-1)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>연속 조건(같은 값): $x=1$에서 $1+a+b = 3(1)+2=5$, 즉 $a+b=4$.
+                <div class="why">두 식이 x=1에서 매끄럽게 이어지려면 먼저 값이 같아야 한다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>미분가능 조건(같은 기울기): $x<1$에서 $f'(x)=2x+a$이므로 $f'(1) = 2+a$. 이것이 $3$과 같아야 하므로 $a=1$.
+                <div class="why">x≥1 쪽은 f'(x)=3으로 상수이므로 그대로 3</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$a=1$을 $a+b=4$에 대입하면 $b=3$.
+                <div class="why">STEP1의 식에 STEP2에서 구한 a를 대입</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$f(-1)$은 $x<1$ 구간의 식을 쓴다: $f(-1) = 1 - a + b = 1-1+3=3$.
+                <div class="why">x=-1은 x<1 조건에 해당하므로 첫 번째 식 사용</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $f(-1)$을 구할 때 실수로 $x\geq1$ 식($3x+2$)에 대입하지 않도록 주의. $x=-1$은 반드시 $x<1$ 구간의 식을 써야 한다.</p>
+            <span class="answer-tag">정답: f(-1) = 3</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 정적분으로 정의된 함수, 극값이 없는 경우</div>
+        <div class="problem-body">
+          <strong>문제:</strong> $f(x)=x^2$, $g(x)=0$일 때 $h(x) = \displaystyle\int_0^x \big(g(t)-f(t)\big)\,dt$이다.
+          $h(x)$가 극값을 갖는지 판별하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>미적분의 기본정리로 $h'(x) = g(x)-f(x) = 0 - x^2 = -x^2$.
+                <div class="why">개념5: h(x)를 직접 다루지 않고 h'(x)부터 구한다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$h'(x)=-x^2$는 모든 $x$에서 $0$ 이하이고, $x=0$에서만 $0$이 된다. 즉 $x=0$의 <strong>양옆에서 모두 음수</strong>라 부호가 바뀌지 않는다.
+                <div class="why">극값이 되려면 그 지점을 기준으로 도함수의 부호가 반드시 바뀌어야 한다</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: "$h'(0)=0$이니까 극값이다"라고 단정하면 안 된다. $h'(x)=0$은 극값의 <strong>후보</strong>일 뿐, 실제 극값이려면 그 앞뒤에서 부호가 바뀌어야 한다.</p>
+            <span class="answer-tag">정답: h(x)는 극값을 갖지 않는다 (h'(x)≤0이라 부호 변화 없음)</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 기본 -->
+      <div class="level-header filterable standard">
+        <span class="level-badge badge-standard">기본</span>
+        <span style="font-size:.95em;color:var(--sub)">한 단계 더 — 정적분 정의 함수의 극값 2개 찾기 · 미분가능성 1단계</span>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — g와 f가 두 번 교차할 때 극값 개수</div>
+        <div class="problem-body">
+          <strong>문제:</strong> $f(x)=x^2$(고정 함수), $g(x)=x$(변동 함수에 $a=1$을 대입한 경우)일 때
+          $h(x) = \displaystyle\int_0^x \big(g(t)-f(t)\big)\,dt$가 극값을 갖는 $x$의 값을 모두 구하고,
+          각각 극댓값인지 극솟값인지 판별하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$h'(x) = g(x)-f(x) = x - x^2 = x(1-x)$.
+                <div class="why">개념5의 공식 그대로 적용</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$h'(x)=0$의 해는 $x=0, 1$ (두 근이 정의역 안에 모두 있음).
+                <div class="why">x(1-x)=0을 풀면 x=0 또는 x=1</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>부호를 조사한다: $x<0$이면 $x(1-x)$는 (음)$\times$(양)$=$음수. $0<x<1$이면 (양)$\times$(양)$=$양수. $x>1$이면 (양)$\times$(음)$=$음수.
+                <div class="why">각 구간에서 대표값을 하나씩 대입해 부호를 확인</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$x=0$에서 음$\to$양이므로 <strong>극소</strong>, $x=1$에서 양$\to$음이므로 <strong>극대</strong>.
+                <div class="why">음에서 양으로 바뀌면 극소, 양에서 음으로 바뀌면 극대</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $g$와 $f$가 만나는 점(교점)이 곧바로 극값 위치는 맞지만, 극대인지 극소인지는 반드시 부호 변화 방향으로 확인해야 한다.</p>
+            <span class="answer-tag">정답: x=0에서 극소, x=1에서 극대 (총 2개)</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 미분가능성으로 삼차함수 계수 확정</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 함수 $g(x) = \begin{cases} x^3+ax+1 & (x<0) \\ x^2+3x+1 & (x \geq 0) \end{cases}$가
+          $x=0$에서 미분가능할 때, $g(-1)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>먼저 연속을 확인한다: $x=0$에서 두 식 모두 값이 $1$로 같다($0+0+1=1$, $0+0+1=1$). 연속 조건은 $a$ 값과 무관하게 이미 성립.
+                <div class="why">x=0을 대입하면 a항이 0이 되어 사라지므로 자동으로 연속</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>미분가능 조건(기울기 일치)을 세운다: $x<0$에서 $g'(x)=3x^2+a$이므로 $g'(0)=a$. $x\geq0$에서 $g'(x)=2x+3$이므로 $g'(0)=3$.
+                <div class="why">경계점 x=0에서 양쪽 도함수 값을 각각 계산</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>두 기울기가 같아야 하므로 $a=3$.
+                <div class="why">미분가능 = 좌우 도함수 값이 일치</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$g(-1)$은 $x<0$ 구간의 식을 쓴다: $g(-1) = (-1)^3 + 3(-1) + 1 = -1-3+1=-3$.
+                <div class="why">x=-1은 x<0에 해당</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: 연속 조건이 자동으로 만족된다고 해서 확인을 생략하면 안 된다 — 상수항이 다른 경우에는 연속 조건이 별도로 $a$ 값을 제한할 수도 있다.</p>
+            <span class="answer-tag">정답: g(-1) = -3</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 심화 -->
+      <div class="level-header filterable advanced">
+        <span class="level-badge badge-advanced">심화</span>
+        <span style="font-size:.95em;color:var(--sub)">조건 제거 로직 · 정적분 정의 함수의 극값 1개로 줄이기</span>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 판별식으로 조건 제거하고 미지수 구하기</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 이차방정식 $3x^2+2ax+15=0$이 서로 다른 두 실근 $\alpha, \beta$
+          ($\alpha<\beta<0$)를 갖고, 두 근의 차 $\beta-\alpha$가 $4$일 때, 양수 $a$의 값을 구하시오.
+          (단, 이 이차방정식이 중근을 가지면 안 된다는 점에 유의한다.)
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>서로 다른 두 실근을 가지려면 판별식 $D/4 = a^2-45>0$, 즉 $a>3\sqrt5$ 또는 $a<-3\sqrt5$여야 한다. ($a=3\sqrt5$이면 두 근이 같아지는 중근이 되어 조건 위반)
+                <div class="why">개념4: "서로 다른 두 실근"이라는 조건 자체가 판별식=0인 경우를 미리 제거한다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>근과 계수의 관계: $\alpha+\beta = -\dfrac{2a}{3}$, $\alpha\beta = \dfrac{15}{3}=5$.
+                <div class="why">이차방정식 3x²+2ax+15=0에서 (합)=-b/a, (곱)=c/a</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$(\beta-\alpha)^2 = (\alpha+\beta)^2 - 4\alpha\beta = \dfrac{4a^2}{9} - 20$. 이 값이 $\beta-\alpha=4$이므로 $16$과 같다:
+                $$\dfrac{4a^2}{9} - 20 = 16 \implies \dfrac{4a^2}{9}=36 \implies a^2=81 \implies a=\pm9$$
+                <div class="why">두 근의 차의 제곱은 (합의 제곱) - 4×(곱)으로 항상 바꿔 쓸 수 있다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>양수 조건과 STEP1의 범위($a>3\sqrt5\approx6.7$)를 모두 만족하는 것은 $a=9$뿐이다.
+                <div class="why">a=-9는 양수 조건 위반, 남은 a=9는 6.7보다 크므로 판별식 조건도 만족</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $a^2=81$에서 $a=\pm9$ 두 값이 나오는데, 문제의 부가 조건(양수, 판별식 범위)으로 하나를 반드시 걸러내야 한다.</p>
+            <span class="answer-tag">정답: a = 9</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 변동 함수에 특정 값을 대입해 극값 개수 확인</div>
+        <div class="problem-body">
+          <strong>문제:</strong> $f(x)=x^2$(고정), $g(x)=3x$(변동 함수 $g(x)=ax$에 $a=3$을 대입)이고
+          정의역이 $-2 \leq x \leq 2$일 때, $h(x) = \displaystyle\int_0^x \big(g(t)-f(t)\big)\,dt$가
+          이 구간에서 극값을 갖는 $x$의 개수를 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$h'(x) = g(x)-f(x) = 3x-x^2 = x(3-x)$.
+                <div class="why">개념5 공식 적용</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$h'(x)=0$의 해는 $x=0, 3$. 그런데 정의역이 $[-2,2]$이므로 $x=3$은 <strong>정의역 밖</strong>이라 고려 대상이 아니다.
+                <div class="why">정의역을 벗어난 근은 그 구간에서의 극값 후보가 될 수 없다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>구간 $[-2,2]$ 안에서 부호를 조사: $x<0$이면 $x(3-x)$는 (음)$\times$(양)$=$음수. $0<x\leq2$이면 (양)$\times$(양, $3-x>0$)$=$양수.
+                <div class="why">3-x는 x가 2 이하이기만 하면 항상 양수(3보다 작으니까)</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$x=0$에서만 음$\to$양으로 부호가 바뀌므로 극값은 $x=0$ 하나뿐이다.
+                <div class="why">정의역 밖의 근(x=3)은 부호 변화에 참여하지 못한다</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $h'(x)=0$의 해가 2개(0, 3)라고 해서 극값도 2개라고 착각하면 안 된다. 반드시 <strong>정의역 안에서만</strong> 부호 변화를 센다.</p>
+            <span class="answer-tag">정답: 극값을 갖는 x는 1개 (x=0, 극소)</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 수능 대비 -->
+      <div class="level-header filterable csat">
+        <span class="level-badge badge-csat">수능 대비</span>
+        <span style="font-size:.95em;color:var(--sub)">15번 유형(킬러) — 두 실전 사례로 전체 논리 흐름 재현</span>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 킬러 유형: 미분가능성 + 실근 겹침 조건</div>
+        <div class="problem-body">
+          <strong>문제:</strong> $a\neq3\sqrt5$인 상수 $a$와 최고차항의 계수가 음수인 이차함수 $f(x)$에 대해
+          함수 $g(x) = \begin{cases} x^3+ax^2+15x+7 & (x<0) \\ f(x) & (x\geq0) \end{cases}$가
+          실수 전체의 집합에서 미분가능하고, $f(0)=7$, $f'(0)=15$이다.
+          $g'(x)\cdot g'(x-4)=0$의 서로 다른 실근이 4개일 때, $g(-2)+g(2)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>조건 $f(0)=7$, $f'(0)=15$로 고정 함수 $f$를 확정한다: 최고차항 계수가 음수인 이차함수이므로 $f(x)=mx^2+15x+7$ ($m<0$)로 놓으면 $f(0)=7$은 이미 만족되고, $f'(x)=2mx+15$이므로 $f'(0)=15$도 자동 만족.
+                <div class="why">개념3: 미분가능 조건으로 얻은 f(0), f'(0) 정보를 이차함수 형태에 바로 반영</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$x\geq0$에서 $g'(x)=f'(x)=2mx+15$. $g'(x)=0$의 해는 $x_0=-\dfrac{15}{2m}$이고, $m<0$이므로 $x_0>0$인 실근 1개가 확정된다.
+                <div class="why">m이 음수이므로 -15/(2m)은 (음)/(음)=양수</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$x<0$에서 $g'(x)=3x^2+2ax+15$. $g'(x)\cdot g'(x-4)=0$이 서로 다른 4개의 실근을 가지려면, $x<0$ 쪽 이차식 $3x^2+2ax+15=0$이 서로 다른 두 음의 실근 $\alpha<\beta<0$을 가져야 한다 (심화1에서 이미 $a=9$로 확정한 바로 그 방정식).
+                <div class="why">심화1의 결과를 그대로 재사용: a=9</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$g'(x-4)=0$은 $g'(x)=0$의 그래프를 $x$축 방향으로 $4$만큼 평행이동한 것과 같다. 실근이 총 4개(더 늘어나지 않음)가 되려면, 평행이동된 근이 기존 근과 겹쳐야 한다: $\alpha+4=\beta$, $\beta+4=x_0$.
+                <div class="why">개념4: 근의 겹침 메커니즘 — 늘어나지 않으려면 반드시 겹쳐야 한다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 5</span>
+              <div>근과 계수의 관계 $\alpha\beta=5$, $\beta-\alpha=4$(=심화1과 동일한 식)에서 $\alpha=-5,\beta=-1$. $\beta+4=3=x_0$이므로 $2m(3)+15=0 \implies m=-\dfrac{5}{2}$.
+                <div class="why">β+4가 x0(x≥0쪽 근)과 같아야 한다는 겹침 조건 사용</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 6</span>
+              <div>$g(2)=f(2)=-\dfrac52(4)+15(2)+7=-10+30+7=27$. $g(-2)=(-2)^3+9(-2)^2+15(-2)+7=-8+36-30+7=5$. 따라서 $g(-2)+g(2)=5+27=32$.
+                <div class="why">x=2는 x≥0 구간(f 사용), x=-2는 x<0 구간(원래 삼차식 사용)</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $g(2)$와 $g(-2)$를 계산할 때 구간을 헷갈려 서로 다른 식을 쓰기 쉽다. $x=2$는 $f(x)$, $x=-2$는 삼차식임을 반드시 확인.</p>
+            <span class="answer-tag">정답: g(-2)+g(2) = 32</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 킬러 유형: 정적분 정의 함수의 유일 극값 경계</div>
+        <div class="problem-body">
+          <strong>문제:</strong> $f(x)=x^2$(고정 함수), $g(x)=ax$($a>0$인 변동 함수)이고 정의역은
+          $-2\leq x\leq2$이다. $h(x) = \displaystyle\int_0^x \big(g(t)-f(t)\big)\,dt$가 이 구간에서
+          <strong>오직 하나의 극값</strong>만 갖도록 하는 $a$의 최솟값을 $k$라 할 때, $k+h(2)$의 값을 구하시오.
+          (단, $h(2)$는 $a=k$일 때의 값이다.)
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$h'(x)=g(x)-f(x)=ax-x^2=x(a-x)$. 근은 $x=0, a$.
+                <div class="why">개념5 공식 적용 — 기본1, 심화2와 같은 구조</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>기본1($a=1$)에서는 두 근 $0, 1$이 모두 구간 $[-2,2]$ 안에 있어 극값이 2개였다. 심화2($a=3$)에서는 근 $3$이 구간 밖으로 나가 극값이 1개였다. 즉 <strong>근 $x=a$가 구간의 오른쪽 끝 $2$를 넘어서는 순간</strong>이 "극값 2개 → 1개"로 바뀌는 경계다.
+                <div class="why">기본1과 심화2의 결과를 비교해 경계 조건을 추론</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$a<2$이면 $x=0$과 $x=a$ 모두 구간 안(내부)에 있어 부호가 음$\to$양$\to$음으로 두 번 바뀌어 극값 2개. $a\geq2$이면 $x=a$가 구간 끝이거나 밖이 되어, 구간 안에서는 $x=0$에서 음$\to$양으로 한 번만 바뀌어 극값 1개.
+                <div class="why">a=2일 때 x=a=2는 구간의 경계점(끝점)이라 내부 극값으로 세지 않는다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>따라서 "오직 하나의 극값"을 만드는 $a$의 최솟값은 $k=2$.
+                <div class="why">a가 2보다 조금이라도 작으면 극값이 2개로 늘어난다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 5</span>
+              <div>$a=k=2$일 때 $h(x)=\displaystyle\int_0^x(2t-t^2)\,dt = \Big[t^2-\dfrac{t^3}{3}\Big]_0^x = x^2-\dfrac{x^3}{3}$. 따라서 $h(2)=4-\dfrac83=\dfrac{12}{3}-\dfrac83=\dfrac43$.
+                <div class="why">부정적분을 구한 뒤 x=2를 대입</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 6</span>
+              <div>$k+h(2) = 2+\dfrac43=\dfrac63+\dfrac43=\dfrac{10}{3}$.
+                <div class="why">k=2를 분수로 통일(6/3)한 뒤 더한다</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $h(2)$를 구할 때 반드시 $a=k=2$로 고정한 뒤 정적분을 계산해야 한다. $a$를 문자로 남긴 채 계산하면 값이 나오지 않는다.</p>
+            <span class="answer-tag">정답: k+h(2) = 10/3</span>
+          </div>
+        </details>
+      </div>
+
+    </div><!-- #problems -->
+
+    <!-- ===== 검증 박스 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>이 자료는 「어피셜」 채널의 영상(gg1q1Ga8Qnw, 약 18분)에서 강사가 제시한 핵심 전략 —
+      '고정 함수 vs 변동 함수' 구분과 '수학의 역설계 3단계' — 을 재구성한 것입니다.
+      해당 영상은 자막 트랙이 제공되지 않아(innertube·yt-dlp 모두 확인, 자막 없음),
+      영상 내용을 정리한 요약본을 기초 자료로 사용했습니다.</p>
+      <p style="margin-top:8px">⚠️ <strong>수능 대비 1</strong>(미분가능성+실근 겹침, 정답 32)은 요약본의 수치를 그대로 사용해
+      전 과정을 직접 재검산하여 일관성을 확인했습니다(확신도 ★★★). <strong>수능 대비 2</strong>(정적분 정의 함수의
+      유일 극값, 정답 10/3)는 요약본에 수록된 원 문제의 세부 조건 일부가 손실되어 있어(고정 함수 표현과 정적분
+      계산 사이에 불일치가 발견됨), 동일한 핵심 개념 — 고정 함수 $f(x)=x^2$·변동 직선 $g(x)=ax$·정의역 제한에 따른
+      유일 극값 경계 — 을 사용해 <strong>처음부터 새로 설계하고 전 과정을 재검산한 문항</strong>입니다(확신도 ★★, 원본
+      영상의 실제 수치와 다를 수 있음 — 학생 배포 전 교사의 재검토를 권장합니다).</p>
+      <p style="margin-top:8px">문항은 영상 내용을 바탕으로 AI가 재구성한 연습 문제이며, 교과서 및 평가원 기출과 직접 대응하지 않습니다.
+      "수능 대비"는 <strong>난이도 라벨</strong>일 뿐 <strong>실재 기출 문제가 아닙니다.</strong></p>
+    </div>
+
+  </div>
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_3차함수극값2대1분할_00ByGXdH.html">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 (00ByGXdH)</a> · <a href="20260614_정수조건과근의논리적확정_arsZnxqP.html">정수 조건과 근의 논리적 확정 (arsZnxqP)</a> · <a href="../../고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a> · <a href="../../고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html">극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ) (hhWJZheD)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-27 · 영상 출처: <a href="https://www.youtube.com/watch?v=gg1q1Ga8Qnw" style="color:var(--primary)">어피셜</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
