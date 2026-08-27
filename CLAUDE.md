@@ -177,7 +177,7 @@ claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기�
    - `python scripts/add_back_button.py`           ① 갤러리 복귀 버튼
    - `python scripts/add_related.py`               ② 관련 자료 카드
    - `python youtube-math-auto/scripts/regen_index.py output/`   ③ 갤러리 index 재생성
-   - `python youtube-math-auto/scripts/patch_pdf_mode.py output/` ④ PDF 인쇄 모드
+   - `python youtube-math-auto/scripts/patch_pdf_mode.py output/` ④ PDF 인쇄 모드 링크 주입
 6. **push**: 위 "자동 push" 단계 (작업 브랜치 → MCP PR → rebase 머지 → deploy-pages)
 7. **★ 옵시디언 스텁 — Drive MCP `create_file` 로 직접 작성** (위 "옵시디언 = Drive" 섹션 절차 사용):
    - 부모: 수학영상노트 ID `1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k` **바로 아래** (YYYY/MM ❌)
@@ -254,6 +254,22 @@ claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기�
 - ❓ 새 단원 등장 시 사용자에게 학생 교과서 단원명 확인 후 결정
 
 문항이 위 ❌ 영역을 사용해야 한다면, **다른 풀이로 우회**: 특수각 활용, 기하적 풀이, 코사인법칙 직접 적용 등. 우회 안 되면 해당 문항 제외하고 다른 패턴으로 대체.
+
+## 🖨️ PDF 인쇄 모드 (2026-08-27 개편)
+
+인쇄 동작은 자료 파일이 아니라 **공유 파일 두 개**에 있다:
+`output/pdf-mode.css`, `output/pdf-mode.js`. 70편이 모두 상대경로로 이 둘을 참조하므로
+**인쇄 서식은 여기만 고치면 전 자료에 일관 적용**된다. 자료 파일을 일괄 수정하지 말 것.
+
+인쇄 전 사용자가 두 가지 중 고른다(선택은 localStorage 기억):
+| 선택 | 결과 | 용도 |
+|------|------|------|
+| **해설 뒤로**(기본) | 문항만 앞에, 정답·풀이는 맨 뒤 `[정답·풀이]` 섹션에 모음. 문항 아래 손글씨 공간 2.5cm | 학생 배포용 |
+| **해설 함께** | 문항 바로 아래에 정답·풀이를 펼쳐 출력. 뒷장 답지는 빠짐 | 교사용·자습용 |
+
+**문항 셀렉터는 두 템플릿을 모두 잡을 것** — `.problem-card`(A형 스켈레톤) + `article.problem`(B형).
+예전엔 A형만 적혀 있어 **B형 29편은 해설 재배치가 아예 안 되는데도** 배너는
+"해설은 뒷장에 모았습니다"라고 표시해, 설명과 실제가 어긋나 있었다(2026-08-27 수정).
 
 ## 🔤 `<title>` 태그 작성 규약 (KaTeX 수식 금지)
 
