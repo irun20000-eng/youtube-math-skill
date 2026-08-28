@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>절댓값 극한과 삼차함수 결정 — 분자·분모 동시 0 원리 (수학Ⅱ) | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:900px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">[고3-수학Ⅱ-함수의 극한]</div>
+    <h1>절댓값 극한 속 숨은 삼차함수 — <strong>분자·분모가 함께 0</strong>이 되는 순간을 두 번 활용하기</h1>
+    <p class="sub">🎯 $\displaystyle\lim_{x\to0}\dfrac{xf(x)+|xf(x)|}{f(x+2)-2}=16$ 하나의 조건에서 $f(0)=0$, $f(2)=2$, $f'(2)=0$ 을 차례로 뽑아내고, 삼차함수 $f(x)$ 를 완전히 결정해 $f(4)$ 를 구한다.</p>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/rh-9TVa1YVs" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/rh-9TVa1YVs/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">9모 1등급을 원한다면 봐야 할 영상</div>
+        <div class="v-meta">📺 수학강사 이정환, 약 8분 · 2026-08-27</div>
+        <a class="v-link" href="https://youtu.be/rh-9TVa1YVs" target="_blank" rel="noopener">https://youtu.be/rh-9TVa1YVs</a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 계산하기 전에 답을 알 수 있다고?</h2>
+      <article class="problem basic">
+        <h3>예시 — 분자가 0으로 가는데 극한이 0이 아니라면?</h3>
+        <p class="problem-body"><strong>비교해보자.</strong> (1) $\displaystyle\lim_{x\to1}\dfrac{x-1}{2x-2}$ 은 계산하면 얼마인가? (2) 다항함수 $g(x)$ 가 $\displaystyle\lim_{x\to1}\dfrac{x-1}{g(x)-3}=4$ 를 만족한다고 하자. <strong>계산을 시작하기도 전에</strong> $g(1)$ 의 값을 알아낼 수 있을까?</p>
+        <details open>
+          <summary>📖 답 미리보기 (자세한 원리는 개념 설명에서)</summary>
+          <div class="solution">
+            <p>(1) 분모도 $2(x-1)$ 로 인수 $x-1$ 을 갖고 있어 약분되어 $\dfrac{x-1}{2(x-1)}=\dfrac12\to\dfrac12$.</p>
+            <p>(2) 분자 $x-1$ 은 $x\to1$ 일 때 $0$ 으로 간다. 그런데 전체 극한은 $4$(<strong>$0$ 이 아닌 유한값</strong>)이라고 했다. 분자는 $0$ 으로 가는데 비율이 유한하고 $0$ 이 아니려면, <strong>분모도 반드시 $0$ 으로 가야 한다</strong>. 즉 $g(1)-3=0$, 그러므로 $g(1)=3$!</p>
+            <p class="answer"><strong>결론:</strong> "분자 $\to0$, 극한값 $\to$ 유한하고 $0$ 이 아님" 이라는 조건 하나만으로 분모도 $0$ 으로 간다는 사실을 계산 없이 알아낼 수 있다. 오늘 영상의 어려운 삼차함수 문제는 이 원리를 <strong>두 번 연속</strong>으로 적용해서 풀린다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (절댓값의 부호조건 · 분자분모 동시 0 원리 · 삼차함수 결정)</h2>
+
+      <div class="concept-block">
+        <h3>① 정의 — 오늘 쓸 세 가지 도구</h3>
+        <p><strong>절댓값의 정의:</strong> 실수 $A$ 에 대해 $A\ge0$ 이면 $|A|=A$, $A<0$ 이면 $|A|=-A$ 이다. 그러므로 $|A|+A$ 는 $A\ge0$ 일 때 $2A$, $A<0$ 일 때 $0$ 이다 — <strong>둘 중 하나뿐</strong>, 다른 값은 절대 나오지 않는다.</p>
+        <p><strong>분자·분모 동시 0 원리:</strong> 분수 $\dfrac{A(x)}{B(x)}$ 의 극한이 유한한 값 $L$($L\ne0$)로 수렴하는데 분자 $A(x)\to0$ 이면, 분모 $B(x)$ 도 반드시 $0$ 으로 수렴해야 한다.</p>
+        <p><strong>미분계수의 정의:</strong> $f'(a)=\displaystyle\lim_{h\to0}\dfrac{f(a+h)-f(a)}{h}$. 즉 "$x=a$ 를 대입했을 때의 함숫값 차"를 "$a$ 로부터 얼마나 움직였는지"로 나눈 값의 극한이다.</p>
+        <div class="prereq">
+          다항함수는 모든 실수에서 연속이다(고1 함수의 연속 — 그래프가 끊어지지 않는다). 그래서 다항함수로 만들어진 분모는 $x\to a$ 일 때 그 함숫값 자체로 수렴한다. 또한 $f(0)=0$ 이면 <strong>인수정리</strong>(고1 다항식)에 의해 $f(x)$ 는 $x$ 를 인수로 가진다: $f(x)=x\cdot Q(x)$.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 비유로 이해하기 — 시소와 감시카메라</h3>
+        <p><strong>분자·분모 동시 0 원리는 시소</strong>다. 시소가 한쪽으로 완전히 기울지 않고 어떤 "기울기"(=극한값, $0$ 이 아닌 유한한 수) 상태를 유지하려면, 한쪽(분자)이 이미 바닥(=$0$)에 닿아버렸다면 반대쪽(분모)도 같이 바닥에 닿아야만 그 비율이 유지된다. 한쪽만 바닥에 닿고 반대쪽이 그대로면 시소는 완전히 평평(비율 $0$)해지거나 완전히 세워진다(비율 발산) — 우리가 원하는 "적당히 기운 상태"가 안 나온다.</p>
+        <p><strong>$|A|+A$ 는 감시카메라 두 대</strong>다. $A$ 가 양수(또는 $0$)면 카메라 두 대가 같은 장면을 찍어 합치면 $2A$. $A$ 가 음수면 절댓값 카메라는 부호를 뒤집어 찍어서, 원래 값과 정확히 상쇄되어 $0$ — 아무 정보도 안 남긴다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 왜 이렇게 될까 — 처음부터 끝까지 유도</h3>
+
+        <p><strong>Ⓐ 왜 $f(0)=0$ 이어야 할까</strong></p>
+        <div class="step-derive">
+          <p>만약 $f(0)\ne0$ 이라고 가정하자. $f$ 는 다항함수라 연속이므로, $x=0$ 근처에서 $f(x)$ 의 부호는 $f(0)$ 의 부호로 계속 일정하게 유지된다(부호가 바뀌려면 중간에 $0$ 을 지나야 하는데, $f(0)\ne0$ 이니 $0$ 근처에선 안 지난다).</p>
+          <p>그런데 $x$ 자체는 $0$ 을 지나면서 부호가 바뀐다(왼쪽은 음수, 오른쪽은 양수). $f(x)$ 의 부호는 고정, $x$ 의 부호는 바뀌므로, 곱 $x f(x)$ 는 $x=0$ 을 지나며 부호가 바뀐다 — 한쪽은 양수, 반대쪽은 음수.</p>
+          <p>$xf(x)<0$ 인 쪽에서는 절댓값의 정의(개념①)에 의해 분자 $xf(x)+|xf(x)|$ 가 <strong>정확히 $0$</strong>이 된다(단순히 $0$ 에 "가까워지는" 게 아니라 그 구간 전체에서 늘 $0$). 그러므로 그쪽에서 전체 식은 $\dfrac{0}{f(x+2)-2}=0$ 이고, 그쪽 편극한은 $0$ 이다.</p>
+          <p>문제의 조건은 (양쪽에서 같은 값으로 수렴하는) 극한이 $16$ 이라는 것이다. 방금 한쪽 편극한이 $0$ 이라고 나왔으므로 $0=16$ 이라는 모순이 생긴다. 따라서 처음 가정이 틀렸다 — <strong>$f(0)=0$ 이어야 한다.</strong></p>
+        </div>
+
+        <div class="insight">
+          이제 $f(0)=0$ 이므로 인수정리(개념①)에 의해 $f(x)=x\,Q(x)$ 로 쓸 수 있다($Q$ 는 이차식). 그러면 $xf(x)=x^2Q(x)$ 이고 $x^2\ge0$ 은 항상 성립하므로, $x=0$ 근처에서 $xf(x)$ 의 부호는 $Q(x)$ 의 부호와 같다. 뒤에서 실제로 $f$ 를 다 구한 다음 $Q(0)>0$ 인지 <strong>반드시 검산</strong>해야 앞으로 쓸 "$xf(x)\ge0$ 이므로 $|xf(x)|+xf(x)=2xf(x)$" 라는 가정이 정당화된다.
+        </div>
+
+        <p><strong>Ⓑ 분자·분모 동시 0 원리를 두 번 적용해 $f(2)=2$, $f'(2)=0$ 얻기</strong></p>
+        <div class="step-derive">
+          <p>$x=0$ 근처에서 $xf(x)\ge0$ 이라 가정하면(Ⓐ의 검산 항목), 분자는 $xf(x)+|xf(x)|=2xf(x)$ 이다. 극한 식은 $\displaystyle\lim_{x\to0}\dfrac{2xf(x)}{f(x+2)-2}=16$, 즉 $\displaystyle\lim_{x\to0}\dfrac{xf(x)}{f(x+2)-2}=8$ 이 된다.</p>
+          <p>분자 $xf(x)\to0\cdot f(0)=0$ 이다(개념① 다항함수 연속성). 극한값 $8$ 은 $0$ 이 아닌 유한값이므로, <strong>분자·분모 동시 0 원리</strong>(개념①)에 의해 분모도 $0$ 으로 가야 한다: $f(0+2)-2=f(2)-2=0$, 즉 <strong>$f(2)=2$</strong>.</p>
+          <p>$f(2)=2$ 이므로 분모를 $f(x+2)-f(2)$ 로 바꿔 쓸 수 있다: $\displaystyle\lim_{x\to0}\dfrac{xf(x)}{f(x+2)-f(2)}=8$. 이제 분자·분모를 모두 $x$ 로 나누면 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{\dfrac{f(x+2)-f(2)}{x}}=8$ 이다.</p>
+          <p>분모의 $\dfrac{f(x+2)-f(2)}{x}$ 는 미분계수의 정의(개념①, $a=2,h=x$)와 정확히 같은 꼴이므로 $x\to0$ 일 때 $f'(2)$ 로 수렴한다. 분자 $f(x)\to f(0)=0$ 이다.</p>
+          <p>다시 한 번 <strong>같은 원리</strong>를 적용한다: 분자가 $0$ 으로 가는데 전체 비율이 $8$(유한, $0$ 아님)이 되려면 분모도 $0$ 으로 가야 한다. 그러므로 <strong>$f'(2)=0$</strong>. (분모가 만약 $0$ 이 아닌 어떤 수로 갔다면, $0$ 을 그 수로 나눈 값 $0$ 이 되어 $8$ 과 모순이었을 것이다.)</p>
+        </div>
+
+        <p><strong>Ⓒ 극값 조건 → 인수분해 → 미정계수 결정</strong></p>
+        <div class="step-derive">
+          <p>$f(2)=2$ 이고 $f'(2)=0$ 이다. $f'(2)=0$ 은 $x=2$ 에서 그래프가 수평접선을 가진다는 뜻이다. 만약 $f(x)-2$ 가 $x=2$ 에서 <strong>홑근</strong>(중복도 $1$)이라면, 그래프가 $x$ 축을 그냥 가로질러 지나가므로 그 순간에도 계속 증가(또는 감소) 중이라 접선이 수평일 수 없다 — $f'(2)=0$ 과 모순. 그러므로 $x=2$ 는 $f(x)-2=0$ 의 <strong>중근(적어도 2중근)</strong>이어야 한다.</p>
+          <p>$f$ 는 삼차함수이므로 $f(x)-2$ 도 최고차항 계수가 같은 삼차식이다. $x=2$ 가 중근이므로 나머지 한 근을 $k$ 라 하면 $f(x)-2=a(x-2)^2(x-k)$ 로 쓸 수 있다. 문제에서 $f$ 의 최고차항 계수가 양수라고 했으므로 $a>0$.</p>
+          <p>여기에 $f(0)=0$ 을 대입: $a(0-2)^2(0-k)+2=0 \Rightarrow 4a(-k)+2=0 \Rightarrow -4ak+2=0 \Rightarrow ak=\dfrac12$. ······ (i)</p>
+          <p>이제 $f(x)=a(x-2)^2(x-k)+2$ 를 전개하면 $f(x)=ax^3-a(k+4)x^2+a(4k+4)x+(2-4ak)$ 인데, (i)에 의해 상수항 $2-4ak=0$ 이다. 그러므로 상수항이 사라져 $f(x)=x\bigl[ax^2-a(k+4)x+a(4k+4)\bigr]$ 로 <strong>딱 떨어지게 인수분해</strong>된다 — 이것이 바로 개념①의 $f(x)=xQ(x)$ 이고, $Q(x)=ax^2-a(k+4)x+a(4k+4)$, $Q(0)=4a(k+1)$ 이다.</p>
+          <p>한편 $f(x+2)-2=a(x+2-2)^2(x+2-k)=ax^2(x+2-k)$ 이다. Ⓑ에서 구한 극한을 다시 쓰면: $\displaystyle\lim_{x\to0}\dfrac{xf(x)}{f(x+2)-2}=\lim_{x\to0}\dfrac{x\cdot xQ(x)}{ax^2(x+2-k)}=\lim_{x\to0}\dfrac{Q(x)}{a(x+2-k)}$ — $x^2$ 이 완전히 약분되어 <strong>더 이상 $0/0$ 이 아니다.</strong> 그대로 $x=0$ 을 대입할 수 있다.</p>
+          <p>$\dfrac{Q(0)}{a(2-k)}=\dfrac{4a(k+1)}{a(2-k)}=\dfrac{4(k+1)}{2-k}=8$ 이 조건이 된다(Ⓑ에서 이 극한값이 $8$ 이었음을 기억). 이를 (i)와 연립하면 $a,k$ 가 <strong>유일하게</strong> 결정된다(수능 대비 2 문항에서 완전히 풀어 확인한다).</p>
+        </div>
+
+        <div class="insight">
+          <strong>정리하면 전체 흐름은:</strong> ① 절댓값 부호조건 → $f(0)=0$ ② 분자분모 동시 0 원리(1차 적용) → $f(2)=2$ ③ 같은 원리(2차 적용, 미분계수의 정의 경유) → $f'(2)=0$ ④ $f(2)=2,\,f'(2)=0$ → 중근 구조 $f(x)-2=a(x-2)^2(x-k)$ ⑤ $f(0)=0$ 과 원래 극한값을 각각 대입 → $a,k$ 결정 → $f(x)$ 완성.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 자주 하는 실수</h3>
+        <ul>
+          <li><strong>실수 1 — $|A|+A$ 를 무조건 $2A$ 로 계산:</strong> $A$ 의 부호를 확인하지 않고 습관적으로 $2A$ 라고 쓰면, $A<0$ 인 쪽에서 분자가 실제로는 $0$ 이라는 사실을 놓친다. 이번 문제에서는 이 실수를 하면 애초에 "왜 $f(0)=0$ 이어야 하는지"를 도출할 수 없다.</li>
+          <li><strong>실수 2 — 분자가 $0$ 으로 가니까 극한값도 $0$ 이라고 성급히 결론:</strong> 분자만 보고 판단하면 안 된다. 분모도 함께 $0$ 으로 가는 $\dfrac00$ 부정형이라서, 실제 극한값은 남은 인수들의 비율로 결정된다 — 이번 문제 전체가 바로 이 함정을 정면으로 다루는 문제다.</li>
+          <li><strong>실수 3 — $f'(2)=0$ 만 보고 $(x-2)$ 를 <em>홑</em>인수로 착각:</strong> $f'(2)=0$ 은 $x=2$ 가 <em>중근 이상</em>임을 뜻하지, 홑근이어도 되는 게 아니다. 홑근이면 애초에 $f'(2)=0$ 이 나올 수 없다(개념③ⓒ 참고).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="filter-info"></section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 분자·분모 동시 0 원리, 첫걸음</h3>
+        <p class="problem-body"><strong>문제:</strong> 다항함수 $g(x)$ 가 $\displaystyle\lim_{x\to2}\dfrac{x-2}{g(x)-5}=3$ 을 만족할 때, $g(2)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>분자 $x-2\to0$ 인데 전체 극한이 $3$($0$ 이 아닌 유한값)이므로, 분자·분모 동시 0 원리에 의해 분모도 $0$ 으로 가야 한다.</p>
+            <p>$g$ 는 다항함수라 연속이므로 $g(x)-5\to g(2)-5$. 이것이 $0$ 이어야 하므로 $g(2)-5=0$.</p>
+            <p class="answer"><strong>정답:</strong> $g(2)=5$</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 절댓값 성질 $|A|+A$ 웜업</h3>
+        <p class="problem-body"><strong>문제:</strong> $\displaystyle\lim_{x\to0}\dfrac{x^2+|x^2|}{x^2}$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$A=x^2$ 이라 하면 $x\ne0$ 인 한 항상 $A>0$ 이다(제곱은 음수가 될 수 없다). 그러므로 $|A|+A=2A=2x^2$.</p>
+            <p>$\dfrac{2x^2}{x^2}=2$ — $x$ 값에 상관없이 ($x\ne0$ 이면) 항상 $2$ 이므로 극한도 $2$.</p>
+            <p class="answer"><strong>정답:</strong> $2$</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 미분계수의 정의로 동시 0 원리 적용</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼차함수 $f(x)$ 가 $f(2)=1$ 이고 $\displaystyle\lim_{x\to2}\dfrac{f(x)-1}{(x-2)^2}=4$ 를 만족시킬 때, $f'(2)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>$f(2)=1$ 이므로 분자는 $f(x)-f(2)$ 꼴이다. 식을 $\dfrac{f(x)-f(2)}{(x-2)^2}=\dfrac{f(x)-f(2)}{x-2}\cdot\dfrac{1}{x-2}$ 로 바꿔 생각한다.</p>
+            <p>$\dfrac{f(x)-f(2)}{x-2}$ 는 미분계수의 정의에 의해 $x\to2$ 일 때 $f'(2)$ 로 수렴한다.</p>
+            <p>만약 $f'(2)\ne0$ 이라면 전체 식은 (유한값)$\times\dfrac{1}{x-2}$ 꼴이 되어 $x\to2$ 일 때 발산한다 — 극한값 $4$(유한)와 모순. 따라서 $f'(2)=0$ 이어야 한다.</p>
+            <p class="answer"><strong>정답:</strong> $f'(2)=0$</p>
+            <p class="why">검산: $f(x)=1+4(x-2)^2+(x-2)^3$ 은 조건을 모두 만족하는 실제 삼차함수의 예다 — $f(2)=1$, $\dfrac{f(x)-1}{(x-2)^2}=4+(x-2)\to4$, $f'(x)=8(x-2)+3(x-2)^2$ 이므로 $f'(2)=0$.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 절댓값 부호조건으로 $f(0)$ 결정</h3>
+        <p class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 $\displaystyle\lim_{x\to0}\dfrac{xf(x)+|xf(x)|}{x^2}=6$ 을 만족할 때, $f(0)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>만약 $f(0)\ne0$ 이면 $f$ 가 연속이라 $0$ 근처에서 $f(x)$ 의 부호가 고정되고, $x$ 의 부호는 $0$ 을 지나며 바뀌므로 $xf(x)$ 는 한쪽에서 음수가 된다.</p>
+            <p>그 쪽에서는 $xf(x)+|xf(x)|=0$ 이 되어(절댓값 성질), 전체 식이 $\dfrac{0}{x^2}=0$($x^2>0$ 이므로 나눌 수 있음) — 그쪽 편극한이 $0$ 이 되어버려 조건($6$)과 모순.</p>
+            <p>따라서 $f(0)=0$ 이어야 한다.</p>
+            <p class="answer"><strong>정답:</strong> $f(0)=0$</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 인수정리와 동시 0 원리를 함께 쓰기</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼차함수 $f(x)$ 가 $\displaystyle\lim_{x\to0}\dfrac{xf(x)+|xf(x)|}{x^2}=6$ 을 만족할 때, $f(0)$ 의 값과 $\displaystyle\lim_{x\to0}\dfrac{f(x)}{x}$ 의 값을 각각 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>(기본 2와 같은 논리로) $f(0)\ne0$ 이면 한쪽 편극한이 $0$ 이 되어 모순이므로 $f(0)=0$.</p>
+            <p>인수정리에 의해 $f(x)=xQ(x)$ ($Q$ 는 이차식)로 쓸 수 있다. $x=0$ 근처에서 $xf(x)=x^2Q(x)$ 이고 $x^2\ge0$ 이므로, 극한이 $6$(양수)이 되려면 $Q(x)>0$ 이어야 하고, 그러면 $xf(x)\ge0$.</p>
+            <p>이때 $xf(x)+|xf(x)|=2xf(x)=2x^2Q(x)$. 식에 대입: $\dfrac{2x^2Q(x)}{x^2}=2Q(x)\to2Q(0)=6$, 즉 $Q(0)=3$.</p>
+            <p>$f(x)=xQ(x)$ 이므로 $\dfrac{f(x)}{x}=Q(x)\to Q(0)=3$.</p>
+            <p class="answer"><strong>정답:</strong> $f(0)=0$, $\displaystyle\lim_{x\to0}\dfrac{f(x)}{x}=3$</p>
+            <p class="why">검산: $f(x)=3x+x^3$ 이 조건을 만족한다. $xf(x)=3x^2+x^4=x^2(3+x^2)\ge0$ (항상), $\dfrac{2x^2(3+x^2)}{x^2}=2(3+x^2)\to6$ ✓, $\dfrac{f(x)}{x}=3+x^2\to3$ ✓.</p>
+            <p class="intent"><strong>출제 의도:</strong> "부호조건 → $f(0)=0$" 과 "인수정리로 약분해 극한값 구하기"를 한 문항에서 순서대로 연결해, 본 개념③의 Ⓐ 단계가 실제 계산까지 이어지는 흐름을 익히게 한다.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 동시 0 원리를 두 번 연속 적용</h3>
+        <p class="problem-body"><strong>문제:</strong> 삼차함수 $f(x)$ 가 $\displaystyle\lim_{x\to0}\dfrac{x^2}{f(x+1)-3}=2$ 를 만족시킬 때, $f(1)$ 과 $f'(1)$ 의 값을 각각 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p>분자 $x^2\to0$, 극한값 $2$(유한, $0$ 아님)이므로 분모도 $0$ 으로 가야 한다: $f(0+1)-3=f(1)-3=0 \Rightarrow f(1)=3$.</p>
+            <p>분모를 $f(x+1)-f(1)$ 로 바꾸고, 분자·분모를 $x$ 로 나누면 $\dfrac{x}{\left(f(x+1)-f(1)\right)/x}$. 분모의 $\left(f(x+1)-f(1)\right)/x$ 는 미분계수의 정의(개념①, $a=1,h=x$)에 의해 $f'(1)$ 로 수렴한다.</p>
+            <p>만약 $f'(1)\ne0$ 이라면 전체 식은 $x/(\text{0이 아닌 값}) \to 0$ 이 되어 조건($2$)과 모순. 따라서 $f'(1)=0$.</p>
+            <p class="answer"><strong>정답:</strong> $f(1)=3$, $f'(1)=0$</p>
+            <p class="why">검산: $f(x)=3+0.5(x-1)^2+(x-1)^3$ 은 $f(1)=3$, $f'(x)=(x-1)+3(x-1)^2$ 이므로 $f'(1)=0$ 을 만족하고, $f(x+1)-3=0.5x^2+x^3=x^2(0.5+x)$ 이므로 $\dfrac{x^2}{x^2(0.5+x)}=\dfrac{1}{0.5+x}\to2$ ✓.</p>
+            <p class="intent"><strong>출제 의도:</strong> 개념③ⓑ의 "동시 0 원리를 두 번 적용(값 확정 → 미분계수 0 확정)" 구조만 딱 떼어내, 절댓값 없이도 같은 논리가 재현됨을 확인시킨다.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 유형 연습: 이동한 함수와 절댓값 극한</h3>
+        <p class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)$ 가 $\displaystyle\lim_{x\to0}\dfrac{xf(x)+|xf(x)|}{f(x+1)-3}=-7$ 을 만족시킬 때, $f(2)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>① $f(0)=0$:</strong> $f(0)\ne0$ 이면 $xf(x)$ 가 $x=0$ 에서 부호가 바뀌어, 한쪽에서 분자가 $0$ 이 되고 그 편극한이 $0$($\ne-7$) — 모순. 따라서 $f(0)=0$, 인수정리로 $f(x)=xQ(x)$.</p>
+            <p><strong>② $f(1)=3$:</strong> $x=0$ 근처에서 $xf(x)\ge0$ 이라 하면(마지막에 검산) 분자는 $2xf(x)=2x^2Q(x)$. 식은 $\dfrac{2x^2Q(x)}{f(x+1)-3}=-7$. 분자 $\to0$ 인데 극한이 $-7$(유한, $0$ 아님)이므로 분모도 $0$: $f(0+1)-3=0 \Rightarrow f(1)=3$.</p>
+            <p><strong>③ $f'(1)=0$:</strong> 분모를 $f(x+1)-f(1)$ 로 바꾸고, $\dfrac{2x^2Q(x)}{f(x+1)-f(1)}=2x\cdot\dfrac{xQ(x)}{f(x+1)-f(1)}=2x\cdot\dfrac{f(x)}{f(x+1)-f(1)}$ 로 다시 쓴다. 분자·분모를 $x$ 로 한 번 더 나누면 $2\cdot\dfrac{f(x)}{\left(f(x+1)-f(1)\right)/x}$. 분모는 미분계수의 정의(개념①, $a=1,h=x$)로 $f'(1)$ 로 수렴하고 분자 $f(x)\to f(0)=0$. 극한이 $-7$(유한, $0$ 아님)이려면 분모도 $0$: $f'(1)=0$.</p>
+            <p><strong>④ 인수분해 형태:</strong> $f(1)=3$, $f'(1)=0$ 이므로 $x=1$ 은 $f(x)-3=0$ 의 중근이다. 다른 근을 $K$, 최고차항 계수를 $A(>0)$ 라 하면 $f(x)-3=A(x-1)^2(x-K)$.</p>
+            <p><strong>⑤ 미정계수 결정:</strong> $f(0)=0$ 대입: $A(0-1)^2(0-K)+3=0 \Rightarrow -AK+3=0 \Rightarrow AK=3$ ······ (i). 이 관계로 상수항이 사라져 $f(x)=x\bigl[Ax^2-A(K+2)x+A(2K+1)\bigr]=xQ(x)$, $Q(0)=A(2K+1)$. 또 $f(x+1)-3=Ax^2(x+1-K)$ 이므로 극한식은 $\dfrac{2x^2Q(x)}{Ax^2(x+1-K)}=\dfrac{2Q(x)}{A(x+1-K)}\to\dfrac{2Q(0)}{A(1-K)}=\dfrac{2A(2K+1)}{A(1-K)}=\dfrac{2(2K+1)}{1-K}=-7$.</p>
+            <p>$2(2K+1)=-7(1-K) \Rightarrow 4K+2=-7+7K \Rightarrow 9=3K \Rightarrow K=3$. (i)에 대입: $A\cdot3=3 \Rightarrow A=1$.</p>
+            <p>따라서 $f(x)-3=(x-1)^2(x-3)$, 즉 $f(x)=(x-1)^2(x-3)+3=x^3-5x^2+7x$.</p>
+            <p class="why">검산: $f(x)=x(x^2-5x+7)$. $x^2-5x+7$ 의 판별식 $=25-28=-3<0$ 이라 항상 양수 — 그러므로 $xf(x)=x^2(x^2-5x+7)\ge0$ 은 <strong>모든 실수 $x$</strong> 에서 성립(②의 부호조건 가정이 정당화됨). $f(x+1)=(x+1)^3-5(x+1)^2+7(x+1)=x^3-2x^2+3$ 이므로 $f(x+1)-3=x^3-2x^2=x^2(x-2)$. 극한 $=\dfrac{2x^2(x^2-5x+7)}{x^2(x-2)}=\dfrac{2(x^2-5x+7)}{x-2}\to\dfrac{2\cdot7}{-2}=-7$ ✓. $f(1)=1-5+7=3$ ✓, $f'(x)=3x^2-10x+7$, $f'(1)=3-10+7=0$ ✓.</p>
+            <p class="answer"><strong>정답:</strong> $f(x)=x^3-5x^2+7x$ 이고 $f(2)=8-20+14=2$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 이동량이 $2$ 가 아니라 $1$ 로 바뀌면 ⑤의 계수도 함께 바뀐다 — 원래 문제(수능 대비 2)의 식을 그대로 베끼지 말고 <strong>매번 $f(x)=xQ(x)$ 부터 다시 전개</strong>해야 한다. 구한 후보는 반드시 원래 극한식에 숫자로 재대입해 검산한다.</p>
+            <p class="intent"><strong>출제 의도:</strong> 영상의 핵심 문제(수능 대비 2)와 동일한 구조를 다른 이동량·다른 극한값으로 한 번 더 연습시켜, 절차를 손에 익히고 "검산으로 확정"하는 습관을 들이게 한다.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 실전: 절댓값 극한으로 완전히 결정되는 삼차함수 (영상 원문제)</h3>
+        <p class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)$ 가 $\displaystyle\lim_{x\to0}\dfrac{xf(x)+|xf(x)|}{f(x+2)-2}=16$ 을 만족시킬 때, $f(4)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — $f(0)=0$:</strong> $f(0)\ne0$ 이라 가정하면 $f$ 가 연속이라 $0$ 근처에서 부호가 고정되고, $x$ 는 $0$ 을 지나며 부호가 바뀌므로 $xf(x)$ 는 한쪽에서 음수가 된다. 그쪽에서 분자 $xf(x)+|xf(x)|=0$(절댓값 성질)이 되어 그 편극한이 $0\,(\ne16)$ — 모순. 따라서 $f(0)=0$. 인수정리에 의해 $f(x)=xQ(x)$($Q$ 는 이차식).</p>
+            <p><strong>STEP 2 — $f(2)=2$:</strong> $x=0$ 근처에서 $xf(x)=x^2Q(x)\ge0$(마지막에 검산)이라 하면 분자는 $2xf(x)$. 식은 $\dfrac{2xf(x)}{f(x+2)-2}=16$, 즉 $\dfrac{xf(x)}{f(x+2)-2}=8$. 분자 $xf(x)\to0$, 극한값 $8$(유한, $0$ 아님)이므로 분모도 $0$: $f(2)-2=0 \Rightarrow f(2)=2$.</p>
+            <p><strong>STEP 3 — $f'(2)=0$:</strong> 분모를 $f(x+2)-f(2)$ 로 바꾸고 분자·분모를 $x$ 로 나누면 $\dfrac{f(x)}{\left(f(x+2)-f(2)\right)/x}=8$. 분모는 미분계수의 정의에 의해 $f'(2)$ 로 수렴하고, 분자 $f(x)\to f(0)=0$. 극한값 $8$(유한, $0$ 아님)이 나오려면 분모도 $0$: $f'(2)=0$.</p>
+            <p><strong>STEP 4 — 인수분해 형태:</strong> $f(2)=2$, $f'(2)=0$ 이므로 $x=2$ 는 $f(x)-2=0$ 의 중근이다(홑근이면 $f'(2)\ne0$). $f$ 는 삼차함수이므로 나머지 근을 $k$, 최고차항 계수를 $a(>0)$ 라 하면 $f(x)-2=a(x-2)^2(x-k)$.</p>
+            <p><strong>STEP 5 — 미정계수 $a,k$ 결정:</strong> $f(0)=0$ 대입: $a(0-2)^2(0-k)+2=0 \Rightarrow -4ak+2=0 \Rightarrow ak=\dfrac12$ ······ (i). 이 관계 덕분에 $f(x)-2$ 를 전개했을 때 상수항이 정확히 사라져 $f(x)=x\bigl[ax^2-a(k+4)x+a(4k+4)\bigr]=xQ(x)$, $Q(0)=4a(k+1)$. 또한 $f(x+2)-2=a x^2(x+2-k)$. STEP2·3의 극한을 다시 쓰면 $\dfrac{x\cdot xQ(x)}{ax^2(x+2-k)}=\dfrac{Q(x)}{a(x+2-k)}\to\dfrac{Q(0)}{a(2-k)}=\dfrac{4a(k+1)}{a(2-k)}=\dfrac{4(k+1)}{2-k}=8$.</p>
+            <p>$4(k+1)=8(2-k) \Rightarrow 4k+4=16-8k \Rightarrow 12k=12 \Rightarrow k=1$. (i)에 대입: $a\cdot1=\dfrac12 \Rightarrow a=\dfrac12$.</p>
+            <p><strong>STEP 6 — $f(x)$ 완성 및 검산:</strong> $f(x)-2=\dfrac12(x-2)^2(x-1)$, 즉 $f(x)=\dfrac12(x-2)^2(x-1)+2=\dfrac12x^3-\dfrac52x^2+4x$. 검산: $f(0)=0$ ✓, $f(2)=2$ ✓, $f'(x)=\dfrac32x^2-5x+4$, $f'(2)=6-10+4=0$ ✓. 부호조건: $xf(x)=x^2\left(\dfrac12x^2-\dfrac52x+4\right)$ 인데 $\dfrac12x^2-\dfrac52x+4$ 의 판별식 $=\dfrac{25}{4}-8=-\dfrac{7}{4}<0$ 이라 <strong>항상 양수</strong> — 즉 $xf(x)\ge0$ 은 모든 실수에서 성립, STEP2에서 가정한 부호조건이 정당화된다.</p>
+            <p class="answer"><strong>정답:</strong> $f(x)=\dfrac12x^3-\dfrac52x^2+4x$ 이고 $f(4)=\dfrac12(64)-\dfrac52(16)+4(4)=32-40+16=\boxed{8}$</p>
+            <p class="key-point"><strong>핵심 포인트:</strong> 이 문제는 "$0/0$ 이 되려면 분자·분모가 함께 $0$" 이라는 원리를 <strong>서로 다른 두 지점</strong>(먼저 함숫값 조건, 그 다음 미분계수 조건)에 <strong>연속으로 두 번</strong> 적용해야 풀린다. 절댓값 조건이 첫 조건($f(0)=0$)을 만들어내고, 그 뒤로는 순수한 함수의 극한·미분계수 논리다.</p>
+            <p class="intent"><strong>출제 의도:</strong> 절댓값의 부호 판정, 분자분모 동시 0 원리의 반복 적용, 미분계수의 정의, 삼차함수의 극값(중근) 조건, 미정계수 결정을 한 문제 안에 모두 결합한 종합 문항 — 준킬러급 문항에서 자주 나오는 "조건 하나로 함수를 완전히 결정" 하는 전형적 흐름이다.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 · 검증</h3>
+    <p>영상(수학강사 이정환, "9모 1등급을 원한다면 봐야 할 영상")을 중수준(하위 40%)도 따라오게, 원리를 유도부터 풀어 작성했습니다:</p>
+    <ul>
+      <li><strong>절댓값 부호조건 → $f(0)=0$</strong> → 연속함수의 부호 고정 성질과 절댓값의 정의를 직접 연결해 증명 (개념③Ⓐ).</li>
+      <li><strong>분자·분모 동시 0 원리의 두 번 연속 적용</strong> → 함숫값 조건($f(2)=2$)과 미분계수 조건($f'(2)=0$)을 각각 별도 문항(기본1, 심화2)으로 떼어내 검증.</li>
+      <li><strong>극값(중근) 조건 → 삼차함수 완전 결정</strong> → 인수분해 형태로 놓고 미정계수를 계산 후, 얻은 $f(x)$ 를 원래 조건에 전부 대입해 재검산(수능 대비 2).</li>
+      <li>모든 문항의 정답은 <strong>직접 전개·수치 대입으로 재검산</strong>했습니다 (수학 정확도 ★★★).</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li><strong>원본 영상은 자막이 제공되지 않아(yt-dlp 확인 결과 자막 트랙 없음)</strong>, Google Spark AI 요약본을 대체 입력으로 사용했습니다. 문제 조건 자체(주어진 극한식)는 명확했지만, 요약본이 제시한 풀이 세부 전개(계수 계산 등)는 부정확한 부분이 있어 <strong>이 자료는 처음부터 독립적으로 처음부터 재유도하고 수치로 재검산</strong>했습니다. 최종 결론 $f(4)=8$ 은 원문 요약본이 명확히 제시하지 못했던 값이며, 이 자료에서 자체적으로 도출·검증한 값입니다 (확신도 ★★ — 영상과 완전히 동일한 풀이 전개인지는 자막 부재로 대조 불가, 교사 확인 권장).</li>
+      <li><strong>수능 대비 1·2를 제외한 기초·기본·심화 문항</strong>은 영상의 핵심 기법(절댓값 부호조건, 분자분모 동시 0 원리)을 단계별로 익히도록 자체 제작·검증한 문항이며, 영상에 등장한 문항 그대로는 아닙니다.</li>
+      <li>"수능 대비"는 출제 패턴을 가리키는 유형 라벨일 뿐이며, 실재하는 특정 회차의 기출문제가 아닙니다.</li>
+    </ul>
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../../고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a> · <a href="../../고2/수학II-다항함수의미분법/20260731_절댓값미분가능성교차상태로판단_ZjU-KOUB.html">절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ) (ZjU-KOUB)</a> · <a href="../../고2/수학II-다항함수의적분법/20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> · <a href="../../고2/수학II-도함수의활용/20260808_3차함수비율관계와특수점활용_5WEbC1T5.html">3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이 (5WEbC1T5)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-08-28 | 영상 출처: <a href="https://youtu.be/rh-9TVa1YVs">https://youtu.be/rh-9TVa1YVs</a> (수학강사 이정환, 게시 2026-08-27)</p>
+    <p>본 자료는 AI가 영상 자막이 없어 Spark AI 요약본을 대체 입력으로 사용해 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
