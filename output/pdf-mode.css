@@ -14,6 +14,7 @@
  */
 
 /* ===== 인쇄 모드 토글 버튼 ===== */
+/* 기본은 우상단 고정 — 자료 툴바를 못 찾았을 때의 폴백 */
 .pdf-toolbar {
   position: fixed;
   top: 16px;
@@ -22,6 +23,22 @@
   display: flex;
   gap: 8px;
 }
+/* 자료 툴바(🏠 갤러리 · 🌙 다크모드 …) 안에 들어간 경우.
+   고정으로 띄우면 난이도 필터를 덮어버려서, 흐름 안에 두고 같은 줄에 앉힌다. */
+.pdf-toolbar.in-toolbar {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  z-index: auto;
+  flex-wrap: wrap;
+}
+.pdf-toolbar.in-toolbar button {
+  padding: 8px 14px;
+  font-size: 13px;
+  box-shadow: none;
+}
+.pdf-toolbar.in-toolbar .pdf-modes { box-shadow: none; border: 1px solid #d0d7de; }
 
 .pdf-toolbar button {
   background: #1976d2;
@@ -168,6 +185,7 @@ body.print-mode.answers-inline details:not([open]) > .solution {
 
 /* ===== 정답·풀이 별도 섹션 ===== */
 .answer-section { display: none; }
+.print-brand-footer { display: none; }  /* 화면에서는 숨김 — 인쇄에서만 나온다 */
 /* '해설 함께'를 고르면 뒷장 답지는 통째로 빠진다 — 같은 내용을 두 번 찍지 않는다 */
 body.print-mode.answers-inline .answer-section { display: none !important; }
 body.print-mode.answers-back .answer-section {
@@ -333,14 +351,24 @@ body.print-mode .katex {
       font-size: 9pt;
       color: #777;
     }
-    /* 페이지 하단 좌측 자료명 (JS가 var 설정) */
-    @bottom-left {
-      content: "📚 학습자료 — youtube-math-skill";
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: 8.5pt;
-      color: #999;
-    }
+    /* 하단 좌측은 비워 둔다 — 워드마크를 .print-brand-footer 로 찍는다.
+       @page 여백 상자의 content 로는 이미지를 안정적으로 넣을 수 없다. */
   }
+
+  /* 인쇄본 바닥글 — 페이지마다 워드마크가 찍힌다.
+     position:fixed 는 인쇄 시 각 페이지에 반복 출력된다. */
+  .print-brand-footer {
+    display: flex !important;
+    align-items: center;
+    gap: 5pt;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 8pt;
+    color: #9aa4b0;
+  }
+  .print-brand-footer img { height: 11pt; width: auto; display: block; }
 
   /* 토글바·배너 인쇄 X */
   .pdf-toolbar, .print-mode-banner { display: none !important; }
