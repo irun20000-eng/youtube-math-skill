@@ -23,6 +23,14 @@
   var PROBLEM_SEL = '.problem-card, article.problem';
   var MODE_KEY = 'pdf-answer-mode';        // 'back' | 'inline'
 
+  // 워드마크 경로는 이 스크립트 위치에서 유도한다. 자료는 output/{학년}/{단원}/ 에
+  // 있어 상대깊이가 고정이지만, 하드코딩하면 구조가 바뀔 때 조용히 깨진다.
+  // currentScript 는 파싱 시점에만 유효하므로 지금 잡아 둔다.
+  var SELF = document.currentScript;
+  var WORDMARK = SELF
+    ? SELF.src.replace(/pdf-mode\.js(?:\?.*)?$/, 'assets/brand/wordmark.png')
+    : '../../assets/brand/wordmark.png';
+
   window.addEventListener('DOMContentLoaded', function () {
     setTimeout(init, 200);                 // KaTeX 렌더 뒤에 붙는다
   });
@@ -39,15 +47,59 @@
   function init() {
     insertToolbar();
     insertBanner();
+    insertPrintFooter();
+  }
+
+  // 인쇄본 바닥글 — 종이에 브랜드가 남게. 화면에서는 CSS 로 숨긴다.
+  // 예전엔 @page 의 @bottom-left 에 "학습자료 — youtube-math-skill" 텍스트를
+  // 박아 뒀는데, 여백 상자에는 이미지를 안정적으로 넣을 수 없어 고정 요소로 바꿨다.
+  function insertPrintFooter() {
+    if (document.querySelector('.print-brand-footer')) return;
+    var f = document.createElement('div');
+    f.className = 'print-brand-footer';
+    f.setAttribute('aria-hidden', 'true');   // 화면 낭독기에는 불필요한 장식
+
+    var img = document.createElement('img');
+    img.src = WORDMARK;
+    img.alt = 'aftermath';
+    f.appendChild(img);
+
+    var handle = document.createElement('span');
+    handle.textContent = '@irun20000';
+    f.appendChild(handle);
+
+    document.body.appendChild(f);
   }
 
   /* ---------------- 툴바 ---------------- */
 
+  /**
+   * 자료가 이미 가진 툴바(🏠 갤러리 · 🌙 다크모드 …) 안, 다크모드 바로 뒤에 끼워 넣는다.
+   * 예전엔 화면 우상단에 고정으로 띄웠는데 난이도 필터(전체·기초·기본…)를 덮었다.
+   * 툴바를 못 찾으면 예전처럼 우상단 고정으로 떨어진다.
+   */
   function insertToolbar() {
     var bar = document.createElement('div');
     bar.className = 'pdf-toolbar';
-    document.body.appendChild(bar);
+
+    var darkBtn = findDarkButton();
+    if (darkBtn && darkBtn.parentElement) {
+      bar.classList.add('in-toolbar');
+      darkBtn.parentElement.insertBefore(bar, darkBtn.nextSibling);
+    } else {
+      document.body.appendChild(bar);
+    }
     renderToolbar();
+  }
+
+  function findDarkButton() {
+    var byId = document.getElementById('darkModeToggle');
+    if (byId) return byId;
+    var all = document.querySelectorAll('.toolbar button, .controls button, header button');
+    for (var i = 0; i < all.length; i++) {
+      if (/다크/.test(all[i].textContent)) return all[i];
+    }
+    return null;
   }
 
   function renderToolbar() {
