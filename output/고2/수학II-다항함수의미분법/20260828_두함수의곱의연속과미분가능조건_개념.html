@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>두 함수의 곱 — 연속·미분가능 조건 유형 분류 (미적분Ⅰ) | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 55%, #8e24aa 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .92; max-width: 660px; margin: 0 auto; }
+    .src-badge { display: inline-block; margin: 18px auto 0; padding: 8px 18px; border-radius: 24px; background: rgba(255,255,255,.16); font-size: 14px; font-weight: 700; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .92; text-align: left; }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink:0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn { display: none !important; } body { background: #fff; color: #000; } .hero { background: #6a1b9a !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+
+    /* 미니 계산 예시 (팁노트 확장) */
+    .mini-ex { margin-top: 9px; padding: 8px 12px; background: var(--summary-bg); border-radius: 6px; font-size: .93em; border-left: 3px solid var(--standard); }
+    .mini-ex .lbl { font-weight: 700; color: var(--standard); }
+    .cmp { margin-top: 9px; font-size: .93em; }
+    .cmp .bad { padding: 6px 11px; background: rgba(244,67,54,.12); border-radius: 5px; margin-bottom: 5px; border-left: 3px solid #f44336; }
+    .cmp .good { padding: 6px 11px; background: rgba(76,175,80,.15); border-radius: 5px; border-left: 3px solid #4caf50; }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:900px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — Ⅱ. 미분 › 연속과 미분가능성</div>
+    <h1>두 함수의 곱 $h=fg$ — 연속·미분가능 조건 유형 분류</h1>
+    <p class="sub">$f$ 가 $x=a$ 에서 가진 <strong>결함의 종류</strong>가 조건을 정한다. 꺾임·점프·제거가능·발산·상쇄를 <strong>6개 유형</strong>으로 나누고, 하나의 공통 유도로 전부 설명한다.</p>
+    <div class="src-badge">📘 개념노트 · 유형 분류 (영상 없음 · 요청 주제)</div>
+    <p class="learn">🎯 <strong>대상</strong>: 미적분Ⅰ(구 수학Ⅱ) · 중하위권도 따라오는 호흡. <strong>범위</strong>: 다항함수·절댓값·조각함수만 사용. 합성·몫·삼각·지수로그 미분은 선택 미적분이라 제외.</p>
+  </div>
+
+    <div class="container">
+
+    <div class="section-title">🧭 이 노트의 뼈대 — 조건은 "차수 사다리"로 정해진다</div>
+    <div class="card">
+      <p>두 함수의 곱 $h(x)=f(x)g(x)$ 가 $x=a$ 에서 연속·미분가능한지는, <strong>$f$ 가 그 점에서 어떤 결함을 갖고 있느냐</strong> 하나로 갈린다. 그리고 조건은 늘 같은 모양이다 —</p>
+      <div class="formula-box">$f$ 의 결함이 클수록, $g$ 는 $x=a$ 에서 <strong>더 높은 차수의 0</strong>을 준비해야 한다</div>
+      <p>결함을 0으로 곱해 지운다는 발상이다. 아래 표가 이 노트 전체의 지도이고, 이어지는 유형 카드가 각 줄을 하나씩 푼다.</p>
+    </div>
+
+    <div class="section-title">📋 유형 분류표 — 한 장으로 보는 조건</div>
+    <div class="card">
+      <table style="width:100%;border-collapse:collapse;font-size:.93em;">
+        <tr>
+          <th style="text-align:left;padding:7px 9px;border-bottom:2px solid var(--border);background:var(--summary-bg);">유형</th><th style="text-align:left;padding:7px 9px;border-bottom:2px solid var(--border);background:var(--summary-bg);">$x=a$ 에서 $f$ 의 상태</th>
+          <th style="text-align:left;padding:7px 9px;border-bottom:2px solid var(--border);background:var(--summary-bg);">$h=fg$ 가 <b>연속</b>일 조건</th><th style="text-align:left;padding:7px 9px;border-bottom:2px solid var(--border);background:var(--summary-bg);">$h=fg$ 가 <b>미분가능</b>할 조건</th>
+        </tr>
+        <tr><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>Ⅰ</b></td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">미분가능 (결함 없음)</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">자동</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">자동</td></tr>
+        <tr><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>Ⅱ</b></td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">연속이나 <b>꺾임</b><br>$f'(a^+)\neq f'(a^-)$</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">자동</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">$g(a)=0$</td></tr>
+        <tr><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>Ⅲ</b></td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>점프</b> 불연속<br>좌·우 극한이 유한하고 다름</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">$g(a)=0$</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">$g(a)=0$ <b>이고</b> $g'(a)=0$</td></tr>
+        <tr><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>Ⅳ</b></td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>제거가능</b> 불연속<br>극한은 있는데 $f(a)$ 만 어긋남</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">$g(a)=0$</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">$g(a)=0$ <b>만으로 충분</b></td></tr>
+        <tr><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>Ⅴ</b></td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>발산</b> $\left(\frac{1}{x-a}\right)$ 꼴</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">$g$ 가 $(x-a)$ 인수</td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">$g$ 가 $(x-a)^2$ 인수</td></tr>
+        <tr><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;"><b>Ⅵ</b></td><td style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">$f,g$ <b>둘 다</b> 결함 (상쇄)</td><td colspan="2" style="padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;">개별 조건으로 판정 ❌ — 곱을 직접 계산</td></tr>
+      </table>
+      <p style="margin-top:10px"><strong>Ⅲ과 Ⅳ가 다르다는 점</strong>이 이 표의 핵심이다. 둘 다 "불연속"인데 미분가능 조건이 갈린다. 왜 그런지는 아래 공통 유도가 한 번에 설명한다.</p>
+    </div>
+
+    <div class="section-title">🔑 공통 유도 — 표의 모든 줄이 여기서 나온다</div>
+    <div class="card">
+      <p><strong>1단계.</strong> $g(a)=0$ 이면 $h(a)=f(a)g(a)=0$ 이므로 미분계수 정의가 이렇게 접힌다:</p>
+      <div class="formula-box">
+        $h'(a^{\pm})=\displaystyle\lim_{t\to a^{\pm}}\frac{f(t)g(t)-0}{t-a}
+        =\lim_{t\to a^{\pm}}f(t)\cdot\frac{g(t)-g(a)}{t-a}
+        =\Big(\lim_{t\to a^{\pm}}f(t)\Big)\cdot g'(a)$
+      </div>
+      <p><strong>2단계.</strong> 그러면 좌·우 미분계수가 같을 조건이 바로 읽힌다.</p>
+      <ul>
+        <li>$f$ 의 <b>좌·우 극한이 같으면</b>(연속·꺾임·제거가능) 양쪽 다 $L\cdot g'(a)$ → <b>자동으로 일치</b>. 그래서 유형 Ⅱ·Ⅳ는 $g(a)=0$ 만으로 끝난다.</li>
+        <li>$f$ 의 <b>좌·우 극한이 다르면</b>(점프) $L^{+}g'(a)$ 와 $L^{-}g'(a)$ 가 되어, 같아지려면 $\big(L^{+}-L^{-}\big)g'(a)=0$ → <b>$g'(a)=0$</b>. 유형 Ⅲ에 한 조건이 더 붙는 이유다.</li>
+      </ul>
+      <p><strong>3단계(유형 Ⅱ의 $g(a)=0$ 이 필요한 이유).</strong> $f$ 가 연속이면 편측에서 곱의 미분법이 되므로
+      $h'(a^{\pm})=f'(a^{\pm})g(a)+f(a)g'(a)$. 차가 $\big(f'(a^{+})-f'(a^{-})\big)g(a)$ 이고, 꺾여 있어 앞 괄호가 $\neq 0$ 이므로 $g(a)=0$.</p>
+      <div class="tip"><strong>한 줄 요약:</strong> "$f$ 의 좌우 극한이 어긋난 만큼, $g$ 가 0의 차수를 올려 갚는다."</div>
+    </div>
+
+    <div class="section-title">Ⅱ 유형 — $f$ 가 연속이지만 꺾인 경우</div>
+    <div class="card">
+      <p>가장 자주 나오는 꼴. $f(x)=|x-a|$ 처럼 <b>절댓값이 만든 꺾임</b>이다. 연속이므로 곱도 <b>연속은 자동</b>이고, 미분가능만 따지면 된다.</p>
+      <div class="mini-ex">
+        <p><strong>예 1.</strong> $h(x)=|x|\,g(x)$ 가 $x=0$ 에서 미분가능할 조건?</p>
+        <p>$h'(0^{+})=\lim\limits_{t\to0^{+}}\dfrac{t\,g(t)}{t}=g(0)$, &nbsp; $h'(0^{-})=\lim\limits_{t\to0^{-}}\dfrac{-t\,g(t)}{t}=-g(0)$.</p>
+        <p>$g(0)=-g(0)\Rightarrow$ <strong>$g(0)=0$</strong>. (수치 확인: $g=x+3$ 이면 좌우 $-3,\,+3$ 로 불일치 / $g=x$ 이면 둘 다 $0$)</p>
+      </div>
+      <div class="mini-ex">
+        <p><strong>예 2 (계수 결정).</strong> $h(x)=(x^{2}+ax+b)\,|x-2|$ 가 $x=2$ 에서 미분가능하려면?</p>
+        <p>꺾이는 점이 $x=2$ 이므로 그 자리에서 다른 인수가 0이어야 한다 → $2^{2}+2a+b=0$, 즉 <strong>$4+2a+b=0$</strong>.</p>
+        <p>예를 들어 $a=0,b=-4$ 면 미분가능(좌우 미분계수 모두 $0$), $a=b=0$ 이면 좌우가 $-4,\,+4$ 로 갈려 불가능.</p>
+      </div>
+      <div class="caution"><strong>⚠️ 오개념:</strong> "절댓값이 있으면 그 점에서 무조건 미분 불가"는 <b>틀렸다</b>. 곱해지는 쪽이 그 점에서 0이면 꺾임이 눌려 사라진다.</div>
+    </div>
+
+    <div class="section-title">Ⅲ·Ⅳ 유형 — $f$ 가 불연속인 경우 (둘을 갈라 보기)</div>
+    <div class="card">
+      <p><b>Ⅲ 점프</b>와 <b>Ⅳ 제거가능</b>은 "불연속"이라는 이름만 같고 요구 조건이 다르다. 이 구분을 놓치면 조건을 하나 더 붙이거나 덜 붙인다.</p>
+      <div class="mini-ex">
+        <p><strong>Ⅲ 점프.</strong> $f(x)=\begin{cases}3&(x\ge0)\\ -5&(x&lt;0)\end{cases}$ — 좌극한 $-5$, 우극한 $3$.</p>
+        <p>· 연속: $g(0)=0$ 이면 좌·우·함숫값이 모두 0 → 연속. &nbsp; · 미분가능: $g=x$ 는 좌우 미분계수가 $-5,\,3$ 으로 <b>불가</b>, $g=x^{2}$ 는 둘 다 $0$ 으로 <b>가능</b>.</p>
+        <p>⇒ <strong>$g(0)=g'(0)=0$</strong>, 즉 $g$ 가 $x^{2}$ 을 인수로 가져야 한다.</p>
+      </div>
+      <div class="mini-ex">
+        <p><strong>Ⅳ 제거가능.</strong> $f(x)=\begin{cases}2&(x\neq0)\\ 7&(x=0)\end{cases}$ — 극한은 $2$ 인데 함숫값만 $7$.</p>
+        <p>· 연속: 역시 $g(0)=0$. &nbsp; · 미분가능: $g=x$ 로도 좌우 미분계수가 <b>둘 다 $2$</b> 라 <b>이미 가능</b>.</p>
+        <p>⇒ <strong>$g(0)=0$ 만으로 충분</strong>. 좌우 극한이 같아 공통 유도의 $L\cdot g'(a)$ 가 양쪽에서 일치하기 때문.</p>
+      </div>
+      <div class="tip"><strong>판별 순서:</strong> ① $f$ 의 <b>좌극한과 우극한을 먼저 비교</b>한다 → ② 다르면 $g'(a)=0$ 까지, 같으면 $g(a)=0$ 까지.</div>
+    </div>
+
+    <div class="section-title">Ⅴ·Ⅵ 유형 — 발산과 상쇄</div>
+    <div class="card">
+      <div class="mini-ex">
+        <p><strong>Ⅴ 발산.</strong> $f(x)=\dfrac{1}{x}$ 처럼 $x=a$ 에서 터지는 경우, $g$ 의 영점 <b>차수</b>가 관건이다.</p>
+        <p>$g=x$ → $h=1$ (연속·미분가능) / $g=x^{2}$ → $h=x$ / $g=x+1$ → $h$ 가 $\pm\infty$ 로 발산.</p>
+        <p>⇒ $f$ 의 극이 1차면 $g$ 는 연속에 $(x-a)$, 미분가능에 $(x-a)^{2}$ 이 필요하다. <b>"결함이 클수록 높은 차수"</b> 사다리의 연장이다.</p>
+      </div>
+      <div class="mini-ex">
+        <p><strong>Ⅵ 상쇄.</strong> $f(x)=g(x)=\begin{cases}1&(x\ge0)\\ -1&(x&lt;0)\end{cases}$ 는 <b>둘 다 불연속</b>이지만 곱은 모든 $x$ 에서 $1$ — <b>연속이고 미분가능</b>하다.</p>
+        <p>⇒ "곱이 연속이려면 각각 연속이어야 한다"는 <b>필요조건이 아니다</b>. 개별로 판정하지 말고 곱을 직접 계산할 것.</p>
+      </div>
+      <div class="caution"><strong>⚠️ 오개념:</strong> 곱의 연속·미분가능은 각 함수의 성질에서 <b>일방향</b>으로만 따라온다(연속×연속 ⇒ 연속). 역방향은 성립하지 않는다.</div>
+    </div>
+
+    <div class="section-title">🎯 절댓값 곱에서 자주 나오는 함정 — 근의 중복도</div>
+    <div class="card">
+      <p>$h(x)=|f(x)|\,g(x)$ 꼴에서는 <b>$f$ 의 모든 근에서 꺾이는 것이 아니다</b>.</p>
+      <ul>
+        <li>$f$ 의 <b>홀수 중복도</b> 근 → 그 점에서 $|f|$ 가 꺾임 → <b>$g(\text{그 근})=0$ 필요</b></li>
+        <li>$f$ 의 <b>짝수 중복도</b> 근 → $|f|=f$ 라 꺾이지 않음 → <b>$g$ 조건 불필요</b></li>
+      </ul>
+      <div class="mini-ex">
+        <p>$h=|x-3|(x+c)$ 는 $c=-3$ 일 때만 $x=3$ 에서 미분가능(좌우 $0,0$), $c=0$ 이면 $-3,\,3$ 으로 불가.</p>
+        <p>반면 $h=|(x-3)^{2}|(x+5)=(x-3)^{2}(x+5)$ 는 $g(3)=8\neq0$ 인데도 <b>미분가능</b>하다.</p>
+      </div>
+    </div>
+
+    <div class="section-title">📝 확인 문항 (8개 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 유형 Ⅱ 기본형</div>
+        <div class="problem-body"><strong>문제:</strong> $h(x)=|x|\,g(x)$ 가 $x=0$ 에서 미분가능하기 위한 $g$ 의 조건을 구하시오. (단 $g$ 는 미분가능)</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>$h'(0^{+})=g(0)$, $h'(0^{-})=-g(0)$ 이므로 두 값이 같으려면 $2g(0)=0$.</p>
+          <p><strong>정답:</strong> $g(0)=0$</p>
+          <p class="warn">⚠️ 절댓값이 있다고 무조건 미분 불가로 단정하지 말 것.</p>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 유형 Ⅰ 확인</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^{2}+1$, $g(x)=|x|$ 일 때 $h=fg$ 는 $x=0$ 에서 연속인가? 미분가능한가?</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>둘 다 $x=0$ 에서 연속이므로 곱도 <b>연속</b>(자동).</p>
+          <p>미분가능은 유형 Ⅱ: 꺾이는 쪽이 $g=|x|$ 이므로 나머지 인수가 0이어야 하는데 $f(0)=1\neq0$.</p>
+          <p><strong>정답:</strong> 연속이지만 미분 <b>불가능</b></p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 유형 Ⅲ 연속 조건</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\begin{cases}3&(x\ge0)\\ -5&(x&lt;0)\end{cases}$ 이고 $g$ 가 연속일 때, $h=fg$ 가 $x=0$ 에서 연속이기 위한 조건은?</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>좌극한 $-5g(0)$, 우극한 $3g(0)$, 함숫값 $3g(0)$.</p>
+          <p>셋이 같으려면 $-5g(0)=3g(0)\Rightarrow 8g(0)=0$.</p>
+          <p><strong>정답:</strong> $g(0)=0$</p>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 유형 Ⅱ 계수 결정</div>
+        <div class="problem-body"><strong>문제:</strong> $h(x)=(x^{2}+ax+b)\,|x-2|$ 가 $x=2$ 에서 미분가능할 때 $a,b$ 의 관계식을 구하고, $a=0$ 일 때 $b$ 를 구하시오.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>$x=2$ 에서 꺾이므로 곱해지는 다항식이 그 점에서 0이어야 한다.</p>
+          <p>$2^{2}+2a+b=0\Rightarrow 4+2a+b=0$. $a=0$ 이면 $b=-4$.</p>
+          <p><strong>정답:</strong> $4+2a+b=0$, &nbsp; $a=0$ 일 때 $b=-4$</p>
+          <p class="warn">검산: $a=0,b=-4$ 면 좌·우 미분계수가 모두 $0$ 으로 일치(수치 확인 완료).</p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 유형 Ⅲ 미분 조건</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\begin{cases}2&(x\ge1)\\ -1&(x&lt;1)\end{cases}$, $g(x)=x^{2}+ax+b$ 이다. $h=fg$ 가 <b>실수 전체</b>에서 미분가능하도록 $a,b$ 를 정하시오.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p><strong>STEP 1.</strong> $x\neq1$ 에서는 $h$ 가 다항식이라 미분가능. 문제는 $x=1$ 뿐.</p>
+          <p><strong>STEP 2.</strong> $f$ 는 $x=1$ 에서 좌극한 $-1$, 우극한 $2$ 로 <b>다르다</b> → 유형 Ⅲ → $g(1)=0$ <b>이고</b> $g'(1)=0$.</p>
+          <p><strong>STEP 3.</strong> $g(1)=1+a+b=0$, $g'(x)=2x+a$ 에서 $g'(1)=2+a=0$ → $a=-2$, $b=1$.</p>
+          <p><strong>정답:</strong> $a=-2,\ b=1$ &nbsp;(즉 $g(x)=(x-1)^{2}$)</p>
+          <p class="warn">⚠️ $g(1)=0$ 만 맞춘 $g=x^{2}-1$ 은 좌우 미분계수가 $-2,\,4$ 로 갈려 <b>불가</b>. 조건 하나를 빠뜨린 대표적 실수.</p>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 유형 Ⅲ vs Ⅳ 구분</div>
+        <div class="problem-body"><strong>문제:</strong> $f_{1}(x)=\begin{cases}3&(x\ge0)\\ -5&(x&lt;0)\end{cases}$, $f_{2}(x)=\begin{cases}2&(x\neq0)\\ 7&(x=0)\end{cases}$ 이다. $g(x)=x$ 일 때 $f_{1}g$ 와 $f_{2}g$ 의 $x=0$ 에서의 미분가능성을 각각 판정하고, 차이가 나는 이유를 설명하시오.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p>$g(0)=0$ 이므로 두 경우 모두 $h(0)=0$ 이고 공통 유도가 적용된다: $h'(0^{\pm})=\big(\lim_{t\to0^{\pm}}f(t)\big)\cdot g'(0)$, 여기서 $g'(0)=1$.</p>
+          <p>· $f_{1}$: 좌우 극한이 $-5,\,3$ 으로 <b>다름</b> → 좌우 미분계수 $-5,\,3$ → <b>미분 불가능</b>.</p>
+          <p>· $f_{2}$: 좌우 극한이 모두 $2$ 로 <b>같음</b> → 좌우 미분계수 모두 $2$ → <b>미분 가능</b>.</p>
+          <p><strong>정답:</strong> $f_{1}g$ 불가능 / $f_{2}g$ 가능. 갈림의 기준은 "불연속이냐"가 아니라 <b>$f$ 의 좌·우 극한이 같으냐</b>.</p>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 근의 중복도</div>
+        <div class="problem-body"><strong>문제:</strong> $h(x)=|x-3|\,(x+c)$ 가 $x=3$ 에서 미분가능하도록 $c$ 를 정하시오. 또 $h(x)=|(x-3)^{2}|\,(x+5)$ 는 $x=3$ 에서 미분가능한지 판정하시오.</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p><strong>앞부분.</strong> $x-3$ 은 단순근(홀수 중복도)이라 $|x-3|$ 이 $x=3$ 에서 꺾인다 → 유형 Ⅱ → $g(3)=3+c=0$ → <b>$c=-3$</b>.</p>
+          <p><strong>뒷부분.</strong> $(x-3)^{2}\ge0$ 이므로 $|(x-3)^{2}|=(x-3)^{2}$ — 절댓값이 아무것도 바꾸지 않아 <b>꺾임 자체가 없다</b>. 따라서 $g(3)=8\neq0$ 이어도 <b>미분가능</b>.</p>
+          <p><strong>정답:</strong> $c=-3$ / 뒷부분은 미분 <b>가능</b></p>
+          <p class="warn">⚠️ "절댓값 안의 식이 0이 되는 모든 점에서 조건을 건다"가 대표 함정. <b>중복도가 짝수면 조건이 필요 없다.</b></p>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 유형 Ⅵ 상쇄 (참·거짓)</div>
+        <div class="problem-body"><strong>문제:</strong> 다음 명제의 참·거짓을 판정하고, 거짓이면 반례를 드시오.<br>「$h=fg$ 가 $x=a$ 에서 연속이면, $f$ 와 $g$ 는 각각 $x=a$ 에서 연속이다.」</div>
+        <details><summary>📖 풀이</summary><div class="solution">
+          <p><strong>거짓.</strong> 반례: $f(x)=g(x)=\begin{cases}1&(x\ge0)\\ -1&(x&lt;0)\end{cases}$ 로 두면 둘 다 $x=0$ 에서 불연속이다.</p>
+          <p>그러나 $h(x)=f(x)g(x)=1$ (모든 $x$) 이므로 상수함수 — $x=0$ 에서 <b>연속이고 미분가능</b>하다.</p>
+          <p><strong>정답:</strong> 거짓. 위가 반례.</p>
+          <p class="warn">⚠️ 성립하는 것은 <b>한 방향뿐</b>: 각각 연속 ⇒ 곱도 연속. 역은 성립하지 않는다.</p>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="section-title">✅ 마무리 점검</div>
+    <div class="card">
+      <ul>
+        <li><b>순서를 지킬 것</b> — ① $f$ 의 좌극한·우극한을 먼저 비교 → ② 같으면 $g(a)=0$, 다르면 $g'(a)=0$ 까지.</li>
+        <li><b>절댓값은 홀수 중복도 근에서만 꺾인다</b> — 짝수면 조건 불필요.</li>
+        <li><b>역방향은 성립하지 않는다</b> — 곱이 연속이라고 각각이 연속인 것은 아니다.</li>
+        <li>본 노트의 모든 조건과 계수는 <b>좌·우 미분계수를 직접 계산해 수치로 검산</b>했다(유형 Ⅱ~Ⅵ 및 8문항 전부).</li>
+      </ul>
+      <p style="margin-top:8px;font-size:.92em;color:var(--muted)">범위: 미적분Ⅰ(구 수학Ⅱ)의 연속·미분가능성. 다항함수와 절댓값·조각함수만 사용했고, 합성·몫·삼각·지수로그 미분은 선택 미적분이라 쓰지 않았다.</p>
+    </div>
+
+  </div>
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a> · <a href="20260708_미분계수와도함수꿀팁과오개념_개념.html">미분계수와 도함수 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260731_절댓값미분가능성교차상태로판단_ZjU-KOUB.html">절댓값 함수의 미분 가능성 — 꺾지 말고 교차 상태로 판단 (수학Ⅱ) (ZjU-KOUB)</a> · <a href="../수학II-함수의극한/20260708_함수의연속꿀팁과오개념_개념.html">함수의 연속 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-07-08 · <strong>개념노트(팁 중심)</strong>(영상 없음 · 단원 큐레이션) · 미적분Ⅰ(수학Ⅱ) 미분계수와 도함수<br>
+    AI가 정리한 팁 노트입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
