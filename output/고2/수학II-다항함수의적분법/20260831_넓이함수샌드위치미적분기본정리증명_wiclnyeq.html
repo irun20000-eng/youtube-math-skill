@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>미적분의 기본정리 증명 — 넓이함수와 샌드위치 정리 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:900px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ — 다항함수의 적분법</div>
+    <h1>미적분의 기본정리: $S'(x)=f(x)$ 증명과 $\displaystyle\int_a^b f(x)\,dx=F(b)-F(a)$ 의 유도</h1>
+    <p class="sub">정적분을 <strong>부정적분의 함숫값 차이</strong>로 계산해도 되는 이유를, 넓이함수 $S(x)$ 를 도함수의 정의로 미분하고 <strong>최대·최소 정리 + 샌드위치 정리</strong>로 정면 돌파해서 증명한다</p>
+    <div class="quote">강사 핵심 포인트 (요약 기반 재구성, [00:04:12~00:17:55]): "식이 주어지지 않은 대상을 미분할 때는 반드시 도함수의 정의로 돌아가야 한다." 이 증명 하나에 수학Ⅱ 전 단원 — 극한의 샌드위치 정리, 연속함수의 최대·최소 정리, 미분의 정의, 적분 — 이 유기적으로 맞물려 있다는 점을 강조.</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/wiclnyeqz8k" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/wiclnyeqz8k/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">[수학2] 미적분의 기본정리 증명 (개념수업)</div>
+        <div class="v-meta">📺 YouTube · 약 24분 · Thinkers'_띵커스</div>
+        <a class="v-link" href="https://youtu.be/wiclnyeqz8k" target="_blank" rel="noopener">https://youtu.be/wiclnyeqz8k</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① 넓이함수 $S(x)=\displaystyle\int_a^x f(t)\,dt$ 를 정의하고 그 넓이로서의 의미를 설명할 수 있다 ② 도함수의 정의·최대·최소 정리·샌드위치 정리를 순서대로 사용해 $S'(x)=f(x)$ 를 직접 증명할 수 있다 ③ 미적분의 기본정리를 이용해 다항함수의 정적분 값 $\displaystyle\int_a^b f(x)\,dx=F(b)-F(a)$ 를 계산할 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 정적분은 왜 부정적분의 값 차이로 끝나는가?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 곡선 $y=2x$ 와 $x$축, 그리고 $x=0,\ x=3$ 사이의 넓이를 두 가지 방법으로 구해 비교해 보자.<br>
+      (1) <strong>도형 공식</strong>: 이 영역은 밑변 $3$, 높이 $6$ 인 직각삼각형이다.<br>
+      (2) <strong>적분 공식</strong>: $F(x)=x^2$ 이 $f(x)=2x$ 의 부정적분($F'(x)=2x$)일 때, $F(3)-F(0)$ 을 계산한다.</div>
+      <div class="visual">        y
+        │                    ● (3,6)
+      6 ┤                  ／│
+        │                ／  │
+        │              ／    │   ← 밑변 3, 높이 6인 삼각형
+        │            ／      │      넓이 = (1/2)×3×6 = 9
+        │          ／        │
+      0 ┼────────╱───────────┼──── x
+        0                    3
+          y=2x
+</div>
+      <details open>
+        <summary>풀이 보기 (두 방법 비교)</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>도형 공식으로 직접 계산: 밑변 $3$, 높이 $f(3)=6$ 인 직각삼각형이므로 넓이 $=\dfrac12\times3\times6=9$.
+            <div class="why">$y=2x$ 는 직선이라 삼각형 넓이 공식을 바로 쓸 수 있다. 하지만 곡선이 직선이 아니면(예: $y=x^2$) 이 방법은 쓸 수 없다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>적분 공식으로 계산: $f(x)=2x$ 의 부정적분은 $F(x)=x^2+C$. $C=0$ 인 것 하나를 택하면 $F(x)=x^2$.
+            $$F(3)-F(0)=9-0=9$$
+            <div class="why">부정적분을 구해서 두 끝점의 함숫값 차이만 빼면 끝난다 — "정적분 계산은 $F(b)-F(a)$" 라는 규칙을 이미 배워서 쓰고 있는 것이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>두 값이 정확히 일치한다 ($9=9$). 우연일까?
+            <div class="why">$y=2x$ 처럼 도형이 삼각형이라 확인하기 쉬운 경우는 우연처럼 보일 수 있다. 그런데 $y=x^2$, $y=x^3-x$ 처럼 곡선이 휘어져서 "도형 공식"이 아예 없는 함수에서도 $F(b)-F(a)$ 는 항상 정확한 넓이를 준다.</div></div></div>
+          <span class="answer-tag">두 방법 모두 넓이 $9$ — 항상 일치한다</span>
+        </div>
+      </details>
+      <div class="tip">삼각형처럼 쉬운 도형이 아니어도, <strong>어떤 연속함수 $f(x)\ge0$ 이든</strong> "정적분 $=F(b)-F(a)$" 가 항상 성립한다는 사실 — 이것이 바로 <strong>미적분의 기본정리(FTC)</strong>다. 이 자료에서는 이 규칙을 결과로만 외우지 않고, <strong>왜 항상 성립하는지 처음부터 끝까지 직접 증명</strong>한다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명 — 미적분의 기본정리, 처음부터 끝까지 증명하기</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 이 증명에 쓰이는 네 가지 도구</div>
+      <p>아래 네 가지는 모두 <strong>이미 배운 내용</strong>이다. 새 공식이 아니라, 이미 아는 도구 네 개를 순서대로 쓰는 것뿐이다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>도함수의 정의</strong>: $g'(x)=\displaystyle\lim_{h\to0}\dfrac{g(x+h)-g(x)}{h}$. 함수의 식이 복잡하거나(혹은 없거나) 미분 공식을 바로 적용할 수 없을 때, 미분계수를 구하는 가장 기본적인 방법이다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>최대·최소 정리</strong>: <em>닫힌구간에서 연속인 함수는 그 구간에서 반드시 최댓값과 최솟값을 갖는다.</em></div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body"><strong>샌드위치 정리(조임 정리)</strong>: $g(x)\le f(x)\le h(x)$ 이고 $\displaystyle\lim g(x)=\lim h(x)=L$ 이면 $\displaystyle\lim f(x)=L$ 이다. 즉 <strong>양쪽에서 같은 값으로 조여지면 가운데 값도 그 값</strong>으로 확정된다.</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body"><strong>부정적분의 성질</strong>: 미분해서 같은 함수 $f(x)$ 가 나오는 두 함수는 <strong>상수 $C$ 만큼만 차이</strong>가 난다. 그래서 $f(x)$ 의 부정적분을 통틀어 $F(x)+C$ 로 쓴다.</div></div>
+      <div class="concept-box">이 네 가지를 <strong>순서대로 이어 붙이면</strong> "정적분 $=$ 부정적분의 값 차이"라는 규칙이 저절로 증명된다. 지금부터 그 과정을 따라간다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>넓이함수 $S(x)$ 의 정의</div>
+      <p>닫힌구간에서 연속이고 $f(x)\ge0$ 인 함수 $f(x)$ 를 생각하자. 어떤 고정된 점 $x=a$ 를 기준으로, <strong>$x=a$ 부터 임의의 $x$ 까지</strong> 곡선 $y=f(x)$ 와 $x$축 사이의 넓이를 <strong>$x$ 의 함수</strong>로 보고 $S(x)$ 라 이름 붙인다.</p>
+      <div class="formula-box">$$S(x) = (x=a\text{부터 }x\text{까지 곡선 아래 넓이})$$</div>
+      <div class="visual">        y
+        │        y=f(x)
+        │       ╱﹍
+        │     ╱   ﹍   ← 이 빗금 부분의 넓이가 S(x)
+        │   ╱░░░░░░﹍
+        │ ╱░░░░░░░░░﹍
+      0 ┼───────────────┼──── t
+        a               x
+</div>
+      <div class="concept-box"><strong>$S(x)$ 는 "$x$ 를 넣으면 넓이가 나오는 함수"</strong>다. 아직 이 함수의 구체적인 식은 모른다 — $f(x)$ 가 어떤 함수인지 특정되지 않았기 때문이다. 목표는 이 <strong>식이 없는 함수 $S(x)$ 를 미분</strong>해서 $S'(x)$ 가 무엇인지 알아내는 것이다.</div>
+      <div class="tip">특별히 기억할 값 하나: $S(a)=0$ 이다. $x=a$ 부터 $x=a$ 까지는 폭이 $0$ 이므로 넓이도 $0$ 이다. 이 값은 STEP 5 에서 결정적으로 쓰인다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>도함수의 정의로 $S'(x)$ 세우기</div>
+      <p>$S(x)$ 는 구체적인 식이 없으므로, 미분 공식을 바로 쓸 수 없다. 이럴 때는 <strong>선수 학습 1번, 도함수의 정의</strong>로 돌아간다.</p>
+      <div class="formula-box">$$S'(x)=\lim_{h\to0}\frac{S(x+h)-S(x)}{h}$$</div>
+      <p><strong>분자의 기하학적 의미를 읽어내는 것이 이 증명의 핵심이다.</strong></p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">$S(x+h)$ 는 $a$ 부터 $x+h$ 까지의 넓이, $S(x)$ 는 $a$ 부터 $x$ 까지의 넓이다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">두 넓이의 차 $S(x+h)-S(x)$ 는 <strong>$x$ 부터 $x+h$ 까지, 즉 아주 좁은 구간 $[x,\,x+h]$ 사이의 넓이 한 조각</strong>이다. 이 조각을 $\Delta S$ 라 부르자.</div></div></div>
+      <div class="concept-box">$$\Delta S = S(x+h)-S(x) = (\text{구간 }[x,\,x+h]\text{ 사이 곡선 아래 넓이})$$</div>
+      <div class="visual">        y
+        │             ╱﹍
+        │           ╱░░﹍  ← 폭 h인 이 좁은 조각이 ΔS
+        │         ╱░░░░﹍
+      0 ┼───────────┼──┼──── t
+        a           x  x+h
+</div>
+      <div class="caution"><strong>여기서 흔한 착각</strong>: $\Delta S$ 를 "$S(x+h)$ 자체의 넓이"로 잘못 읽는 경우가 많다. $\Delta S$ 는 어디까지나 <strong>두 넓이의 차이</strong>, 즉 폭이 $h$ 뿐인 좁은 조각만을 뜻한다.</div>
+      <p>이제 $\dfrac{\Delta S}{h}$ 가 $h\to0$ 일 때 무엇으로 다가가는지 알아내면 $S'(x)$ 를 구할 수 있다. 다음 개념(최대·최소 정리)이 이 값을 정확히 조여준다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>최대·최소 정리로 넓이 부등식 만들기 ($h&gt;0$ 인 경우)</div>
+      <p>구간 $[x,\,x+h]$ 는 닫힌구간이고, $f(x)$ 는 연속이라고 가정했다. 그러므로 <strong>선수 학습 2번, 최대·최소 정리</strong>에 의해 $f$ 는 이 구간 안에서 반드시 최솟값 $m$ 과 최댓값 $M$ 을 갖는다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">$\Delta S$(구간 $[x,x+h]$ 사이의 실제 넓이)는, <strong>높이 $m$ 인 작은 직사각형</strong>과 <strong>높이 $M$ 인 큰 직사각형</strong> 사이에 완전히 끼인다. 두 직사각형 모두 밑변은 $h$ 다.</div></div>
+      <div class="formula-box">$$m\cdot h \le \Delta S \le M\cdot h$$</div>
+      <div class="visual">        y
+      M ┤           ┌──────┐  ← 높이 M인 큰 직사각형(넓이 M·h)
+        │           │  ╱﹍  │
+      m ┤           │╱░░﹍  │  ← 높이 m인 작은 직사각형(넓이 m·h)
+        │           │░░░░﹍ │     실제 넓이 ΔS는 그 사이
+      0 ┼───────────┼──────┼──── t
+        a           x    x+h
+</div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">양변을 $h$ 로 나눈다. 지금은 $h&gt;0$ 인 경우만 보므로 부등호 방향은 바뀌지 않는다.</div></div>
+      <div class="formula-box">$$m \le \frac{\Delta S}{h} \le M$$</div>
+      <div class="concept-box">이 부등식이 뜻하는 것: <strong>넓이 변화율 $\dfrac{\Delta S}{h}$ 는 항상 그 구간의 최솟값 $m$ 과 최댓값 $M$ 사이에 갇혀 있다</strong>. $h$ 가 작아질수록 $m$ 과 $M$ 도 점점 움직일 텐데, 그 움직임을 다음 개념에서 추적한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>샌드위치 정리로 $S'(x)=f(x)$ 증명 완성</div>
+      <p>이제 $h\to0$ 으로 보내보자. 구간 $[x,\,x+h]$ 의 폭이 점점 $0$ 으로 줄어들면서, 구간 자체가 <strong>한 점 $x$</strong>로 오그라든다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">$f$ 가 $x$ 에서 연속이므로, 구간이 점 $x$ 하나로 줄어들면 그 구간 안의 최솟값 $m$ 도 최댓값 $M$ 도 결국 $f(x)$ 로 수렴한다.</div></div>
+      <div class="formula-box">$$\lim_{h\to0}m = f(x), \qquad \lim_{h\to0}M = f(x)$$</div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">양 끝이 똑같이 $f(x)$ 로 조여지므로, <strong>선수 학습 3번, 샌드위치 정리</strong>에 의해 가운데 있는 $\dfrac{\Delta S}{h}$ 도 같은 값 $f(x)$ 로 수렴할 수밖에 없다.</div></div></div>
+      <div class="formula-box">$$\lim_{h\to0}\frac{\Delta S}{h}=\lim_{h\to0}\frac{S(x+h)-S(x)}{h}=S'(x)=f(x)$$</div>
+      <div class="concept-box"><strong>$S'(x)=f(x)$</strong> — 넓이함수를 미분하면 원래 함수 $f(x)$ 가 그대로 나온다. 이것이 미적분의 기본정리의 핵심 명제다.</div>
+      <div class="caution">⚠️ 엄밀하게는 $h&lt;0$ (구간 $[x+h,\,x]$)인 경우도 같은 방식(최댓값·최솟값을 잡고 $h$ 로 나눌 때 부등호 방향에 주의)으로 따로 확인해야 완전한 증명이 된다. 결과는 $h&gt;0$ 일 때와 똑같이 $f(x)$ 로 수렴하므로, 양쪽 극한이 모두 $f(x)$ 로 일치해 $S'(x)=f(x)$ 가 성립한다. (이 부분은 원본 영상 요약에는 $h&gt;0$ 경우만 명시되어 있어, 여기서는 참고로만 덧붙였다 — 아래 검증 안내 참고.)</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>부정적분과 적분상수 결정 — 증명의 완성</div>
+      <p>앞에서 $S'(x)=f(x)$ 를 증명했다. 이제 $f(x)$ 의 <strong>어떤 특정한</strong> 부정적분을 하나 골라 $F(x)$ 라 부르자 (즉 $F'(x)=f(x)$).</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">$S(x)$ 와 $F(x)$ 는 미분하면 똑같이 $f(x)$ 가 나온다 ($S'(x)=f(x)=F'(x)$). <strong>선수 학습 4번</strong>에 의해 이 둘은 상수 차이만 난다.
+            $$S(x) = F(x) + C$$</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">개념 1에서 확인한 $S(a)=0$ 을 대입해 $C$ 를 결정한다.
+            $$0 = F(a) + C \ \Longrightarrow\ C = -F(a)$$</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">$C=-F(a)$ 를 대입하면 $S(x)$ 의 정체가 완전히 밝혀진다.
+            $$S(x) = F(x) - F(a)$$</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body">이제 $x=b$ 를 대입하면, $S(b)$(즉 $x=a$ 부터 $x=b$ 까지의 넓이, 곧 정적분 $\displaystyle\int_a^b f(x)\,dx$)가 무엇인지 나온다.
+            $$S(b) = F(b) - F(a) = \int_a^b f(x)\,dx$$</div></div>
+      <div class="formula-box">$$\boxed{\displaystyle\int_a^b f(x)\,dx = F(b)-F(a)}\qquad(\text{미적분의 기본정리, FTC})$$</div>
+      <div class="concept-box">도입 문제에서 확인한 "삼각형 넓이 $9$ = $F(3)-F(0)=9$"가 우연이 아니었던 이유가 이제 완전히 밝혀졌다. <strong>연속이고 $f(x)\ge0$ 인 어떤 함수든</strong>, 넓이함수 $S(x)$ 는 항상 $F(x)-F(a)$ 형태로 결정되기 때문이다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">6</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — $\Delta S$ 를 $S(x+h)$ 자체로 착각.</strong> $\Delta S=S(x+h)-S(x)$ 는 <strong>두 넓이의 차</strong>, 즉 폭 $h$ 인 좁은 조각만을 가리킨다. $S(x+h)$ 는 $a$ 부터 $x+h$ 까지의 넓이 전체이므로 훨씬 크다.</div>
+      <div class="caution"><strong>실수 2 — $m,\ M$ 을 그냥 상수로 보고 $h\to0$ 극한을 빼먹기.</strong> $m,\ M$ 은 <strong>구간 $[x,x+h]$ 에 따라 값이 바뀌는 양</strong>이다. $h\to0$ 일 때 이 둘이 모두 $f(x)$ 로 수렴한다는 것을 반드시 확인해야 샌드위치 정리를 쓸 수 있다.</div>
+      <div class="caution"><strong>실수 3 — $S(a)=0$ 조건을 빼먹고 $C$ 를 임의로 $0$ 으로 설정.</strong> $S(x)=F(x)+C$ 에서 $C$ 는 <strong>반드시 $S(a)=0$ 을 대입해서</strong> 구해야 한다. $C$ 를 아무 값이나 넣으면 $S(b)=F(b)-F(a)$ 라는 결론이 나오지 않는다.</div>
+      <div class="caution"><strong>실수 4 — 부정적분 기호와 정적분 기호를 혼동.</strong> $F(x)$(부정적분, 함수)와 $\displaystyle\int_a^b f(x)\,dx$(정적분, 하나의 숫자)는 다른 대상이다. 증명의 결론은 "정적분(숫자)이 부정적분의 함숫값 차이(숫자)와 같다"는 것이지, 두 기호 자체가 같다는 뜻이 아니다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>미적분의 기본정리 직접 적용</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — $S'(x)=f(x)$ 바로 적용</div>
+        <div class="problem-body"><strong>문제:</strong> $S(x)=\displaystyle\int_1^x (t^2+3)\,dt$ 일 때, $S'(x)$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 4에서 증명한 미적분의 기본정리 $S'(x)=f(x)$ 를 떠올린다.
+            <div class="why">$S(x)=\displaystyle\int_a^x f(t)\,dt$ 꼴이면, 어렵게 적분을 계산할 필요 없이 <strong>피적분함수를 그대로 미분계수로</strong> 쓰면 된다는 것이 개념 2~4에서 증명한 내용이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>여기서 $f(t)=t^2+3$ 이므로, $t$ 대신 $x$ 를 넣기만 하면 된다.
+            $$S'(x)=x^2+3$$
+            <div class="why">피적분함수의 변수 $t$ 는 계산이 끝나면 사라지는 "더미 변수"다. 결과는 항상 $x$ 에 대한 식으로 나온다.</div></div></div>
+          <span class="answer-tag">정답: $S'(x)=x^2+3$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 정적분 값 계산</div>
+        <div class="problem-body"><strong>문제:</strong> 미적분의 기본정리를 이용하여 $\displaystyle\int_0^2 (3x^2-2x)\,dx$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)=3x^2-2x$ 의 부정적분 $F(x)$ 를 하나 구한다.
+            $$F(x)=x^3-x^2$$
+            <div class="why">$3x^2$ 을 적분하면 $x^3$, $-2x$ 를 적분하면 $-x^2$. 검산: $F'(x)=3x^2-2x=f(x)$, 맞다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 5에서 증명한 $\displaystyle\int_a^b f(x)\,dx=F(b)-F(a)$ 에 $a=0,\ b=2$ 를 대입한다.
+            $$\int_0^2(3x^2-2x)\,dx = F(2)-F(0) = (8-4)-(0-0)=4$$
+            <div class="why">$F(2)=2^3-2^2=8-4=4$, $F(0)=0-0=0$.</div></div></div>
+          <span class="answer-tag">정답: $4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>넓이함수의 도함수 응용</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 넓이함수의 특정 지점 미분계수</div>
+        <div class="problem-body"><strong>문제:</strong> $g(x)=\displaystyle\int_2^x (4t-1)\,dt$ 일 때, $g'(3)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 4의 $S'(x)=f(x)$ 를 이용하면, $g(x)$ 를 실제로 적분해서 $g'(x)$ 를 구할 필요가 없다.
+            $$g'(x)=4x-1$$
+            <div class="why">$g(x)=\displaystyle\int_2^x(4t-1)\,dt$ 는 개념 1의 $S(x)$ 와 똑같은 구조다($a=2$, $f(t)=4t-1$). 개념 4의 증명 결과를 그대로 재사용하면 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x=3$ 을 대입한다.
+            $$g'(3)=4\times3-1=11$$
+            <div class="why">피적분함수 $f(t)=4t-1$ 에 $t$ 대신 $3$ 을 넣은 값과 동일하다.</div></div></div>
+          <span class="answer-tag">정답: $11$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 미분계수와 정적분 값을 함께 계산</div>
+        <div class="problem-body"><strong>문제:</strong> $S(x)=\displaystyle\int_1^x (t^2-t)\,dt$ 일 때, 다음을 구하시오.<br>(1) $S'(2)$<br>(2) $S(3)$</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1 (1)</span><div>개념 4에 의해 $S'(x)=x^2-x$ 이므로, $x=2$ 를 대입한다.
+            $$S'(2)=4-2=2$$
+            <div class="why">(1)은 미분계수를 묻는 것이라 적분 계산이 전혀 필요 없다 — 문제의 함정 포인트다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2 (2)</span><div>(2)는 넓이(정적분) 값을 묻는 것이므로 개념 5 공식이 필요하다. $f(t)=t^2-t$ 의 부정적분 $F(t)=\dfrac{t^3}{3}-\dfrac{t^2}{2}$.
+            <div class="why">(1)과 달리 (2)는 구체적인 숫자 값을 구해야 하므로, 개념 5에서 증명한 $S(x)=F(x)-F(a)$ 공식을 실제로 계산해야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3 (2)</span><div>$a=1,\ x=3$ 을 대입한다. $F(3)=9-\dfrac92=\dfrac92$, $F(1)=\dfrac13-\dfrac12=-\dfrac16$.
+            $$S(3)=F(3)-F(1)=\frac92-\left(-\frac16\right)=\frac{27}{6}+\frac16=\frac{28}{6}=\frac{14}{3}$$
+            <div class="why">분수 계산은 통분(분모 $6$)을 먼저 맞추고 더하면 실수가 줄어든다.</div></div></div>
+          <span class="answer-tag">정답: (1) $2$ &nbsp; (2) $\dfrac{14}{3}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>증명의 아이디어를 새로운 상황에 적용</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 최대·최소 부등식을 구간 전체로 확장</div>
+        <div class="problem-body"><strong>문제:</strong> 닫힌구간 $[1,4]$ 에서 연속인 함수 $f(x)$ 가 이 구간의 모든 $x$ 에 대해 $3\le f(x)\le7$ 을 만족시킬 때, $\displaystyle\int_1^4 f(x)\,dx$ 의 값의 범위를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 3에서 세운 부등식 $m\cdot h\le\Delta S\le M\cdot h$ 는 원래 아주 좁은 구간 $[x,x+h]$ 에서 세운 것이지만, <strong>같은 원리가 구간 전체 $[1,4]$ 에도 그대로 적용</strong>된다.
+            <div class="why">이유는 같다: $f$ 의 그래프가 최솟값 $m$ 인 가로 직선과 최댓값 $M$ 인 가로 직선 사이에 있으면, 그 아래 넓이도 두 직사각형의 넓이 사이에 끼인다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>구간의 길이는 $4-1=3$. 최솟값 $m=3$, 최댓값 $M=7$ 이므로,
+            $$m\times(\text{구간 길이}) \le \int_1^4 f(x)\,dx \le M\times(\text{구간 길이})$$
+            $$3\times3 \le \int_1^4 f(x)\,dx \le 7\times3$$
+            <div class="why">개념 3의 부등식에서 $h$ 자리에 구간 전체 길이 $3$ 을, $m,M$ 자리에 구간 전체에서의 최솟값·최댓값을 넣은 것이다.</div></div></div>
+          <span class="answer-tag">정답: $9 \le \displaystyle\int_1^4 f(x)\,dx \le 21$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 적분상수 $C$ 를 조건으로 역산</div>
+        <div class="problem-body"><strong>문제:</strong> $S(x)=\displaystyle\int_1^x (2t+3)\,dt$ 이고, 모든 $x$ 에 대해 $S(x)=x^2+3x+k$ 가 성립할 때, 상수 $k$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 1에서 확인한 성질 $S(a)=0$ 을 떠올린다. 여기서 하한이 $a=1$ 이므로 $S(1)=0$ 이 반드시 성립해야 한다.
+            <div class="why">$S(x)$ 는 "$1$ 부터 $x$ 까지의 넓이"이므로, $x=1$ 을 넣으면 폭이 $0$ 인 넓이, 즉 $0$ 이 나온다 — 개념 5 증명에서 $C$ 를 결정할 때 쓴 바로 그 조건이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>주어진 식 $S(x)=x^2+3x+k$ 에 $x=1$ 을 대입한다.
+            $$S(1)=1+3+k=4+k$$
+            <div class="why">$S(1)=0$ 이어야 하므로 이 식이 $0$ 이 되도록 $k$ 를 정하면 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$4+k=0$ 을 풀면 $k=-4$.
+            <div class="why">개념 5의 증명 과정 자체가 "$S(a)=0$ 으로 $C$ 를 결정한다"였다. 이 문제는 그 증명 아이디어를 거꾸로 이용해 미지수를 구하는 것이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>검산: $f(t)=2t+3$ 의 부정적분은 $F(t)=t^2+3t$. 개념 5 공식대로 $S(x)=F(x)-F(1)=(x^2+3x)-(1+3)=x^2+3x-4$. 주어진 식과 비교하면 $k=-4$, 일치한다.
+            <div class="why">직접 부정적분을 구해 계산해도 같은 답이 나오는지 확인하는 습관을 들이면 실수를 줄일 수 있다.</div></div></div>
+          <span class="answer-tag">정답: $k=-4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>준킬러 유형 — 증명 결과의 종합 활용</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 넓이함수의 극값을 $f$ 의 부호로 판정</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=(x-1)(x-3)$ 이고 $g(x)=\displaystyle\int_0^x f(t)\,dt$ 라 하자. $g(x)$ 가 극댓값을 갖는 $x$ 의 값과, 그때의 극댓값 $g(1)$ 을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 4의 증명 결과 $g'(x)=f(x)$ 를 그대로 쓴다.
+            $$g'(x)=(x-1)(x-3)$$
+            <div class="why">"넓이함수를 미분하면 원래 함수가 나온다"는 증명 자체가 이 문제 풀이의 첫 줄이 된다 — 별도의 계산 없이 바로 대입.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$g'(x)=0$ 이 되는 $x$ 는 $x=1$ 또는 $x=3$. $f(x)=(x-1)(x-3)$ 은 아래로 볼록한 포물선이므로, $x&lt;1$ 에서 양수, $1&lt;x&lt;3$ 에서 음수, $x&gt;3$ 에서 양수다.
+            <div class="why">$g'(x)$ 의 부호가 $f(x)$ 의 부호와 같으므로, $g$ 의 증가·감소는 $f$ 의 부호표로 바로 읽을 수 있다 — 도함수를 이용한 증가·감소 판정을 그대로 적용.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$x=1$ 에서 $g'$ 이 양$\to$음으로 바뀌므로 $g$ 는 <strong>극댓값</strong>을 갖는다. ($x=3$ 에서는 음$\to$양이라 극솟값.)
+            <div class="why">도함수가 양에서 음으로 바뀌는 지점은 함수가 증가하다가 감소로 바뀌는 지점, 즉 극댓값이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>극댓값 $g(1)$ 을 계산한다. $F(t)=\dfrac{t^3}{3}-2t^2+3t$ 라 하면(부정적분), $g(1)=F(1)-F(0)$.
+            $$F(1)=\frac13-2+3=\frac43,\qquad F(0)=0$$
+            $$g(1)=\frac43-0=\frac43$$
+            <div class="why">$f(t)=(t-1)(t-3)=t^2-4t+3$ 을 전개해서 항별로 적분하면 $F(t)=\dfrac{t^3}{3}-2t^2+3t$.</div></div></div>
+          <span class="answer-tag">정답: $x=1$ 에서 극댓값 $\dfrac43$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 부등식으로 갇힌 함수의 정적분 범위</div>
+        <div class="problem-body"><strong>문제:</strong> 닫힌구간 $[0,3]$ 에서 연속인 함수 $f(x)$ 가 이 구간의 모든 $x$ 에 대해 $2x\le f(x)\le 2x+2$ 를 만족시킨다. $S(x)=\displaystyle\int_0^x f(t)\,dt$ 일 때, $S(3)$ 의 값의 범위를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>심화 1에서 쓴 원리(구간 전체에서의 부등식 확장)를 다시 쓰되, 이번에는 $m,\ M$ 이 <strong>상수가 아니라 $x$ 의 함수</strong>다.
+            <div class="why">$f(x)$ 가 상수 사이가 아니라 두 <strong>함수</strong> $2x$ 와 $2x+2$ 사이에 갇혀 있으므로, 부등식의 양 끝도 함수째로 적분해야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$[0,3]$ 의 모든 $x$ 에서 $2x\le f(x)\le2x+2$ 이므로, 양변을 각각 $0$ 부터 $3$ 까지 정적분해도 부등호 방향은 유지된다.
+            $$\int_0^3 2x\,dx \ \le\ \int_0^3 f(x)\,dx \ \le\ \int_0^3(2x+2)\,dx$$
+            <div class="why">넓이가 항상 아래쪽 함수의 넓이보다 크거나 같고 위쪽 함수의 넓이보다 작거나 같다는 것은, 개념 3~4 증명에서 "구간을 잘게 쪼갠 직사각형이 실제 넓이를 가둔다"는 아이디어를 구간 전체로 그대로 확장한 것이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>양 끝 정적분을 각각 계산한다.
+            $$\int_0^3 2x\,dx=\Big[x^2\Big]_0^3=9,\qquad \int_0^3(2x+2)\,dx=\Big[x^2+2x\Big]_0^3=9+6=15$$
+            <div class="why">$S(3)=\displaystyle\int_0^3 f(t)\,dt$ 이므로, 이 두 값이 그대로 $S(3)$ 의 범위가 된다.</div></div></div>
+          <span class="answer-tag">정답: $9 \le S(3) \le 15$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「[수학2] 미적분의 기본정리 증명 (개념수업)」</strong>(Thinkers'_띵커스, 약 24분)의 상세 요약본을 근거로 재구성했습니다. 자막 트랙이 제공되지 않아(yt-dlp·innertube 모두 자막 추출 실패) 타임스탬프별 챕터 요약·핵심 개념·강조 포인트가 포함된 상세 요약본을 대체 입력으로 사용했습니다. 영상이 다룬 5단계 증명 — ① 넓이함수 $S(x)$ 정의 ② 도함수 정의로 $S'(x)$ 세우기 ③ 최대·최소 정리로 부등식 구성 ④ 샌드위치 정리로 $S'(x)=f(x)$ 증명 ⑤ 적분상수 결정으로 $\int_a^b f(x)dx=F(b)-F(a)$ 완성 — 을 각각 개념 1~5 에 그대로 대응시켰고, 모든 단계의 계산을 직접 재검산했습니다.</p>
+      <p style="margin-top:8px">⚠️ <strong>확신도 ★★ 항목</strong>: 개념 4의 "$h&lt;0$ 인 경우도 같은 결론" 서술은 미적분의 기본정리 증명에서 표준적으로 요구되는 보충 설명이지만, 제공된 요약본에는 $h&gt;0$ 인 경우만 명시되어 있어 <strong>이 자료에서 추가로 보완한 부분</strong>입니다. 결론(양쪽 극한 모두 $f(x)$)은 표준 교과서 증명과 일치하지만, 강사가 실제로 이 부분을 언급했는지는 확인할 수 없어 별도 표시했습니다. 도입 문제와 문항 8개는 모두 요약본에 기술된 증명 원리를 바탕으로 <strong>새로 출제</strong>한 것이며, 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아닙니다.</strong> 학생 배포 전 교사 검토를 권장합니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 본 자료는 다항함수의 극한·연속·미분·정적분, 최대·최소 정리, 샌드위치 정리만 사용합니다(현 고2 미적분Ⅰ 범위 — CLAUDE.md 교육과정 범위 제한상 "정적분의 기본정리" 항목으로 명시적으로 허용된 주제). 고3 선택 「미적분」 영역(삼각함수의 덧셈정리·극한·미분, 부분적분·치환적분, 수열의 극한·급수 등)은 <strong>전혀 사용하지 않았습니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> · <a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-31 · 영상 출처: <a href="https://youtu.be/wiclnyeqz8k" style="color:var(--primary)">Thinkers'_띵커스</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
