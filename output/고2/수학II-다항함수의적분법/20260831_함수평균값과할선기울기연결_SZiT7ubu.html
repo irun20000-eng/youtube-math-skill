@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>함수의 평균값과 원시함수의 할선 기울기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:900px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ — 다항함수의 적분법</div>
+    <h1>함수의 평균값 $f_{avg}=\dfrac{1}{b-a}\displaystyle\int_a^b f(x)\,dx$ 와 원시함수의 할선 기울기 $\dfrac{F(b)-F(a)}{b-a}$ 가 같은 이유</h1>
+    <p class="sub">연속함수의 "평균 높이"를 구하는 문제는 결국 <strong>넓이를 구간의 폭으로 나누는 것</strong>이며, 이는 미적분의 기본정리(FTC)에 의해 <strong>원시함수 그래프의 두 끝점을 잇는 할선의 기울기</strong>와 완전히 같은 값이 된다</p>
+    <div class="quote">강사 핵심 포인트 (요약 기반 재구성, [00:07:01~00:08:23]): "모든 접선 기울기들의 평균은, 전체 구간의 평균 기울기와 같다." 넓이(적분)라는 개념과 기울기(미분)라는 개념이 <strong>평균값</strong>이라는 다리를 통해 정확히 하나로 이어진다는 점을 강조.</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/SZiT7ubuPXg" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/SZiT7ubuPXg/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">제9장: 넓이와 기울기 사이 숨겨진 연결고리 | 미적분학의 본질</div>
+        <div class="v-meta">📺 YouTube · 약 12분 · 3Blue1Brown 한국어</div>
+        <a class="v-link" href="https://youtu.be/SZiT7ubuPXg" target="_blank" rel="noopener">https://youtu.be/SZiT7ubuPXg</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① 유한 개의 값의 평균에서 출발해, 표본 개수를 무한히 늘리는 극한 과정을 통해 <strong>연속함수의 평균값 공식</strong>이 정적분으로 유도되는 과정을 설명할 수 있다 ② 주어진 다항함수의 평균값을 직접 계산할 수 있다 ③ 함수의 평균값이 <strong>원시함수 그래프 위 두 점을 잇는 할선의 기울기</strong>와 같음을 미적분의 기본정리로 증명하고, 이를 이용해 문제를 풀 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 연속으로 변하는 값의 "평균"은 어떻게 구할까?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 수학 점수 $80,\ 90,\ 70$ 의 평균은 $\dfrac{80+90+70}{3}=80$ 으로 쉽게 구한다. 그런데 함수 $f(x)=x^2$ 이 구간 $[0,3]$ 에서 갖는 <strong>무한히 많은 함숫값</strong>의 평균은 어떻게 구할까? 값을 전부 더해서 개수로 나눌 수가 없다 — 개수가 무한대이기 때문이다.</div>
+      <div class="visual">        y
+        │                         ● (3,9)
+      9 ┤                       ／
+        │                    ／
+        │        y=x²    ／     ← 이 곡선 위의 "무한히 많은" 점의
+        │             ／           높이를 어떻게 평균 낼까?
+        │         ／
+      0 ┼─────╱──────────────┼──── x
+        0                    3
+</div>
+      <div class="tip">힌트: 이산적인(끊어져 있는) 값의 평균은 "더하고 나누기"지만, 연속적으로 변하는 값의 평균은 <strong>정적분(넓이)을 이용</strong>해야 한다. 그 이유를 처음부터 직접 유도해 본다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명 — 함수의 평균값, 어디서 오는가</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 이미 아는 것부터 정리</div>
+      <p>이 자료는 아래 두 가지를 <strong>이미 배운 사실로 전제</strong>하고 시작한다 (증명이 필요하면 같은 단원의 「미적분의 기본정리 증명」 자료를 먼저 참고).</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>미적분의 기본정리(FTC)</strong>: 연속함수 $f(x)$ 의 부정적분(원시함수) 중 하나를 $F(x)$($F'(x)=f(x)$)라 하면, $\displaystyle\int_a^b f(x)\,dx=F(b)-F(a)$.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>정적분의 의미</strong>: $f(x)\ge0$ 일 때 $\displaystyle\int_a^b f(x)\,dx$ 는 곡선 $y=f(x)$ 와 $x$ 축, 두 직선 $x=a,\ x=b$ 로 둘러싸인 부분의 넓이다.</div></div>
+      <div class="concept-box">이 두 가지 도구를 가지고, "연속함수의 평균값"이라는 새 개념을 <strong>유한 개의 평균 → 극한</strong>이라는 과정으로 직접 유도해 본다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>유한 표본평균에서 연속 평균으로 — 극한 유도</div>
+      <p>구간 $[a,b]$ 를 <strong>폭이 아주 좁은 $N$ 개의 조각</strong>으로 등분하고, 각 조각에서 표본값 $f(x_1),\,f(x_2),\,\dots,\,f(x_N)$ 을 하나씩 뽑는다고 하자.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">$N$ 개의 표본값을 뽑았으니, 이산 평균 공식 그대로 평균을 구한다.
+        $$(\text{표본평균}) = \frac{f(x_1)+f(x_2)+\cdots+f(x_N)}{N}$$</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">조각 하나의 폭을 $dx$ 라 하면, 구간 전체 폭 $b-a$ 를 $N$ 조각으로 나눈 것이므로 $dx=\dfrac{b-a}{N}$, 즉 $\dfrac1N=\dfrac{dx}{b-a}$ 이다.
+        <div class="why">$N$(조각의 개수)과 $dx$(조각 하나의 폭)는 서로 역수 관계로 묶여 있다 — $N$ 이 커질수록 $dx$ 는 작아진다.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">$\dfrac1N=\dfrac{dx}{b-a}$ 를 표본평균 식에 대입해서 정리한다.
+        $$(\text{표본평균}) = \frac{dx}{b-a}\big(f(x_1)+\cdots+f(x_N)\big) = \frac{1}{b-a}\Big(f(x_1)\,dx+f(x_2)\,dx+\cdots+f(x_N)\,dx\Big)$$
+        <div class="why">단순히 값을 더한 게 아니라, 각 항에 <strong>폭 $dx$ 를 곱했다</strong> — 이제 각 항 $f(x_i)\,dx$ 는 "높이 $\times$ 폭"이므로 <strong>작은 직사각형 하나의 넓이</strong>가 된다. 값의 차원이 "높이"에서 "넓이"로 바뀐 것이다.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body">이제 $N\to\infty$ (즉 $dx\to0$) 극한을 취한다. 괄호 안 $f(x_1)dx+\cdots+f(x_N)dx$ 는 정적분의 정의 그 자체 — 좁은 직사각형 넓이들의 합의 극한이므로 $\displaystyle\int_a^b f(x)\,dx$ 로 수렴한다.
+        $$\lim_{N\to\infty}(\text{표본평균}) = \frac{1}{b-a}\int_a^b f(x)\,dx$$</div></div></div>
+      <div class="caution">⚠️ <strong>이산 평균과 연속 평균을 혼동하지 말 것</strong>: "값을 더해서 개수로 나눈다"는 이산 평균의 규칙을 연속함수에 그대로 쓰면 안 된다. 반드시 각 값에 <strong>미소 폭 $dx$ 를 곱해 넓이 차원으로 바꾼 뒤</strong>, 구간의 폭 $b-a$ 로 나누어야 한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>함수의 평균값(Average Value) — 정의</div>
+      <div class="formula-box">$$f_{avg} = \frac{1}{b-a}\int_a^b f(x)\,dx$$</div>
+      <div class="concept-box">기하학적 의미: $f_{avg}$ 는 <strong>곡선 $y=f(x)$ 아래 넓이와 똑같은 넓이를 갖는, 밑변이 $b-a$ 인 직사각형의 높이</strong>다. 울퉁불퉁한 곡선의 "굴곡"을 다 눌러 편평하게 만들었을 때의 높이라고 생각하면 된다.</div>
+      <div class="visual">        y
+        │        y=f(x)
+        │       ╱﹍___
+        │     ╱      ﹍___     ┄┄┄┄┄┄┄┄┄┄┄┄┄  ← 높이 f_avg인 직사각형
+        │   ╱░░░░░░░░░░░﹍___         (넓이는 곡선 아래 넓이와 동일)
+      0 ┼───────────────────────┼──── x
+        a                       b
+</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>영상 속 예시로 감 잡기 (참고용 — 계산 결과만 인용)</div>
+      <div class="caution">⚠️ 이 부분은 원본 영상이 실제로 사용한 예시 $y=\sin x$ 를 <strong>결과만 소개</strong>하는 참고용 박스다. 삼각함수의 적분·미분은 현재 고2 수능 범위(선택 과목 「미적분」 영역)에 해당하지 않으므로, 아래 계산 과정을 직접 재현하거나 문제로 풀 필요는 없다 — 결과만 눈으로 확인하고 넘어가면 된다.</div>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">영상은 구간 $[0,\pi]$ 에서 $y=\sin x$ 의 평균 높이를 묻는다. $\sin x$ 의 원시함수는 $-\cos x$ 이고, $\displaystyle\int_0^\pi \sin x\,dx = 2$ 라는 계산 결과가 주어진다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">개념 2의 공식을 적용하면 평균값은 $f_{avg}=\dfrac{2}{\pi}\approx0.6366$.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">원시함수 $-\cos x$ 그래프 위 두 점 $(0,-1)$ 과 $(\pi,1)$ 을 잇는 할선의 기울기는 $\dfrac{1-(-1)}{\pi-0}=\dfrac{2}{\pi}$ — <strong>평균값과 정확히 일치</strong>한다.</div></div></div>
+      <div class="concept-box">이 "우연 같은 일치"가 우연이 아니라는 것을, 다음 개념에서 <strong>모든 다항함수를 포함한 일반 연속함수</strong>에 대해 직접 증명한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>평균값 = 원시함수의 할선 기울기 — 증명</div>
+      <p>개념 2의 정의에서 출발해, 선수 학습 1번(FTC)을 딱 한 줄 적용하면 증명이 끝난다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">평균값 정의에서 시작한다.
+        $$f_{avg} = \frac{1}{b-a}\int_a^b f(x)\,dx$$</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">$F'(x)=f(x)$ 인 원시함수 $F(x)$ 를 하나 고르면, 선수 학습 1번(FTC)에 의해 $\displaystyle\int_a^b f(x)\,dx=F(b)-F(a)$ 이므로 그대로 대입한다.
+        $$f_{avg} = \frac{F(b)-F(a)}{b-a}$$
+        <div class="why">적분 기호 안의 함수를, <strong>원시함수의 양 끝점 값의 차이</strong>로 통째로 바꿔치기한 것 — FTC의 핵심 쓸모다.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">$\dfrac{F(b)-F(a)}{b-a}$ 를 도형으로 읽으면, $F(x)$ 의 그래프 위 두 점 $(a,F(a))$ 와 $(b,F(b))$ 를 <strong>직선으로 이었을 때의 기울기(할선의 기울기)</strong> 그 자체다.
+        <div class="why">두 점을 잇는 직선의 기울기는 항상 $\dfrac{y\text{값의 차}}{x\text{값의 차}}$ 이므로, 이 식은 정확히 그 형태다.</div></div></div>
+      <div class="formula-box">$$\boxed{f_{avg} = \frac{1}{b-a}\int_a^b f(x)\,dx = \frac{F(b)-F(a)}{b-a}}$$</div>
+      <div class="concept-box">직관적으로 풀면: $F(x)$ 는 $f(x)$ 의 <strong>접선 기울기 조각들을 이어 붙여 만든 함수</strong>다($F'=f$). 그 조각들(순간 기울기)의 평균을 내면, 결국 $F$ 가 처음부터 끝까지 실제로 변한 <strong>전체 평균 변화율</strong>과 같아질 수밖에 없다 — "모든 접선 기울기의 평균 = 두 끝점을 잇는 할선의 기울기".</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — $b-a$ 로 나누는 것을 빼먹음.</strong> 평균값은 <strong>넓이(정적분)가 아니라 "넓이 ÷ 구간의 폭"</strong>이다. $\displaystyle\int_a^b f(x)\,dx$ 자체를 답으로 내는 실수가 가장 흔하다.</div>
+      <div class="caution"><strong>실수 2 — 평균값을 최댓값·최솟값으로 착각.</strong> $f_{avg}$ 는 구간 안의 최솟값 $m$ 과 최댓값 $M$ 사이에 있는 값 ($m\le f_{avg}\le M$) 이지, $f(x)$ 의 특별한 함숫값(최댓값 등)이 아니다.</div>
+      <div class="caution"><strong>실수 3 — 할선 기울기 방향을 거꾸로 씀.</strong> $\dfrac{F(b)-F(a)}{b-a}$ 에서 분자·분모의 $a,b$ 순서가 같아야 한다. $\dfrac{F(a)-F(b)}{b-a}$ 처럼 한쪽만 뒤집으면 부호가 반대로 나온다.</div>
+      <div class="caution"><strong>실수 4 — 이산 평균 공식 그대로 사용.</strong> "값을 더해서 개수로 나눈다"는 유한 개의 값에서만 통한다. 연속함수는 반드시 개념 1의 극한 과정(적분)을 거쳐야 한다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2) — 모두 다항함수</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>평균값 공식 직접 적용</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 평균값 공식 바로 계산</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=x^2$ 의 구간 $[0,3]$ 에서의 평균값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)=x^2$ 의 원시함수를 하나 구한다.
+            $$F(x)=\frac{x^3}{3}$$
+            <div class="why">$x^2$ 을 적분하면 $\dfrac{x^3}{3}$. 검산: $F'(x)=x^2=f(x)$, 맞다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 4의 공식 $f_{avg}=\dfrac{F(b)-F(a)}{b-a}$ 에 $a=0,\ b=3$ 을 대입한다.
+            $$f_{avg}=\frac{F(3)-F(0)}{3-0}=\frac{9-0}{3}=3$$
+            <div class="why">$F(3)=\dfrac{27}{3}=9$, $F(0)=0$. 넓이 $9$ 를 구간 폭 $3$ 으로 나눈 값이다.</div></div></div>
+          <span class="answer-tag">정답: $3$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 평균값과 할선 기울기 일치 확인</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=2x$ 의 구간 $[1,5]$ 에서의 평균값을 구하고, 원시함수 $F(x)=x^2$ 의 그래프 위 두 점 $(1,F(1))$, $(5,F(5))$ 를 잇는 할선의 기울기와 비교하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 4의 공식으로 평균값을 계산한다. $F(1)=1,\ F(5)=25$.
+            $$f_{avg}=\frac{F(5)-F(1)}{5-1}=\frac{25-1}{4}=6$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>할선의 기울기를 직접 계산해서 비교한다. 두 점 $(1,1),\,(5,25)$ 를 잇는 직선의 기울기는
+            $$\frac{25-1}{5-1}=6$$
+            <div class="why">STEP 1과 STEP 2가 완전히 같은 계산이다 — 개념 4에서 증명한 "평균값 = 할선 기울기"가 실제로 성립함을 숫자로 확인한 것이다.</div></div></div>
+          <span class="answer-tag">정답: 평균값 $6$, 할선 기울기 $6$ — 일치</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>평균값 계산과 조건 활용</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 이차함수의 평균값</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=3x^2-2x+1$ 의 구간 $[0,2]$ 에서의 평균값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>원시함수를 구한다.
+            $$F(x)=x^3-x^2+x$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$F(2)$ 와 $F(0)$ 을 계산한다.
+            $$F(2)=8-4+2=6,\qquad F(0)=0$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>개념 4의 공식에 대입한다.
+            $$f_{avg}=\frac{F(2)-F(0)}{2-0}=\frac{6-0}{2}=3$$
+            <div class="why">넓이(정적분값 $6$)를 구간 폭 $2$ 로 나눈 값이 평균값이다.</div></div></div>
+          <span class="answer-tag">정답: $3$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 평균값이 주어졌을 때 미지수 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=x^2+k$ (단, $k$ 는 상수)의 구간 $[0,3]$ 에서의 평균값이 $5$ 일 때, $k$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>원시함수 $F(x)=\dfrac{x^3}{3}+kx$ 를 이용해 평균값을 $k$ 에 대한 식으로 나타낸다.
+            $$f_{avg}=\frac{F(3)-F(0)}{3-0}=\frac{(9+3k)-0}{3}=3+k$$
+            <div class="why">$F(3)=\dfrac{27}{3}+3k=9+3k$, $F(0)=0$. 분수를 약분하면 $3+k$ 로 깔끔하게 정리된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>평균값이 $5$ 라는 조건을 식으로 세운다.
+            $$3+k=5$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>방정식을 풀면 $k=2$.
+            <div class="why">검산: $f(x)=x^2+2$, $F(x)=\dfrac{x^3}{3}+2x$, $f_{avg}=\dfrac{(9+6)-0}{3}=\dfrac{15}{3}=5$. 조건과 일치한다.</div></div></div>
+          <span class="answer-tag">정답: $k=2$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>평균값 개념의 확장 적용</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 평균값과 같은 함숫값을 갖는 점 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=x^2$ 의 구간 $[-1,2]$ 에서의 평균값을 구하고, 열린구간 $(-1,2)$ 에서 $f(c)=f_{avg}$ 를 만족시키는 $c$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>먼저 평균값을 구한다. $F(x)=\dfrac{x^3}{3}$ 이므로 $F(2)=\dfrac83$, $F(-1)=-\dfrac13$.
+            $$f_{avg}=\frac{F(2)-F(-1)}{2-(-1)}=\frac{\frac83-\left(-\frac13\right)}{3}=\frac{\frac93}{3}=\frac{3}{3}=1$$
+            <div class="why">$f$ 는 연속함수이고 구간이 닫힌구간이므로, 사잇값의 정리에 의해 평균값과 같은 함숫값을 갖는 점이 구간 안에 반드시 존재한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(c)=f_{avg}=1$, 즉 $c^2=1$ 을 만족시키는 $c$ 를 찾는다.
+            $$c^2=1 \ \Longrightarrow\ c=1 \ \text{또는}\ c=-1$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>조건이 <strong>열린구간</strong> $(-1,2)$ 이므로 구간의 끝점인 $c=-1$ 은 제외된다.
+            <div class="why">$-1$ 은 구간의 경계값이라 "구간 안에 속한다"는 조건에 맞지 않는다. $c=1$ 만 $(-1,2)$ 내부에 있다.</div></div></div>
+          <span class="answer-tag">정답: 평균값 $1$, $c=1$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 원시함수 값만으로 평균값 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 의 한 원시함수를 $F(x)$ 라 하자. $F(1)=2,\ F(5)=14$ 일 때, $f(x)$ 의 구간 $[1,5]$ 에서의 평균값을 구하시오. (단, $f(x)$ 의 식은 주어지지 않는다.)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)$ 의 식을 몰라도, 개념 4에서 증명한 공식 $f_{avg}=\dfrac{F(b)-F(a)}{b-a}$ 는 <strong>원시함수의 두 끝점 값만 알면</strong> 계산할 수 있다.
+            <div class="why">이 문제가 이 자료의 핵심 아이디어를 가장 직접적으로 보여준다 — $f(x)$ 를 적분해서 평균값을 구하는 게 아니라, <strong>이미 알려진 원시함수 값의 차이를 구간 폭으로 나누기만</strong> 하면 끝난다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$a=1,\ b=5$ 를 대입한다.
+            $$f_{avg}=\frac{F(5)-F(1)}{5-1}=\frac{14-2}{4}=\frac{12}{4}=3$$</div></div>
+          <span class="answer-tag">정답: $3$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>준킬러 유형 — 평균값 조건의 종합 활용</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 평균값 조건으로 계수 결정</div>
+        <div class="problem-body"><strong>문제:</strong> 이차함수 $f(x)=ax^2+b$ ($a,b$ 는 상수)에 대하여, 구간 $[0,3]$ 에서 $f(x)$ 의 평균값이 $10$ 이고 $f(0)=1$ 일 때, $f(3)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(0)=1$ 조건을 먼저 쓴다. $f(0)=a\cdot0^2+b=b$ 이므로 $b=1$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>원시함수 $F(x)=\dfrac{a}{3}x^3+bx$ 를 이용해 평균값을 식으로 세운다.
+            $$f_{avg}=\frac{F(3)-F(0)}{3-0}=\frac{(9a+3b)-0}{3}=3a+b$$
+            <div class="why">$F(3)=\dfrac{a}{3}\cdot27+3b=9a+3b$, $F(0)=0$. 분모 $3$ 으로 나누면 $3a+b$ 로 정리된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>평균값이 $10$, $b=1$ 이므로 대입해 방정식을 세운다.
+            $$3a+1=10 \ \Longrightarrow\ 3a=9 \ \Longrightarrow\ a=3$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(x)=3x^2+1$ 이므로 $f(3)$ 을 계산한다.
+            $$f(3)=3\times9+1=28$$
+            <div class="why">검산: $F(x)=x^3+x$, $f_{avg}=\dfrac{F(3)-F(0)}{3}=\dfrac{(27+3)-0}{3}=\dfrac{30}{3}=10$. 조건과 일치한다.</div></div></div>
+          <span class="answer-tag">정답: $f(3)=28$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 평균값과 같아지는 점의 개수</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=x^3-6x^2+9x$ 의 구간 $[0,4]$ 에서의 평균값을 $k$ 라 하자. 열린구간 $(0,4)$ 에서 $f(x)=k$ 를 만족시키는 $x$ 의 개수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>먼저 평균값 $k$ 를 구한다. $F(x)=\dfrac{x^4}{4}-2x^3+\dfrac{9}{2}x^2$ 이므로,
+            $$F(4)=\frac{256}{4}-2\cdot64+\frac{9}{2}\cdot16=64-128+72=8,\qquad F(0)=0$$
+            $$k=f_{avg}=\frac{F(4)-F(0)}{4-0}=\frac{8}{4}=2$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$g(x)=f(x)-2=x^3-6x^2+9x-2$ 로 놓고, $g(x)=0$ 의 실근 개수를 $g$ 의 증가·감소로 분석한다. $g'(x)=3x^2-12x+9=3(x-1)(x-3)$ 이므로 극값은 $x=1,\ x=3$ 에서 나온다.
+            <div class="why">$f(x)=k$ 를 직접 풀기보다, $g(x)=f(x)-k$ 가 $x$축과 몇 번 만나는지를 증가·감소표로 보는 것이 삼차함수 문제의 표준적인 접근이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>구간의 끝점과 극값에서 $g$ 의 값을 계산해 부호를 확인한다.
+            $$g(0)=-2,\quad g(1)=1-6+9-2=2,\quad g(3)=27-54+27-2=-2,\quad g(4)=64-96+36-2=2$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$g$ 는 $[0,1]$ 에서 증가($g'(x)>0$), $[1,3]$ 에서 감소, $[3,4]$ 에서 증가한다. 부호가 $g(0)=-2<0,\ g(1)=2>0,\ g(3)=-2<0,\ g(4)=2>0$ 으로 세 번 바뀌므로, 사잇값의 정리에 의해 각 구간에서 근이 정확히 하나씩 존재한다.
+            <div class="why">$(0,1)$ 사이에서 음$\to$양으로 한 번, $(1,3)$ 사이에서 양$\to$음으로 한 번, $(3,4)$ 사이에서 음$\to$양으로 한 번 — 총 세 번 부호가 바뀌므로 근도 세 개다.</div></div></div>
+          <span class="answer-tag">정답: $3$개</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「제9장: 넓이와 기울기 사이 숨겨진 연결고리 | 미적분학의 본질」</strong>(3Blue1Brown 한국어, 약 12분)의 상세 요약본을 근거로 재구성했습니다. 자막 트랙이 제공되지 않아(yt-dlp·innertube 모두 자막 추출 실패) 타임스탬프별 챕터 요약이 포함된 상세 요약본을 대체 입력으로 사용했습니다. 영상이 다룬 3단계 — ① 유한 표본평균의 극한으로 평균값 공식 유도 ② 평균값의 정의와 계산 ③ 평균값이 원시함수의 할선 기울기와 일치함을 증명 — 을 각각 개념 1·2·4 에 대응시켰고, 모든 계산을 직접 재검산했습니다.</p>
+      <p style="margin-top:8px">⚠️ <strong>확신도 ★★ 항목</strong>: 심화 1·수능 대비 2 문항에서 사용한 "사잇값의 정리(닫힌구간에서 연속인 함수가 두 함숫값 사이의 모든 값을 반드시 지나간다)"는 제공된 요약본에 직접 언급되지 않았으며, 같은 학년(고2) 수학Ⅱ 「함수의 극한과 연속」 단원에서 이미 배우는 정리를 <strong>이 자료에서 문제 풀이용으로 추가한 것</strong>입니다. 도입 문제와 문항 8개는 모두 요약본에 기술된 평균값 개념을 바탕으로 <strong>새로 출제</strong>했으며, 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아닙니다.</strong> 학생 배포 전 교사 검토를 권장합니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 원 영상은 도입 예시로 $\sin x$ 를 사용하지만, 삼각함수의 적분·미분은 현 고2 수능 범위 밖(선택 과목 「미적분」 영역)입니다. 이 자료에서는 개념 3 박스 하나에서만 <strong>계산 결과를 인용하는 용도로 짧게</strong> 소개했고, 학생에게 삼각함수 계산을 요구하는 문항은 <strong>단 하나도 없습니다.</strong> 도입 문제와 문항 8개는 모두 다항함수(이차·삼차함수)만 사용했으며, 최대·최소, 사잇값의 정리, 정적분의 기본정리 등 현 고2 대수·미적분Ⅰ 범위 안에서만 구성했습니다. 부분적분·치환적분·수열의 극한 등 고3 선택 「미적분」 영역은 <strong>전혀 사용하지 않았습니다.</strong> 같은 단원의 「미적분의 기본정리 증명」 자료가 다룬 $S'(x)=f(x)$ 증명 과정은 이 자료에서 반복하지 않고, 선수 학습으로만 짧게 전제했습니다.</p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> · <a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-08-31 · 영상 출처: <a href="https://youtu.be/SZiT7ubuPXg" style="color:var(--primary)">3Blue1Brown 한국어</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
