@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지수·로그함수 90도 회전과 원 보조선 — 준킬러 21번 격파</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .example-card { background: var(--visual-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 14px 0; }
+    .example-title { font-weight: 700; margin-bottom: 8px; color: var(--primary-dark); }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:900px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2·고3 · 대수(수학Ⅰ) — 지수함수와 로그함수</div>
+    <h1>직각이 2개 겹치면,<br>기울기 곱 대신 원을 그려라</h1>
+    <p>$y=a^{-x}$와 $y=\log_a x$가 원점 기준 $90°$ 회전 관계임을 간파하면, 지름 위의 원주각과 현의 수직이등분선만으로 준킬러 문제를 암산 수준으로 끝낼 수 있다</p>
+    <div class="quote">
+      "직각이 2개 이상 겹치면 무조건 원 보조선(지름·현)을 그려라. 원을 도입해놓고 다시 기울기 곱으로 되돌아가지 말고 끝까지 밀고 나가라." — 강사 인용
+    </div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/Iet2uhLYKwQ" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/Iet2uhLYKwQ/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">3등급 이하에게는 빛과 소금이 될 영상</div>
+        <div class="v-meta">📺 YouTube · 수학강사 이정환 · 약 10분</div>
+        <a class="v-link" href="https://youtu.be/Iet2uhLYKwQ" target="_blank" rel="noopener">https://youtu.be/Iet2uhLYKwQ</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 예시 문항 (도입) ===== -->
+    <div class="section-title">🔥 예시 문항 — 왜 이 관점이 필요할까?</div>
+    <div class="card">
+      <p><strong>문제</strong> (모의고사 21번 유형·준킬러): $a>1$인 상수 $a$에 대하여 제2사분면 위의 점 $P$는 곡선 $y=a^{-x}$ 위에 있고, 점 $Q$는 곡선 $y=\log_a x$ 위에 있다. 점 $A(1,0)$에 대하여 다음 조건을 만족시킬 때, 상수 $a$의 값과 선분 $PQ$의 길이를 구하시오.</p>
+      <p style="margin-top:8px">(가) $\overline{OP}=\overline{OQ}=\sqrt5$ &nbsp; (나) $\angle PAQ=90°$ (단, $O$는 원점)</p>
+
+      <div class="caution">
+        <strong>일반적인 방법</strong>: (나) 조건을 곧바로 "직선 $AP$의 기울기 $\times$ 직선 $AQ$의 기울기 $=-1$"로 대입하면, $P,\,Q$의 좌표에 이미 로그·지수가 섞여 있어서 분수식이 얽힌 이차 연립방정식이 된다. 전개 과정에서 부호 실수가 나기 쉽고 시간도 오래 걸린다.
+      </div>
+      <div class="tip">
+        <strong>구조로 보는 방법</strong>: $y=a^{-x}$와 $y=\log_a x$는 원점 기준 $90°$ 회전 관계이므로 $Q(m,n)$이면 $P(-n,m)$으로 즉시 결정된다(오늘 배울 개념 1~2). 여기에 $\angle POQ=\angle PAQ=90°$라는 사실을 원 보조선으로 연결하면(개념 3~4), 계산 없이 "$PQ$의 중점의 $x$좌표$=\dfrac12$"라는 식 하나가 바로 나온다.
+      </div>
+      <div style="margin-top:8px"><span class="answer-tag">정답: $a=2$, $\overline{PQ}=\sqrt{10}$</span></div>
+      <p style="margin-top:10px; font-size:14px; color:var(--sub)">이 문제를 어떻게 암산 수준으로 푸는지, 아래 개념 1~4를 따라가며 확인해 보자. STEP-by-STEP 풀이는 심화 1에서 똑같은 흐름으로 다시 다룬다.</p>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">📐 개념 — 회전 대칭과 원 보조선</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>역함수의 정의:</strong> 함수 $y=f(x)$의 역함수 $y=f^{-1}(x)$는 원래 함수의 $x$와 $y$를 서로 바꾼 관계다. 그래프로는 직선 $y=x$에 대해 대칭이다.</li>
+        <li><strong>$y$축 대칭이동:</strong> $y=f(x)$를 $y$축에 대해 대칭이동하면 $y=f(-x)$가 된다 ($x$ 대신 $-x$를 대입).</li>
+        <li><strong>로그의 정의:</strong> $\log_a N=x \iff a^x=N$ ($a>0,\ a\ne1,\ N>0$).</li>
+        <li><strong>원주각의 성질(직각삼각형과 외접원):</strong> 직각삼각형에서 빗변의 중점은 세 꼭짓점 모두로부터 같은 거리에 있다 — 이 사실을 개념 3에서 증명 없이 바로 쓸 수 있도록 짚어둔다.</li>
+      </ul>
+    </div>
+
+    <!-- CONCEPT 1 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>$y=a^{-x}$와 $y=\log_a x$는 왜 $90°$ 회전 관계일까</div>
+
+      <p><strong>① 정의</strong>: 로그함수 $y=\log_a x$의 역함수는 $y=a^x$이다(로그와 지수는 서로 역함수). 이 $y=a^x$를 $y$축에 대해 대칭이동하면 $x$ 대신 $-x$를 넣은 $y=a^{-x}$가 된다. 즉 <strong>$y=\log_a x \xrightarrow{y=x\text{ 대칭}} y=a^x \xrightarrow{y\text{축 대칭}} y=a^{-x}$</strong> — 두 번의 대칭이동을 거쳐 $y=\log_a x$가 $y=a^{-x}$로 바뀐다.</p>
+
+      <p style="margin-top:10px"><strong>② 비유</strong>: 종이 위의 그림을 거울 두 장에 순서대로 비추는 것과 같다. 첫 번째 거울($y=x$)에 비추고, 그 상을 다시 두 번째 거울($y$축)에 비추면, 결과적으로 원래 그림이 제자리에서 <strong>한 방향으로 홱 돌아간 것</strong>처럼 보인다. 실제로 이 두 대칭을 순서대로 합성한 효과는, 원점을 중심으로 그림을 $90°$ 돌린 것과 정확히 같다.</p>
+
+      <p style="margin-top:10px"><strong>③ 작동 원리(좌표로 확인)</strong>: 로그함수 위의 점 $(x_0,y_0)$을 따라가 보자. $y=x$ 대칭은 $x,y$를 맞바꾸므로 $(x_0,y_0)\to(y_0,x_0)$. 이어서 $y$축 대칭은 $x$좌표의 부호만 바꾸므로 $(y_0,x_0)\to(-y_0,x_0)$. 최종적으로 $(x_0,y_0)\to(-y_0,x_0)$ — 이것이 바로 원점을 중심으로 $90°$(반시계) 돌린 점의 좌표 공식과 똑같다.</p>
+
+      <div class="concept-box">
+        <strong>결론</strong>: $y=\log_a x$ 위의 점을 원점 기준 $90°$ 회전시키면 항상 $y=a^{-x}$ 위의 점이 된다. 두 곡선은 "회전한 것처럼 보이는" 게 아니라, 실제로 $y=x$ 대칭과 $y$축 대칭이라는 <strong>이미 배운 두 대칭이동을 합성한 결과</strong>다.
+      </div>
+
+      <div class="caution">
+        <strong>④ 자주 하는 실수</strong>: "회전이동"이라는 단어 때문에 새로운 공식을 외워야 한다고 생각하기 쉽다. 하지만 이 관계는 기존에 알던 $y=x$ 대칭(역함수)과 $y$축 대칭을 <strong>두 번 적용한 것일 뿐</strong>이다. 매번 이 두 단계를 다시 밟아 확인하는 습관을 들이면 공식을 잊어도 스스로 복원할 수 있다.
+      </div>
+    </div>
+
+    <!-- CONCEPT 2 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>좌표 변환 공식 — $Q(m,n) \to P(-n,m)$</div>
+
+      <p>개념 1의 결과를 문제 풀이에 바로 쓸 수 있는 형태로 정리하자.</p>
+
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">점 $Q(m,n)$이 곡선 $y=\log_a x$ 위에 있다고 하자. 즉 $n=\log_a m$ (동치로 $m=a^n$).</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">개념 1의 좌표 공식 $(x_0,y_0)\to(-y_0,x_0)$을 적용하면 $Q(m,n)$의 회전 대응점은 $(-n,\ m)$이다.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">확인: 이 점이 정말 $y=a^{-x}$ 위에 있는지 검산하면, $x=-n$일 때 $y=a^{-(-n)}=a^{n}=m$ — 정확히 $y$좌표 $m$과 일치한다.</div>
+      </div>
+
+      <div class="formula-box">
+        $$Q(m,n) \text{ on } y=\log_a x \ \Longrightarrow\ P(-n,\ m) \text{ on } y=a^{-x}$$
+      </div>
+
+      <p style="margin-top:10px"><strong>이 공식을 언제 쓸 수 있는가?</strong> 문제에서 "$\overline{OP}=\overline{OQ}$"라는 조건이 주어지고, $P$가 놓일 수 있는 사분면(제2사분면 등)이 한 곳으로 정해져 있으면, 그 범위 안에서 원점으로부터 같은 거리에 있는 점은 사실상 하나뿐이다. 그 유일한 점이 바로 $Q$를 $90°$ 회전시킨 점과 일치하므로, $Q(m,n)$을 잡으면 $P$의 좌표를 계산 없이 바로 $(-n,m)$으로 쓸 수 있다.</p>
+
+      <div class="tip">
+        이 순간부터 미지수가 $m,n$ 두 개로 정리된다. $P,Q$를 각각 따로 문자로 놓았다면 미지수가 4개였을 것을 회전 관계 하나로 절반으로 줄인 것 — 이것이 오늘 기법의 첫 번째 절약이다.
+      </div>
+    </div>
+
+    <!-- CONCEPT 3 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>직각이 2개 겹치면 원이 보인다 — 원주각의 성질</div>
+
+      <p><strong>① 정의(직각삼각형과 외접원의 관계)</strong>: 직각삼각형에서 <strong>빗변의 중점은 세 꼭짓점 모두로부터 같은 거리</strong>에 있다. 즉 빗변을 지름으로 하는 원을 그리면 세 꼭짓점이 전부 그 원 위에 놓인다. 거꾸로 말하면, 어떤 점에서 두 점을 이은 선분을 바라보는 각이 $90°$라면, 그 점은 "그 선분을 지름으로 하는 원" 위에 있다는 뜻이다.</p>
+
+      <p style="margin-top:10px"><strong>② 비유</strong>: 시계 판을 반으로 자른 지름을 상상하면 쉽다. 지름의 양 끝을 $12$시와 $6$시라 하면, 시계 원 위의 <strong>어느 숫자에서 봐도</strong> $12$시와 $6$시를 잇는 선은 항상 직각으로 벌어져 보인다. "직각으로 보인다"는 조건 하나가 "그 점이 원 위에 있다"는 위치 정보로 바뀌는 것이다.</p>
+
+      <p style="margin-top:10px"><strong>③ 작동 원리(우리 문제에 적용)</strong>: 오늘 문제에는 직각이 <strong>두 개</strong> 나온다 — $\angle POQ=90°$(개념 2의 회전 관계에서 자동으로 나옴, $O$에서 $P,Q$를 보는 각)와 $\angle PAQ=90°$(문제의 조건, $A$에서 $P,Q$를 보는 각). 두 각 모두 "선분 $PQ$를 바라보는 각이 $90°$"라는 같은 형태이므로, ①의 성질에 의해 <strong>$O$와 $A$가 모두 $PQ$를 지름으로 하는 원 위에 있다</strong>.</p>
+
+      <div class="concept-box">
+        <strong>핵심 전환</strong>: "각이 두 번 직각"이라는 대수적 조건이 "$O,A$가 한 원 위에 있다"는 <strong>도형 정보</strong>로 바뀌었다. 이제부터는 좌표 계산이 아니라 원의 성질(개념 4)로 문제를 이어간다.
+      </div>
+
+      <div class="caution">
+        <strong>④ 자주 하는 실수</strong>: $\angle PAQ=90°$를 보자마자 "기울기 곱 $=-1$" 공식으로 직행하는 것. 이 공식 자체는 틀리지 않지만, $P,Q$ 좌표에 지수·로그가 섞여 있어 계산이 복잡해진다. 직각이 <strong>두 개 이상</strong> 겹쳐 있다면 먼저 "지름 위 원주각"으로 볼 수 없는지부터 확인하는 습관이 계산량을 크게 줄인다.
+      </div>
+    </div>
+
+    <!-- CONCEPT 4 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>현의 수직이등분선은 반드시 원의 중심을 지난다</div>
+
+      <p><strong>① 정의</strong>: 원 위의 두 점을 이은 선분을 <strong>현(弦)</strong>이라 한다. 원의 중심은 원 위의 모든 점으로부터 같은 거리(반지름)에 있으므로, 특히 현의 두 끝점으로부터도 같은 거리에 있다. "두 점으로부터 같은 거리에 있는 점들의 모임"이 바로 그 두 점을 잇는 선분의 <strong>수직이등분선</strong>이므로, 원의 중심은 항상 그 현의 수직이등분선 위에 있다.</p>
+
+      <p style="margin-top:10px"><strong>② 비유</strong>: 두 친구 집에서 거리가 똑같은 곳을 찾으라면, 두 집을 잇는 선분의 한가운데를 지나면서 그 선분과 수직인 길을 따라가면 된다. 원의 중심도 마찬가지로, 원 위의 임의의 두 점(현)에 대해 "그 두 점에서 거리가 같은 길" 위에 반드시 있다.</p>
+
+      <p style="margin-top:10px"><strong>③ 작동 원리(우리 문제에 적용)</strong>: 개념 3에서 $O(0,0)$과 $A(1,0)$이 모두 $PQ$를 지름으로 하는 원 위에 있음을 확인했다. 따라서 선분 $OA$는 이 원의 <strong>현</strong>이다. $O,A$가 모두 $x$축 위에 있으므로 $\overline{OA}$의 수직이등분선은 $\overline{OA}$의 중점 $\left(\dfrac12,0\right)$을 지나면서 $x$축과 수직인 직선, 즉 <strong>$x=\dfrac12$</strong>이다. 그런데 지름 $PQ$의 중점은 곧 원의 중심이므로, 원의 중심은 반드시 이 직선 $x=\dfrac12$ 위에 있어야 한다.</p>
+
+      <div class="formula-box">
+        $$\text{원의 중심(=} \overline{PQ}\text{의 중점)의 } x\text{좌표} = \frac12$$
+      </div>
+
+      <p style="margin-top:10px">개념 2에서 $Q(m,n)$, $P(-n,m)$이라 했으므로 $\overline{PQ}$의 중점의 $x$좌표는 $\dfrac{m+(-n)}{2}=\dfrac{m-n}{2}$이다. 이것이 $\dfrac12$와 같아야 하므로:</p>
+
+      <div class="formula-box">
+        $$\frac{m-n}{2}=\frac12 \ \Longrightarrow\ m-n=1$$
+      </div>
+
+      <div class="tip">
+        복잡한 기울기 곱 공식을 전개하지 않고도, "현 $OA$의 수직이등분선이 $x=\dfrac12$"라는 사실 하나로 $m-n=1$이 바로 나왔다. 이것이 오늘 기법의 두 번째, 그리고 가장 큰 절약이다.
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 기초 문항 ===== -->
+    <div class="level-header filterable basic">
+      <span class="level-badge badge-basic">기초</span>
+      <span style="font-weight:600; color:#2e7d32">개념 하나씩 따로 확인하기</span>
+    </div>
+
+    <div class="problem-card filterable basic">
+      <div class="problem-num">기초 1 — 회전 좌표 공식 직접 적용</div>
+      <div class="problem-body">
+        로그함수 $y=\log_2 x$ 위의 점 $Q(4,2)$가 있다. $Q$를 원점을 중심으로 $90°$ 회전시킨 점을 $P$라 할 때, $P$의 좌표를 구하고 $P$가 곡선 $y=2^{-x}$ 위에 있음을 확인하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$Q(4,2)$가 $y=\log_2 x$ 위에 있는지 먼저 확인: $\log_2 4=2$ — 맞다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>개념 2의 공식 $(m,n)\to(-n,m)$을 적용: $Q(4,2) \to P(-2,4)$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>검산: $y=2^{-x}$에 $x=-2$를 대입하면 $2^{-(-2)}=2^2=4$ — $P$의 $y$좌표 $4$와 일치한다.</div>
+          </div>
+          <div class="why">$m,n$에 숫자를 넣어보면 공식이 실제로 성립함을 눈으로 확인할 수 있다 — 이 검산 습관이 시험장에서 부호 실수를 막아준다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $P(-2,4)$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable basic">
+      <div class="problem-num">기초 2 — 지름과 원주각(탈레스 정리) 직접 확인</div>
+      <div class="problem-body">
+        두 점 $M(-1,0)$, $N(3,0)$을 지름의 양 끝점으로 하는 원이 있다. 이 원 위의 점 $K(1,2)$에 대하여 $\angle MKN$의 크기를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>원의 중심은 $\overline{MN}$의 중점 $(1,0)$, 반지름은 $\dfrac{\overline{MN}}{2}=2$이다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$K(1,2)$가 실제로 원 위에 있는지 확인: 중심 $(1,0)$에서 $K$까지 거리 $=\sqrt{0^2+2^2}=2$ — 반지름과 같으므로 $K$는 원 위의 점이다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>개념 3의 성질(지름을 보는 원주각은 항상 $90°$)에 의해 $\angle MKN=90°$.</div>
+          </div>
+          <div class="why">좌표를 대입해 직접 벡터 $\overrightarrow{KM}\cdot\overrightarrow{KN}$을 계산해도 확인할 수 있지만($(-2,-2)\cdot(2,-2)=-4+4=0$), 지름 위의 원주각이라는 성질을 알면 계산 없이 바로 $90°$라고 답할 수 있다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $\angle MKN=90°$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 기본 문항 ===== -->
+    <div class="level-header filterable standard">
+      <span class="level-badge badge-standard">기본</span>
+      <span style="font-weight:600; color:#1565c0">두 개념을 잇는 연습</span>
+    </div>
+
+    <div class="problem-card filterable standard">
+      <div class="problem-num">기본 1 — 회전 관계 + 거리 확인 (다른 밑)</div>
+      <div class="problem-body">
+        로그함수 $y=\log_3 x$ 위의 점 $Q(9,2)$가 있다. $Q$를 원점 기준 $90°$ 회전시킨 점을 $P$라 하자. $P$가 곡선 $y=3^{-x}$ 위에 있음을 보이고, $\overline{OP}=\overline{OQ}$가 성립함을 확인하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$\log_3 9=2$이므로 $Q(9,2)$는 실제로 $y=\log_3 x$ 위의 점이다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>회전 공식 적용: $Q(9,2)\to P(-2,9)$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>검산: $3^{-(-2)}=3^2=9$ — $P(-2,9)$는 $y=3^{-x}$ 위의 점이 맞다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$\overline{OQ}=\sqrt{9^2+2^2}=\sqrt{85}$, $\overline{OP}=\sqrt{(-2)^2+9^2}=\sqrt{85}$ — 같다.</div>
+          </div>
+          <div class="why">회전이동은 원점으로부터의 거리를 절대 바꾸지 않는다(도형을 돌리기만 하지 늘리거나 줄이지 않으므로). 그래서 $\overline{OP}=\overline{OQ}$는 계산해보지 않아도 항상 성립하는 사실이다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $P(-2,9)$, $\overline{OP}=\overline{OQ}=\sqrt{85}$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable standard">
+      <div class="problem-num">기본 2 — 현의 수직이등분선으로 원의 중심 찾기</div>
+      <div class="problem-body">
+        좌표평면 위의 원 $C$가 두 점 $O(0,0)$과 $A(1,0)$을 지난다. 원 $C$의 중심의 $x$좌표를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$O,A$가 모두 원 $C$ 위에 있으므로 선분 $OA$는 원 $C$의 현이다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>개념 4에 의해 원의 중심은 현 $OA$의 수직이등분선 위에 있다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$O(0,0),A(1,0)$은 $x$축 위의 점이므로, $\overline{OA}$의 수직이등분선은 중점 $\left(\dfrac12,0\right)$을 지나는 세로선 $x=\dfrac12$이다.</div>
+          </div>
+          <div class="why">원의 크기나 $y$방향 위치는 전혀 몰라도, $O,A$가 둘 다 $x$축 위에 있다는 사실만으로 중심의 $x$좌표가 확정된다. 이 문제가 바로 개념 4가 오늘의 문제에서 하는 역할 그 자체다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $x=\dfrac12$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 심화 문항 ===== -->
+    <div class="level-header filterable advanced">
+      <span class="level-badge badge-advanced">심화</span>
+      <span style="font-weight:600; color:#6a1b9a">네 개념 종합 — 예시 문항과 동일한 풀이 흐름</span>
+    </div>
+
+    <div class="problem-card filterable advanced">
+      <div class="problem-num">심화 1 — 종합 적용 (예시 문항과 같은 구조)</div>
+      <div class="problem-body">
+        $a>1$인 상수 $a$에 대하여 제2사분면 위의 점 $P$는 곡선 $y=a^{-x}$ 위에 있고, 점 $Q$는 곡선 $y=\log_a x$ 위에 있다. 점 $A(1,0)$에 대하여 $\overline{OP}=\overline{OQ}=\sqrt{13}$, $\angle PAQ=90°$일 때, 상수 $a$의 값과 선분 $PQ$의 길이를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$Q(m,n)$ ($m>0,n>0$)이라 하면 개념 2에 의해 $P(-n,m)$이고, $n=\log_a m$이다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>개념 3에 의해 $\angle POQ=\angle PAQ=90°$이므로 $O,A$는 모두 $\overline{PQ}$를 지름으로 하는 원 위에 있다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>개념 4에 의해 현 $OA$의 수직이등분선 $x=\dfrac12$ 위에 $\overline{PQ}$의 중점이 있으므로 $\dfrac{m-n}{2}=\dfrac12$, 즉 $m-n=1$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$\overline{OQ}=\sqrt{13}$이므로 $m^2+n^2=13$. $m=n+1$을 대입: $(n+1)^2+n^2=13 \Rightarrow 2n^2+2n-12=0 \Rightarrow n^2+n-6=0 \Rightarrow (n+3)(n-2)=0$. $n>0$이므로 $n=2$, $m=3$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 5</div>
+            <div>$n=\log_a m$에서 $2=\log_a 3 \Rightarrow a^2=3 \Rightarrow a=\sqrt3$ ($a>1$).</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 6</div>
+            <div>$P(-2,3)$, $Q(3,2)$이므로 $\overline{PQ}=\sqrt{(3-(-2))^2+(2-3)^2}=\sqrt{25+1}=\sqrt{26}$.</div>
+          </div>
+          <div class="why">STEP 3까지는 좌표를 몰라도 도형 성질만으로 $m-n=1$을 얻었다. 실제 계산이 필요한 곳은 STEP 4 하나뿐이다 — 원 보조선을 쓰지 않았다면 $\angle PAQ=90°$ 조건 자체를 기울기 곱으로 풀어야 했고, 그 전개가 STEP 3~4를 합친 것보다 훨씬 복잡했을 것이다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $a=\sqrt3$, $\overline{PQ}=\sqrt{26}$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable advanced">
+      <div class="problem-num">심화 2 — 종합 적용 (다른 수치)</div>
+      <div class="problem-body">
+        $a>1$인 상수 $a$에 대하여 제2사분면 위의 점 $P$는 곡선 $y=a^{-x}$ 위에 있고, 점 $Q$는 곡선 $y=\log_a x$ 위에 있다. 점 $A(1,0)$에 대하여 $\overline{OP}=\overline{OQ}=5$, $\angle PAQ=90°$일 때, 상수 $a$의 값과 선분 $PQ$의 길이를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$Q(m,n)$이라 하면 $P(-n,m)$, $n=\log_a m$ (개념 2).</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$\angle POQ=\angle PAQ=90°$이므로 $O,A$가 $\overline{PQ}$를 지름으로 하는 원 위에 있고(개념 3), 현 $OA$의 수직이등분선 $x=\dfrac12$ 위에 중점이 있으므로 $m-n=1$(개념 4).</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$\overline{OQ}=5$이므로 $m^2+n^2=25$. $m=n+1$ 대입: $(n+1)^2+n^2=25 \Rightarrow 2n^2+2n-24=0 \Rightarrow n^2+n-12=0 \Rightarrow (n+4)(n-3)=0$. $n>0$이므로 $n=3$, $m=4$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$3=\log_a 4 \Rightarrow a^3=4 \Rightarrow a=\sqrt[3]{4}$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 5</div>
+            <div>$P(-3,4)$, $Q(4,3)$이므로 $\overline{PQ}=\sqrt{(4-(-3))^2+(3-4)^2}=\sqrt{49+1}=\sqrt{50}=5\sqrt2$.</div>
+          </div>
+          <div class="why">$a=\sqrt[3]4$처럼 정수가 아닌 답도 정상적인 결과다. $m,n$이 정수로 깔끔하게 나오는 경우가 오히려 드물고, 실제 시험에서도 무리수 $a$가 답인 경우가 흔하다 — 계산 과정이 맞다면 답의 모양을 두려워할 필요는 없다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $a=\sqrt[3]4$, $\overline{PQ}=5\sqrt2$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 수능 대비 ===== -->
+    <div class="level-header filterable csat">
+      <span class="level-badge badge-csat">수능 대비</span>
+      <span style="font-weight:600; color:#b71c1c">준킬러 — 21번 유형</span>
+    </div>
+
+    <div class="problem-card filterable csat">
+      <div class="problem-num">수능 대비 1 — 준킬러 유형(원의 넓이까지 확장)</div>
+      <div class="problem-body">
+        $a>1$인 상수 $a$에 대하여 제2사분면 위의 점 $P$는 곡선 $y=a^{-x}$ 위에 있고, 점 $Q$는 곡선 $y=\log_a x$ 위에 있다. 점 $A(1,0)$에 대하여 $\overline{OP}=\overline{OQ}=\sqrt{41}$, $\angle PAQ=90°$일 때, 상수 $a$의 값과 $\overline{PQ}$를 지름으로 하는 원의 넓이를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$Q(m,n) \to P(-n,m)$, $n=\log_a m$ (개념 2), $m-n=1$ (개념 3~4, 앞선 문항과 동일한 논리).</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>$m^2+n^2=41$, $m=n+1$: $(n+1)^2+n^2=41 \Rightarrow 2n^2+2n-40=0 \Rightarrow n^2+n-20=0 \Rightarrow (n+5)(n-4)=0$. $n>0$이므로 $n=4$, $m=5$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>$4=\log_a 5 \Rightarrow a^4=5 \Rightarrow a=\sqrt[4]5$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>$P(-4,5)$, $Q(5,4)$이므로 $\overline{PQ}=\sqrt{9^2+1^2}=\sqrt{82}$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 5</div>
+            <div>원의 반지름 $r=\dfrac{\overline{PQ}}{2}=\dfrac{\sqrt{82}}{2}$이므로 넓이 $=\pi r^2=\pi\cdot\dfrac{82}{4}=\dfrac{41}{2}\pi$.</div>
+          </div>
+          <div class="why">$\overline{OP}=\overline{OQ}=\sqrt{41}$이라는 조건 하나가 STEP2의 $m^2+n^2=41$로 그대로 옮겨간다는 점이 이 유형의 패턴이다 — 조건의 숫자를 식에 대입하는 자리를 정확히 아는 것이 실전 속도를 좌우한다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: $a=\sqrt[4]5$, 원의 넓이 $=\dfrac{41}{2}\pi$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="problem-card filterable csat">
+      <div class="problem-num">수능 대비 2 — 준킬러 유형(사각형 $OPAQ$의 넓이)</div>
+      <div class="problem-body">
+        $a>1$인 상수 $a$에 대하여 제2사분면 위의 점 $P$는 곡선 $y=a^{-x}$ 위에 있고, 점 $Q$는 곡선 $y=\log_a x$ 위에 있다. 점 $A(1,0)$에 대하여 $\overline{OP}=\overline{OQ}=\sqrt{61}$, $\angle PAQ=90°$일 때, 사각형 $OPAQ$(꼭짓점을 $O\to P\to A\to Q$ 순서로 연결)의 넓이를 구하시오.
+      </div>
+      <details>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 1</div>
+            <div>$Q(m,n) \to P(-n,m)$, $m-n=1$ (개념 2~4와 동일). $m^2+n^2=61$에 $m=n+1$을 대입: $2n^2+2n-60=0 \Rightarrow n^2+n-30=0 \Rightarrow (n+6)(n-5)=0$. $n>0$이므로 $n=5$, $m=6$. 즉 $P(-5,6)$, $Q(6,5)$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 2</div>
+            <div>사각형 $OPAQ$는 대각선 $\overline{OQ}$로 삼각형 $POQ$와 삼각형 $OAQ$ 두 개로 나뉜다.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 3</div>
+            <div>삼각형 $POQ$: $\angle POQ=90°$이고 두 변이 $\overline{OP}=\overline{OQ}=\sqrt{61}$이므로 넓이 $=\dfrac12\cdot\sqrt{61}\cdot\sqrt{61}=\dfrac{61}{2}$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 4</div>
+            <div>삼각형 $OAQ$: 밑변 $\overline{OA}=1$ ($x$축 위), 높이는 $Q$의 $y$좌표 $5$ (밑변이 $x$축이므로 $Q$의 $y$좌표가 곧 $Q$에서 밑변까지의 거리). 넓이 $=\dfrac12\cdot1\cdot5=\dfrac52$.</div>
+          </div>
+          <div class="sol-step">
+            <div class="sol-step-label">STEP 5</div>
+            <div>사각형 넓이 $=\dfrac{61}{2}+\dfrac52=\dfrac{66}{2}=33$.</div>
+          </div>
+          <div class="why">삼각형 $POQ$는 직각이등변삼각형이 아니라 <strong>두 변이 같은 직각삼각형(등변)</strong>이라는 점에 주의 — $\angle POQ=90°$와 $\overline{OP}=\overline{OQ}$가 동시에 있어야 넓이 공식 $\dfrac12 \times \overline{OP}\times\overline{OQ}$를 바로 쓸 수 있다. 이 문제에서는 상수 $a$($=6^{1/5}$)를 구할 필요조차 없었다 — 묻는 것이 넓이라면 $m,n$ 좌표만으로 끝낼 수 있는지 먼저 확인하는 것이 실전 팁이다.</div>
+          <div style="margin-top:4px"><span class="answer-tag">정답: 사각형 $OPAQ$의 넓이 $=33$</span></div>
+        </div>
+      </details>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>단계</th><th>쓰는 개념</th><th>얻는 것</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">① 좌표 세팅</td><td>회전 대칭 (개념 1~2)</td><td>$Q(m,n) \to P(-n,m)$, 미지수 절반으로 축소</td></tr>
+          <tr style="background:#e0f7fa"><td style="font-weight:700">② 각 조건 해석</td><td>지름 위 원주각 (개념 3)</td><td>$O,A$가 $\overline{PQ}$를 지름으로 하는 원 위에 있음</td></tr>
+          <tr><td style="font-weight:700">③ 위치 확정</td><td>현의 수직이등분선 (개념 4)</td><td>중점의 $x$좌표 $=\dfrac12 \Rightarrow m-n=1$</td></tr>
+          <tr style="background:#e0f7fa"><td style="font-weight:700">④ 나머지 계산</td><td>주어진 길이 조건($\overline{OP}=\overline{OQ}=\cdots$)</td><td>$m,n$ 확정 → $a$, $\overline{PQ}$ 등 계산</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+      <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+      <div>① $y=a^{-x}$와 $y=\log_a x$를 동시에 보면 "$Q(m,n) \to P(-n,m)$" 회전 공식부터 떠올린다.<br>
+      ② 한 문제에 직각이 <strong>두 개 이상</strong> 등장하면(각도 조건이 $90°$로 반복되면) 바로 원 보조선을 그린다 — 기울기 곱 공식으로 직행하지 않는다.<br>
+      ③ 좌표축 위의 두 점(예: $O,A$)이 원 위에 있다면, 그 둘을 잇는 현의 수직이등분선은 계산 없이 눈으로 바로 그을 수 있다.<br>
+      ④ 원의 중심 $=$ 지름의 중점이라는 사실을 이용해 "중점의 좌표 $=$ 확정된 직선 위의 점"이라는 식을 세운다.<br>
+      ⑤ 답으로 나오는 $a$가 정수가 아니어도(예: $\sqrt3,\ \sqrt[3]4$) 계산 과정이 맞다면 정상적인 결과다.</div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">⚠️ 사용자 검토 권고 · 교육과정 범위 판단 근거</div>
+      <div>
+        <strong>범위 판단</strong>: 이 자료는 (1) 지수함수·로그함수의 $90°$ 회전 대칭 — 기존에 허용된 <em>역함수 관계($y=x$ 대칭)</em>와 <em>$y$축 대칭이동</em> 두 가지를 순서대로 합성한 결과로만 설명했으며, "회전변환" 자체를 독립된 공식으로 도입하지 않았습니다. (2) 지름 위의 원주각이 $90°$라는 성질(탈레스 정리)과 현의 수직이등분선이 중심을 지난다는 성질은 원의 기본 정의에서 바로 나오는 초등 수준 원의 기하로, 삼각함수의 덧셈정리·배각공식이나 선택 과목 "기하"(벡터·이차곡선 등), 선택 과목 "미적분"의 내용을 전혀 사용하지 않았습니다. 이는 CLAUDE.md의 "✅ 활용 가능" 목록(지수·로그 함수 대수) 범위 안에 있다고 판단하여 작성했습니다.<br><br>
+        <strong>문항 출처</strong>: 문항 속 숫자(예: $\overline{OP}=\overline{OQ}=\sqrt5,\sqrt{13},5,\sqrt{41},\sqrt{61}$ 등)는 영상이 제시한 풀이 기법(회전 대칭 좌표 변환 · 원주각·지름 관계 · 현의 수직이등분선)을 재구성하여 새로 만든 것이며, 실재하는 특정 기출문제의 숫자가 아닙니다. 모든 문항은 좌표를 대입해 조건(로그·지수 관계식, $\overline{OP}=\overline{OQ}$, $\angle PAQ=90°$ 등)을 직접 재검산했으나, 학생 배포 전 교사의 최종 검토를 권장합니다.
+      </div>
+    </div>
+
+    <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+      📺 <strong>원본 영상</strong>: <a href="https://youtu.be/Iet2uhLYKwQ" target="_blank" rel="noopener" style="color:var(--primary)">3등급 이하에게는 빛과 소금이 될 영상 (수학강사 이정환)</a><br>
+      📅 자료 생성: 2026-08-31 · 본 자료는 영상 요약을 기반으로 AI가 작성하였습니다(자막 미제공 영상 — 사용자 작성 요약 기반). 학생 배포 전 교사 검토 권장.
+    </div>
+
+  </div><!-- /container -->
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+  <script>
+    function toggleDark(){document.body.classList.toggle('dark');}
+    function filterLevel(level,btn){
+      document.querySelectorAll('.toolbar .flt').forEach(b=>b.classList.remove('active'));
+      if(btn)btn.classList.add('active');
+      document.querySelectorAll('.filterable').forEach(el=>{el.style.display=(level==='all'||el.classList.contains(level))?'':'none';});
+      if(level!=='all'){const f=document.querySelector('.level-header');if(f)f.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+    window.addEventListener('scroll',()=>{const b=document.getElementById('scrollTopBtn');if(b)b.style.display=window.scrollY>400?'block':'none';});
+    document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;if(e.key==='d'||e.key==='D')toggleDark();});
+  </script>
+
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260808_지수로그함수확대축소원점직선_G6iWQpMu.html">지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율 (G6iWQpMu)</a> · <a href="20260427_지수함수차이비율공식과도형우선해석_MJWwaaju.html">지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ) (MJWwaaju)</a> · <a href="20260509_지수함수점근선차이비율사다리꼴_DArDb6p7.html">지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ) (DArDb6p7)</a></div><!--REL_END-->
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
