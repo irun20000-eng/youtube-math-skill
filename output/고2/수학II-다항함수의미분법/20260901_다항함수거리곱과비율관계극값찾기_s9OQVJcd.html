@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>다항함수 거리곱과 비율관계로 극값 빠르게 구하기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:900px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅱ — 다항함수의 미분법(도함수의 활용)</div>
+    <h1>다항함수의 거리곱(distance product) — 식을 세우지 않고 $f(x)-L=a(x-\alpha)^{m}(x-\beta)$ 로 극값을 3초 만에 구하는 법</h1>
+    <p class="sub">미정계수를 구하고 대입하는 대신, 기준선 $y=L$ 과 그래프의 <strong>접점·교점까지의 가로 거리를 곱하기만</strong> 해서 함숫값·극값의 높이차를 즉시 읽어내는 실전 그래프 해석 기법을 원리부터 유도한다</p>
+    <div class="quote">"결국 1과 2의 차이, 1과 4의 차이, 1과 6의 차이를 곱하는 거예요. 이 거리들을 곱하는 거라 '거리곱'이라고 부릅니다." — 강사 인용 [00:01:18]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/s9OQVJcdyWE" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/s9OQVJcdyWE/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">아직도 계산 파티? 거리곱. 시간 단축, 그래프 시야 확장, 실수x 수2 관점을 바꿔줄게.</div>
+        <div class="v-meta">📺 YouTube · 약 15분 · 의대누나수학</div>
+        <a class="v-link" href="https://youtu.be/s9OQVJcdyWE" target="_blank" rel="noopener">https://youtu.be/s9OQVJcdyWE</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① $f(x)-L=a(x-\alpha)^{m_1}(x-\beta)^{m_2}\cdots$ 구조에서 거리곱 공식 $\Delta y=|a|\cdot\prod|x-x_i|^{m_i}$ 을 직접 유도할 수 있다 ② 중근(접점)은 거리의 제곱, 3중근은 세제곱으로 반영해야 하는 이유를 설명할 수 있다 ③ 3차함수의 등간격·비율 성질과 4차함수의 3중접선 비율(3:1)·원점대칭 비율(1:$\sqrt3$)을 이용해 미정계수 없이 극값을 계산할 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 식을 세우지 않고 함숫값을 구할 수 있을까?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$ 인 삼차함수 $f(x)$ 가 $x=2,\ 4,\ 6$ 에서 $x$축과 만난다. $f(1)$ 의 값을 구하시오.</div>
+      <div class="visual">   y
+   │
+   │         2      4      6
+ ──┼─────────●──────●──────●──── x
+   │  ↑
+   │  x=1 (여기서 f(1)을 구해야 함)
+   │  1 · 3 · 5  ← x=1과 세 근까지의 "거리"들
+</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>세 근을 알고 최고차항 계수가 $2$ 이므로 식을 직접 세울 수 있다.
+            $$f(x)=2(x-2)(x-4)(x-6)$$
+            <div class="why">삼차함수가 $x=2,4,6$ 에서 $x$축과 만난다는 것은 $(x-2),(x-4),(x-6)$ 이 모두 인수라는 뜻이다. 최고차항 계수 $2$ 를 앞에 곱해주면 식이 완성된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x=1$ 을 대입한다.
+            $$f(1)=2(1-2)(1-4)(1-6)=2\times(-1)\times(-3)\times(-5)=-30$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>이 계산을 다시 보면, 부호를 뺀 <strong>거리들의 곱</strong> $|1-2|\times|1-4|\times|1-6|=1\times3\times5=15$ 에 최고차항 계수 $2$ 를 곱한 값이 $30$ — 정확히 $|f(1)|$ 과 같다.
+            <div class="why">식을 전개하지 않고도, "$x=1$ 에서 각 근까지 떨어진 거리를 모두 곱하고 최고차항 계수를 곱하면 높이(절댓값)가 바로 나온다"는 사실을 이 계산이 보여준다. 부호는 $x=1$ 이 가장 작은 근 $2$ 보다 왼쪽에 있어 그래프가 아래로 뻗는 구간이므로 음수다.</div></div></div>
+          <span class="answer-tag">정답: $f(1)=-30$</span>
+        </div>
+      </details>
+      <div class="tip">이 "거리들을 곱해서 높이를 구하는" 아이디어를 <strong>거리곱(distance product)</strong>이라 부른다. 아래에서 왜 이 계산이 항상 성립하는지 원리부터 유도해 본다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명 — 거리곱은 왜 성립할까</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 인수분해된 다항함수와 중근</div>
+      <p>이 자료는 아래 두 가지를 <strong>이미 배운 사실로 전제</strong>하고 시작한다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>인수분해된 다항함수</strong>: $f(x)=a(x-p)(x-q)(x-r)$ 처럼 인수분해되어 있으면, $x=p,q,r$ 은 모두 $f(x)=0$ 의 근(그래프가 $x$축과 만나는 점)이다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>중근(重根)과 접선</strong>: 인수 $(x-p)$ 가 <strong>두 번 곱해져</strong> $(x-p)^2$ 형태로 있으면 $x=p$ 는 중근이라 하고, 이때 그래프는 $x$축(또는 어떤 직선)과 <strong>스치듯 접한다</strong> — 넘어가지 않고 닿았다가 되돌아간다는 뜻이다. $(x-p)^3$ 처럼 세 번 곱해지면 3중근이라 하며, 이때는 접하면서도 <strong>변곡점(휘어지는 방향이 바뀌는 점)</strong>을 이룬다.</div></div>
+      <div class="concept-box">이 두 가지를 가지고, "기준선과 다항함수 사이의 높이차를 식을 세우지 않고 구하는 방법"을 처음부터 직접 유도해 본다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>거리곱 공식의 유도</div>
+      <p>다항함수 $f(x)$ 가 기준선 $y=L$ 과 만나는 지점들을 알고 있다고 하자. 함수 $g(x)=f(x)-L$ 을 생각하면, $g(x)=0$ 이 되는 점이 바로 $f(x)$ 와 직선 $y=L$ 이 만나는 점이다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">$g(x)=f(x)-L$ 이 $x=\alpha$ 에서 접하고(중근) $x=\beta$ 에서 만난다면(단순근), 인수분해하면
+            $$f(x)-L=a(x-\alpha)^2(x-\beta)$$
+            <div class="why">$g(x)$ 의 최고차항 계수는 $f(x)$ 의 최고차항 계수 $a$ 와 같다 — 상수 $L$ 을 뺐다고 최고차항이 바뀌지 않기 때문이다.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">임의의 지점 $x=k$ 에서의 높이차 $|f(k)-L|$ 을 구하려면 그냥 대입하면 된다.
+            $$|f(k)-L|=|a|\cdot|k-\alpha|^2\cdot|k-\beta|$$</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">여기서 $|k-\alpha|$ 는 "$k$ 에서 접점 $\alpha$ 까지의 가로 거리", $|k-\beta|$ 는 "$k$ 에서 교점 $\beta$ 까지의 가로 거리"다. 즉 <strong>높이차는 각 근까지의 거리들을 곱하고 최고차항 계수를 곱한 것</strong>이다 — 이것이 거리곱 공식이다.</div></div>
+      <div class="formula-box">$$\Delta y = |f(k)-L| = |a| \cdot \prod_i |k-x_i|^{m_i}$$
+      <p style="font-size:13px;margin-top:8px;color:var(--sub)">($x_i$: 기준선과 만나는 각 근, $m_i$: 그 근의 중복도 — 단순근이면 $1$, 접점(중근)이면 $2$, 3중접점이면 $3$)</p></div>
+      <div class="caution">⚠️ <strong>거듭제곱을 빼먹지 말 것</strong>: 접점은 중근이므로 거리를 <strong>제곱</strong>해서 곱해야 한다. 그냥 거리 그대로 곱하면 계산이 완전히 틀린다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>3차함수의 등간격 성질 — 접점에서 극값 위치 찾기</div>
+      <p>거리곱을 쓰려면 먼저 <strong>극값이 어느 $x$ 에서 나오는지</strong> 알아야 한다. 최고차항 계수 $a$ 인 3차함수 $f(x)$ 가 직선 $y=L$ 에 $x=p$ 에서 접하고(중근) $x=q$ 에서 만난다면($p\neq q$), 극값은 항상 다음 위치에서 나온다.</p>
+      <div class="formula-box">$$x_{\text{극값}} = p + \frac{2}{3}(q-p)$$</div>
+      <div class="concept-box">직관적으로 이해하면: 3차함수의 도함수(2차함수, 포물선)는 접점 $x=p$ 에서 <strong>중근</strong>을 가지므로 대칭축이 $x=p$ 근처가 아니라, 실제로는 $f'(x)=3a(x-p)(x-\frac{2q+p}{3})$ 형태가 되어 극값이 $q$ 방향으로 $\frac23$ 지점에서 나온다 — 굳이 암기하지 않아도, 아래 심화 문항의 검산 과정에서 직접 확인할 수 있다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>4차함수의 3중접선 비율 — 변곡점에서 극값까지 3:1</div>
+      <p>4차함수가 직선 $y=L$ 에 $x=p$ 에서 <strong>3중으로 접하면</strong>(변곡점이면서 접선), 그 인수는 $(x-p)^3$ 형태다. 최고차항 계수 $a$, 나머지 교점을 $x=q$ 라 하면 $f(x)-L=a(x-p)^3(x-q)$.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">이때 극값은 $p$ 와 $q$ 사이를 $3:1$ 로 나누는 지점에서 나온다.
+            $$x_{\text{극값}} = p+\frac34(q-p)$$
+            <div class="why">$p$ 에서 극값 위치까지의 거리와, 극값 위치에서 $q$ 까지의 거리 비율이 정확히 $3:1$ 이다 — 이 자료의 수능 대비 문항에서 직접 검산한다.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">극값에서의 거리곱을 쓸 때는, $p$ 가 3중근이므로 그 거리를 <strong>세제곱</strong>해야 한다.
+            $$\Delta y = |a|\cdot|x_{\text{극값}}-p|^3\cdot|x_{\text{극값}}-q|$$</div></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>기함수(원점대칭) 3차함수의 극점·교점 비율 — 1:$\sqrt3$</div>
+      <p>3차함수가 <strong>원점을 지나면서 원점에 대해 대칭</strong>이면(기함수, $f(-x)=-f(x)$), $f(x)=ax^3+bx$ 형태로 쓸 수 있다. 이때 극값이 나오는 $x$ 좌표와, 원점 이외에 $x$축과 만나는 점의 $x$ 좌표 사이에는 항상 다음 비율이 성립한다.</p>
+      <div class="formula-box">$$x_{\text{극값}} : x_{\text{교점}} = 1 : \sqrt3$$</div>
+      <div class="concept-box">예를 들어 $f(x)=x^3-3x$ 는 $x=0,\pm\sqrt3$ 에서 $x$축과 만나고, $f'(x)=3x^2-3=3(x-1)(x+1)$ 이므로 극값은 $x=\pm1$ 에서 나온다. $1:\sqrt3$ 비율이 정확히 성립함을 확인할 수 있다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — 접점의 거듭제곱을 빼먹음.</strong> 중근(접점)은 반드시 거리를 <strong>제곱</strong>, 3중근(3중접점)은 <strong>세제곱</strong>해야 한다. 그냥 거리를 그대로 곱하면 값이 완전히 틀려진다.</div>
+      <div class="caution"><strong>실수 2 — 부호를 확인하지 않음.</strong> 거리곱은 <strong>높이의 절댓값(차이)</strong>만 알려준다. 구하려는 점이 기준선보다 위에 있는지 아래에 있는지는 그래프의 개형(증가·감소, 볼록성)을 보고 별도로 판단해야 한다.</div>
+      <div class="caution"><strong>실수 3 — 등간격·비율 공식을 아무 3차·4차함수에나 적용.</strong> 개념 2·3·4의 비율 공식은 각각 "접점+교점(3차)", "3중접점+교점(4차)", "원점대칭(기함수)"이라는 <strong>조건이 성립할 때만</strong> 쓸 수 있다. 조건을 먼저 확인해야 한다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>단순근의 거리곱 — 직접 대입과 비교</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 세 근의 거리곱</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $3$ 인 삼차함수 $f(x)$ 가 $x=1,\ 3,\ 5$ 에서 $x$축과 만난다. $f(2)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>세 근이 모두 단순근(중복도 $1$)이므로 각 거리를 그대로 곱한다.
+            $$|2-1|=1,\quad |2-3|=1,\quad |2-5|=3$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>거리곱 공식에 최고차항 계수 $3$ 을 곱한다.
+            $$\Delta y = 3\times(1\times1\times3)=9$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$x=2$ 는 가장 작은 근 $1$ 보다 크고 다음 근 $3$ 보다 작으므로, $f(x)=3(x-1)(x-3)(x-5)$ 에서 $(x-1)>0,\ (x-3)<0,\ (x-5)<0$ 이 되어 부호는 양수다.
+            <div class="why">검산: $f(2)=3(2-1)(2-3)(2-5)=3\times1\times(-1)\times(-3)=9$. 거리곱으로 구한 값과 정확히 일치한다.</div></div></div>
+          <span class="answer-tag">정답: $f(2)=9$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 접점(중근)의 제곱 규칙</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수 $f(x)$ 가 $x=2$ 에서 $x$축에 접하고(중근), $x=6$ 에서 만난다(단순근). $f(4)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$x=2$ 는 접점(중근)이므로 거리를 제곱, $x=6$ 은 단순근이므로 거리를 그대로 쓴다.
+            $$|4-2|^2=4,\qquad |4-6|=2$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>거리곱 공식에 최고차항 계수 $1$ 을 곱한다.
+            $$\Delta y = 1\times4\times2=8$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f(x)=(x-2)^2(x-6)$ 에서 $x=4$ 를 대입하면 $(4-2)^2>0$, $(4-6)<0$ 이므로 부호는 음수다.
+            <div class="why">검산: $f(4)=(4-2)^2(4-6)=4\times(-2)=-8$. 접점은 <strong>제곱</strong>해야 한다는 것을 빼먹으면 $|4-2|\times|4-6|=4$ 로 절반의 오답이 나온다 — 실수 1에 해당.</div></div></div>
+          <span class="answer-tag">정답: $f(4)=-8$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>접점에서 극값 위치를 찾아 거리곱 적용</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 접선 기준 극값 찾기 (작은 수)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수 $f(x)$ 가 직선 $y=2$ 와 $x=0$ 에서 접하고, $x=3$ 에서 만난다. $f(x)$ 의 극솟값을 구하시오. (단, 접점 $x=0$ 은 극댓값이 나오는 자리이며, 접하는 순간의 함숫값 $f(0)=2$ 는 문제에서 이미 주어진 정보다 — 구해야 할 것은 <strong>또 다른 극값</strong>인 극솟값이다.)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 2의 공식으로 극값의 위치를 먼저 찾는다. $p=0,\ q=3$ 이므로
+            $$x_{\text{극값}} = 0+\frac23(3-0)=2$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x=2$ 에서 기준선 $y=2$ 까지의 거리곱을 계산한다. 접점($x=0$)까지 거리는 제곱, 교점($x=3$)까지 거리는 그대로.
+            $$|2-0|^2=4,\qquad |2-3|=1,\qquad \Delta y=1\times4\times1=4$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$x=2$ 는 교점 $x=3$ 보다 작은 쪽에 있어 곡선이 기준선 아래로 내려가는 구간이므로 이 극값(극솟값)은 $y=2$ 보다 작다.
+            <div class="why">검산: $f(x)-2=(x-0)^2(x-3)=x^3-3x^2$ 이므로 $f(x)=x^3-3x^2+2$. $f(2)=8-12+2=-2$. 거리곱 결과($2-4=-2$)와 일치한다. $f'(x)=3x^2-6x=3x(x-2)$ 이므로 $x=0,2$ 가 정확히 극값 자리 — $x=0$ 은 극대($f(0)=2$, 문제에서 이미 주어짐), $x=2$ 는 극소($f(2)=-2$).</div></div></div>
+          <span class="answer-tag">정답: 극솟값 $-2$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 접선 기준 극값 찾기 (큰 수)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수 $f(x)$ 가 직선 $y=3$ 과 $x=3$ 에서 접하고, $x=12$ 에서 만난다. $f(x)$ 의 극솟값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 2의 공식으로 극값의 위치를 찾는다. $p=3,\ q=12$ 이므로
+            $$x_{\text{극값}} = 3+\frac23(12-3)=3+6=9$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x=9$ 에서의 거리곱을 계산한다. 접점($x=3$)까지 거리는 제곱, 교점($x=12$)까지 거리는 그대로.
+            $$|9-3|^2=36,\qquad |9-12|=3,\qquad \Delta y=1\times36\times3=108$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$x=9$ 는 교점 $x=12$ 보다 작은 쪽이라 곡선이 기준선 아래로 내려가는 구간이므로 극값은 $y=3$ 보다 작다 — 이 극값이 바로 극솟값이다.
+            <div class="why">검산: $f(x)-3=(x-3)^2(x-12)$ 에 $x=9$ 를 대입하면 $(9-3)^2(9-12)=36\times(-3)=-108$. $f(9)=3-108=-105$.</div></div></div>
+          <span class="answer-tag">정답: 극솟값 $-105$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>구간 최대·최소 — 거리곱으로 미지수 없이 풀기</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 최솟값에서 최댓값 역산</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$ 인 삼차함수 $f(x)$ 의 도함수 $f'(x)$ 의 근이 $x=0,\ 2$ 이다. 닫힌구간 $[-2,3]$ 에서 $f(x)$ 의 최솟값이 $-8$ 일 때, 최댓값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f'(x)=0$ 의 근이 $0,2$ 이고 최고차항 계수가 $2$ 이므로 $f'(x)=2\times3(x-0)(x-2)=6x^2-12x$. 이를 적분하면 $f(x)=2x^3-6x^2+C$ ($C$는 상수). 부호를 확인하면 $x=0$ 이 극대, $x=2$ 가 극소다.
+            <div class="why">$f'(x)$ 가 최고차항 계수 $a$ 인 삼차함수의 도함수이면 $f'(x)=3a(x-p)(x-q)$ 형태다($p,q$는 극값의 $x$좌표). 최고차항 계수가 양수인 삼차함수는 증가$\to$감소$\to$증가 순서이므로 왼쪽 극값이 극대다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>극대를 지나는 기준선 $y=f(0)=C$ 에 대해 $f(x)-C$ 를 계산하면, 상수 $C$ 가 그대로 상쇄된다.
+            $$f(x)-C = 2x^3-6x^2 = 2x^2(x-3)$$
+            <div class="why">이 식은 $C$ 가 무엇이든 항상 성립한다 — $x=0$ 에서 접하고($x^2$, 극대점이므로 당연히 중근) $x=3$ 에서 만난다(단순근)는 사실을 <strong>인수분해로 직접 확인</strong>한 것이지, 비율 공식을 추측한 것이 아니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>이제 STEP 2의 인수분해를 이용해 구간 $[-2,3]$ 의 후보점들의 값을 $C$ 로 나타낸다. $x=-2$ 에서의 거리곱: 접점($x=0$)까지 거리 제곱 $4$, 교점($x=3$)까지 거리 $5$.
+            $$\Delta y = 2\times4\times5=40,\qquad f(-2)-C=2(-2)^2(-2-3)=2\times4\times(-5)=-40$$
+            <div class="why">직접 대입한 부호($-40$)와 거리곱으로 구한 크기($40$)가 일치 — $x=-2$ 는 두 근보다 왼쪽이라 곡선이 기준선 아래에 있다. 같은 방식으로 극소값도 확인: $f(2)-C=2(4)(2-3)=-8$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>구간 $[-2,3]$ 의 네 후보값은 $f(-2)=C-40,\ f(0)=C,\ f(2)=C-8,\ f(3)=C$. 이 중 가장 작은 값은 $C-40$ 이므로 최솟값 조건을 적용한다.
+            $$C-40=-8 \ \Longrightarrow\ C=32$$
+            네 후보 중 가장 큰 값은 $C$(=$f(0)$과 $f(3)$에서 동시에 나옴)이므로 최댓값은 $32$.</div></div>
+          <span class="answer-tag">정답: 최댓값 $32$ (극댓값 $f(0)=32$)</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 미정계수 $a,b,c,d$ 를 두고 식을 세워 연립하는 대신, 등간격 성질과 거리곱만으로 구간 최댓값·최솟값을 구하는 실전 감각을 확인한다.</div>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 최댓값에서 최솟값 역산</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수 $f(x)$ 의 도함수 $f'(x)$ 의 근이 $x=-2,\ 0$ 이다. 닫힌구간 $[-3,2]$ 에서 $f(x)$ 의 최댓값이 $19$ 일 때, 최솟값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f'(x)=0$ 의 근이 $-2,0$ 이고 최고차항 계수가 $1$ 이므로 $f'(x)=3(x+2)(x-0)=3x^2+6x$. 적분하면 $f(x)=x^3+3x^2+C$. 왼쪽 극값($x=-2$)이 극대, 오른쪽 극값($x=0$)이 극소다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>극소를 지나는 기준선 $y=f(0)=C$ 에 대해 $f(x)-C$ 를 계산하면 상수가 상쇄된다.
+            $$f(x)-C = x^3+3x^2 = x^2(x+3)$$
+            <div class="why">인수분해로 직접 확인: $x=0$ 에서 접하고(극소이므로 중근) $x=-3$ 에서 만난다(단순근). 비율을 추측하지 않고 식 전개로 바로 얻은 결과다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>구간 $[-3,2]$ 의 네 후보점을 STEP 2의 인수분해로 $C$ 에 대해 나타낸다. 오른쪽 끝 $x=2$ 에서의 거리곱: 접점($x=0$)까지 거리 제곱 $4$, 교점($x=-3$)까지 거리 $5$.
+            $$f(2)-C=2^2(2+3)=4\times5=20 \ \Longrightarrow\ f(2)=C+20$$
+            같은 방식으로 $f(-3)-C=(-3)^2(-3+3)=0\ \Longrightarrow\ f(-3)=C$, $f(-2)-C=(-2)^2(-2+3)=4\ \Longrightarrow\ f(-2)=C+4$(극댓값).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>구간 $[-3,2]$ 의 네 후보값은 $f(-3)=C,\ f(-2)=C+4,\ f(0)=C,\ f(2)=C+20$. 가장 큰 값은 $C+20$(=$f(2)$)이므로 최댓값 조건을 적용한다.
+            $$C+20=19 \ \Longrightarrow\ C=-1$$
+            네 후보 중 가장 작은 값은 $C$($f(-3)$과 $f(0)$에서 동시에 나옴)이므로 최솟값은 $-1$.
+            <div class="why">$f(0)=C$ 는 극솟값이자 동시에 구간 전체의 최솟값이 된 경우다.</div></div></div>
+          <span class="answer-tag">정답: 최솟값 $-1$ (극솟값 $f(0)=-1$)</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 심화 1과 반대 방향(최댓값 → 최솟값)으로 거리곱을 적용하며, 극대·극소 중 어느 쪽이 최솟값 후보인지 그래프 개형으로 판단하는 능력을 함께 확인한다.</div>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>4차함수 3중접선 · 기함수 대칭 비율 — 준킬러 유형</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 4차함수 3중접선 비율(3:1)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$ 인 사차함수 $f(x)$ 가 직선 $y=3$ 과 $x=1$ 에서 3중으로 접하고(변곡점을 이루는 접선), $x=-3$ 에서 만난다. $f(x)$ 의 극솟값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 3의 공식으로 극값의 위치를 찾는다. $p=1,\ q=-3$ 이므로
+            $$x_{\text{극값}} = 1+\frac34(-3-1)=1+\frac34\times(-4)=1-3=-2$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x=-2$ 에서의 거리곱을 계산한다. $x=1$ 은 3중접점이므로 거리를 <strong>세제곱</strong>, $x=-3$ 은 단순 교점이므로 거리 그대로.
+            $$|-2-1|^3=3^3=27,\qquad |-2-(-3)|=1$$
+            $$\Delta y = 2\times27\times1=54$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$x=-2$ 는 교점 $x=-3$ 보다 오른쪽, 3중접점 $x=1$ 보다 왼쪽에 있는 구간으로, 이 구간에서 곡선은 기준선 아래에 있다. 따라서
+            $$f(-2)=3-54=-51$$
+            <div class="why">검산: $f(x)-3=2(x-1)^3(x+3)$ 이므로 $f'(x)=2\big[3(x-1)^2(x+3)+(x-1)^3\big]=2(x-1)^2\big[3(x+3)+(x-1)\big]=2(x-1)^2(4x+8)=8(x-1)^2(x+2)$. $f'(x)=0$ 의 근은 $x=1$(중근, 부호가 안 바뀌므로 극값 아님)과 $x=-2$(부호가 바뀌므로 극값) — 정확히 개념 3의 공식이 예측한 위치와 일치한다. $f(-2)=2(-2-1)^3(-2+3)+3=2\times(-27)\times1+3=-54+3=-51$.</div></div></div>
+          <span class="answer-tag">정답: 극솟값 $-51$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 3중접선이라는 조건에서 인수의 중복도(세제곱)를 정확히 반영하는지, 그리고 3차함수와 다른 4차함수만의 비율($3:1$)을 구분해 적용할 수 있는지 확인하는 준킬러 유형이다.</div>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 기함수(원점대칭) 극점·교점 비율(1:$\sqrt3$)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수 $f(x)$ 가 원점에 대하여 대칭이고(기함수), 원점이 아닌 곳에서 $x=3\sqrt3$ 에서 $x$축과 만난다. $f(x)$ 의 극댓값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 4의 비율 $x_{\text{극값}}:x_{\text{교점}}=1:\sqrt3$ 을 이용해 극값의 위치를 구한다.
+            $$x_{\text{극값}} = \frac{x_{\text{교점}}}{\sqrt3}=\frac{3\sqrt3}{\sqrt3}=3$$
+            <div class="why">기함수이므로 원점을 기준으로 대칭 — 양수 쪽 교점이 $3\sqrt3$ 이면 양수 쪽 극값(여기서는 극소)은 $3$, 음수 쪽 극값(극대)은 $-3$ 에서 나온다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>기함수이고 원점, $x=\pm3\sqrt3$ 에서 근을 가지므로 식을 바로 세울 수 있다.
+            $$f(x)=x(x-3\sqrt3)(x+3\sqrt3)=x(x^2-27)=x^3-27x$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>극댓값은 음수 쪽 극값 $x=-3$ 에서 나온다.
+            $$f(-3)=(-3)^3-27\times(-3)=-27+81=54$$
+            <div class="why">검산: $f'(x)=3x^2-27=3(x-3)(x+3)$ 이므로 $f'(x)=0$ 의 근은 $x=\pm3$ — 개념 4가 예측한 위치와 정확히 일치한다. 최고차항 계수가 양수이므로 왼쪽 극값($x=-3$)이 극대다.</div></div></div>
+          <span class="answer-tag">정답: 극댓값 $54$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 함수의 대칭성(기함수)을 근거로 두 극값이 원점에 대해 대칭 위치에 있음을 인지하고, $1:\sqrt3$ 비율을 무리수가 포함된 조건에도 정확히 적용할 수 있는지 확인한다.</div>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「아직도 계산 파티? 거리곱. 시간 단축, 그래프 시야 확장, 실수x 수2 관점을 바꿔줄게.」</strong>(의대누나수학, 약 15분)의 상세 요약본(타임스탬프별 챕터, 강사 발언 verbatim 인용, 칠판 수식 포함)을 근거로 재구성했습니다. 요약본에 담긴 예제 5개 중 4개(기초1의 원형, 기본1·2의 원형, 심화1·2)는 <strong>직접 재계산하여 원본과 일치함을 확인</strong>했습니다.</p>
+      <p style="margin-top:8px">⚠️ <strong>확신도 ★★ 항목</strong>: 요약본의 4차함수 3중접선 예제([00:07:15], $f'(x)=8x^3+\cdots$, $f(1)=3$ 조건에서 $f(0)$ 을 구하는 문제)는 <strong>강사가 제시한 최종 수치(54)와 서술된 계산 과정이 서로 맞지 않는 내적 모순</strong>이 있어(거리·지수 배치가 뒤섞여 표기됨), 그대로 인용하지 않았습니다. 대신 동일한 "4차함수 3중접선 3:1 비율" 개념을 사용해 <strong>완전히 새로운 수치로 재구성</strong>한 문제를 수능 대비 1번에 배치했으며, 도함수를 직접 전개해 극값 위치와 최종값을 모두 재검산했습니다(풀이의 "왜?" 박스에 검산 과정 전체 명시). 학생 배포 전 이 문항의 논리를 한 번 더 검토해 주시기 바랍니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 이 영상은 다항함수의 그래프·극값(도함수의 활용)만 다루며, 삼각함수 덧셈정리 등 현 고2 수능 범위 밖(선택 과목 「미적분」) 내용은 전혀 등장하지 않습니다. 도입 문제와 문항 8개 전부 다항함수(3차·4차)만 사용했으며, 부분적분·치환적분·수열의 극한 등 고3 선택 「미적분」 영역은 사용하지 않았습니다. 같은 갤러리에 이미 있는 다른 "거리곱" 주제 자료(다른 영상 출처)와 문항 소재가 겹치지 않도록, 이 영상 고유의 예제 구조(3차함수 접선 비율·구간 최대최소·4차함수 3중접선·기함수 대칭)를 중심으로 문항을 구성했습니다. 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="20260507_거리곱완전정복도함수까지_M3TGprau.html">거리곱 완전정복 1탄 (M3TGprau)</a> · <a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a> · <a href="20260515_항등식근차수인수정리태도_XT-SSrkl.html">항등식의 본질 (XT-SSrkl)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-09-01 · 영상 출처: <a href="https://youtu.be/s9OQVJcdyWE" style="color:var(--primary)">의대누나수학</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
