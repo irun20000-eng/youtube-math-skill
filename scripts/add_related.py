@@ -15,6 +15,24 @@ for _s in (sys.stdout, sys.stderr):
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT = os.path.join(REPO, "output")
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.I | re.S)
+# 본문 실제 폭 감지 — A형은 .container(880px), B형은 body 자체(900px)에 max-width 가 있다.
+# 하드코딩(과거엔 항상 880px)을 쓰면 B형(900px 본문)에서 관련자료 박스만 20px 좁아져
+# 본문 하단이 어긋난다. 파일마다 실제 쓰는 폭을 읽어 그대로 맞춘다.
+CONTAINER_W_RE = re.compile(r"\.container\s*\{[^}]*?max-width:\s*(\d+)px")
+BODY_W_RE = re.compile(r"(?<!\.)\bbody\s*\{([^}]*)\}")
+
+
+def detect_content_width(html: str, default: int = 880) -> int:
+    m = CONTAINER_W_RE.search(html)
+    if m:
+        return int(m.group(1))
+    m = BODY_W_RE.search(html)
+    if m:
+        mm = re.search(r"max-width:\s*(\d+)px", m.group(1))
+        if mm:
+            return int(mm.group(1))
+    return default
+
 STOP = {"완전정복", "정리", "풀이", "공식", "활용", "기초", "기본", "심화", "전략",
         "본질", "관점", "세관점", "마스터", "정복", "핵심", "비법", "꿀팁", "특강",
         "학습자료", "계산", "줄이는", "미분법", "보는", "눈이", "바뀝니다",
@@ -81,8 +99,9 @@ def main() -> int:
         html = re.sub(r'\n?(?:\s*<a href="\.\./[^"]+\.html">[^<]*\([A-Za-z0-9_-]{6,}\)</a>(?:\s*·\s*)?)+\s*</div>\n?', "", html)
 
         if rel_links:
+            width = detect_content_width(html)
             box = ('\n<!--REL_START--><div class="related-box" id="related-box" '
-                   'style="max-width:880px;margin:26px auto 0;padding:14px 20px;'
+                   f'style="max-width:{width}px;margin:26px auto 0;padding:14px 20px;'
                    'background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;'
                    "font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;\">"
                    '<div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div>'
