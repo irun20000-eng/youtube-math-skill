@@ -95,11 +95,31 @@ _COPY_SCRIPT = (
 )
 
 
-def build_snippet(has_own_gallery_link: bool) -> str:
+
+# 본문 실제 폭 감지 — A형은 .container, B형은 body 자체에 max-width 가 있다.
+# 하드코딩된 값(과거엔 항상 900px)을 쓰면 A형(880px 본문)에서 브랜드바만 20px
+# 넓어져 상단이 어긋난다. 파일마다 실제 쓰는 폭을 읽어 그대로 맞춘다.
+_CONTAINER_W_RE = re.compile(r"\.container\s*\{[^}]*?max-width:\s*(\d+)px")
+_BODY_W_RE = re.compile(r"(?<!\.)\bbody\s*\{([^}]*)\}")
+
+
+def detect_content_width(html: str, default: int = 900) -> int:
+    m = _CONTAINER_W_RE.search(html)
+    if m:
+        return int(m.group(1))
+    m = _BODY_W_RE.search(html)
+    if m:
+        mm = re.search(r"max-width:\s*(\d+)px", m.group(1))
+        if mm:
+            return int(mm.group(1))
+    return default
+
+
+def build_snippet(has_own_gallery_link: bool, width: int = 900) -> str:
     """페이지 툴바에 이미 갤러리 링크가 있으면 복귀 버튼을 빼고 워드마크만 넣는다."""
     return (
         '\n<nav id="brand-bar" '
-        'style="max-width:900px;margin:0 auto;padding:14px 20px 0;display:flex;'
+        f'style="max-width:{width}px;margin:0 auto;padding:14px 20px 0;display:flex;'
         'align-items:center;gap:14px;flex-wrap:wrap;font-family:'
         "'Pretendard','Noto Sans KR',sans-serif;\">"
         '<a href="../../index.html" aria-label="aftermath — 갤러리 홈" '
@@ -141,7 +161,8 @@ def main() -> int:
             print(f"  ! <body> 못 찾음: {rel}", file=sys.stderr)
             continue
         # 페이지가 자체 툴바에 갤러리 링크를 이미 갖고 있으면 복귀 버튼 중복을 피한다
-        snippet = build_snippet('href="../../index.html"' in t)
+        width = detect_content_width(t)
+        snippet = build_snippet('href="../../index.html"' in t, width)
         t = BODY_RE.sub(lambda m: m.group(1) + snippet, t, count=1)
         open(f, "w", encoding="utf-8").write(t)
         added += 1
