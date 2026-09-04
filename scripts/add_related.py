@@ -57,6 +57,22 @@ def _h_padding(decls: str) -> "tuple[int, int]":
         right = int(float(m.group(1)))
     return left, right
 
+
+def detect_side_gap(html: str) -> int:
+    """본문 호스트의 좌우 패딩 합. 주입 요소의 width:calc() 에 쓴다.
+
+    max-width 만 맞추면 화면이 좁을 때(모바일) max-width 가 걸리지 않아, 주입
+    요소만 화면 끝까지 퍼지고 카드는 호스트 패딩만큼 들어가 좌우가 어긋난다.
+    width:calc(100% - gap) 을 함께 주면 두 경우 모두 카드와 정확히 맞는다.
+    """
+    m = CONTAINER_W_RE.search(html)
+    if m and re.search(r"max-width:\s*\d+px", m.group(1)):
+        # A형: 주입 요소가 .container 의 형제라 호스트 패딩을 못 받는다 → 보정 필요
+        pl, pr = _h_padding(m.group(1))
+        return pl + pr
+    # B형: 호스트가 body 자신이고 주입 요소는 그 자식이라 이미 패딩 안쪽이다 → 보정 0
+    return 0
+
 def detect_content_width(html: str, default: int = 848) -> int:
     """본문 카드가 실제로 차지하는 폭(패딩 안쪽)을 돌려준다."""
     for rx in (CONTAINER_W_RE, BODY_W_RE):
@@ -138,8 +154,10 @@ def main() -> int:
 
         if rel_links:
             width = detect_content_width(html)
+            gap = detect_side_gap(html)
             box = ('\n<!--REL_START--><div class="related-box" id="related-box" '
-                   f'style="max-width:{width}px;margin:26px auto 0;padding:14px 20px;'
+                   f'style="max-width:{width}px;width:calc(100% - {gap}px);'
+                   f'margin:26px auto 0;padding:14px 20px;'
                    'background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;'
                    "font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;\">"
                    '<div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div>'
