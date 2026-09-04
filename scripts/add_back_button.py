@@ -138,6 +138,22 @@ def _h_padding(decls: str) -> "tuple[int, int]":
         right = int(float(m.group(1)))
     return left, right
 
+
+def detect_side_gap(html: str) -> int:
+    """본문 호스트의 좌우 패딩 합. 주입 요소의 width:calc() 에 쓴다.
+
+    max-width 만 맞추면 화면이 좁을 때(모바일) max-width 가 걸리지 않아, 주입
+    요소만 화면 끝까지 퍼지고 카드는 호스트 패딩만큼 들어가 좌우가 어긋난다.
+    width:calc(100% - gap) 을 함께 주면 두 경우 모두 카드와 정확히 맞는다.
+    """
+    m = _CONTAINER_W_RE.search(html)
+    if m and re.search(r"max-width:\s*\d+px", m.group(1)):
+        # A형: 주입 요소가 .container 의 형제라 호스트 패딩을 못 받는다 → 보정 필요
+        pl, pr = _h_padding(m.group(1))
+        return pl + pr
+    # B형: 호스트가 body 자신이고 주입 요소는 그 자식이라 이미 패딩 안쪽이다 → 보정 0
+    return 0
+
 def detect_content_width(html: str, default: int = 860) -> int:
     """본문 카드가 실제로 차지하는 폭(패딩 안쪽)을 돌려준다."""
     for rx in (_CONTAINER_W_RE, _BODY_W_RE):
@@ -153,11 +169,12 @@ def detect_content_width(html: str, default: int = 860) -> int:
     return default
 
 
-def build_snippet(has_own_gallery_link: bool, width: int = 900) -> str:
+def build_snippet(has_own_gallery_link: bool, width: int = 900, gap: int = 32) -> str:
     """페이지 툴바에 이미 갤러리 링크가 있으면 복귀 버튼을 빼고 워드마크만 넣는다."""
     return (
         '\n<nav id="brand-bar" '
-        f'style="max-width:{width}px;margin:0 auto;padding:14px 20px 0;display:flex;'
+        f'style="max-width:{width}px;width:calc(100% - {gap}px);margin:0 auto;'
+        'padding:14px 20px 0;display:flex;'
         'align-items:center;gap:14px;flex-wrap:wrap;font-family:'
         "'Pretendard','Noto Sans KR',sans-serif;\">"
         '<a href="../../index.html" aria-label="aftermath — 갤러리 홈" '
@@ -200,7 +217,7 @@ def main() -> int:
             continue
         # 페이지가 자체 툴바에 갤러리 링크를 이미 갖고 있으면 복귀 버튼 중복을 피한다
         width = detect_content_width(t)
-        snippet = build_snippet('href="../../index.html"' in t, width)
+        snippet = build_snippet('href="../../index.html"' in t, width, detect_side_gap(t))
         t = BODY_RE.sub(lambda m: m.group(1) + snippet, t, count=1)
         open(f, "w", encoding="utf-8").write(t)
         added += 1
