@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>9모 시험 끝나자마자 해야 할 일 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #7b1fa2; --primary-dark: #4a148c; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #f3e5f5; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #7b1fa2;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #2c2236; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --tip-bg: #2c2236;
+      --primary: #ba68c8; --primary-dark: #e1bee7; --btn-bg: #2a2f36; --btn-active: #ba68c8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .hero { background: linear-gradient(135deg, #4a148c 0%, #7b1fa2 60%, #ab47bc 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .summary-list { padding-left: 1.3em; }
+    .summary-list li { margin: 8px 0; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 14px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .step-body label { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; }
+    .step-body input[type=checkbox] { margin-top: 4px; flex-shrink: 0; width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+    .step-body .step-title { font-weight: 700; }
+    .step-body.checked .step-title, .step-body.checked p { opacity: .55; text-decoration: line-through; }
+    .quote-card { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 14px 20px; margin: 12px 0; font-size: .96em; }
+    .quote-card .qt-time { color: var(--sub); font-size: .82em; margin-top: 6px; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .quiz-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 14px; }
+    .quiz-q { font-weight: 700; margin-bottom: 6px; }
+    .quiz-a { margin-top: 10px; background: var(--sol-bg); border-radius: 8px; padding: 12px 16px; }
+    .flash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 12px; }
+    .flash-card { background: var(--tip-bg); border-radius: 10px; padding: 14px 16px; font-size: .92em; }
+    .flash-card .fc-term { font-weight: 700; color: var(--primary-dark); margin-bottom: 4px; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #4a148c !important; } details > .quiz-a { display: block !important; } summary { display: none; } .card, .quiz-card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:880px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+  </div>
+
+  <div class="hero">
+    <div class="tag">📝 수학 공부법 · 9모 분석·오답 전략</div>
+    <h1>9모 시험 끝나자마자 해야 할 일</h1>
+    <p class="sub">9모는 점수를 매기는 시험이 아니라 약점 구덩이를 찾는 기회 — 시험지 원본을 보존해 "틀린 생각"을 복원하고, 약점 유형 몰아풀기·카운트다운 압박·기회비용 선별 3대 훈련으로 수능 당일 동일 실수를 막는다.</p>
+    <div class="quote">"점수 받는 날이 아니라 미래를 보고 오는 날이다." — 강사 인용 [00:01:13]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/cNPl_Rxbhf4" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/cNPl_Rxbhf4/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">9모 시험 끝나자마자 해야 할 일</div>
+        <div class="v-meta">📺 YouTube · 약 9분 · 수능 수학은 이동준</div>
+        <a class="v-link" href="https://youtu.be/cNPl_Rxbhf4" target="_blank" rel="noopener">https://youtu.be/cNPl_Rxbhf4</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">🎯 한눈에 보기</div>
+    <div class="card">
+      <ol class="summary-list">
+        <li><strong>시험지 원본 보존과 "틀린 생각" 복원</strong>: 지우개로 풀이 흔적을 지우지 말고, 문제를 보고 가장 먼저 떠올렸던 엉뚱한 생각을 문제 상단에 적어 그 사고 경로에 "진입 금지"를 세운다.</li>
+        <li><strong>지식 암기에서 "인출과 속도"로 전환</strong>: 약점 유형을 10~20문제씩 몰아풀어 오개념을 점검하고, 타임업이 아닌 카운트다운(시간 압박) 방식으로 실전 압박감을 훈련한다.</li>
+        <li><strong>기회비용에 기반한 선별적 집중</strong>: 소화하기 힘든 극단적 킬러 1문항에 매몰되지 말고, 70% 수준에서 해결 가능한 준킬러·약점 문항 5~10개를 확실히 내 것으로 만든다.</li>
+      </ol>
+    </div>
+
+    <div class="section-title">🛠️ 실천 프로토콜</div>
+    <div class="card">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body" data-step-id="freeze">
+          <label><input type="checkbox" class="step-check"><span class="step-title">원본 시험지 동결(Freeze)</span></label>
+          <p>9모 시험지를 펼치고 절대 지우개를 사용하지 않는다. 틀린 문항의 연필 자국, 낙서, 지웠던 흔적을 100% 보존한다 — 비행기 사고의 블랙박스를 지우지 않는 것과 같다.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body" data-step-id="labeling">
+          <label><input type="checkbox" class="step-check"><span class="step-title">틀린 생각의 언어화(Labeling)</span></label>
+          <p>문항 번호 옆 여백에 적는다: "나는 이 조건에서 [ ]라고 잘못 판단하여 [ ] 방식으로 전개하다가 막혔다." 정답 필사가 아니라 오발상 경로를 기록하는 것이 핵심이다.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body" data-step-id="signpost">
+          <label><input type="checkbox" class="step-check"><span class="step-title">필연적 진입점 확립(Signpost)</span></label>
+          <p>"앞으로 이 조건이 나오면 무조건 [ ] 관점으로 먼저 접근한다"를 명시해 같은 함정에 다시 빠지지 않도록 사고 진입 금지 표지를 세운다.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-body" data-step-id="block-practice">
+          <label><input type="checkbox" class="step-check"><span class="step-title">10~20제 테마 몰아풀기(Block Practice)</span></label>
+          <p>취약 주제의 기출·N제 문항을 10~20개 선별해 연속으로 푼다. 9모 당시의 잘못된 생각이 0.1초라도 스치면 오답 처리하고 다시 교정한다.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-body" data-step-id="timer-run">
+          <label><input type="checkbox" class="step-check"><span class="step-title">카운트다운 실전 적용(Timer Run)</span></label>
+          <p>한 문항당 3~4분 카운트다운 타이머를 맞추고, 쫓기는 환경에서 손이 바로 나가는 연습을 지속한다. 스톱워치(누적)가 아니라 카운트다운(잔여)이어야 압박감이 생긴다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">🔑 핵심 원칙</div>
+    <div class="card">
+      <div class="formula-box">획득 점수 $(S)$ + 약점 구덩이 $(100-S)$ = 100 &nbsp;·&nbsp; 오답 정리 $\ne$ 정답 복사, 오답 정리 = 오발상 기록 → 사고 차단 → 필연적 발상 체화</div>
+      <p>정답 풀이는 해설지·인강 어디에나 있다. 정작 필요한 것은 "내가 그 순간 왜 틀린 길로 빠졌는가"라는 경로이고, 그 데이터는 오직 본인이 푼 시험지 원본에만 있다.</p>
+    </div>
+
+    <div class="section-title">💬 인상적인 말</div>
+    <div class="quote-card">
+      "여러분들이 70점이라고 칠게요. 그 70점 사형 선고가 아니에요. 여기 이 30점이 네가 약한 자리다라고 콕 집어 주는 세상에서 제일 정확한 정보라고요."
+      <div class="qt-time">[00:01:54]</div>
+    </div>
+    <div class="quote-card">
+      "그 시험지 절대 건드리지 마세요. 지우개로 지우지도, 위에 덧쓰지도 마세요. 어디서 손이 멈췄는지 그게 전부 날것으로 찍혀 있어야 합니다."
+      <div class="qt-time">[00:02:49]</div>
+    </div>
+    <div class="quote-card">
+      "시간을 잴 때 중요한 건 타임업이 아니라 카운트다운입니다. 항상 쫓기는 연습을 해야 돼."
+      <div class="qt-time">[00:05:15]</div>
+    </div>
+
+    <div class="section-title">❓ 복습 퀴즈</div>
+    <div class="quiz-card">
+      <div class="quiz-q">Q1. 9월 모의평가 직후 가장 위험한 행동은 무엇인가?</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">점수라는 숫자만 확인하고 들뜨거나 좌절하여, 시험지를 분석 없이 그대로 덮어버리는 행동입니다.</div></details>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q">Q2. 오답 분석 시 해설지 정답 필사보다 우선되어야 하는 핵심 작업은?</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">시험지 원본에 남겨진 본인의 흔적을 바탕으로 "내가 처음에 어떤 틀린 생각으로 진입했는가"를 복원하고, 그 사고 경로에 진입 금지를 세우는 것입니다.</div></details>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q">Q3. 남은 수능 파이널 기간의 3대 실전 훈련은?</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">① 약점 유형 10~20문제 몰아풀기, ② 카운트다운 방식의 시간 압박 훈련, ③ 기회비용을 고려한 준킬러 문항 선별 집중입니다.</div></details>
+    </div>
+
+    <div class="section-title">📌 기억할 것</div>
+    <div class="flash-grid">
+      <div class="flash-card"><div class="fc-term">9모의 본질적 목적</div>점수를 매기는 시험이 아니라, 수능 전 내 실력의 구덩이(취약점)를 미리 찾아 메우는 진단 기회다.</div>
+      <div class="flash-card"><div class="fc-term">시험지 원본 보존의 이유</div>내가 그 순간 왜 틀린 길로 빠졌는지에 대한 유일한 기록(블랙박스)이 담겨 있기 때문이다.</div>
+      <div class="flash-card"><div class="fc-term">오답 노트 핵심 기록</div>"나는 이 문제를 보고 가장 먼저 [틀린 생각]을 떠올렸다"를 적어 사고 진입 금지를 세운다.</div>
+      <div class="flash-card"><div class="fc-term">파이널 시간 관리 훈련법</div>누적 타이머(스톱워치)가 아닌 "카운트다운 타이머"로 쫓기는 실전 압박감을 체화한다.</div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 안내</div>
+      <p>이 자료는 영상 속 강사의 실전 전략·공부법을 요약·정리한 것으로, 수학 개념·문제풀이 자료가 아닙니다. 효과는 개인차가 있으며, AI가 자막·요약을 기초로 자동 생성했으므로 학생 지도 시 참고용으로 활용하세요.</p>
+    </div>
+
+  </div>
+
+  <footer>
+    생성일 2026-09-04 · 영상 출처: <a href="https://youtu.be/cNPl_Rxbhf4" style="color:var(--primary)">수능 수학은 이동준</a><br>
+    AI가 영상 자막·요약을 기초로 자동 생성한 공부법 정리자료입니다. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+    (function () {
+      var LS_KEY = 'study-checklist:' + location.pathname;
+      function read() { try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch (_) { return {}; } }
+      function write(v) { try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch (_) {} }
+      var state = read();
+      document.querySelectorAll('.step-body').forEach(function (body) {
+        var id = body.dataset.stepId;
+        var box = body.querySelector('.step-check');
+        if (!box || !id) return;
+        box.checked = !!state[id];
+        body.classList.toggle('checked', box.checked);
+        box.addEventListener('change', function () {
+          state[id] = box.checked;
+          write(state);
+          body.classList.toggle('checked', box.checked);
+        });
+      });
+    })();
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
