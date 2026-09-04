@@ -102,6 +102,28 @@ def build_output_path(
     return base / g / u / fname
 
 
+def build_study_method_path(
+    base_dir: Path | str,
+    unit: str,
+    topic: str,
+    when: date | None = None,
+) -> Path:
+    """공부법(수학 개념·문제풀이가 아닌 시험전략/시간관리/메타인지 등) 자료 경로.
+
+    output/공부법/{단원}/{YYYYMMDD}_{핵심주제}_공부법.html
+
+    video_id는 파일명에 넣지 않는다(본문 영상 링크로 충분) — 대신 파일명이
+    "_공부법"으로 끝나는 것을 기준으로 regen_index.py 가 source="study" 갤러리
+    카드/필터를 판별한다(개념 자료가 "_개념" 접미사로 판별되는 것과 동일한 방식).
+    """
+    base = Path(base_dir)
+    when = when or date.today()
+    u = normalize_unit(unit)
+    t = sanitize(topic, max_len=24)
+    fname = f"{when:%Y%m%d}_{t}_공부법.html"
+    return base / "공부법" / u / fname
+
+
 def parse_output_path(path: Path | str) -> dict | None:
     """build_output_path의 역과정. 파일명 패턴이 안 맞으면 None."""
     p = Path(path)

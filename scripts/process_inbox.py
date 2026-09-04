@@ -60,6 +60,34 @@ MATH_KEYWORDS = [
     "문제풀이",
 ]
 
+# 공부법 판별(2026-09-04 신설) 키워드 — "분야: 수학강의"로 태그된 채널이라도
+# 실제 내용이 수학 개념·문제풀이가 아니라 시험전략/시간관리/메타인지/오답분석 같은
+# "공부법" 영상인 경우를 math 판정보다 먼저 걸러낸다. 이 신호가 잡히면 type="study_method"
+# 로 라우팅해 별도 경량 템플릿(templates/study-method-skeleton.html)으로 처리한다 —
+# 8~10문항 문제집을 억지로 만들지 않기 위함. classify_math()보다 먼저 실행한다.
+STUDY_METHOD_KEYWORDS = [
+    "공부법", "시간관리", "메타인지", "오답노트", "오답분석", "슬럼프", "멘탈관리",
+    "학습전략", "시험전략", "실전전략", "자기주도학습", "공부습관", "9모분석",
+    "수능전략",
+]
+
+
+def classify_study_method(text: str, filename: str) -> tuple[bool, str]:
+    """(공부법 여부, 판정 근거) 반환. classify_math() 보다 먼저 호출해야 한다.
+
+    스파크 파일명의 [카테고리] 태그(예: [수학][수학공부법])·title·topics·tags 를 합쳐
+    STUDY_METHOD_KEYWORDS 매치 여부로 판정. 수학 개념 키워드(MATH_KEYWORDS)보다
+    좁고 구체적인 신호만 모아뒀으므로, 매치되면 곧바로 공부법으로 확정한다.
+    """
+    title = _field(text, "title") or filename
+    topics = _field(text, "topics") or ""
+    tags = _field(text, "tags") or ""
+    signal = " ".join([filename, title, topics, tags])
+    hit = next((kw for kw in STUDY_METHOD_KEYWORDS if kw in signal), None)
+    if hit:
+        return True, f"공부법 키워드('{hit}')"
+    return False, ""
+
 
 def _field(text: str, key: str) -> str | None:
     """'키: 값' 을 텍스트에서 추출.
@@ -165,15 +193,27 @@ def parse_report(path: Path, skip_ids: set[str]) -> dict:
             "reason": "_done 마커 이미 존재 — 어느 파이프라인이든 처리 완료",
         }
 
-    is_math, why = classify_math(text, path.name)
+    is_study, study_why = classify_study_method(text, path.name)
+    is_math, math_why = (False, "") if is_study else classify_math(text, path.name)
+
+    if is_study:
+        content_type, why = "study_method", study_why
+    elif is_math:
+        content_type, why = "math", math_why
+    else:
+        content_type, why = "not_math", "명시 필드 없음 + 키워드 매치 없음"
 
     job = {
         "file": str(path),
         "name": path.name,
-        "status": "ready" if is_math else "skip_not_math",
-        "type": "math" if is_math else "not_math",
+        "status": "ready" if content_type != "not_math" else "skip_not_math",
+        "type": content_type,
         "reason": why,
-        "route": "html_gallery + obsidian_stub" if is_math else "_skip(claude_work 담당)",
+        "route": {
+            "math": "html_gallery + obsidian_stub",
+            "study_method": "study_method_gallery + obsidian_stub",
+            "not_math": "_skip(claude_work 담당)",
+        }[content_type],
         "title": _field(text, "title") or _field(text, "제목"),
         "channel": _field(text, "channel") or _field(text, "채널"),
         "published": _field(text, "published") or _field(text, "게시일"),
@@ -212,12 +252,13 @@ def main() -> int:
 
     if not args.json_only:
         n_math = sum(j["type"] == "math" for j in jobs)
+        n_study = sum(j["type"] == "study_method" for j in jobs)
         n_skip = sum(j["status"] == "skip_not_math" for j in jobs)
         n_done = sum(j["status"] == "skip_done" for j in jobs)
         n_unw = sum(j["status"] == "unwatchable" for j in jobs)
         print(f"[OK] 스테이징: {inbox}", file=sys.stderr)
-        print(f"[OK] {len(jobs)}건 — 수학 {n_math} / 비수학 skip {n_skip} / 이미완료 skip {n_done} / 시청불가 {n_unw}",
-              file=sys.stderr)
+        print(f"[OK] {len(jobs)}건 — 수학 {n_math} / 공부법 {n_study} / 비수학 skip {n_skip} / "
+              f"이미완료 skip {n_done} / 시청불가 {n_unw}", file=sys.stderr)
         for j in jobs:
             print(f"  - {j['name']}  →  [{j['type'] or j['status']}] {j.get('reason','')}",
                   file=sys.stderr)

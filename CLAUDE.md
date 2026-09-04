@@ -126,14 +126,15 @@ claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기�
 - 파일명 패턴: `{YYYY-MM-DD}_[카테고리]_{영상제목}.md`.
 - 본문엔 `type: youtube-insight`, `title`, `url`, `video_id`, `channel`, `published`, `duration_min`, `topics`, `tags` 등 frontmatter 유사 텍스트가 있지만, Google Docs 변환 과정에서 **`---` YAML 펜스가 없고 모든 필드가 줄바꿈 없이 한 문단에 이어붙으며**, `_`·`[`·`]`·`*` 가 `\_`·`\[`·`\]`·`\*` 로 이스케이프되고, 이모지가 `ð` 등으로 깨진다. `scripts/process_inbox.py` 가 이 형태를 그대로 파싱하도록 되어 있다(이스케이프 해제 + 줄바꿈 없는 inline 필드 추출).
 
-**타입(수학 여부) 판별 — `process_inbox.py`의 `classify_math()`**:
-1. **1순위(명시적 필드)**: 본문에 `타입:`/`분야:` 필드가 있고 값에 `수학`이 포함되면 확정 수학(옛 리포트 형식 호환용 — 스파크 표준 템플릿엔 이 필드가 없어 사실상 항상 2순위로 감).
+**타입 판별 — `process_inbox.py`의 `classify_study_method()` → `classify_math()`**:
+0. **0순위(공부법)**: `classify_study_method()` 를 먼저 실행 — 제목(파일명의 `[카테고리]` 태그 포함)·topics·tags 에서 `STUDY_METHOD_KEYWORDS`(공부법·시간관리·메타인지·오답노트·오답분석·실전전략 등) 매치 시 `type=study_method` 로 확정(아래 math 판정보다 우선 — "분야: 수학강의" 같은 넓은 필드에 낚이지 않도록). 상세는 아래 "📝 수학 공부법 자료 워크플로우 (트랙 C)" 참조.
+1. **1순위(명시적 필드)**: 0순위에서 안 걸리면, 본문에 `타입:`/`분야:` 필드가 있고 값에 `수학`이 포함되면 확정 수학(옛 리포트 형식 호환용 — 스파크 표준 템플릿엔 이 필드가 없어 사실상 항상 2순위로 감).
 2. **2순위(휴리스틱)**: 제목(파일명의 `[카테고리]` 태그 포함)·채널·topics·tags 를 합쳐 `MATH_KEYWORDS`(수학·미적분·확률과통계·기하·대수·함수·방정식·부등식·수열·극한·미분·적분·벡터·행렬·삼각함수·로그·지수·도형·확률·통계·수능·모의고사·학력평가·내신·N제·기출·문제풀이) 매치 여부로 판정.
-3. 둘 다 아니면 **이 레포는 관여하지 않고 skip** — claude_work 의 `routines/spark-reconstruct-curator.md` 가 일반 노트로 처리한다.
+3. 셋 다 아니면 **이 레포는 관여하지 않고 skip** — claude_work 의 `routines/spark-reconstruct-curator.md` 가 일반 노트로 처리한다.
 
 **공유 완료 마커 (`_done` 폴더, claude_work 와 공용)**:
 - 마커 파일명 `{video_id}.done`, video_id 당 하나만 존재. **처리 시작 전 반드시 먼저 `_done/{video_id}.done` 존재 여부 확인 — 있으면(내용의 `pipeline` 값과 무관하게) 즉시 skip**(이미 어느 쪽이든 처리 완료).
-- **이 레포가 실제로 처리를 완료했을 때만** 마커 생성, 내용에 `pipeline: math` 필수 포함. 수학이 아니라고 판단해 skip한 문서엔 마커를 만들지 않는다(claude_work 쪽이 자기 마커를 남긴다).
+- **이 레포가 실제로 처리를 완료했을 때만** 마커 생성, 내용에 `pipeline: math` 또는 `pipeline: study_method` 필수 포함(처리한 트랙에 맞게). 수학도 공부법도 아니라고 판단해 skip한 문서엔 마커를 만들지 않는다(claude_work 쪽이 자기 마커를 남긴다).
 - 생성은 Drive MCP `create_file(contentMimeType='text/plain', disableConversionToGoogleType=true, parentId=스파크 _done ID)`.
 - `output/` 내 `find_existing()` dedup 은 2차 방어로 계속 유지(공유 마커가 1차 방어).
 
@@ -160,9 +161,9 @@ claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기�
 1. Drive MCP `search_files(parentId=스파크 1TEHzkORlQLtsu2CKGgy2TZMIiW-NWMdr)` 로 문서 목록, `search_files(parentId=_done 1_XTvautWp8O40l1ZX8Jea97I26SJofAL)` 로 완료 마커 목록 확보.
 2. video_id 가 이미 `_done/{video_id}.done` 로 있으면 skip(1차 방어).
 3. 남은 문서를 `read_file_content(fileId)` 로 읽어 로컬 스테이징 폴더에 평문 `.md` 로 저장.
-4. `python scripts/process_inbox.py --inbox <스테이징폴더>` 로 수학 여부 판별(위 "스파크 기반 트랙 A" 섹션 참조).
-5. `type=math` 인 것만 아래 A-2 의 3~8단계(자료 생성 ~ 결과 보고)를 그대로 수행.
-6. 완료한 건은 `_done/{video_id}.done` 마커 생성(`pipeline: math` 필수 포함). 수학이 아니라 skip한 문서는 마커를 만들지 않는다.
+4. `python scripts/process_inbox.py --inbox <스테이징폴더>` 로 타입 판별(위 "스파크 기반 트랙 A" 섹션 참조 — 공부법 0순위 → 수학 1/2순위).
+5. `type=math` 인 것만 아래 A-2 의 3~8단계(자료 생성 ~ 결과 보고)를 그대로 수행. `type=study_method` 인 것은 "📝 수학 공부법 자료 워크플로우 (트랙 C)" 절차를 수행.
+6. 완료한 건은 `_done/{video_id}.done` 마커 생성(math는 `pipeline: math`, 공부법은 `pipeline: study_method` 필수 포함). 어느 쪽도 아니라 skip한 문서는 마커를 만들지 않는다.
 7. 처리할 새 수학 영상이 없으면 "처리할 새 자료 없음"만 보고.
 
 ### A-2. 세션에서 직접 처리할 때 (URL + 자동 자막 추출)
@@ -211,6 +212,36 @@ claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기�
    - PR 머지 해시
 
 > 트랙 A·B 비교, 검증 체크리스트, 약점 진단은 `docs/WORKFLOW-REVIEW.md` 참조.
+
+## 📝 수학 공부법 자료 워크플로우 (트랙 C, 2026-09-04 신설)
+
+스파크 문서 중 "분야: 수학강의"로 태그되어 있지만 실제 내용은 수학 개념·문제풀이가 아니라
+시험전략·시간관리·메타인지·오답분석 같은 **"공부법" 영상**인 경우가 있다(예: 이동준 채널의
+"9모 시험 끝나자마자 해야 할 일", "ABC 공부법"). 이런 영상에 `youtube-math-lesson` 의
+8~10문항 문제집 형식을 강제하면 영상에 없는 수학 문제를 지어내야 해서 사용하지 않는다.
+
+**분류 (A-1 09:00 루틴에 통합됨)**: `scripts/process_inbox.py` 의 `classify_study_method()` 가
+`classify_math()` 보다 먼저 실행되어 파일명 `[카테고리]` 태그·title·topics·tags 에서
+`STUDY_METHOD_KEYWORDS`(공부법·시간관리·메타인지·오답노트·오답분석·슬럼프·멘탈관리·
+학습전략·시험전략·실전전략·자기주도학습·공부습관·9모분석·수능전략)를 매치하면
+`type: "study_method"` 로 확정 라우팅한다(math 판정보다 우선 — "수학강의" 같은 넓은 명시
+필드에 낚이지 않도록). 매치 없으면 기존처럼 `classify_math()` 로 폴백.
+
+**자료 생성 절차** (A-1 5단계에서 `type=study_method` 인 것만 이 경로를 탄다):
+1. **베이스**: `templates/study-method-skeleton.html` (보라 그라데이션 히어로, KaTeX는 선택적).
+   영상의 실천 프로토콜(단계별 체크리스트) · 인상적 발언(타임스탬프 인용) · 핵심 개념/공식(있을 때만)
+   · 복습 퀴즈 · 기억할 것(플래시카드) 섹션으로 구성. 문항 8~10개, 난이도 필터는 넣지 않는다.
+2. **출력 경로**: `output_path.build_study_method_path()` 사용 →
+   `output/공부법/{단원}/{YYYYMMDD}_{핵심주제}_공부법.html`. 파일명 **반드시 `_공부법` 으로 끝낼 것**
+   → 갤러리 `data-source="study"`(📝 공부법 필터 탭) 라우팅 트리거. video_id는 파일명에 넣지 않고
+   본문 영상 카드 링크에만 담는다(썸네일은 본문 URL에서 자동 복구되므로 정상 표시됨).
+3. **갤러리 후처리**: 트랙 A/B와 동일 4단계(add_back_button → add_related → regen_index →
+   patch_pdf_mode).
+4. **push**: 작업 브랜치 commit + push → MCP PR rebase 머지 → deploy-pages.
+5. **옵시디언 스텁**: 수학영상노트 폴더에 동일 절차로 작성하되 frontmatter
+   `type: study-method-stub`, `tags: [math, study-method]`.
+6. **`_done` 마커**: `pipeline: study_method` 로 생성(트랙 A의 math 마커와 동일 폴더/방식).
+7. **결과 보고**: 갤러리 URL · Drive 스텁 링크 · PR 머지 해시(트랙 A/B와 동일 형식).
 
 ## 🎯 학습자 수준 가이드 (반드시 적용)
 

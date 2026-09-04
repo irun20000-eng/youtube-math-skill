@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!--
+  수학 공부법 자료 표준 스켈레톤 (2026-09-04 신설)
+  - 대상: "분야: 수학강의"로 태그되지만 실제 내용은 수학 개념·문제풀이가 아니라
+    시험전략·시간관리·메타인지·오답분석 같은 "공부법" 영상 (scripts/process_inbox.py
+    classify_study_method() 가 이 유형을 감지해 별도 라우팅한다).
+  - hybrid-skeleton과 달리 8~10문항 KaTeX 문제집을 강제하지 않는다 — 영상에 실제
+    수학 개념·문제가 없는데 억지로 문항을 지어내면 안 되기 때문. 대신 실천
+    프로토콜·인상적 발언·복습 퀴즈 중심의 가벼운 요약 자료.
+  - 위치: 이 파일은 output/ 밖(미발행). 실제 자료는
+    output/공부법/{단원}/{YYYYMMDD}_{주제}_공부법.html 로 저장(video_id는 페이지 본문
+    영상 링크에만 담고, 파일명 끝은 "_공부법" 고정 — regen_index.py 가 이 접미사로
+    source="study" 갤러리 카드/필터를 판별한다. output_path.build_study_method_path 사용).
+  - 상대경로(../../)는 output/공부법/{단원}/ 깊이를 가정.
+  - 후처리는 일반 자료와 동일: add_back_button → add_related → regen_index → patch_pdf_mode.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{TITLE}} | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #7b1fa2; --primary-dark: #4a148c; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #f3e5f5; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #7b1fa2;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #2c2236; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --tip-bg: #2c2236;
+      --primary: #ba68c8; --primary-dark: #e1bee7; --btn-bg: #2a2f36; --btn-active: #ba68c8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .hero { background: linear-gradient(135deg, #4a148c 0%, #7b1fa2 60%, #ab47bc 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .summary-list { padding-left: 1.3em; }
+    .summary-list li { margin: 8px 0; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 14px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .step-body label { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; }
+    .step-body input[type=checkbox] { margin-top: 4px; flex-shrink: 0; width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+    .step-body .step-title { font-weight: 700; }
+    .step-body.checked .step-title, .step-body.checked p { opacity: .55; text-decoration: line-through; }
+    .quote-card { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 14px 20px; margin: 12px 0; font-size: .96em; }
+    .quote-card .qt-time { color: var(--sub); font-size: .82em; margin-top: 6px; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .quiz-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 14px; }
+    .quiz-q { font-weight: 700; margin-bottom: 6px; }
+    .quiz-a { margin-top: 10px; background: var(--sol-bg); border-radius: 8px; padding: 12px 16px; }
+    .flash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 12px; }
+    .flash-card { background: var(--tip-bg); border-radius: 10px; padding: 14px 16px; font-size: .92em; }
+    .flash-card .fc-term { font-weight: 700; color: var(--primary-dark); margin-bottom: 4px; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #4a148c !important; } details > .quiz-a { display: block !important; } summary { display: none; } .card, .quiz-card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <!-- 툴바: add_back_button.py 가 갤러리 링크 id="gallery-back" 존재 시 건너뜀 -->
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+  </div>
+
+  <div class="hero">
+    <div class="tag">📝 수학 공부법 · {{CATEGORY}}</div>
+    <h1>{{TITLE}}</h1>
+    <p class="sub">{{SUBTITLE}}</p>
+    <div class="quote">"{{QUOTE_VERBATIM}}" — 강사 인용 [{{QUOTE_TIME}}]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/{{VIDEO_ID}}" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/{{VIDEO_ID}}/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">{{VIDEO_TITLE}}</div>
+        <div class="v-meta">📺 YouTube · {{DURATION}} · {{CHANNEL}}</div>
+        <a class="v-link" href="https://youtu.be/{{VIDEO_ID}}" target="_blank" rel="noopener">https://youtu.be/{{VIDEO_ID}}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">🎯 한눈에 보기</div>
+    <div class="card">
+      <ol class="summary-list">
+        <!-- [반복] 3줄 요약 li -->
+        <li>{{SUMMARY_1}}</li>
+      </ol>
+    </div>
+
+    <div class="section-title">🛠️ 실천 프로토콜</div>
+    <div class="card">
+      <!-- [반복] step-row (체크박스로 진행 표시, localStorage 저장) -->
+      <div class="step-row">
+        <div class="step-num">{{N}}</div>
+        <div class="step-body" data-step-id="{{STEP_ID}}">
+          <label><input type="checkbox" class="step-check"><span class="step-title">{{STEP_TITLE}}</span></label>
+          <p>{{STEP_BODY}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- [선택] 핵심 공식/개념이 있을 때만 -->
+    <div class="section-title">🔑 핵심 개념 · 공식</div>
+    <div class="card">
+      <div class="formula-box">{{FORMULA}}</div>
+      <p>{{CONCEPT_NOTE}}</p>
+    </div>
+
+    <div class="section-title">💬 인상적인 말</div>
+    <!-- [반복] quote-card -->
+    <div class="quote-card">
+      "{{QUOTE_TEXT}}"
+      <div class="qt-time">[{{QUOTE_TIME}}]</div>
+    </div>
+
+    <div class="section-title">❓ 복습 퀴즈</div>
+    <!-- [반복] quiz-card -->
+    <div class="quiz-card">
+      <div class="quiz-q">Q{{N}}. {{QUESTION}}</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">{{ANSWER}}</div></details>
+    </div>
+
+    <div class="section-title">📌 기억할 것</div>
+    <div class="flash-grid">
+      <!-- [반복] flash-card -->
+      <div class="flash-card"><div class="fc-term">{{TERM}}</div>{{DEFINITION}}</div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 안내</div>
+      <p>이 자료는 영상 속 강사의 실전 전략·공부법을 요약·정리한 것으로, 수학 개념·문제풀이 자료가 아닙니다. 효과는 개인차가 있으며, AI가 자막·요약을 기초로 자동 생성했으므로 학생 지도 시 참고용으로 활용하세요.</p>
+    </div>
+
+    <!-- 관련 자료: add_related.py 가 <!~~REL_START/END~~> 마커로 자동 주입(여기 비워둔다) -->
+  </div>
+
+  <footer>
+    생성일 {{DATE}} · 영상 출처: <a href="https://youtu.be/{{VIDEO_ID}}" style="color:var(--primary)">{{CHANNEL}}</a><br>
+    AI가 영상 자막·요약을 기초로 자동 생성한 공부법 정리자료입니다. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+    // 실천 프로토콜 체크 상태 — 페이지별로 로컬에 저장 (사생활 모드 등에서 예외 던질 수 있어 감싼다)
+    (function () {
+      var LS_KEY = 'study-checklist:' + location.pathname;
+      function read() { try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch (_) { return {}; } }
+      function write(v) { try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch (_) {} }
+      var state = read();
+      document.querySelectorAll('.step-body').forEach(function (body) {
+        var id = body.dataset.stepId;
+        var box = body.querySelector('.step-check');
+        if (!box || !id) return;
+        box.checked = !!state[id];
+        body.classList.toggle('checked', box.checked);
+        box.addEventListener('change', function () {
+          state[id] = box.checked;
+          write(state);
+          body.classList.toggle('checked', box.checked);
+        });
+      });
+    })();
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>

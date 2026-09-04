@@ -121,10 +121,19 @@ def gather(output_dir: Path) -> list[dict]:
             continue
         rel = html.relative_to(output_dir)
         is_concept = html.stem.endswith("_개념")
+        is_study = html.stem.endswith("_공부법")
         parsed = parse_output_path(rel)
         if not parsed and is_concept and len(rel.parts) >= 3:
             # 개념 자료(_개념): 영상 ID 대신 명시 접미사 → 폴백 파싱
             m = re.match(r"(\d{8})_(.+)_개념$", html.stem)
+            if m:
+                parsed = {"grade": rel.parts[0], "unit": rel.parts[1],
+                          "date": m.group(1), "topic": m.group(2),
+                          "video_id_short": html.stem}
+        if not parsed and is_study and len(rel.parts) >= 3:
+            # 공부법 자료(_공부법): 영상은 있지만 파일명엔 video_id 없음 → 폴백 파싱
+            # (실제 video_id는 본문 영상 링크에서 extract_meta 로 복구해 썸네일에 쓴다)
+            m = re.match(r"(\d{8})_(.+)_공부법$", html.stem)
             if m:
                 parsed = {"grade": rel.parts[0], "unit": rel.parts[1],
                           "date": m.group(1), "topic": m.group(2),
@@ -136,12 +145,13 @@ def gather(output_dir: Path) -> list[dict]:
         full_vid = extract_video_id_from_url(meta["url"]) if meta["url"] else None
         rel_posix = rel.as_posix()
         d = parsed["date"]
+        source = "concept" if is_concept else ("study" if is_study else "video")
         rows.append({
             **parsed,
             **meta,
             "video_id_full": full_vid,
             "rel_path": rel_posix,
-            "source": "concept" if is_concept else "video",
+            "source": source,
             # 추가일(git 최초 커밋). 못 구하면 영상 게시일 자정으로 폴백해
             # 정렬이 뒤섞이지 않게 한다.
             "added": added_map.get(
@@ -154,7 +164,7 @@ def detect_duplicates(rows: list[dict]) -> dict[str, list[dict]]:
     """같은 video_id_short(8자)를 가진 자료가 2개 이상 있으면 보고."""
     by_vid: dict[str, list[dict]] = {}
     for r in rows:
-        if r.get("source") == "concept":   # 개념 자료는 영상 중복 판정 제외
+        if r.get("source") in ("concept", "study"):   # 개념·공부법 자료는 영상 중복 판정 제외
             continue
         by_vid.setdefault(r["video_id_short"], []).append(r)
     return {k: v for k, v in by_vid.items() if len(v) > 1}
@@ -379,6 +389,7 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
   .card[data-grade="고2"] { --stripe: #2563eb; }
   .card[data-grade="고3"] { --stripe: #d9760a; }
   .card[data-grade="미분류"] { --stripe: #8698ab; }
+  .card[data-grade="공부법"] { --stripe: #7b1fa2; }
 
   #toast {
     position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px);
@@ -474,6 +485,7 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
       <button data-source="all" class="active">전체</button>
       <button data-source="video">🎬 영상</button>
       <button data-source="concept">📘 개념</button>
+      <button data-source="study">📝 공부법</button>
     </div>
     <div class="unit-wrap" id="unitWrap">
       <button class="unit-toggle" id="unitToggle" type="button"
@@ -827,13 +839,16 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
         ])).lower()
 
         is_concept = r.get("source") == "concept"
+        is_study = r.get("source") == "study"
         if thumb:
             thumb_html = f'<img src="{_esc(thumb)}" loading="lazy" alt="{_esc(title)}">'
         elif is_concept:
             thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>'
+        elif is_study:
+            thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#4a148c,#7b1fa2);color:#fff;font-weight:700">📝 공부법 자료</div>'
         else:
             thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999">썸네일 없음</div>'
-        src_badge = '📘 개념' if is_concept else '🎬 영상'
+        src_badge = '📝 공부법' if is_study else ('📘 개념' if is_concept else '🎬 영상')
         original_link = (
             f'<a class="ghost" href="{_esc(url)}" target="_blank" rel="noopener" '
             f'title="원본 영상 열기">▶ 원본</a>'
