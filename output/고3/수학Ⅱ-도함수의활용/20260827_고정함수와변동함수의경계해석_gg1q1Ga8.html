@@ -102,7 +102,7 @@
   <link rel="stylesheet" href="../../pdf-mode.css">
 </head>
 <body>
-<nav id="brand-bar" style="max-width:880px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+<nav id="brand-bar" style="max-width:848px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
 
 
   <div class="toolbar">
@@ -220,7 +220,7 @@
       <div class="concept-title"><span class="concept-num">3</span>미분가능성으로 고정 함수의 계수 확정하기</div>
       <p>구간에 따라 다른 식으로 정의된 함수(구간별 함수)가 <strong>이어 붙는 경계점에서 미분가능</strong>하다는 조건이 주어지면, 그 조건은 "①연속(같은 값)"과 "②같은 기울기(도함수 값 일치)"라는 <strong>두 개의 식</strong>을 동시에 준다는 뜻입니다. 이 두 식을 연립하면 남아있던 미지수(계수)를 확정할 수 있습니다.</p>
       <div class="formula-box">
-        $f(x) = \begin{cases} (\text{식 A}, x<c) \\ (\text{식 B}, x \geq c) \end{cases}$가 $x=c$에서 미분가능<br>
+        $f(x) = \begin{cases} (\text{식 A}, x&lt;c) \\ (\text{식 B}, x \geq c) \end{cases}$가 $x=c$에서 미분가능<br>
         $\Leftrightarrow$ ① $\lim_{x\to c^-}(\text{식 A}) = (\text{식 B의 } x=c \text{ 값})$ (연속)<br>
         &nbsp;&nbsp;&nbsp;&nbsp;② $(\text{식 A})'|_{x=c} = (\text{식 B})'|_{x=c}$ (기울기 일치)
       </div>
@@ -354,7 +354,7 @@
             </div>
             <div class="sol-step">
               <span class="sol-step-label">STEP 3</span>
-              <div>부호를 조사한다: $x<0$이면 $x(1-x)$는 (음)$\times$(양)$=$음수. $0<x<1$이면 (양)$\times$(양)$=$양수. $x>1$이면 (양)$\times$(음)$=$음수.
+              <div>부호를 조사한다: $x<0$이면 $x(1-x)$는 (음)$\times$(양)$=$음수. $0&lt;x<1$이면 (양)$\times$(양)$=$양수. $x>1$이면 (양)$\times$(음)$=$음수.
                 <div class="why">각 구간에서 대표값을 하나씩 대입해 부호를 확인</div>
               </div>
             </div>
@@ -480,7 +480,7 @@
             </div>
             <div class="sol-step">
               <span class="sol-step-label">STEP 3</span>
-              <div>구간 $[-2,2]$ 안에서 부호를 조사: $x<0$이면 $x(3-x)$는 (음)$\times$(양)$=$음수. $0<x\leq2$이면 (양)$\times$(양, $3-x>0$)$=$양수.
+              <div>구간 $[-2,2]$ 안에서 부호를 조사: $x<0$이면 $x(3-x)$는 (음)$\times$(양)$=$음수. $0&lt;x\leq2$이면 (양)$\times$(양, $3-x>0$)$=$양수.
                 <div class="why">3-x는 x가 2 이하이기만 하면 항상 양수(3보다 작으니까)</div>
               </div>
             </div>
@@ -629,7 +629,7 @@
 
   </div>
   
-<!--REL_START--><div class="related-box" id="related-box" style="max-width:880px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_3차함수극값2대1분할_00ByGXdH.html">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 (00ByGXdH)</a> · <a href="20260614_정수조건과근의논리적확정_arsZnxqP.html">정수 조건과 근의 논리적 확정 (arsZnxqP)</a> · <a href="../../고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a> · <a href="../../고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html">극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ) (hhWJZheD)</a></div><!--REL_END-->
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_3차함수극값2대1분할_00ByGXdH.html">3차함수 극값 위치 2:1 분할 정리 — 진정한 특수 풀이 (00ByGXdH)</a> · <a href="20260614_정수조건과근의논리적확정_arsZnxqP.html">정수 조건과 근의 논리적 확정 (arsZnxqP)</a> · <a href="../../고2/수학II-다항함수의미분법/20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a> · <a href="../../고2/수학II-함수의극한/20260817_극한식의미분계수변환과변곡접선_hhWJZheD.html">극한식의 미분계수 변환과 변곡접선 해석 (고2 미적분Ⅰ) (hhWJZheD)</a></div><!--REL_END-->
 <footer>
     생성일 2026-08-27 · 영상 출처: <a href="https://www.youtube.com/watch?v=gg1q1Ga8Qnw" style="color:var(--primary)">어피셜</a><br>
     AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
