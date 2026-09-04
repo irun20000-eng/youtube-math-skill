@@ -18,19 +18,57 @@ TITLE_RE = re.compile(r"<title>(.*?)</title>", re.I | re.S)
 # 본문 실제 폭 감지 — A형은 .container(880px), B형은 body 자체(900px)에 max-width 가 있다.
 # 하드코딩(과거엔 항상 880px)을 쓰면 B형(900px 본문)에서 관련자료 박스만 20px 좁아져
 # 본문 하단이 어긋난다. 파일마다 실제 쓰는 폭을 읽어 그대로 맞춘다.
-CONTAINER_W_RE = re.compile(r"\.container\s*\{[^}]*?max-width:\s*(\d+)px")
+CONTAINER_W_RE = re.compile(r"\.container\s*\{([^}]*)\}")
 BODY_W_RE = re.compile(r"(?<!\.)\bbody\s*\{([^}]*)\}")
 
 
-def detect_content_width(html: str, default: int = 880) -> int:
-    m = CONTAINER_W_RE.search(html)
+
+# 폭 계산은 max-width 만 봐서는 안 된다. 본문 호스트(.container 또는 body)에는
+# 좌우 패딩이 있고, 카드는 그 패딩 안쪽에 놓인다. 주입 요소는 호스트 밖(body 직계)
+# 이라 패딩을 받지 못하므로, max-width 를 그대로 쓰면 좌우로 정확히 패딩만큼
+# 더 넓어진다(A형 880-16-16=848 인데 880 을 써서 좌우 16px 씩 튀어나왔다).
+_PAD_RE = re.compile(r"(?:^|;)\s*padding\s*:\s*([^;]+)")
+_PADL_RE = re.compile(r"(?:^|;)\s*padding-left\s*:\s*(-?[\d.]+)px")
+_PADR_RE = re.compile(r"(?:^|;)\s*padding-right\s*:\s*(-?[\d.]+)px")
+
+
+def _h_padding(decls: str) -> "tuple[int, int]":
+    """선언 블록에서 좌우 패딩(px)을 뽑는다. px 아닌 단위는 0 으로 본다."""
+    left = right = 0
+    m = _PAD_RE.search(decls)
     if m:
-        return int(m.group(1))
-    m = BODY_W_RE.search(html)
+        parts = m.group(1).split()
+
+        def px(tok):
+            mm = re.fullmatch(r"(-?[\d.]+)px", tok)
+            return int(float(mm.group(1))) if mm else 0
+
+        if len(parts) == 1:
+            left = right = px(parts[0])
+        elif len(parts) in (2, 3):
+            left = right = px(parts[1])
+        elif len(parts) >= 4:
+            right, left = px(parts[1]), px(parts[3])
+    m = _PADL_RE.search(decls)
     if m:
-        mm = re.search(r"max-width:\s*(\d+)px", m.group(1))
-        if mm:
-            return int(mm.group(1))
+        left = int(float(m.group(1)))
+    m = _PADR_RE.search(decls)
+    if m:
+        right = int(float(m.group(1)))
+    return left, right
+
+def detect_content_width(html: str, default: int = 848) -> int:
+    """본문 카드가 실제로 차지하는 폭(패딩 안쪽)을 돌려준다."""
+    for rx in (CONTAINER_W_RE, BODY_W_RE):
+        m = rx.search(html)
+        if not m:
+            continue
+        decls = m.group(1)
+        mm = re.search(r"max-width:\s*(\d+)px", decls)
+        if not mm:
+            continue
+        pl, pr = _h_padding(decls)
+        return int(mm.group(1)) - pl - pr
     return default
 
 STOP = {"완전정복", "정리", "풀이", "공식", "활용", "기초", "기본", "심화", "전략",
