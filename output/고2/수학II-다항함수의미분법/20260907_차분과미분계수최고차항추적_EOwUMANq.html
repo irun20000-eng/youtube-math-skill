@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>차분과 미분계수 - f(x+a)-f(x) 최고차항 공식과 원함수 역추적 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2·고3 · 수학Ⅱ — 다항함수의 미분법(차분과 도함수)</div>
+    <h1>다항함수의 차분 $f(x+a)-f(x)$ — 최고차항 공식 $a\cdot f'(x)$ 하나로 미정계수 없이 원함수까지 역추적하기</h1>
+    <p class="sub">이항정리로 차분의 최고차항 공식을 직접 유도하고, 연속 곱 변형과 역차분(이산 적분) 테크닉을 이용해 정석 계수비교 없이 다항함수 문제를 빠르게 처리하는 법을 배운다</p>
+    <div class="quote">🎬 영상 핵심 한 줄: "$f(x+a)-f(x)$ 꼴의 함수 방정식(차분)은 이항정리 관점에서 최고차항이 $a\cdot f'(x)$로 축약되는 이산 미분의 성질을 띤다" — [00:00:34] 차분 공식의 수학적 근거 챕터 요약</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/EOwUMANqB3M" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/EOwUMANqB3M/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">차분 스킬? 함수 문제 이 원리 하나 알면 훨씬 쉬워집니다!【수학의 인덕션】</div>
+        <div class="v-meta">📺 YouTube · 약 8분 · 수학의 인덕션</div>
+        <a class="v-link" href="https://youtu.be/EOwUMANqB3M" target="_blank" rel="noopener">https://youtu.be/EOwUMANqB3M</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① 이항정리를 이용해 $f(x+a)-f(x)$의 최고차항이 $a\cdot f'(x)$의 최고차항과 같음을 직접 유도할 수 있다 ② 연속 곱 변형 $x(x+a)(x+2a)\cdots$ 을 이용해 차분식을 계수비교 없이 빠르게 계산할 수 있다 ③ 역차분(이산 적분) 기법으로 차분 결과가 주어졌을 때 원함수 $f(x)$를 역추적할 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 매번 다 전개해야 할까?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)=2x^2+5x-3$ 에 대하여 $f(x+1)-f(x)$ 를 구하시오.</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>가장 단순한 방법은 $f(x+1)$ 을 전부 전개해서 $f(x)$ 를 빼는 것이다.
+            $$f(x+1)=2(x+1)^2+5(x+1)-3=2x^2+9x+4$$
+            $$f(x+1)-f(x)=(2x^2+9x+4)-(2x^2+5x-3)=4x+7$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>그런데 이 계산, 매번 이렇게 다 전개해야 할까? 최고차항만 놓고 보면 $f'(x)=4x+5$ 이고, 그 최고차항은 $4x$ 다. 방금 구한 답 $4x+7$ 의 최고차항도 정확히 $4x$ — 간격이 $1$이므로 $1\times f'(x)$ 의 최고차항과 일치한다.
+            <div class="why">우연이 아니다. 아래 개념 설명에서 이 관계 $f(x+a)-f(x)$ 의 최고차항 $=a\cdot f'(x)$ 의 최고차항이 <strong>모든</strong> 다항함수에서 성립하는 이유를 이항정리로 직접 증명한다.</div></div></div>
+          <span class="answer-tag">정답: $f(x+1)-f(x)=4x+7$</span>
+        </div>
+      </details>
+      <div class="tip">이렇게 $f(x+a)-f(x)$ 를 구하는 연산을 <strong>차분(difference)</strong>이라 부른다. 최고차항은 공식으로 즉시 알 수 있고, 나머지 항도 전부 전개하지 않고 빠르게 구하는 방법이 있다 — 아래에서 원리부터 유도해 본다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명 — 차분과 미분은 왜 닮았을까</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 미분계수·도함수, 이항정리</div>
+      <p>이 자료는 아래 두 가지를 <strong>이미 배운 사실로 전제</strong>하고 시작한다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>도함수와 거듭제곱 미분법</strong>: 다항함수 $f(x)=px^n+\cdots$ 에서 $x^n$ 을 미분하면 $nx^{n-1}$ 이 된다(지수를 앞으로 내리고 지수를 하나 줄인다). 그래서 $f'(x)=pnx^{n-1}+\cdots$ 이다. $f'(x)$ 는 "$f(x)$ 가 그 순간 얼마나 빠르게 변하는가"를 나타내는 함수다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>이항정리(간단한 형태)</strong>: $(x+a)^n$ 을 전개하면 $x^n + na\,x^{n-1} + (\text{더 낮은 차수의 항들})$ 이 된다. 여기서 <strong>두 번째 항 $na\,x^{n-1}$</strong> 이 이번 개념의 핵심 재료다.</div></div>
+      <div class="concept-box">이 두 가지만 있으면, "간격 $a$ 만큼 옮겼을 때 함숫값이 얼마나 변하는가"를 식을 다 전개하지 않고도 알아내는 방법을 처음부터 직접 유도할 수 있다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>차분의 최고차항 공식 — $a\cdot f'(x)$</div>
+      <p>다항함수 $f(x)=px^n+\cdots$ ($p$ 는 최고차항 계수) 가 있을 때, $f(x+a)-f(x)$ 를 <strong>차분(difference)</strong>이라 부른다. 계단을 한 칸(간격 $a$) 이동했을 때 높이가 얼마나 바뀌는지를 재는 것과 비슷하다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">최고차항만 따로 떼어 $(x+a)^n$ 을 이항정리로 전개한다.
+            $$p(x+a)^n - px^n = p\big(x^n+na\,x^{n-1}+\cdots-x^n\big) = pna\,x^{n-1}+\cdots$$
+            <div class="why">$x^n$ 은 전개식의 첫 항과 원래 식의 $-x^n$ 이 서로 상쇄되어 사라진다. 남는 것 중 가장 차수가 높은 항이 이항정리의 두 번째 항 $na\,x^{n-1}$ 에 계수 $p$ 를 곱한 것이다.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">그런데 $f'(x)=pnx^{n-1}+\cdots$ 이므로, 방금 구한 최고차항 $pna\,x^{n-1}$ 은 정확히 $a\cdot f'(x)$ 의 최고차항과 같다.</div></div>
+      <div class="formula-box">$$f(x+a)-f(x)\text{의 최고차항} \;=\; a\cdot f'(x)\text{의 최고차항}$$</div>
+      <div class="caution">⚠️ <strong>간격 $a$ 를 빼먹지 말 것</strong>: $f'(x)$ 의 최고차항 계수만 그대로 쓰면 안 된다. 반드시 간격 $a$ 를 곱해야 한다 — 위 도입 문제에서 $a=1$ 이라 눈에 안 띄었을 뿐이다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>연속 곱 변형 — 나머지 항까지 빠르게</div>
+      <p>최고차항은 공식으로 바로 나오지만, 나머지 항(낮은 차수 + 상수항)까지 빠르게 구하려면 식을 <strong>간격 $a$ 에 맞춘 연속 곱</strong> 형태로 바꿔 쓰는 게 편하다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">예를 들어 $f(x)=2x^2-3x+1$ 을 간격 $2$ 에 맞춰 $2x(x+2)$ 라는 덩어리로 바꿔 쓴다.
+            $$f(x)=2x(x+2)-7x+1 \quad(\because 2x^2+4x-7x+1=2x^2-3x+1)$$</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">$f(x+2)$ 도 같은 덩어리로 쓰면 $f(x+2)=2(x+2)(x+4)-7(x+2)+1$. 이제 두 식을 빼면 $2x(x+2)$ 라는 덩어리와 $2(x+2)(x+4)$ 라는 덩어리에서 <strong>공통 인수 $(x+2)$</strong> 를 밖으로 뺄 수 있다.
+            $$f(x+2)-f(x)=2(x+2)\big[(x+4)-x\big]-7\big[(x+2)-x\big]=2(x+2)(4)-7(2)$$
+            <div class="why">한 칸씩 밀린 두 덩어리를 빼면 가운데 항들이 저절로 사라지고 앞뒤 차이만 남는다 — 마치 사다리를 한 칸 옮겨도 겹치는 가로대는 그대로인 것과 같다.</div></div></div>
+      <div class="concept-box">정리하면 $f(x+2)-f(x)=8(x+2)-14=8x+2$. 전개를 두 번(각각 세 항짜리) 하지 않고, 공통 인수를 묶어 <strong>덧셈·뺄셈 몇 번</strong>으로 끝났다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>역차분 — 차분 결과로 원함수 $f(x)$ 역추적하기</div>
+      <p>반대 방향도 가능하다. $f(x+a)-f(x)$ 의 결과가 주어졌을 때, 원래 함수 $f(x)$ 를 구하는 것을 <strong>역차분(이산 적분)</strong>이라 부른다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>정석</strong>은 $f(x)=ax^3+bx^2+cx+d$ 로 두고 대입해서 계수비교하는 것인데, 3차 이상이면 계산이 매우 길어진다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>테크닉</strong>은 주어진 식을 간격 $a$ 의 연속 곱으로 분해하는 것이다. 예를 들어 간격이 $2$ 라면 $x^2 = x(x+2)-2x$ 로 쓸 수 있다(직접 전개하면 $x^2+2x-2x=x^2$ 로 확인된다).</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">연속 곱 덩어리 하나하나를 <strong>인수를 하나 늘리고, (인수 개수)$\times$(간격)으로 나누는</strong> 역연산을 적용한다 — 미분의 반대인 적분과 같은 방식이다.
+            <div class="why">$x(x+2)$(인수 2개, 간격 2) → 인수를 하나 늘려 $(x-2)x(x+2)$ 로 만들고 $3\times2=6$ 으로 나눈다. $-2x$(인수 1개, 간격 2) → $(x-2)x$ 로 만들고 $2\times2=4$ 로 나눈다. 마지막에 상수 $C$ 를 더한다(상수는 차분하면 사라지므로 원래 정보만으로는 알 수 없다 — 별도 조건이 있어야 정해진다).</div></div></div>
+      <div class="formula-box">$$\text{역차분 보정값} = (\text{연속 곱 인수 개수}) \times (\text{간격})$$</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — 간격 $a$ 를 빼먹음.</strong> 최고차항 계수를 $n$ 배만 하고 간격 $a$ 를 곱하지 않으면 오답이다. 반드시 $a\cdot f'(x)$.</div>
+      <div class="caution"><strong>실수 2 — 3차 이상에서 무작정 계수비교.</strong> $ax^3+bx^2+cx+d$ 를 직접 대입해 전개하면 계산 실수가 급격히 늘어난다. 최고차항은 공식으로 먼저 확정하고, 나머지는 연속 곱 변형이나 다른 조건과 결합해 처리한다.</div>
+      <div class="caution"><strong>실수 3 — 역차분 보정값 계산 실수.</strong> 인수를 하나 늘렸으면 나누는 값은 항상 (<strong>늘어난 후의</strong> 인수 개수)$\times$(간격)이다. 늘리기 전 개수로 나누면 값이 배로 틀어진다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>최고차항 공식 그대로 적용</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 이차함수의 차분 최고차항</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)=x^2+2x$ 에 대하여 $f(x+3)-f(x)$ 의 최고차항을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f'(x)=2x+2$ 이므로 최고차항은 $2x$ 이다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>차분의 최고차항 공식 $a\cdot f'(x)$ 에 간격 $a=3$ 을 곱한다.
+            $$3\times2x=6x$$
+            <div class="why">검산: $f(x+3)=(x+3)^2+2(x+3)=x^2+8x+15$. $f(x+3)-f(x)=(x^2+8x+15)-(x^2+2x)=6x+15$. 최고차항이 정확히 $6x$ 로 일치한다.</div></div></div>
+          <span class="answer-tag">정답: 최고차항 $6x$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 삼차함수의 차분 최고차항</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)=2x^3-x$ 에 대하여 $f(x+1)-f(x)$ 의 최고차항을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f'(x)=6x^2-1$ 이므로 최고차항은 $6x^2$ 이다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>간격 $a=1$ 을 곱한다.
+            $$1\times6x^2=6x^2$$
+            <div class="why">검산: $f(x+1)=2(x+1)^3-(x+1)=2x^3+6x^2+5x+1$. $f(x+1)-f(x)=(2x^3+6x^2+5x+1)-(2x^3-x)=6x^2+6x+1$. 최고차항이 정확히 $6x^2$ 로 일치한다.</div></div></div>
+          <span class="answer-tag">정답: 최고차항 $6x^2$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>연속 곱 변형으로 전체 식 구하기</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 연속 곱 변형 (간격 2)</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)=2x^2-3x+1$ 에 대하여 $f(x+2)-f(x)$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>간격 $2$ 에 맞춰 $f(x)$ 를 연속 곱 덩어리로 바꿔 쓴다.
+            $$f(x)=2x(x+2)-7x+1$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(x+2)=2(x+2)(x+4)-7(x+2)+1$ 로 같은 덩어리로 쓴 뒤 뺀다.
+            $$f(x+2)-f(x)=2(x+2)\big[(x+4)-x\big]-7\big[(x+2)-x\big]=2(x+2)(4)-7(2)$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>정리한다.
+            $$=8(x+2)-14=8x+16-14=8x+2$$
+            <div class="why">검산: $f(x+2)=2(x+2)^2-3(x+2)+1=2x^2+5x+3$. $f(x+2)-f(x)=(2x^2+5x+3)-(2x^2-3x+1)=8x+2$. 일치한다.</div></div></div>
+          <span class="answer-tag">정답: $f(x+2)-f(x)=8x+2$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 연속 곱 변형 (간격 3)</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)=x^2+4x+2$ 에 대하여 $f(x+3)-f(x)$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>간격 $3$ 에 맞춰 $f(x)$ 를 연속 곱 덩어리로 바꿔 쓴다.
+            $$f(x)=x(x+3)+x+2$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(x+3)=(x+3)(x+6)+(x+3)+2$ 로 같은 덩어리로 쓴 뒤 뺀다.
+            $$f(x+3)-f(x)=(x+3)\big[(x+6)-x\big]+\big[(x+3)-x\big]=(x+3)(6)+3$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>정리한다.
+            $$=6x+18+3=6x+21$$
+            <div class="why">검산: $f(x+3)=(x+3)^2+4(x+3)+2=x^2+10x+23$. $f(x+3)-f(x)=(x^2+10x+23)-(x^2+4x+2)=6x+21$. 일치한다.</div></div></div>
+          <span class="answer-tag">정답: $f(x+3)-f(x)=6x+21$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>역차분 + 조건 결합</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 역차분으로 원함수 역추적</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$ 가 모든 실수 $x$ 에 대하여 $f(x+2)-f(x)=4x^2$ 을 만족하고 $f(0)=0$ 일 때, $f(x)$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>차분 결과가 2차식이므로 원함수 $f(x)$ 는 3차식이어야 한다. 간격이 $2$ 이므로 $x^2$ 을 연속 곱으로 분해한다.
+            $$x^2=x(x+2)-2x \implies 4x^2=4x(x+2)-8x$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>각 덩어리를 역차분한다. $4x(x+2)$(인수 2개, 간격 2) → 인수를 하나 늘려 $\dfrac{4}{3\times2}(x-2)x(x+2)$. $-8x$(인수 1개, 간격 2) → $\dfrac{-8}{2\times2}(x-2)x$.
+            $$f(x)=\frac{2}{3}(x-2)x(x+2)-2(x-2)x+C$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>전개해서 정리한다. $(x-2)x(x+2)=x(x^2-4)=x^3-4x$, $(x-2)x=x^2-2x$ 이므로
+            $$f(x)=\frac{2}{3}(x^3-4x)-2(x^2-2x)+C=\frac{2}{3}x^3-2x^2+\frac{4}{3}x+C$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(0)=C=0$ 이므로 $C=0$.
+            <div class="why">검산: $f(x)=\frac23x^3-2x^2+\frac43x$ 로 $f(x+2)-f(x)$ 를 직접 계산하면 상수항·1차항이 모두 상쇄되어 $4x^2$ 만 남는다(직접 대입해 확인 가능).</div></div></div>
+          <span class="answer-tag">정답: $f(x)=\dfrac{2}{3}x^3-2x^2+\dfrac{4}{3}x$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 정석(미정계수 대입)이 아니라 연속 곱 분해와 역차분 보정 공식을 실제로 적용해 원함수를 역추적하는 능력을 확인한다.</div>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 최고차항 공식 + 연립으로 계수 결정</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $a$ 인 이차함수 $f(x)$ 에 대하여 $f(x+3)-f(x)=12x+15$ 이고 $f(0)=2$ 일 때, $f(1)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)=ax^2+bx+c$ 로 놓으면 $f(x+3)-f(x)=a\big[(x+3)^2-x^2\big]+3b=a(6x+9)+3b=6ax+(9a+3b)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x$ 의 계수를 비교하면 $6a=12$ 이므로 $a=2$.
+            <div class="why">이것이 바로 개념 1의 최고차항 공식이다 — $a\cdot f'(x)$ 의 최고차항 $a\times2ax=6ax$ 과 정확히 같은 값이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>상수항을 비교하면 $9a+3b=15$ 이므로 $18+3b=15$, $b=-1$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(0)=c=2$ 이므로 $f(x)=2x^2-x+2$. 따라서
+            $$f(1)=2-1+2=3$$</div></div>
+          <span class="answer-tag">정답: $f(1)=3$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 차분식 전체를 전개해 계수를 하나씩 맞추는 연습을 통해, 최고차항 공식이 계수비교의 일부임을 확인한다.</div>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>극한(미분계수 정의) + 차분 결합 — 준킬러 유형</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 극한으로 미분계수 읽고 최고차항 공식 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $a$ 인 삼차함수 $f(x)$ 에 대하여 $\displaystyle\lim_{x\to1}\frac{f(x)-4}{x-1}=3a-1$ 이고, $f(x+1)-f(x)=12x^2+\cdots$ ($x^2$ 의 계수만 알려짐) 를 만족할 때, 상수 $a$ 의 값과 $f'(1)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>극한의 분모 $x-1$ 이 $0$ 으로 가는데 극한값이 유한하므로, 분자도 $0$ 으로 가야 한다. 따라서 $f(1)=4$.
+            <div class="why">분자가 $0$ 으로 가지 않으면 전체 극한이 무한대로 발산해 유한한 값 $3a-1$ 이 될 수 없다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(1)=4$ 이므로 주어진 극한은 미분계수의 정의 $\displaystyle\lim_{x\to1}\frac{f(x)-f(1)}{x-1}=f'(1)$ 과 똑같은 꼴이다. 따라서
+            $$f'(1)=3a-1$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>차분의 최고차항 공식을 쓴다. $f(x)=ax^3+\cdots$ 이므로 $f'(x)=3ax^2+\cdots$, 간격 $1$ 을 곱한 최고차항은 $3ax^2$. 주어진 $x^2$ 계수 $12$ 와 비교한다.
+            $$3a=12 \implies a=4$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>STEP 2 의 관계식에 $a=4$ 를 대입한다.
+            $$f'(1)=3(4)-1=11$$
+            <div class="why">$a$ 는 차분식(개념 1)에서, $f'(1)$ 은 극한식(미분계수의 정의)에서 각각 독립적으로 구해지는 두 조건을 연립해 풀어낸 문제다.</div></div></div>
+          <span class="answer-tag">정답: $a=4$, $f'(1)=11$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 극한값이 유한하려면 분자가 0으로 수렴해야 한다는 사실과 미분계수의 정의, 차분의 최고차항 공식을 모두 결합해 사용할 수 있는지 확인하는 준킬러 유형이다.</div>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 차분식 전체와 미분계수·함숫값 조건 결합</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수 $f(x)=x^3+bx^2+cx+d$ 가 $f(x+2)-f(x)=6x^2+4x+k$ (단, $k$ 는 상수)를 만족하고, $f'(1)=5$, $f(0)=3$ 일 때, 상수 $b,\,k$ 의 값과 $f(2)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x+2)-f(x)$ 를 직접 전개한다.
+            $$f(x+2)-f(x)=6x^2+(12+4b)x+(8+4b+2c)$$
+            <div class="why">$x^3$ 항과 상수항 $d$ 는 차분 과정에서 자동으로 사라진다 — 최고차항 $6x^2$ 은 이미 개념 1의 공식($2\times3x^2=6x^2$)과 일치해 최고차항 계수가 $1$ 이라는 조건과 모순이 없음을 확인할 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x$ 의 계수를 비교한다.
+            $$12+4b=4 \implies b=-2$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f'(x)=3x^2+2bx+c=3x^2-4x+c$ 이므로 $f'(1)=3-4+c=c-1=5$, 따라서 $c=6$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>상수항 비교로 $k$ 를 구한다.
+            $$k=8+4b+2c=8-8+12=12$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$f(0)=d=3$ 이므로 $f(x)=x^3-2x^2+6x+3$. 따라서
+            $$f(2)=8-8+12+3=15$$
+            <div class="why">검산: $f(x+2)-f(x)=6x^2+4x+12$ 를 직접 전개해 확인하면 STEP1의 식과 정확히 일치한다.</div></div></div>
+          <span class="answer-tag">정답: $b=-2,\ k=12,\ f(2)=15$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 차분식 전체를 전개해 계수를 하나씩 결정하는 과정에, 미분계수 조건과 함숫값 조건까지 함께 연립하는 실전형 준킬러 문항이다.</div>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「차분 스킬? 함수 문제 이 원리 하나 알면 훨씬 쉬워집니다!」</strong>(수학의 인덕션, 약 8분)의 구글 스파크 상세 요약본(챕터별 타임스탬프, 칠판 수식 verbatim, 예제 3개의 풀이 과정 포함)을 근거로 재구성했습니다. 자막 원본이 아닌 요약본을 대체 입력으로 사용했으며, 히어로 영역의 "영상 핵심 한 줄" 인용은 요약본의 텍스트를 그대로 사용한 것으로, 강사의 실제 발화를 verbatim으로 옮긴 것은 아님을 밝힙니다.</p>
+      <p style="margin-top:8px">문항은 요약본의 예제 구조(차분 최고차항 공식 → 연속 곱 변형 → 역차분 → 극한·미분계수 결합)를 그대로 따르되, 모든 수치를 새로 설계하고 <strong>본 세션에서 직접 재계산·검산</strong>했습니다(기초 2문항은 전개 후 최고차항 일치 확인, 기본 2문항·심화 2문항·수능대비 2문항은 모두 정방향 전개로 역검산 완료). 확신도는 전 문항 <strong>★★★</strong>이며 ⚠️ 플래그 항목은 없습니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 이 영상은 다항함수의 차분·미분계수·도함수(다항함수의 미분법)만 다루며, 삼각함수의 덧셈정리·부분적분·치환적분 등 현 고2 수능 범위 밖(선택 과목 「미적분」) 내용은 전혀 등장하지 않습니다. 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260717_절댓값극한과미분계수접선해석_1D2zCNqf.html">절댓값 극한과 미분계수 — 근과 차수로 접선 해석 (수학Ⅱ) (1D2zCNqf)</a> · <a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="20260507_거리곱완전정복도함수까지_M3TGprau.html">거리곱 완전정복 1탄 (M3TGprau)</a> · <a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-09-07 · 영상 출처: <a href="https://youtu.be/EOwUMANqB3M" style="color:var(--primary)">수학의 인덕션</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
