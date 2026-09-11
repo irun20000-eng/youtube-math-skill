@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지수·로그함수 그래프 - 닮음비와 진행적 특징으로 계산 없이 풀기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2·고3 · 수학Ⅰ(대수) — 지수함수와 로그함수의 그래프와 활용</div>
+    <h1>지수·로그함수 그래프<br>좌표 대입 없이 "닮음비"로 끝내기</h1>
+    <p class="sub">평행이동을 가로 배율로 바꾸고, 지수함수의 '진행적 특징'을 이용하면 미지수 연립 없이 직각삼각형 닮음으로 풀린다</p>
+    <div class="quote">지수·로그 그래프에 직선이 얽힌 문제는 좌표를 $x_1,y_1,x_2,y_2$로 잡아 연립하는 대신, 로그의 평행이동을 가로 축소비로, 지수함수의 증가를 "몇 배가 되려면 얼마나 이동해야 하는가"의 진행량으로 바꿔 푸는 것이 핵심 발상이다. — 영상 핵심 통찰</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/_mKXqVTeP6g" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/_mKXqVTeP6g/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">1등급들이 계산을 안 하는 이유</div>
+        <div class="v-meta">📺 YouTube · 약 6분 · 수능 수학은 이동준</div>
+        <a class="v-link" href="https://youtu.be/_mKXqVTeP6g" target="_blank" rel="noopener">https://youtu.be/_mKXqVTeP6g</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 로그함수의 $y$축 평행이동을 $x$축 배율로 바꿔 읽고, 지수함수의 "진행적 특징"($\Delta x=\log_a k$)을 이용해 좌표 대입 없이 기울기·넓이 문제를 해결한다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 두 기법을 한 번에</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 지수함수 $y=2^x$ 위의 두 점 $A(0,1)$, $B(k,8)$이 있고, 로그함수 $y=\log_2 x+2$가 있다. (1) $k$의 값을 구하시오. (2) 로그함수를 $y=\log_2(cx)$ 꼴로 나타낼 때 $c$의 값을 구하고, 이는 $y=\log_2 x$ 그래프를 가로로 몇 배 한 것인지 말하시오.</div>
+      <div class="visual">지수함수의 진행적 특징        로그함수의 평행이동 = 가로배율
+
+   y                           y
+   │        ●B(k,8)            │      y=log₂x+2
+   │       ╱                   │     ╱   ↑ 이 그래프는
+   │      ╱ y=2ˣ                │    ╱    y=log₂x를
+   │     ╱                     │   ╱     가로로 1/4배 한 것과 같다
+  1●────                       │  ╱
+   0    k=?                    └─────────── x
+
+  2^k = 8 → k = log₂8 = 3            log₂x+2 = log₂x+log₂4 = log₂(4x)</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$A(0,1)$에서 $B$까지 함숫값이 $1\to 8$, 즉 $8$배가 된다.<div class="why">지수함수 $y=2^x$는 $x$가 $\log_2 k$만큼 증가할 때 함숫값이 정확히 $k$배가 된다(진행적 특징). $2^{x+\log_2 k}=2^x\cdot 2^{\log_2 k}=k\cdot 2^x$이기 때문이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>따라서 $k=\log_2 8=3$.<div class="why">$2^3=8$이므로 $x$가 $0$에서 $3$만큼 이동해야 함숫값이 $8$배가 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\log_2 x+2=\log_2 x+\log_2 4=\log_2(4x)$이므로 $c=4$.<div class="why">로그의 성질 $\log_a x + n = \log_a x + n\log_a a = \log_a(a^n x)$를 이용해 "위로 $n$ 이동"을 "$x$에 $a^n$을 곱한 것"으로 바꿔 쓸 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$y=\log_2(4x)$는 같은 $y$값을 원래 $x$좌표의 $\frac14$인 지점에서 낸다는 뜻이므로, $y=\log_2 x$ 그래프를 가로로 $\dfrac14$배 축소한 것이다.<div class="why">$x$ 대신 $4x$가 들어갔으므로, 원래 그래프의 $x=4x_0$ 지점의 값이 새 그래프의 $x=x_0$ 지점에 나타난다 — 가로 좌표가 $\frac14$로 압축된 셈이다.</div></div></div>
+          <span class="answer-tag">정답: $k=3$, $c=4$ (가로 $\dfrac14$배 축소)</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>지수함수:</strong> $y=a^x$ ($a>1$)는 $x$가 커질수록 급격히 증가하며, $a^{x+y}=a^x\cdot a^y$ (지수법칙).</li>
+        <li><strong>로그함수:</strong> $y=\log_a x$는 $y=a^x$의 역함수. $\log_a(xy)=\log_a x+\log_a y$, $\log_a a^n=n$.</li>
+        <li><strong>평행이동:</strong> $y=f(x)+n$은 $y=f(x)$를 $y$축 방향으로 $n$만큼 이동한 그래프.</li>
+        <li><strong>기울기:</strong> 두 점 $(x_1,y_1),(x_2,y_2)$을 지나는 직선의 기울기는 $\dfrac{y_2-y_1}{x_2-x_1}$.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>로그함수의 평행이동 = 가로 배율 변환</div>
+      <p>로그함수를 $y$축으로 이동시킨 것은 사실 $x$축 방향으로 압축·확대한 것과 똑같은 그래프다. 이 성질을 이용하면 "몇 칸 올렸다"는 생각을 "가로로 몇 배 했다"는 비율로 바꿔 읽을 수 있다.</p>
+      <div class="formula-box">$$y=\log_a x + n = \log_a x + n\log_a a = \log_a(a^n x)$$</div>
+      <div class="concept-box"><strong>해석:</strong> $y=\log_a(a^n x)$는 $y=\log_a x$의 $x$자리에 $a^n x$를 대입한 것과 같으므로, 그래프는 $y=\log_a x$를 $x$축 방향으로 $\dfrac{1}{a^n}$배 한 것이다.</div>
+      <div class="caution"><strong>주의:</strong> $n>0$이면 위로 이동한 것이지만, 가로 방향으로는 "압축"($\dfrac{1}{a^n}<1$)이라는 점이 헷갈리기 쉽다. 방향(위/아래)과 배율(압축/확대)을 혼동하지 않도록 한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>지수함수의 "진행적 특징"</div>
+      <p>지수함수는 $x$가 일정 거리만큼 증가할 때 함숫값이 항상 일정한 "배수"로 늘어난다. 이 배수와 이동 거리 사이의 관계를 알아두면 좌표를 몰라도 거리·기울기를 계산할 수 있다.</p>
+      <div class="formula-box">$$x \to x+\log_a k \ \Longrightarrow\ a^x \to k\cdot a^x$$</div>
+      <div class="step-row">
+        <div class="step-num">⚙</div>
+        <div class="step-body"><strong>증명:</strong> $a^{x+\log_a k}=a^x\cdot a^{\log_a k}=a^x\cdot k=k\cdot a^x$ (지수법칙과 로그의 정의 $a^{\log_a k}=k$를 그대로 사용).</div>
+      </div>
+      <div class="tip"><strong>실전 활용:</strong> "함숫값이 $k$배 되려면 $x$가 $\log_a k$만큼 이동해야 한다"를 거꾸로 쓰면, 두 점의 함숫값 비를 알 때 곧바로 $x$좌표 차이(가로거리)를 얻는다 — 좌표를 미지수로 두고 연립할 필요가 없다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>직각삼각형 닮음으로 기울기·넓이 구하기</div>
+      <p>지수·로그 그래프 위의 두 점을 잇는 직선이 나오면, 위 두 기법으로 구한 가로거리 $\Delta x$와 실제 함숫값 차 $\Delta y$를 다리로 하는 직각삼각형을 상상한다.</p>
+      <div class="concept-box"><strong>절차:</strong> ① 평행이동을 가로배율로 바꿔 두 곡선 위 대응점의 가로거리 비를 구한다 → ② 지수함수의 진행적 특징으로 실제 가로거리(로그값)를 구한다 → ③ $\Delta x,\Delta y$로 기울기 $m=\dfrac{\Delta y}{\Delta x}$ 또는 삼각형 넓이 $S=\dfrac12\times$밑변$\times$높이를 계산한다.</div>
+      <div class="caution"><strong>주의:</strong> 가로거리는 로그값(무리수)으로 나오는 경우가 많다. 좌표를 억지로 정수로 맞추려 하지 말고 $\log_a k$ 형태 그대로 계산을 진행한다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span style="font-weight:600; color:#2e7d32">공식 직접 적용</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 지수함수 진행적 특징</div>
+        <div class="problem-body"><strong>문제:</strong> $y=3^x$에서 함숫값이 $27$배가 되기 위해 필요한 $x$축 방향 이동 거리를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>이동 거리 $=\log_3 27=\log_3 3^3=3$.</p>
+          <p class="warn">오답 주의: "$27$배"를 "$27$만큼 증가"로 착각해 $\log$를 빼먹지 않도록 한다.</p>
+          <span class="answer-tag">정답: 3</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 로그함수 평행이동→배율</div>
+        <div class="problem-body"><strong>문제:</strong> $y=\log_5 x+1$을 $y=\log_5(cx)$ 꼴로 나타내고, $y=\log_5 x$ 그래프를 가로로 몇 배 한 것인지 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$\log_5 x+1=\log_5 x+\log_5 5=\log_5(5x)$이므로 $c=5$, 가로로 $\dfrac15$배(축소).</p>
+          <p class="warn">오답 주의: $c=5$를 "$5$배 확대"로 잘못 읽기 쉽다. $x$자리에 $5x$가 들어갔으므로 실제로는 $\dfrac15$배 압축이다.</p>
+          <span class="answer-tag">정답: $c=5$, 가로 $\dfrac15$배</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span style="font-weight:600; color:#1565c0">기울기·분할비 계산</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 진행적 특징 + 기울기</div>
+        <div class="problem-body"><strong>문제:</strong> 지수함수 $y=5^x$ 위의 두 점 $A(0,1)$, $B(k,125)$가 있다. $k$의 값과 직선 $AB$의 기울기를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">$k$</span><div>$5^k=125=5^3 \Rightarrow k=3$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">기울기</span><div>$m=\dfrac{125-1}{3-0}=\dfrac{124}{3}$.</div></div>
+          <p class="warn">오답 주의: 함숫값 자체($1,125$)를 그대로 기울기 공식의 $x$ 자리에 넣는 실수에 주의한다.</p>
+          <span class="answer-tag">정답: $k=3$, 기울기 $\dfrac{124}{3}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 로그함수 분할비</div>
+        <div class="problem-body"><strong>문제:</strong> $y=\log_2 x+4$를 $y=\log_2(cx)$ 꼴로 나타내시오. 또한 전체 가로 구간을 $1$이라 할 때, 축소된 부분과 나머지 부분의 비(분할비)를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">$c$</span><div>$\log_2 x+4=\log_2 x+\log_2 16=\log_2(16x)$이므로 $c=16$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">분할비</span><div>가로 축소비 $\dfrac{1}{16}$이므로, 분할비는 $\dfrac{1}{16}:\left(1-\dfrac{1}{16}\right)=1:15$.</div></div>
+          <p class="warn">오답 주의: 분할비를 구할 때 축소비 $\frac{1}{16}$을 그대로 답으로 쓰지 않도록 — 문제는 "나머지 부분과의 비"를 요구한다.</p>
+          <span class="answer-tag">정답: $c=16$, 분할비 $1:15$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span style="font-weight:600; color:#6a1b9a">역방향 — 밑 구하기</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 지수함수 역방향(밑 구하기)</div>
+        <div class="problem-body"><strong>문제:</strong> 밑이 $a$ ($a>1$)인 지수함수 $y=a^x$ 위의 두 점의 함숫값의 비가 $1:16$이고, 두 점의 $x$좌표 차가 $2$일 때, $a$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">관계식</span><div>진행적 특징에 의해 $x$가 $2$만큼 증가할 때 함숫값은 $a^2$배가 된다. 조건에서 이 배수가 $16$이므로 $a^2=16$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">$a$</span><div>$a>1$이므로 $a=4$.</div></div>
+          <p class="warn">오답 주의: $a^2=16$에서 $a=\pm4$ 둘 다 나오지만, 지수함수의 밑은 $a>0, a\neq1$이어야 하므로 $a=4$만 답이 된다.</p>
+          <span class="answer-tag">정답: $a=4$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 로그함수 역방향(밑 구하기)</div>
+        <div class="problem-body"><strong>문제:</strong> $y=\log_a x+3$을 $y=\log_a(cx)$ 꼴로 나타내면 $c=a^3$이다. 이 그래프가 $y=\log_a x$를 가로로 $\dfrac18$배 한 것일 때, 밑 $a$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">관계식</span><div>가로 축소비가 $\dfrac{1}{a^3}=\dfrac18$이므로 $a^3=8$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">$a$</span><div>$a=2$.</div></div>
+          <p class="warn">오답 주의: "$3$만큼 위로 이동"과 "가로로 $\frac18$배"를 서로 다른 미지수로 따로 풀려 하지 말고, $c=a^3$ 관계식 하나로 바로 연결한다.</p>
+          <span class="answer-tag">정답: $a=2$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span style="font-weight:600; color:#b71c1c">준킬러 — 두 기법 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러(지수 + 삼각형 넓이)</div>
+        <div class="problem-body"><strong>문제:</strong> 지수함수 $y=2^x$ 위에 점 $A(0,1)$이 있다. 같은 곡선 위에서 함숫값이 $A$의 $3$배인 점을 $B$라 하자. 삼각형 $OAB$($O$는 원점)의 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">$B$의 좌표</span><div>진행적 특징에 의해 $B$의 $x$좌표는 $\log_2 3$, $y$좌표는 $3$. $B(\log_2 3,\ 3)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">넓이 공식</span><div>원점을 포함한 삼각형의 넓이는 $S=\dfrac12|x_A y_B - x_B y_A|$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">계산</span><div>$S=\dfrac12|0\times3-\log_2 3\times1|=\dfrac12\log_2 3$.</div></div>
+          <p class="warn">오답 주의: $B$의 좌표를 "$x=3$"으로 착각하기 쉽다 — $3$배가 되는 것은 함숫값(세로좌표)이지 가로좌표가 아니다.</p>
+          <span class="answer-tag">정답: $\dfrac{\log_2 3}{2}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 준킬러(로그 + 대응점 거리)</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=\log_2 x$ 위의 점의 $x$좌표를 $p$, 곡선 $y=\log_2 x+3$ 위에서 $y$좌표가 같은 대응점의 $x$좌표를 $q$라 하자. $p=16$일 때, $|p-q|$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">대응 관계</span><div>$y=\log_2 x+3=\log_2(8x)$이므로, 같은 $y$값에서 이 곡선의 $x$좌표는 원래 곡선의 $x$좌표의 $\dfrac18$이다. 즉 $q=\dfrac{p}{8}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">계산</span><div>$q=\dfrac{16}{8}=2$. $|p-q|=|16-2|=14$.</div></div>
+          <p class="warn">오답 주의: $q=8p$처럼 배율의 방향을 반대로 적용하지 않도록 — 위로 이동한 그래프일수록 같은 높이에 "더 작은" $x$에서 도달한다.</p>
+          <span class="answer-tag">정답: 14</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>기법</th><th>식</th><th>의미</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">지수함수 진행적 특징</td><td>$\Delta x=\log_a k$</td><td>함숫값이 $k$배 되기 위한 가로 이동거리</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">로그함수 평행이동→배율</td><td>$\log_a x+n=\log_a(a^n x)$</td><td>$y$축 이동 $=$ 가로 $\dfrac{1}{a^n}$배</td></tr>
+          <tr><td style="font-weight:700">원점 포함 삼각형 넓이</td><td>$\dfrac12|x_1y_2-x_2y_1|$</td><td>좌표만 알면 바로 계산</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ===== 검증 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 영상 [01:25]~[04:30] 구간에서 제시된 두 핵심 기법(로그함수의 평행이동을 가로 배율로 바꾸는 변환, 지수함수의 "진행적 특징")을 그대로 개념 설명에 옮기고, 도입 문제와 수준별 문항은 같은 기법을 적용한 자체 구성 문항으로 새로 만들었습니다. 영상 속 5점(A~E) 도형 문제는 좌표가 구체적으로 특정되지 않아 그대로 재현하는 대신, 같은 기법을 검증 가능한 좌표로 재구성했습니다.</p>
+      <p style="margin-top:8px">지수함수·로그함수의 그래프와 평행이동, 좌표평면 위 직선의 기울기·넓이 범위 내에서만 구성했습니다(삼각함수·미분·적분 등은 사용하지 않았습니다). "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div><!-- /container -->
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260831_지수로그90도회전원보조선_Iet2uhLY.html">지수·로그함수 90도 회전과 원 보조선 — 준킬러 21번 격파 (Iet2uhLY)</a> · <a href="20260808_지수로그함수확대축소원점직선_G6iWQpMu.html">지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율 (G6iWQpMu)</a> · <a href="20260427_지수함수차이비율공식과도형우선해석_MJWwaaju.html">지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ) (MJWwaaju)</a> · <a href="20260509_지수함수점근선차이비율사다리꼴_DArDb6p7.html">지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ) (DArDb6p7)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-09-11 · 영상 출처: <a href="https://youtu.be/_mKXqVTeP6g" style="color:var(--primary)">수능 수학은 이동준</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
