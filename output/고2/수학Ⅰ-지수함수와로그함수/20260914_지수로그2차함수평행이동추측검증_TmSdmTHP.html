@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지수·로그함수와 이차함수의 평행이동 - 합리적 추측과 검증 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .intent { font-size: .92em; color: var(--purple); margin: 6px 0 4px; }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅰ(대수) — 지수함수와 로그함수의 그래프와 평행이동</div>
+    <h1>지수·로그함수와 이차함수, 평행이동으로 잇기<br>"합리적 추측 → 대입 검증"으로 킬러문항 뚫기</h1>
+    <p class="sub">이차함수의 평행이동 관계를 완전제곱 대신 계수비교법으로 빠르게 찾고, 지수·로그함수의 대칭(역함수) 성질과 결합해 최고난도 문항을 실전적으로 공략하는 전략을 배운다</p>
+    <div class="quote">"최고난도 킬러 문항은 처음부터 끝까지 완벽하게 논증하려 하기보다, 함수·점의 이동 관계에서 자연스러운 '합리적 추측'을 세운 뒤 계산하고, 마지막에 반드시 원래 조건에 대입해 검증하는 것이 시험장 실전 생존 전략이다." — 영상 핵심 통찰</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/TmSdmTHPao0" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/TmSdmTHPao0/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">2027학년도 9월 모의고사 수학 22번 해설강의 | 한태희</div>
+        <div class="v-meta">📺 YouTube · 1문항 심층 해설강의 · 수놀음 수능교육센터</div>
+        <a class="v-link" href="https://youtu.be/TmSdmTHPao0" target="_blank" rel="noopener">https://youtu.be/TmSdmTHPao0</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 두 이차함수의 평행이동 관계를 계수비교법으로 정확히 찾아내고, 지수함수와 로그함수가 직선 $y=x$에 대해 대칭(서로 역함수)임을 이용해, 완벽한 증명 대신 "합리적 추측 → 계산 → 검증"으로 문제를 해결하는 실전 전략을 스스로 적용한다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 평행이동한 함수, 점도 똑같이 이동했을까?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 두 이차함수 $f(x)=x^2-6x+11$, $g(x)=x^2-2x+5$가 있다. (1) $g(x)=f(x-m)+n$ 꼴로 나타낼 때 $m,n$의 값을 계수비교법으로 구하시오. (2) 점 $A(2,\,f(2))$가 $f$ 위에 있다. "함수가 $(m,n)$만큼 이동했으니 점도 똑같이 이동했을 것"이라는 합리적 추측을 세워, $A$를 이동시킨 점 $A'$의 좌표를 구하고, 실제로 $A'$이 $g(x)$ 위에 있는지 검증하시오.</div>
+      <div class="visual">f(x)=x²-6x+11 = (x-3)²+2   →  꼭짓점 (3, 2)
+g(x)=x²-2x+5  = (x-1)²+4   →  꼭짓점 (1, 4)
+
+꼭짓점 이동:  x: 1-3 = -2 (왼쪽 2)     y: 4-2 = +2 (위 2)
+                  ↓ 즉 m = -2, n = 2
+
+  y                                   y
+  │            A'(0,5)? ← 검증 대상    │
+  │  A(2,3)                           │      g의 그래프
+  │    ●  f의 그래프                    │    ●
+  │     ╲___╱                          │   ╱ ╲
+  └───────────── x                    └───────────── x</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x-m)+n$을 전개한다: $f(x-m)+n=(x-m)^2-6(x-m)+11+n = x^2-(2m+6)x+(m^2+6m+11+n)$.<div class="why">평행이동한 함수를 완전제곱으로 다시 고치는 대신, "이동시킨 식을 전개해서 계수를 맞춘다"는 계수비교법을 쓰면 어떤 이차식이든 같은 방식으로 처리할 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x$의 계수를 비교: $-(2m+6)=-2 \Rightarrow 2m+6=2 \Rightarrow m=-2$.<div class="why">$g(x)=x^2-2x+5$의 $x$계수는 $-2$이므로, STEP 1에서 얻은 계수 $-(2m+6)$과 같아야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>상수항을 비교: $m^2+6m+11+n=5$에 $m=-2$를 대입 $\Rightarrow 4-12+11+n=5 \Rightarrow n=2$.<div class="why">$x$계수를 맞춰 $m$을 먼저 확정한 뒤, 남은 상수항 조건에 대입하면 $n$은 자동으로 하나로 정해진다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$A=(2,f(2))=(2,\,4-12+11)=(2,3)$. 합리적 추측: $A'=(2+m,\,3+n)=(2-2,\,3+2)=(0,5)$.<div class="why">"함수 전체가 $(m,n)=(-2,2)$만큼 이동했다"는 사실을 그대로 점 하나에 적용해 본 것 — 이것이 이 단원에서 배우는 "추측"의 첫 단계다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5(검증)</span><div>$g(0)=0^2-2(0)+5=5$. $A'(0,5)$의 $y$좌표와 정확히 일치하므로 추측이 맞았다.<div class="why">사실 $g(x)=f(x-m)+n$으로 정의된 이상, $f$ 위의 어떤 점이든 $(m,n)$만큼 옮기면 반드시 $g$ 위로 간다 — 이 경우는 "추측"이 아니라 "보장된 사실"이다. 하지만 뒤에서 다룰 실제 킬러 문항에서는 이런 보장이 없는 상황에서 같은 방식의 추측을 쓴다. 그래서 <strong>매번 검증이 필수</strong>다.</div></div></div>
+          <span class="answer-tag">정답: $m=-2,\ n=2,\ A'=(0,5)$ (검증 완료)</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>이차함수의 평행이동:</strong> $y=f(x)$를 $x$축 방향으로 $m$, $y$축 방향으로 $n$만큼 평행이동한 그래프의 식은 $y=f(x-m)+n$이다.</li>
+        <li><strong>지수함수:</strong> $y=a^x$ ($a>0,\ a\neq 1$)는 정의역이 실수 전체, 치역이 양수 전체이며 $a>1$이면 $x$가 커질수록 값도 커진다.</li>
+        <li><strong>로그의 정의:</strong> $a^p=q$ ($a>0,a\neq1,\ q>0$)이면 $p=\log_a q$이다. 즉 지수식과 로그식은 같은 관계를 두 가지 방식으로 쓴 것이다.</li>
+        <li><strong>역함수와 대칭:</strong> 함수 $y=h(x)$의 그래프 위의 점 $(p,q)$가 있으면, 그 역함수 $y=h^{-1}(x)$의 그래프는 점 $(q,p)$를 지난다(직선 $y=x$에 대해 대칭).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>이차함수의 평행이동 — 완전제곱 대신 계수비교법</div>
+      <p>두 이차함수가 전개된 형태(예: $x^2-6x+11$)로 주어지면, 매번 완전제곱으로 꼭짓점을 구해 비교하는 것보다 "이동시킨 식을 전개해서 계수를 맞추는" 계수비교법이 더 빠르고 실수가 적다. $f(x)=ax^2+bx+c$를 $x$축으로 $m$, $y$축으로 $n$만큼 이동하면 다음과 같이 전개된다.</p>
+      <div class="formula-box">$$f(x-m)+n = ax^2+(b-2am)x+(am^2-bm+c+n)$$</div>
+      <div class="concept-box"><strong>사용법:</strong> 이 식을 목표 함수 $g(x)=ax^2+b'x+c'$와 계수별로 비교한다.<br>① $x$계수: $b-2am=b' \Rightarrow m=\dfrac{b-b'}{2a}$ (먼저 확정)<br>② 상수항: $am^2-bm+c+n=c' \Rightarrow n=c'-am^2+bm-c$ (앞서 구한 $m$을 대입)</div>
+      <div class="caution"><strong>주의:</strong> $m$의 부호에 유의한다. $m>0$이면 오른쪽 이동, $m$이 음수이면 왼쪽 이동이다. 부호를 반대로 읽어 이동 방향을 거꾸로 계산하는 실수가 가장 흔하다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>지수함수와 로그함수는 직선 $y=x$에 대해 대칭</div>
+      <p>로그함수 $y=\log_a x$는 지수함수 $y=a^x$의 역함수다. 역함수의 그래프는 원래 함수의 그래프를 직선 $y=x$에 대해 대칭이동한 것과 같으므로, 좌표를 서로 맞바꾸기만 하면 두 곡선을 오간다.</p>
+      <div class="formula-box">$$\text{점 } (p,q)\text{가 } y=a^x \text{ 위에 있다} \iff \text{점 } (q,p)\text{가 } y=\log_a x \text{ 위에 있다}$$</div>
+      <div class="step-row">
+        <div class="step-num">⚙</div>
+        <div class="step-body"><strong>증명(1줄):</strong> $(p,q)$가 $y=a^x$ 위에 있다는 것은 $q=a^p$라는 뜻이다. 로그의 정의(선수 학습 참고)에 의해 이 식은 곧바로 $p=\log_a q$로 바꿔 쓸 수 있고, 이는 점 $(q,p)$가 $y=\log_a x$의 식에서 $x=q$일 때 $y=p$가 됨을 뜻한다.</div>
+      </div>
+      <div class="tip"><strong>실전 활용:</strong> 지수함수 위의 점 하나만 알면, 좌표를 뒤바꾸는 것만으로 로그함수 위의 대응점을 즉시 얻는다 — 연립방정식을 새로 세울 필요가 없다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>실전 전략 — "합리적 추측 → 계산 → 대입 검증"</div>
+      <p>도입 문제처럼 함수 전체가 어떻게 이동했는지 알아도, 그 이동이 "특정 점"이나 "도형의 특정 꼭짓점"에도 그대로 적용되는지는 항상 완벽하게 증명하기 어렵다. 시험장에서는 다음 4단계로 진행하는 것이 현실적인 생존 전략이다.</p>
+      <div class="concept-box">① 함수·도형이 이동·대칭된 방식을 먼저 파악한다 → ② "점도 똑같은 방식으로 대응될 것"이라는 자연스러운(=합리적인) 추측을 세운다 → ③ 그 추측을 다른 조건(예: 지수함수 위에 있다는 조건)과 연립해 미지수를 계산한다 → ④ <strong>구한 값을 처음의 모든 조건에 다시 대입해, 실제로 모순 없이 성립하는지 반드시 확인한다.</strong></div>
+      <div class="caution"><strong>주의:</strong> ②의 "추측"은 어디까지나 가설이다. 도입 문제의 STEP 5에서 보였듯, 단순히 하나의 함수가 평행이동한 경우엔 추측이 항상 보장되지만, 여러 조건(대칭·이동·교점)이 겹친 복잡한 문제에서는 추측이 어긋날 수도 있다 — 그래서 ④ 검증을 절대 생략하면 안 된다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>연립하면 완전제곱식이 되는 경우 — 답이 하나로 정해지는 신호</div>
+      <p>합리적 추측으로 얻은 관계식(예: $\beta-\alpha=k$)을 이차함수 조건 $\beta=f(\alpha)$와 연립하면 $\alpha$에 대한 이차방정식이 나온다. 이 방정식이 (일차식)$^2=0$ 형태로 완전제곱이 되면, 판별식이 $0$이라는 뜻이므로 $\alpha$가 오직 하나로 정해진다.</p>
+      <div class="formula-box">$$A\alpha^2+B\alpha+C=0,\quad B^2-4AC=0 \ \Longrightarrow\ \alpha=-\frac{B}{2A}\ (\text{중근, 하나뿐})$$</div>
+      <div class="tip"><strong>실전 해석:</strong> 계산 중 판별식이 정확히 $0$이 되면 "계산 실수가 아니라 원래 답이 유일하게 정해지도록 설계된 문제"라는 신호로 받아들이면 된다. 오히려 계산이 맞았다는 확인 장치로 활용할 수 있다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span style="font-weight:600; color:#2e7d32">계수비교·대칭 공식 직접 적용</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 계수비교법으로 m, n 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^2+2x+4$, $g(x)=x^2-4x+9$가 있다. $g(x)=f(x-m)+n$일 때 $m,n$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x-m)+n=x^2+(2-2m)x+(m^2-2m+4+n)$. $x$계수 비교: $2-2m=-4 \Rightarrow m=3$. 상수항 비교: $9-6+4+n=9 \Rightarrow n=2$.</p>
+          <p class="warn">오답 주의: $x$계수의 부호를 놓쳐 $m=-3$으로 잘못 계산하지 않도록, $2-2m=-4$ 식을 끝까지 차분히 풀 것.</p>
+          <span class="answer-tag">정답: $m=3,\ n=2$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 지수·로그 대칭점 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> 점 $P(2,9)$가 곡선 $y=3^x$ 위에 있다. $P$를 직선 $y=x$에 대해 대칭이동한 점 $Q$의 좌표를 구하고, $Q$가 곡선 $y=\log_3 x$ 위에 있는지 확인하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$3^2=9$이므로 $P(2,9)$는 조건을 만족한다. 좌표를 맞바꾸면 $Q=(9,2)$. 확인: $\log_3 9=\log_3 3^2=2$이므로 $Q$는 실제로 $y=\log_3 x$ 위에 있다.</p>
+          <p class="warn">오답 주의: 대칭이동은 좌표를 "맞바꾸는" 것이지 부호를 바꾸는 것이 아니다. $(-2,-9)$ 등으로 착각하지 않는다.</p>
+          <span class="answer-tag">정답: $Q(9,2)$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span style="font-weight:600; color:#1565c0">계수비교·대칭 + 한 단계 응용</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 계수 비교로 m, n 구하기(응용)</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=2x^2+4x+7$, $g(x)=2x^2-8x+19$가 있다. $g(x)=f(x-m)+n$일 때 $m,n$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">전개</span><div>$f(x-m)+n=2x^2+(4-4m)x+(2m^2-4m+7+n)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">m</span><div>$4-4m=-8 \Rightarrow m=3$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">n</span><div>$2(9)-4(3)+7+n=19 \Rightarrow 18-12+7+n=19 \Rightarrow n=6$.</div></div>
+          <p class="warn">오답 주의: 이차항 계수가 $2$이므로 $am^2$의 $a=2$를 빠뜨리지 않는다 — $a=1$일 때 공식을 그대로 쓰면 틀린다.</p>
+          <span class="answer-tag">정답: $m=3,\ n=6$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 로그함수에서 지수함수 밑 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 곡선 $y=\log_5 x$ 위에 있는 점 $P$의 $x$좌표가 $25$이다. $P$를 직선 $y=x$에 대해 대칭이동한 점 $Q$가 지수함수 $y=a^x$ 위에 있다고 할 때, $a$의 값을 구하고 $Q$가 실제로 그 곡선 위에 있는지 검증하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">P</span><div>$P=(25,\log_5 25)=(25,2)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">Q</span><div>좌표를 맞바꾸면 $Q=(2,25)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">a, 검증</span><div>$Q$가 $y=a^x$ 위에 있으려면 $a^2=25 \Rightarrow a=5$ ($a>0$). 검증: $5^2=25$로 실제 성립.</div></div>
+          <p class="warn">오답 주의: $a^2=25$에서 $a=\pm5$가 나오지만, 지수함수의 밑은 $a>0,\ a\neq1$이어야 하므로 $a=5$만 답이다.</p>
+          <span class="answer-tag">정답: $a=5$ (검증 완료)</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span style="font-weight:600; color:#6a1b9a">추측·검증 + 완전제곱 활용</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 왼쪽 이동 + 점의 대응 검증</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=3x^2-6x+8$, $g(x)=3x^2+18x+35$가 있다. (1) $g(x)=f(x-m)+n$의 $m,n$을 구하시오. (2) 점 $A(1,f(1))$을 $(m,n)$만큼 이동한 점 $A'$을 구하고, $A'$이 $g(x)$ 위에 있는지 검증하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">전개</span><div>$f(x-m)+n=3x^2-(6m+6)x+(3m^2+6m+8+n)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">m</span><div>$-(6m+6)=18 \Rightarrow 6m+6=-18 \Rightarrow m=-4$ (왼쪽으로 4).</div></div>
+          <div class="sol-step"><span class="sol-step-label">n</span><div>$3(16)+6(-4)+8+n=35 \Rightarrow 48-24+8+n=35 \Rightarrow n=3$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">A, A'</span><div>$A=(1,f(1))=(1,3-6+8)=(1,5)$. $A'=(1+(-4),\,5+3)=(-3,8)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">검증</span><div>$g(-3)=3(9)+18(-3)+35=27-54+35=8$. $A'$의 $y$좌표와 일치 — 성립.</div></div>
+          <p class="intent"><strong>출제 의도:</strong> $m$이 음수(왼쪽 이동)일 때 부호 처리가 흐트러지기 쉬운 지점을 정면으로 다룬다.</p>
+          <p class="warn">오답 주의: $m=-4$를 "오른쪽으로 4"라고 반대로 해석해 $A'=(5,8)$로 잘못 계산하지 않는다.</p>
+          <span class="answer-tag">정답: $m=-4,\ n=3,\ A'=(-3,8)$ (검증 완료)</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 관계식과 연립해 완전제곱으로 정리하기</div>
+        <div class="problem-body"><strong>문제:</strong> 이차함수 $f(x)=x^2-3x+6$ 위의 점 $A(\alpha,\beta)$가 있다($\beta=f(\alpha)$). 어떤 도형 조건으로부터 $\beta-\alpha=2$라는 관계식을 얻었다고 하자. $\alpha,\beta$의 값을 구하고, 이 관계식을 만족하는 $\alpha$가 오직 하나뿐임을 보이시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">연립</span><div>$\beta=\alpha+2$와 $\beta=\alpha^2-3\alpha+6$을 연립: $\alpha+2=\alpha^2-3\alpha+6 \Rightarrow \alpha^2-4\alpha+4=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">완전제곱</span><div>$\alpha^2-4\alpha+4=(\alpha-2)^2=0$이므로 $\alpha=2$(중근, 하나뿐).</div></div>
+          <div class="sol-step"><span class="sol-step-label">β</span><div>$\beta=\alpha+2=4$. 검증: $f(2)=4-6+6=4$로 일치.</div></div>
+          <p class="intent"><strong>출제 의도:</strong> "완전제곱식 → 중근"이라는 신호를 스스로 확인하는 연습 — 뒤이은 수능 대비 문항의 예행연습이다.</p>
+          <p class="warn">오답 주의: 이차방정식을 인수분해할 때 부호를 헷갈려 두 개의 서로 다른 근이 있다고 착각하지 않도록 판별식을 직접 계산해 확인한다($B^2-4AC=16-16=0$).</p>
+          <span class="answer-tag">정답: $\alpha=2,\ \beta=4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span style="font-weight:600; color:#b71c1c">준킬러 — 세 개념 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러(지수함수 + 추측·검증 + 완전제곱)</div>
+        <div class="problem-body"><strong>문제:</strong> $a>1$인 지수함수 $y=a^x$ 위의 점 $A(\alpha,\beta)$가 이차함수 $f(x)=2x^2-11x+20$ 위에도 있다(즉 $\beta=f(\alpha)$). 어떤 도형 조건을 종합해 "$\beta-\alpha=2$"라는 관계식을 합리적으로 추측했다고 하자. 이 추측을 이용해 $a^3$의 값을 구하고, 얻은 값이 원래 조건을 모두 만족하는지 검증하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>추측한 관계식 $\beta=\alpha+2$와 $\beta=2\alpha^2-11\alpha+20$을 연립한다: $\alpha+2=2\alpha^2-11\alpha+20$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>정리하면 $2\alpha^2-12\alpha+18=0$, 양변을 $2$로 나누면 $\alpha^2-6\alpha+9=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$(\alpha-3)^2=0$ — 완전제곱이므로 $\alpha=3$으로 유일하게 정해진다(판별식 $=36-36=0$).<div class="why">이렇게 판별식이 정확히 $0$이 되는 것은 우연이 아니라, "추측이 맞다면 답이 하나로 정해지도록" 설계된 구조라는 신호다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$\beta=\alpha+2=5$. 한편 $A$는 $y=a^x$ 위의 점이므로 $\beta=a^{\alpha}$, 즉 $5=a^3$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5(검증)</span><div>① $f(3)=2(9)-33+20=18-33+20=5=\beta$ (이차함수 조건 성립) ② $\beta-\alpha=5-3=2$ (추측한 관계식 성립) ③ $a=5^{1/3}\approx1.71>1$이므로 지수함수의 밑 조건도 만족한다. 세 조건이 모두 모순 없이 성립하므로 추측이 검증되었다.</div></div>
+          <p class="intent"><strong>출제 의도:</strong> 실제 최고난도 문항에서 자주 나오는 결말 — 밑 $a$ 자체는 $\sqrt[3]{5}$처럼 무리수이지만, $a^3$은 $5$라는 깔끔한 유리수로 답이 나오는 구조를 그대로 경험한다. $a^3=\dfrac{5}{1}$을 "$p/q$($p,q$는 서로소인 자연수)" 꼴로 나타내면 $p+q=6$이 된다.</p>
+          <p class="warn">오답 주의: STEP 4에서 $\beta=a^\alpha$를 $\alpha=a^\beta$로 뒤바꿔 쓰지 않도록 — 항상 "밑 $a$의 $\alpha$제곱이 $\beta$"라는 원래 정의로 돌아가 확인한다.</p>
+          <span class="answer-tag">정답: $a^3=5$ (검증 완료)</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 준킬러(계수비교 역방향 + 추측·검증)</div>
+        <div class="problem-body"><strong>문제:</strong> 이차함수 $f(x)=x^2+px+q$를 $x$축 방향으로 $-2$, $y$축 방향으로 $5$만큼 평행이동하면 $g(x)=x^2-8x+21$이 된다. (1) 계수비교법으로 $p,q$의 값을 구하시오. (2) 점 $A(0,f(0))$이 $f$ 위에 있다. $A$를 방금의 평행이동만큼 이동한 점 $A'$을 구하고, 실제로 $A'$이 $g(x)$ 위에 있는지 검증하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>"$x$축 방향으로 $-2$, $y$축 방향으로 $5$" 이동은 $g(x)=f(x-(-2))+5=f(x+2)+5$를 뜻한다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(x+2)+5=(x+2)^2+p(x+2)+q+5=x^2+(4+p)x+(9+2p+q)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$x$계수 비교: $4+p=-8 \Rightarrow p=-12$. 상수항 비교: $9+2(-12)+q=21 \Rightarrow -15+q=21 \Rightarrow q=36$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>따라서 $f(x)=x^2-12x+36$이고, $A=(0,f(0))=(0,36)$. 합리적 추측: $A'=(0+(-2),\,36+5)=(-2,41)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5(검증)</span><div>$g(-2)=(-2)^2-8(-2)+21=4+16+21=41$. $A'$의 $y$좌표와 정확히 일치 — 성립.</div></div>
+          <p class="intent"><strong>출제 의도:</strong> "이동량 $(m,n)$을 알 때 원래 함수의 미지 계수를 역으로 찾아내는" 반대 방향 응용으로, 계수비교법을 양방향으로 다룰 수 있는지 확인한다.</p>
+          <p class="warn">오답 주의: "$x$축 방향으로 $-2$"를 $m=2$로 잘못 대입하지 않는다 — 문제에 주어진 이동량의 부호 그대로 $m=-2$를 쓴다.</p>
+          <span class="answer-tag">정답: $p=-12,\ q=36,\ A'=(-2,41)$ (검증 완료)</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>기법</th><th>핵심 식</th><th>의미</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">이차함수 계수비교법</td><td>$b-2am=b',\ am^2-bm+c+n=c'$</td><td>완전제곱 없이 평행이동 $(m,n)$ 결정</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">지수·로그 대칭</td><td>$(p,q)\in a^x \iff (q,p)\in \log_a x$</td><td>좌표만 바꾸면 두 곡선을 왕복</td></tr>
+          <tr><td style="font-weight:700">완전제곱 판정</td><td>$B^2-4AC=0 \Rightarrow$ 중근</td><td>답이 유일하게 정해진다는 신호</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">실전 전략</td><td>추측 → 계산 → <strong>대입 검증</strong></td><td>완벽한 증명 대신 실전 시간 안에 뚫는 법</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ===== 검증 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>이 영상은 2027학년도 9월 모의고사 수학 22번(최고난도 준킬러)을 해설하며, 지수함수 $y=a^x$·로그함수·두 이차함수 $f_1,f_2$ 위의 네 점이 직사각형을 이루는 조건에서 $a^3$을 구하는 문제를 다룹니다. 두 이차함수가 계수비교법으로 평행이동 관계임을 밝히는 방법과, 도형의 대응점을 "함수가 이동한 만큼 점도 이동했을 것"이라는 합리적 추측으로 정한 뒤 검산하는 실전 전략이 이 자료의 핵심 개념입니다.</p>
+      <p style="margin-top:8px">단, 참고한 두 요약본에서 세부 수치(예: $\beta-\alpha=3/2$ 또는 $3/4$)가 서로 다르게 표기되어 있어 원본 수치를 그대로 재현하지 않았습니다. 대신 같은 풀이 기법(계수비교법 → 합리적 추측 → 연립 → 완전제곱 → 검증)을 도입 문제와 8개 연습문항 전체에서 처음부터 끝까지 자체적으로 다시 계산·검산해, 내적으로 일관되고 정답이 확인된 새 문항으로 구성했습니다. 이차함수·지수함수·로그함수의 그래프와 평행이동 범위 내에서만 구성했으며(삼각함수의 덧셈정리, 치환·부분적분 등은 사용하지 않았습니다), "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div><!-- /container -->
+
+  <!-- 관련 자료: add_related.py 가 <!~~REL_START/END~~> 마커로 자동 주입(여기 비워둔다) -->
+  <footer>
+    생성일 2026-09-14 · 영상 출처: <a href="https://youtu.be/TmSdmTHPao0" style="color:var(--primary)">수놀음 수능교육센터</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
