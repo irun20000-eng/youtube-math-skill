@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>합차함수 넓이와 점대칭 정적분 소거법</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink:0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 13.5px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .persp-head { font-weight: 700; color: var(--primary-dark); margin: 18px 0 6px; display:flex; align-items:center; gap:8px; }
+    .persp-badge { background: var(--primary); color:#fff; border-radius:6px; padding:2px 10px; font-size:12.5px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅱ(미적분Ⅰ) — 다항함수의 적분법</div>
+    <h1>합함수의 넓이 확장, 차함수의 회전,<br>그리고 점대칭 정적분 소거법</h1>
+    <p class="sub">절댓값이 낀 정적분에서 "직선 하나를 더했을 때 넓이가 어디까지 커질 수 있는가"를 <strong>그래프 관점 2가지 + 대수 증명 1가지</strong>로 완전분해한다.</p>
+    <div class="quote">"ㄷ을 독립문제로 보지 말 것 — ㄱ의 숫자 6과 ㄴ의 점대칭 적분 성질이 결정적 힌트다." — 영상 핵심 포인트</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/2KSBMPwjOtQ" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/2KSBMPwjOtQ/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">27학년도 9평 수학 13번 'ㄷ' 선지의 다양한 관점</div>
+        <div class="v-meta">📺 YouTube · 약 12분 · 권현석</div>
+        <a class="v-link" href="https://youtu.be/2KSBMPwjOtQ" target="_blank" rel="noopener">https://youtu.be/2KSBMPwjOtQ</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 최고차항 계수가 정해진 이차함수에 1차함수를 더한 절댓값 정적분이 "어떤 실수든" 넓이로 나올 수 있는지를, ① 합함수 그래프의 넓이 확장 ② 차함수(직선 회전) ③ 점대칭 구간에서의 정적분 소거라는 3개의 눈으로 판단한다. 그 근거인 <strong>이차함수 절댓값 넓이 공식</strong>과 <strong>점대칭 정적분=0</strong> 성질을 직접 유도한다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 2027학년도 9월 모의평가 13번, ㄱ부터 다시 보기</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제 배경(원문제 재구성):</strong> 그래프에서 원점을 지나는 것이 확인되는(즉 $f(0)=0$) 최고차항 계수 $6$인 이차함수 $f(x)$가 $\displaystyle\int_0^2 f(x)\,dx=4$를 만족시킨다.
+      <br>(ㄱ) $\displaystyle\int_0^1 |f(x)|\,dx+\int_1^2 |f(x)|\,dx=6$
+      <br>(ㄴ) $g(1)=0$인 1차함수 $g(x)$에 대해 $\displaystyle\int_0^2 g(x)\,dx=0$
+      <br>(ㄷ) $\displaystyle\int_0^2 (f(x)+h(x))\,dx=4$인 1차함수 $h(x)$에 대해, $\displaystyle\int_0^2 |f(x)+h(x)|\,dx=k$를 만족시키는 $h(x)$가 <strong>$6$보다 큰 모든 실수 $k$</strong>에 대해 존재하는가?</div>
+      <div class="visual">  f(x) = 6x(x-1)   (x=0, x=1 에서 x축과 만남)
+
+    y
+    │                         ╱
+    │                       ╱
+────┼────●────────●───────────── x
+    0    1(음수 구간)      2
+    │  [0,1] 아래로 볼록↓   [1,2] 위로 볼록↑
+    │   넓이 1              넓이 5
+        1 + 5 = 6  ← (ㄱ)의 값, 뒤에서 다시 쓰인다!</div>
+      <details open>
+        <summary>풀이 보기 — f(x) 확정 + ㄱ 검산</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)=6x^2+bx+c$ 로 놓는다. 그래프가 원점을 지나므로 $f(0)=c=0$.<div class="why">$y$절편이 곧 $f(0)$이고, 그래프가 원점을 지난다는 것은 $x=0$일 때 $y=0$이라는 뜻이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\displaystyle\int_0^2 f(x)\,dx=\Big[2x^3+\tfrac{b}{2}x^2\Big]_0^2=16+2b=4$ 이므로 $b=-6$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>따라서 $f(x)=6x^2-6x=6x(x-1)$. $x=0,\,x=1$에서 $x$절편을 갖고, 최고차항 계수가 양수이므로 <strong>두 근 사이 $(0,1)$에서는 음수</strong>, <strong>바깥쪽 $(1,2)$에서는 양수</strong>이다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$\displaystyle\int_0^1 f(x)\,dx=\Big[2x^3-3x^2\Big]_0^1=2-3=-1$ → 넓이는 $|-1|=1$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$\displaystyle\int_1^2 f(x)\,dx=\Big[2x^3-3x^2\Big]_1^2=(16-12)-(2-3)=4-(-1)=5$ → 이 구간은 이미 양수이므로 넓이는 그대로 $5$.</div></div>
+          <span class="answer-tag">ㄱ 검산: $1+5=6$ ✓ — 이 "6"이 뒤에 나올 ㄷ의 기준값이다</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <p>① <strong>정적분의 기본정리</strong>: $f$의 한 부정적분을 $F$라 하면 $\displaystyle\int_a^b f(x)dx=F(b)-F(a)$.</p>
+      <p style="margin-top:6px">② <strong>$|f(x)|$의 정적분 = 넓이의 합</strong>: $f(x)\ge0$인 구간은 그대로, $f(x)<0$인 구간은 부호를 뒤집어(즉 $-f(x)$를 적분해서) 더한다. 그래서 $\displaystyle\int|f|$는 항상 $0$ 이상이다.</p>
+      <p style="margin-top:6px">③ <strong>1차함수 $y=m(x-a)$는 항상 점 $(a,0)$을 지나는 직선</strong>이다 (기울기 $m$이 뭐든 상관없이).</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>ㄴ이 감추고 있는 것 — 점대칭이면 정적분이 사라진다</div>
+      <p>$g(1)=0$인 1차함수는 $g(x)=m(x-1)$ 꼴로 쓸 수 있다(1차함수가 $x=1$에서 $0$이 되려면 $(x-1)$을 인수로 가져야 한다). 이 직선을 $[0,2]$에서 적분하면 <strong>기울기 $m$이 얼마든 항상 $0$</strong>이 된다.</p>
+      <div class="formula-box">$\displaystyle\int_0^2 m(x-1)\,dx=m\Big[\tfrac{(x-1)^2}{2}\Big]_0^2=m\Big(\tfrac12-\tfrac12\Big)=0$</div>
+      <div class="concept-box">직선 $g(x)=m(x-1)$은 점 $(1,0)$을 중심으로 <strong>점대칭</strong>이다. $x=1+t$에서의 값과 $x=1-t$에서의 값은 부호만 반대이고 크기가 같다($g(1+t)=mt,\ g(1-t)=-mt$). 대칭 구간 $[0,2]$(중심에서 폭 $1$씩 양쪽)에서 적분하면 이 둘이 정확히 상쇄된다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>절댓값 정적분 = 이차함수 넓이 공식 (유도)</div>
+      <p>최고차항 계수 $a>0$이고 두 근이 $p,\,q$ ($p \lt q$)인 이차함수 $F(x)=a(x-p)(x-q)$는 <strong>두 근 사이에서 항상 음수</strong>다. 이 구간의 절댓값 정적분을 직접 유도해 보자.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">근 사이 $[p,q]$에서 $F(x)<0$이므로 $|F(x)|=-F(x)=a(x-p)(q-x)$.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">전개: $(x-p)(q-x)=-x^2+(p+q)x-pq$. 이건 그냥 이차식이라 항별로 적분(거듭제곱 적분 공식)만 쓰면 된다 — 특별한 치환 없이 계산 가능.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">직접 계산하면 결과는 항상 $\dfrac{a(q-p)^3}{6}$ 로 정리된다(구간 길이의 세제곱에 비례). 예를 들어 $f(x)=6x(x-1)$은 $a=6,\,p=0,\,q=1$이므로 $\dfrac{6\cdot1^3}{6}=1$ — 방금 STEP 4에서 직접 계산한 값과 정확히 일치한다.</div></div>
+      <div class="formula-box">$\displaystyle\int_p^q \big|a(x-p)(x-q)\big|\,dx=\dfrac{|a|(q-p)^3}{6}$</div>
+      <div class="tip">이 공식은 <strong>두 근 "사이" 구간에만</strong> 적용된다. 근 바깥 구간(예: $[1,2]$)은 이미 부호가 고정돼 있으므로 그냥 직접 적분하면 된다(STEP 5처럼).</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>ㄷ선지 분해 — $h(x)$의 정체와 인수분해</div>
+      <p>ㄷ의 조건 $\displaystyle\int_0^2(f(x)+h(x))dx=4$에서, 이미 $\displaystyle\int_0^2 f(x)dx=4$이므로 <strong>$\displaystyle\int_0^2 h(x)dx=0$</strong>이 강제된다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$h(x)=px+q$로 놓으면 $\displaystyle\int_0^2 h\,dx=2p+2q=0 \Rightarrow q=-p$.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">따라서 $h(x)=px-p=p(x-1)$, 즉 <strong>개념 1의 $g(x)$와 똑같은 꼴</strong>이다. $h(1)=0$ — ㄴ이 미리 깔아둔 성질을 ㄷ이 그대로 물려받는다. 이제부터 $m=p$라 쓰자.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">$f(x)+h(x)=6x(x-1)+m(x-1)$. 공통인수 $(x-1)$로 묶으면:</div></div>
+      <div class="formula-box">$f(x)+h(x)=(x-1)(6x+m)$</div>
+      <div class="caution">여기서 멈추면 안 된다 — <strong>ㄱ의 6, ㄴ의 점대칭</strong>이 이 식 안에 다시 등장해야 진짜 풀이다. 다음 카드에서 3가지 눈으로 이 식을 완전히 뜯어본다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>세 가지 관점으로 ㄷ 뜯어보기</div>
+
+      <div class="persp-head"><span class="persp-badge">관점 1</span>합함수 그래프 — 넓이가 무한히 커진다</div>
+      <p>$m>0$이라 하자. $[0,1]$에서는 $x-1\le0$이므로 $h(x)=m(x-1)\le0$ — 이미 음수인 $f$에 <strong>더 깊은 음수</strong>를 더한다. $[1,2]$에서는 $x-1\ge0$이므로 $h(x)\ge0$ — 이미 양수인 $f$에 <strong>더 높은 양수</strong>를 더한다. 즉 $m$이 커질수록 두 구간의 넓이가 <strong>동시에 함께</strong> 커지고, $m\to\infty$면 넓이도 발산한다.</p>
+      <div class="visual">   m 이 커질수록:
+   [0,1] 구간            [1,2] 구간
+   f 는 이미 음수 ↓      f 는 이미 양수 ↑
+   + h(음수) → 더 깊게    + h(양수) → 더 높게
+   넓이 ↑↑               넓이 ↑↑
+   → 전체 절댓값 넓이는 6에서 시작해 끝없이 커진다</div>
+
+      <div class="persp-head"><span class="persp-badge">관점 2</span>차함수 — 직선을 회전시키는 그림</div>
+      <p>$f(x)+h(x)$를 $f(x)-\big(-h(x)\big)$로 바꿔 읽으면, $-h(x)=-m(x-1)$은 <strong>점 $(1,0)$을 지나고 기울기 $-m$</strong>인 직선이다. $m$을 $0$에서 키워갈수록 이 직선은 $(1,0)$을 축으로 점점 가파르게(기울기가 점점 음의 방향으로) <strong>회전</strong>한다. $f$와 이 직선 사이에 둘러싸인 넓이($=\int|f-(-h)|$)는 직선이 회전할수록 계속 넓어진다 — 직선이 90°에 가까워지면 넓이는 무한히 커진다.</p>
+
+      <div class="persp-head"><span class="persp-badge">관점 3</span>수식 — 점대칭 소거로 정확히 증명 (심화)</div>
+      <p>이 관점이 앞의 두 관점을 <strong>숫자로 완전히 증명</strong>한다. $m\ge0$이면 $6x+m$은 $[0,2]$에서 항상 $0$ 이상($x=0$에서 최솟값 $m\ge0$)이므로 부호는 $(x-1)$이 결정한다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$|(x-1)(6x+m)|=(6x+m)|x-1|$ (이 구간에서 $6x+m\ge0$이므로).</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$6x+m$을 "$(x-1)$의 배수 + 상수" 꼴로 쪼갠다: $6x+m=6(x-1)+(m+6)$.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">그러면 $(6x+m)|x-1|=6(x-1)|x-1|+(m+6)|x-1|$.</div></div>
+      <div class="step-row"><span class="step-num">4</span><div class="step-body">$(x-1)|x-1|$은 점 $(1,0)$에 대해 점대칭이다 — 직접 확인: $x=1+t$면 값은 $t|t|$, $x=1-t$면 값은 $-t|t|$로 정확히 부호만 반대. $[0,2]$는 $x=1$ 기준 폭 $1$씩 대칭 구간이므로 개념 1과 같은 원리로 $\displaystyle\int_0^2 6(x-1)|x-1|\,dx=0$.</div></div>
+      <div class="step-row"><span class="step-num">5</span><div class="step-body">남는 것은 $\displaystyle(m+6)\int_0^2|x-1|\,dx=(m+6)\times1=m+6$ ($\int_0^2|x-1|dx$는 밑변 1, 높이 1인 삼각형 두 개 = $1$).</div></div>
+      <div class="formula-box">$\displaystyle\int_0^2|f(x)+h(x)|\,dx=m+6\quad(m\ge0)$</div>
+      <p>$m$이 $0$부터 커지면 $m+6$은 $6$부터 시작해 <strong>모든 실수를 하나도 빠짐없이</strong> 지나며 무한히 커진다. 그러므로 <strong>$6$보다 큰 임의의 실수 $k$</strong>에 대해 $m=k-6\,(>0)$으로 두면 정확히 $\displaystyle\int_0^2|f(x)+h(x)|\,dx=k$가 된다.</p>
+      <div class="tip"><strong>결론: ㄷ은 참(True)이다.</strong> $6$보다 큰 모든 실수 $k$에 대해 조건을 만족하는 $h(x)=(k-6)(x-1)$이 항상 존재한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수</div>
+      <div class="caution">① ㄷ을 처음 보는 독립 문제처럼 f(x)를 처음부터 다시 구하려는 실수 — <strong>ㄱ의 6, ㄴ의 점대칭 성질을 그대로 재사용</strong>해야 계산이 반의반으로 준다.<br>② $(x-1)|x-1|$을 그냥 $(x-1)^2$처럼 다뤄서 항상 양수라고 착각하는 실수 — 절댓값이 붙으면 $x<1$에서 부호가 반대로 뒤집힌다는 것을 잊지 말 것.<br>③ $m<0$인 경우까지 똑같이 $6x+m\ge0$이라고 가정하는 실수 — $m\ge0$일 때만 $6x+m$의 부호가 $[0,2]$에서 고정된다. (이 자료에서는 문제에서 요구하는 $k>6$ 범위를 커버하는 데 필요한 $m\ge0$까지만 다룬다.)</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 점대칭 직선의 정적분</div>
+        <div class="problem-body"><strong>문제:</strong> $g(1)=0$인 1차함수 $g(x)=3(x-1)$에 대하여 $\displaystyle\int_0^2 g(x)\,dx$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$g(x)=3x-3$. $\displaystyle\int_0^2(3x-3)dx=\Big[\tfrac32x^2-3x\Big]_0^2=(6-6)-0=0$.</p>
+          <p class="warn">오답 주의: 기울기 $3$을 보고 "적분값도 커야 한다"고 착각하지 말 것 — 점 $(1,0)$에 대해 점대칭이면 기울기와 무관하게 $[0,2]$ 적분값은 항상 $0$이다.</p>
+          <span class="answer-tag">정답: $0$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 이차함수 넓이 공식 직접 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$이고 $x=0,\,x=3$에서 $x$절편을 갖는 이차함수 $f(x)$에 대하여 $\displaystyle\int_0^3 |f(x)|\,dx$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x)=2x(x-3)$, 개념 2의 공식 $\dfrac{|a|(q-p)^3}{6}$에 $a=2,\,p=0,\,q=3$을 대입: $\dfrac{2\times3^3}{6}=\dfrac{54}{6}=9$.</p>
+          <p class="why">검산: $F(x)=\tfrac23x^3-3x^2$, $F(3)-F(0)=(18-27)-0=-9$이고 이 구간에서 $f<0$이므로 넓이는 $|-9|=9$. 일치.</p>
+          <span class="answer-tag">정답: $9$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — ㄱ 다시 만들기(다른 수치)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $3$이고 $f(0)=f(2)=0$인 이차함수 $f(x)$에 대하여 $\displaystyle\int_0^2 |f(x)|\,dx$와 $\displaystyle\int_2^4 |f(x)|\,dx$를 각각 구하고, 그 합을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x)=3x(x-2)=3x^2-6x$. $[0,2]$는 두 근 사이 → 공식 $\dfrac{|3|\cdot2^3}{6}=4$.</p>
+          <p>$[2,4]$는 근 바깥(양수 구간) → 직접 적분: $F(x)=x^3-3x^2$, $F(4)-F(2)=(64-48)-(8-12)=16-(-4)=20$.</p>
+          <p class="warn">오답 주의: $[2,4]$는 근 사이 구간이 아니므로 넓이 공식을 그대로 쓰면 안 된다 — 반드시 직접 적분으로 확인.</p>
+          <span class="answer-tag">정답: $4$, $20$, 합 $24$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — ㄴ의 일반화 확인</div>
+        <div class="problem-body"><strong>문제:</strong> $h(2)=0$인 1차함수 $h(x)=5(x-2)$에 대하여 $\displaystyle\int_0^4 h(x)\,dx$의 값을 직접 계산으로 확인하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$h(x)=5x-10$. $\displaystyle\int_0^4(5x-10)dx=\Big[\tfrac52x^2-10x\Big]_0^4=(40-40)-0=0$.</p>
+          <p class="why">일반화: $h(x)=m(x-2)$ 꼴이면 기울기 $m$이 무엇이든 $[0,4]$(중심 $x=2$, 반경 $2$인 대칭구간)에서 적분값은 항상 $0$이다.</p>
+          <span class="answer-tag">정답: $0$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — ㄷ 전체 재구성 (다른 수치로 참/거짓 증명)</div>
+        <div class="problem-body"><strong>문제:</strong> 기본 1의 $f(x)=3x^2-6x$에 대해, $\displaystyle\int_0^4 (f(x)+h(x))\,dx=16$을 만족하는 1차함수 $h(x)$를 생각하자. (1) $h(x)$의 일반형을 구하시오. (2) $f(x)+h(x)$를 인수분해하시오. (3) "$24$보다 큰 모든 실수 $k$에 대해 $\displaystyle\int_0^4|f(x)+h(x)|dx=k$인 $h(x)$가 존재한다"의 참, 거짓을 판별하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>(1) $\displaystyle\int_0^4 f\,dx=16$이므로 $\int_0^4 h\,dx=0 \Rightarrow h(x)=m(x-2)$.</p>
+          <p>(2) $f(x)+h(x)=3x(x-2)+m(x-2)=(x-2)(3x+m)$.</p>
+          <p>(3) $m\ge0$이면 $3x+m\ge0$ on $[0,4]$. $3x+m=3(x-2)+(m+6)$이므로 $|(x-2)(3x+m)|=3(x-2)|x-2|+(m+6)|x-2|$. 첫 항은 점대칭 소거로 $0$, $\displaystyle\int_0^4|x-2|dx=4$(삼각형 두 개, 각 넓이 $2$)이므로 전체 $=4(m+6)=4m+24$. $m\ge0$일 때 이 값은 $24$부터 시작해 무한히 커진다 → <strong>참</strong>.</p>
+          <span class="answer-tag">정답: (1) $h(x)=m(x-2)$ (2) $(x-2)(3x+m)$ (3) 참</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 목표 넓이에서 거꾸로 $h(x)$ 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> 심화 1의 상황에서 $\displaystyle\int_0^4 |f(x)+h(x)|\,dx=40$을 만족시키는 $h(x)$를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>심화 1에서 구한 식 $4m+24=40$을 풀면 $m=4$.</p>
+          <p>따라서 $h(x)=4(x-2)=4x-8$.</p>
+          <p class="warn">오답 주의: $m\ge0$ 범위에서만 이 공식이 성립한다는 것을 먼저 확인하고 대입할 것 — $m=4\ge0$이므로 이 경우엔 문제없다.</p>
+          <span class="answer-tag">정답: $h(x)=4x-8$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러 유형(참·거짓 판별)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$이고 $f(0)=f(3)=0$인 이차함수 $f(x)$와 $h(3)=0$인 1차함수 $h(x)$가 $\displaystyle\int_0^6 (f(x)+h(x))\,dx=36$을 만족시킨다. 다음 명제의 참, 거짓을 판별하시오: "$54$보다 큰 모든 실수 $k$에 대하여 $\displaystyle\int_0^6|f(x)+h(x)|dx=k$를 만족시키는 $h(x)$가 존재한다."</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x)=2x(x-3)$, $h(x)=m(x-3)$. $f+h=(x-3)(2x+m)$.</p>
+          <p>$m\ge0$이면 $2x+m\ge0$ on $[0,6]$. $2x+m=2(x-3)+(m+6)$ → $|f+h|=2(x-3)|x-3|+(m+6)|x-3|$.</p>
+          <p>점대칭 항은 $0$, $\displaystyle\int_0^6|x-3|dx=9$(밑변3,높이3 삼각형 두 개, 각 넓이 $4.5$) → 전체 $=9(m+6)=9m+54$. $m\ge0$이면 $54$부터 무한히 커진다.</p>
+          <span class="answer-tag">정답: 참</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 단답형 ($p+q$)</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=6x(x-1)$, $h(x)=m(x-1)$이고 $m=\dfrac14$일 때 $\displaystyle\int_0^2 |f(x)+h(x)|\,dx$의 값을 $k=\dfrac{q}{p}$($p,q$는 서로소인 자연수)라 하자. $p+q$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>개념 4·관점3의 결과 $\displaystyle\int_0^2|f+h|dx=m+6$을 그대로 적용: $k=\dfrac14+6=\dfrac{25}{4}$.</p>
+          <p>$q=25,\ p=4$는 서로소 → $p+q=29$.</p>
+          <span class="answer-tag">정답: $29$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상의 핵심 흐름(ㄱ의 기준값 $6$, ㄴ의 점대칭 정적분 소거, ㄷ의 인수분해 $(x-1)(6x+m)$과 세 가지 관점)을 그대로 반영했고, 최종 결론 "$6$보다 큰 모든 $k$에 대해 존재 = 참"도 대수적으로 재검증했습니다.</p>
+      <p style="margin-top:8px">⚠️ <strong>재구성 사유(★★, 교사 확인 권장)</strong>: 원문제는 그래프가 함께 제시되는 유형으로 추정되나, 본 자료에서 참고한 요약에는 $f(x)$를 유일하게 결정하는 그래프 정보(예: $x$절편)가 텍스트로 남아있지 않았습니다. 이 자료는 "최고차항 계수 $6$ + 원점을 지남($f(0)=0$) + $\int_0^2 f=4$"라는 조건으로 $f(x)=6x^2-6x$를 재구성했으며, 이는 영상이 실제로 사용한 것으로 보이는 수치(넓이 $1$, $5$, 합 $6$, 인수분해 $(x-1)(6x+m)$)와 정확히 일치함을 확인했습니다. 새로 만든 8개 연습문항은 같은 원리를 다른 숫자로 재구성한 것으로, "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  <footer>
+    생성일 2026-09-14 · 영상 출처: <a href="https://youtu.be/2KSBMPwjOtQ" style="color:var(--primary)">권현석</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
