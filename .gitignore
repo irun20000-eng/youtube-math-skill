@@ -32,6 +32,8 @@ desktop.ini
 # Claude Code 세션 상태 (있다면)
 .claude/sessions/
 .claude/state/
+# 백그라운드 에이전트 격리용 임시 git worktree (세션 종료 시 정리됨)
+.claude/worktrees/
 
 # 환경 / 비밀
 .env
