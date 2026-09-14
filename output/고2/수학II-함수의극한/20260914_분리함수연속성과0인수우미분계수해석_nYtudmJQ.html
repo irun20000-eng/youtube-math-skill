@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>분리함수 연속성과 0인수, 우미분계수 해석 - 수능 21번 유형 분석</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .fein-label { display:inline-block; font-size:12px; font-weight:700; padding:2px 10px; border-radius:12px; background:var(--primary); color:#fff; margin-bottom:8px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+    table { border-collapse: collapse; width: 100%; } th, td { padding: 10px; border: 1px solid var(--border); text-align: center; } th { background: var(--box-blue); }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅱ(미적분Ⅰ) — 함수의 극한과 연속, 미분계수의 정의</div>
+    <h1>복잡한 조건은 스킬이 아니라<br><strong>연속성 → 0인수 → 우미분계수</strong>의 필연적 순서다</h1>
+    <p class="sub">최고차항 계수가 양수인 삼차함수 $f(x)$를 반으로 접은 분리함수 $g(x)$의 연속 조건에서 시작해, 분수 극한이 존재하려면 분모의 근에서 분자도 반드시 $0$이어야 한다는 사실을 거쳐, $0/0$ 꼴 극한을 우미분계수의 정의로 되돌려 읽는 법까지 — 준킬러 문항의 논리를 한 단계씩 분해합니다.</p>
+    <div class="quote">"작년 수능 21번의 복잡한 조건은 기괴한 스킬이 아니라, 연속성·0인수·우미분계수라는 기본 개념이 필연적인 순서로 이어진 결과다" — 영상 핵심 메시지 (자막 요약 기반 재구성, 원문 그대로의 인용·타임스탬프 아님)</div>
+    <div class="video-card">
+      <a class="thumb" href="https://www.youtube.com/watch?v=nYtudmJQnoo" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/nYtudmJQnoo/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">[메가스터디] 수학 오르새쌤 - 멋있는 작수 21 (+내 한계를 깨는 훈련)</div>
+        <div class="v-meta">📺 YouTube · theMEGASTUDY (오르새) · 영상 길이 미기재</div>
+        <a class="v-link" href="https://www.youtube.com/watch?v=nYtudmJQnoo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=nYtudmJQnoo</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 분리함수(구간별로 다르게 정의된 함수)의 연속 조건에서 경계점 $t$를 찾고, 분수 극한이 존재하기 위한 필요조건으로 삼차함수의 근을 확정한 뒤, $0/0$ 꼴 극한을 우미분계수의 정의로 해석해 부호·범위를 판단할 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 이 영상이 다루는 준킬러의 정체</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수 $f(x)$와 실수 $t$에 대하여 함수 $g(x)$를
+      $$g(x)=\begin{cases}f(x)&(x\ge t)\\-f(x)&(x&lt;t)\end{cases}$$
+      라 하자. $g(x)$는 실수 전체의 집합에서 연속이고, 모든 실수 $a$에 대하여 $\displaystyle\lim_{x\to a+}\dfrac{g(x)}{x(x-1)}$가 존재(수렴)한다. $t$는 $f(x)=0$의 세 실근 중 가장 큰 값이고 $t<4$이며 $g(4)=24$일 때, $f(-1)$의 값을 구하시오.</div>
+      <div class="visual">     g = -f(x)          g = f(x)
+  ────●────────●────────●──────────→ x
+      0        1        2(=t)
+   (f의 근)  (f의 근)  (f의 근, 경계점 t)
+
+  x &lt; t 이면 g는 f를 뒤집어 쓰고, x ≥ t 이면 g는 f를 그대로 쓴다.</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$g$가 $x=t$에서 연속이려면 좌극한 $=$ 우극한 $=$ 함숫값이어야 한다. $x\to t-$이면 $g(x)=-f(x)\to -f(t)$, $x\to t+$이면 $g(x)=f(x)\to f(t)$. 두 값이 같아야 하므로 $-f(t)=f(t)$, 즉 $2f(t)=0 \Rightarrow f(t)=0$.<div class="why">경계점 $t$는 반드시 $f(x)=0$의 근이어야 한다는 뜻 — 문제의 조건과 정확히 일치한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>모든 실수 $a$에서 극한이 존재해야 하는데, 분모 $x(x-1)$은 $a=0$과 $a=1$에서 $0$이 된다. 그 지점에서 극한이 존재(발산이 아니라 수렴)하려면 분자도 반드시 $0$이어야 한다.<div class="why">$g$가 연속이므로 $x\to a+$일 때 $g(x)\to g(a)$. 분모가 $0$인데 분자 $g(a)\ne0$이면 극한은 $\pm\infty$로 발산해 "존재"하지 않는다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>따라서 $g(0)=0$, $g(1)=0$. $g=\pm f$이므로 $|g|=|f|$, 즉 $f(0)=0$, $f(1)=0$. 최고차항 계수가 $1$인 삼차함수이므로 세 번째 근을 $c$라 하면 $f(x)=x(x-1)(x-c)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$t$는 세 실근 $0,1,c$ 중 가장 큰 값이고 $t<4$이므로 $c\le 4$ 범위에서 $t=\max(0,1,c)$. $t<4\le$ 이므로 $g(4)=f(4)$ (왜냐하면 $4\ge t$인 것이 자연스럽고, 곧 $c$ 값으로 확인됨).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$g(4)=f(4)=4\cdot3\cdot(4-c)=12(4-c)=24 \Rightarrow 4-c=2 \Rightarrow c=2$. 따라서 $f(x)=x(x-1)(x-2)$이고 $t=\max(0,1,2)=2$ ($t<4$ 만족 ✓).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>$f(-1)=(-1)(-1-1)(-1-2)=(-1)(-2)(-3)=-6$.</div></div>
+          <span class="answer-tag">정답: $f(-1)=-6$</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명 — 연속성 → 0인수 → 우미분계수</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>연속의 정의</strong>: 함수 $h$가 $x=a$에서 연속이라는 것은 $\displaystyle\lim_{x\to a-}h(x)=\lim_{x\to a+}h(x)=h(a)$, 즉 <strong>좌극한과 우극한이 모두 존재하고 그 값이 함숫값과 같다</strong>는 뜻이다(중3~고1 함수의 연속).</li>
+        <li><strong>좌극한 · 우극한</strong>: $x\to a-$는 $a$보다 작은 쪽에서 $a$로 다가가는 것(왼쪽 극한), $x\to a+$는 $a$보다 큰 쪽에서 다가가는 것(오른쪽 극한)이다. 두 값이 다르면 그 점에서 극한 자체가 존재하지 않는다.</li>
+        <li><strong>미분계수의 정의</strong>: 함수 $h$가 $x=a$에서 미분가능하면 $h'(a)=\displaystyle\lim_{x\to a}\dfrac{h(x)-h(a)}{x-a}$. 오른쪽에서만 다가가는 극한 $\displaystyle\lim_{x\to a+}\dfrac{h(x)-h(a)}{x-a}$을 <strong>우미분계수</strong>라 하고 $h'_+(a)$로 쓴다(고2 미적분Ⅰ).</li>
+        <li><strong>다항함수의 성질</strong>: 다항함수(삼차함수 포함)는 정의역 전체에서 항상 연속이고 항상 미분가능하다. 오늘 다루는 $f(x)$는 항상 이 조건을 만족하므로, 문제의 까다로움은 전부 $g(x)$처럼 <strong>구간을 나눠 정의한 부분</strong>에서 생긴다.</li>
+      </ul>
+    </div>
+
+    <!-- 개념 1: 분리함수의 연속 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>분리함수(구간별 정의)의 연속 조건 — 경계점은 반드시 근이다</div>
+
+      <span class="fein-label">① 정의</span>
+      <p>오늘 다루는 $g(x)$는 하나의 경계점 $t$를 기준으로 $x\ge t$이면 $f(x)$를, $x&lt;t$이면 $-f(x)$를 쓰는 <strong>분리함수(조각마다 다르게 정의된 함수)</strong>다. $f$ 자체는 다항함수라 어디서나 매끄럽지만, $x=t$를 넘나드는 순간 부호가 통째로 뒤집히므로 그 지점에서만 연속이 깨질 위험이 있다.</p>
+
+      <p style="margin-top:10px"><span class="fein-label">② 비유</span> 거울에 비친 상을 생각해보자. 거울 면(경계 $t$) 이쪽에서는 원래 모습 $f(x)$가 보이고, 저쪽에서는 위아래(부호)가 뒤집힌 상 $-f(x)$가 보인다. 두 모습이 거울 면에서 <strong>정확히 만나 이어지려면</strong>, 그 지점에서만큼은 원래 모습과 뒤집힌 모습이 똑같아야 한다 — 즉 그 지점의 높이가 $0$이어야 한다.</p>
+
+      <p style="margin-top:10px"><span class="fein-label">③ 왜 $f(t)=0$이어야 할까 (유도)</span></p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">$x\to t-$ (왼쪽에서 접근)일 때는 $x&lt;t$ 구간의 정의를 쓰므로 $g(x)=-f(x)\to -f(t)$ ($f$는 다항함수라 연속이므로 극한값은 그냥 대입값).</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">$x\to t+$ (오른쪽에서 접근)일 때는 $x\ge t$ 구간의 정의를 쓰므로 $g(x)=f(x)\to f(t)$.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">$g$가 $x=t$에서 연속이려면 좌극한 $=$ 우극한이어야 하므로 $-f(t)=f(t)$.</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body">$-f(t)=f(t) \Rightarrow 2f(t)=0 \Rightarrow f(t)=0$. (참고: $x=t$가 아닌 다른 모든 점에서는 $g$가 $f$ 또는 $-f$ 그대로이고 둘 다 다항함수라 자동으로 연속이다.)</div></div>
+
+      <div class="formula-box">
+        $$g(x)=\begin{cases}f(x)&(x\ge t)\\-f(x)&(x&lt;t)\end{cases}\text{가 }x=t\text{에서 연속} \iff f(t)=0$$
+      </div>
+
+      <div class="caution">
+        <span class="fein-label" style="background:var(--orange)">④ 자주 하는 실수</span> ① "$g$가 연속"이라는 조건을 보고 $t$가 아무 값이나 될 수 있다고 생각하는 것 — <strong>$t$는 반드시 $f$의 근이어야 한다.</strong> ② $x=t$에서만 신경 쓰고 다른 점들도 확인하려는 것 — $f$가 다항함수인 이상 $t$ 이외의 점은 애초에 걱정할 필요가 없다.
+      </div>
+    </div>
+
+    <!-- 개념 2: 극한 존재의 필요조건 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>분수 극한이 존재하려면 — 분모의 근에서 분자도 반드시 $0$</div>
+
+      <span class="fein-label">① 정의</span>
+      <p>분수식 $\dfrac{N(x)}{D(x)}$에서 $x\to a$일 때 $D(a)=0$인데 $N(a)\ne0$이면, 분자는 어떤 $0$이 아닌 값으로 남고 분모만 $0$에 가까워지므로 전체 값은 한없이 커지거나 작아진다 — 극한이 $+\infty$ 또는 $-\infty$로 <strong>발산</strong>하며, 이는 "극한이 존재한다(수렴한다)"는 조건을 만족하지 못한다. 그러므로 극한이 존재(수렴)하려면 <strong>분모가 $0$이 되는 점에서 분자도 반드시 $0$이어야 한다</strong>. (단, 이것은 필요조건일 뿐 — 분자·분모가 둘 다 $0$이어도 실제로 극한이 수렴하는지는 한 번 더 확인해야 한다. 다항함수끼리는 항상 약분이 되어 문제없이 수렴한다.)</p>
+
+      <p style="margin-top:10px"><span class="fein-label">② 비유</span> 시소를 생각하면 쉽다. 분모(받침대와의 거리)가 $0$에 가까워질수록 아주 작은 무게(분자)만 있어도 시소는 하늘 끝까지 치솟는다. 시소가 어느 한쪽으로 치솟지 않고 <strong>일정한 높이에서 멈추려면</strong>, 받침대가 딱 그 지점에 놓이는 순간 무게도 함께 $0$이 되어야 한다.</p>
+
+      <p style="margin-top:10px"><span class="fein-label">③ 오늘 문제에 적용하면 (유도)</span></p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">문제의 조건 "모든 실수 $a$에 대해 $\lim_{x\to a+} g(x)/(x(x-2))$가 존재한다"에서, 분모 $x(x-2)$는 $a=0$과 $a=2$일 때 $0$이 된다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">$g$는 이미 연속이라고 주어졌으므로 $x\to a+$일 때 $g(x)\to g(a)$ (우극한 $=$ 함숫값). 따라서 $a=0,2$에서 극한이 존재하려면 $g(0)=0$, $g(2)=0$이어야 한다.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">$g(x)$는 $f(x)$ 또는 $-f(x)$이므로 $g(a)=0 \iff f(a)=0$ (부호를 붙이든 안 붙이든 $0$은 $0$이다). 따라서 $f(0)=0$, $f(2)=0$.</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body">최고차항 계수가 양수 $k$인 삼차함수 $f$가 $x=0,2$를 근으로 가지므로, 나머지 한 근을 $\alpha$라 하면 $f(x)=kx(x-2)(x-\alpha)$ — 미지수가 $k,\alpha$ 두 개로 줄어든다.</div></div>
+
+      <div class="concept-box">
+        정리: <strong>$\lim_{x\to a+}\dfrac{N(x)}{D(x)}$가 존재(수렴) $\Rightarrow$ $D(a)=0$인 모든 $a$에서 $N(a)=0$</strong>. 오늘 문제에서는 이 논리 한 번으로 삼차함수의 근 두 개($0$과 $2$)가 그냥 확정된다.
+      </div>
+
+      <div class="caution">
+        <span class="fein-label" style="background:var(--orange)">④ 자주 하는 실수</span> ① 분모가 $0$이 되는 점을 한 곳만 찾고 끝내는 것 — $x(x-2)$처럼 <strong>인수분해된 분모는 $0$이 되는 지점이 두 개 이상</strong>일 수 있으니 전부 확인해야 한다. ② "극한이 존재한다"를 "극한값이 $0$이다"로 잘못 읽는 것 — 존재한다는 것은 <strong>어떤 유한한 값으로 수렴한다</strong>는 뜻이지, 그 값이 반드시 $0$이라는 뜻이 아니다.
+      </div>
+    </div>
+
+    <!-- 개념 3: 0/0 극한 → 우미분계수 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>$0/0$ 꼴 극한을 우미분계수의 정의로 되돌리기 (오늘의 핵심)</div>
+
+      <span class="fein-label">① 정의</span>
+      <p>개념 2에서 $f(0)=0$, $f(2)=0$이 확정되면, 정작 $a=2$에서의 극한 $\lim_{x\to2+} g(x)/(x(x-2))$는 분자·분모가 <strong>둘 다 $0$으로 가는 $0/0$ 꼴</strong>이 되어버린다. 이 경우 극한값을 그냥 대입으로 구할 수 없다 — 대신 $0/0$ 꼴을 <strong>미분계수의 정의 그 자체</strong>로 다시 읽어내야 한다.</p>
+
+      <p style="margin-top:10px"><span class="fein-label">② 비유</span> $h(a)=0$일 때 $\dfrac{h(x)}{x-a}$는 사실 $\dfrac{h(x)-h(a)}{x-a}$와 완전히 같은 식이다(뒤에서 $0$을 빼는 것은 아무것도 안 바꾸는 것과 같으니까). 그런데 $\dfrac{h(x)-h(a)}{x-a}$는 "$x=a$ 근처에서 $h$가 얼마나 가파르게 변하는가"를 재는 <strong>평균변화율</strong> 그 자체다. $x\to a$로 보내면 그 평균변화율의 극한, 즉 <strong>미분계수 $h'(a)$</strong>가 된다.</p>
+
+      <p style="margin-top:10px"><span class="fein-label">③ 왜 그렇게 변형될까 (유도)</span></p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">목표: $\displaystyle\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}$를 계산한다. 개념 2에서 $g(2)=0$임을 이미 확인했으므로, 분자에서 $0$을 빼도 식이 바뀌지 않는다: $g(x)=g(x)-g(2)$ (같은 값을 빼는 것).</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">분수식을 인위적으로 나눠 쓴다: $$\dfrac{g(x)}{x(x-2)}=\dfrac{g(x)-g(2)}{x(x-2)}=\dfrac{1}{x}\cdot\dfrac{g(x)-g(2)}{x-2}$$ ($x$와 $x-2$를 분모에서 따로 떼어낸 것뿐, 값은 그대로다.)</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">$x\to2+$일 때 앞부분 $\dfrac1x\to\dfrac12$ (분모 $x=2\ne0$이므로 그냥 대입 가능, 연속함수의 극한). 뒷부분 $\dfrac{g(x)-g(2)}{x-2}$는 정의 그대로 $x=2$에서의 <strong>우미분계수 $g'_+(2)$</strong>로 수렴한다 (오른쪽에서만 다가가는 극한이므로 "우"미분계수).</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-body">두 극한이 각각 존재하므로 곱의 극한도 곱으로 계산할 수 있다: $$\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}=\dfrac12\cdot g'_+(2)$$</div></div>
+
+      <div class="formula-box">
+        $$\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}=\lim_{x\to2+}\dfrac1x\cdot\dfrac{g(x)-g(2)}{x-2}=\dfrac12\,g'_+(2)$$
+      </div>
+
+      <div class="tip">
+        <strong>왜 이 변형이 결정적인가</strong>: $f(x)=kx(x-2)(x-\alpha)$의 정확한 $\alpha$를 몰라도, $x=2$ 근처에서 $g$가 $f$를 쓰는지 $-f$를 쓰는지(개념 4에서 설명)만 알면 $g'_+(2)$를 <strong>부호까지</strong> 계산할 수 있다. 즉 미지수를 다 구하지 않고도 조건 하나하나의 <strong>부호</strong>를 먼저 판정할 수 있게 해주는 것이 이 변형의 진짜 위력이다.
+      </div>
+
+      <div class="caution">
+        <span class="fein-label" style="background:var(--orange)">④ 자주 하는 실수</span> ① $g(2)=0$을 확인하지 않고 곧바로 미분계수 공식을 쓰는 것 — <strong>분자가 정말 $0$인지 먼저 확인</strong>해야 "$0$을 빼도 안 바뀐다"는 트릭이 성립한다. ② $x\to2+$라서 우미분계수를 써야 하는데 그냥 $f'(2)$(양쪽 미분계수)를 쓰는 것 — $g$가 $x=2$ 근처에서 $f$ 그대로인지 $-f$로 뒤집혔는지에 따라 우미분계수의 값 자체가 달라질 수 있다(다음 개념에서 확인).
+      </div>
+    </div>
+
+    <!-- 개념 4: 부호 판정 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>$t$의 위치가 부호를 가른다 — 어느 가지를 쓰는지부터 확인</div>
+      <p>$g'_+(2)$를 실제로 계산하려면, $x=2$ 바로 오른쪽 근방에서 $g(x)$가 $f(x)$인지 $-f(x)$인지부터 정해야 한다. 이는 오로지 <strong>경계점 $t$와 $2$의 대소 관계</strong>로 결정된다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>$t\le2$인 경우</strong>: $x=2$와 그 오른쪽 근방은 모두 $x\ge t$ 영역에 속하므로 $g(x)=f(x)$. 부호 반전이 없으므로 $g'_+(2)=f'(2)$ (보통의 미분계수).</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>$t>2$인 경우</strong>: $x=2$의 오른쪽 근방(정확히는 $2&lt;x&lt;t$ 구간)은 여전히 $x&lt;t$ 영역이므로 $g(x)=-f(x)$가 계속 적용된다. 따라서 $g'_+(2)=-f'(2)$ — <strong>부호가 뒤집힌다.</strong></div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-body">즉 "$x=2$가 포함된 구간에서 $g$가 어느 가지를 쓰는가"는 $t$가 $2$보다 작거나 같은지, 큰지 딱 하나로만 갈린다 — 이것이 오늘 문제 계열에서 가장 자주 나오는 함정이다.</div></div>
+      <div class="concept-box">
+        $t\le2 \Rightarrow g'_+(2)=f'(2)$ (그대로) &nbsp;|&nbsp; $t>2 \Rightarrow g'_+(2)=-f'(2)$ (반전)
+      </div>
+      <div class="caution">
+        <strong>자주 하는 실수</strong>: $x=2$가 분모의 근이라는 사실에만 집중해 부호 판정을 건너뛰는 것. <strong>계산에 들어가기 전에 반드시 "$t$와 $2$ 중 무엇이 더 큰가"부터 확인</strong>해야 한다. 마찬가지로 $x=0$ 근방에서도 $t$와 $0$의 대소 관계로 같은 판정을 해야 한다.
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ===== 기초 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic">
+        <span class="level-badge badge-basic">기초</span>
+        <span style="font-weight:600; color:#2e7d32">연속 조건 하나만 — 개념 1 적용</span>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 경계점은 근이다</div>
+        <div class="problem-body"><strong>문제:</strong> 삼차함수 $f(x)=x^3-4x$와 실수 $t$에 대하여 함수
+          $$g(x)=\begin{cases}f(x)&(x\ge t)\\-f(x)&(x&lt;t)\end{cases}$$
+          가 실수 전체의 집합에서 연속이 되도록 하는 모든 실수 $t$의 값의 합을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 1에 의해 $g$가 연속이려면 $f(t)=0$이어야 한다. 즉 $t$는 $f(x)=0$의 근이다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(x)=x^3-4x=x(x^2-4)=x(x-2)(x+2)$. 근은 $x=0,2,-2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>가능한 $t$의 값은 $0,2,-2$ 세 개이며, 그 합은 $0+2+(-2)=0$.</div></div>
+          <p class="warn">오답 주의: $t$가 딱 하나뿐이라고 착각해 근을 다 찾지 않고 끝내는 경우가 많다. "모든 실수 $t$의 값의 합"이라는 표현은 근이 여러 개일 수 있음을 암시한다.</p>
+          <span class="answer-tag">정답: $0$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 분모의 근에서 분자도 0 (개념 2 적용)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수 $f(x)$와 실수 $t$에 대하여 함수 $g(x)=f(x)\;(x\ge t)$, $-f(x)\;(x&lt;t)$가 실수 전체의 집합에서 연속이고, 모든 실수 $a$에 대하여 $\displaystyle\lim_{x\to a+}\dfrac{g(x)}{x(x-3)}$가 존재한다. $f(1)=-6$일 때, $f(-1)$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>분모 $x(x-3)$은 $x=0,3$에서 $0$이 된다. 개념 2에 의해 극한이 존재하려면 $g(0)=0$, $g(3)=0$, 즉 $f(0)=0$, $f(3)=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>최고차항 계수가 $1$이고 세 번째 근을 $c$라 하면 $f(x)=x(x-3)(x-c)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f(1)=1\cdot(1-3)\cdot(1-c)=-2(1-c)=-6 \Rightarrow 1-c=3 \Rightarrow c=-2$. 따라서 $f(x)=x(x-3)(x+2)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(-1)=(-1)(-1-3)(-1+2)=(-1)(-4)(1)=4$.</div></div>
+          <p class="warn">오답 주의: $t$의 구체적인 값은 이 문제를 푸는 데 전혀 쓰이지 않는다. 개념 2의 논리는 $t$의 위치와 무관하게 성립하기 때문이다 — 불필요한 정보에 휘둘리지 말 것.</p>
+          <span class="answer-tag">정답: $4$</span>
+        </div></details>
+      </div>
+
+      <!-- ===== 기본 ===== -->
+      <div class="level-header filterable standard">
+        <span class="level-badge badge-standard">기본</span>
+        <span style="font-weight:600; color:#1565c0">연속 + 극한 존재 조건을 함께 — 개념 1·2 결합</span>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 세 근을 모두 확정해 계수 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 양수 $k$인 삼차함수 $f(x)$와 실수 $t=-1$에 대하여 함수
+          $$g(x)=\begin{cases}f(x)&(x\ge -1)\\-f(x)&(x<-1)\end{cases}$$
+          이 실수 전체의 집합에서 연속이고, 모든 실수 $a$에 대하여 $\displaystyle\lim_{x\to a+}\dfrac{g(x)}{x(x-2)}$가 존재한다. $f(5)=54$일 때, $k$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 1: $g$가 $x=-1$에서 연속 $\Rightarrow f(-1)=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 2: 분모 $x(x-2)$의 근 $0,2$에서 극한이 존재 $\Rightarrow f(0)=0$, $f(2)=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>세 근이 $-1,0,2$로 모두 확정되었으므로 $f(x)=k(x+1)x(x-2)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(5)=k\cdot6\cdot5\cdot3=90k=54 \Rightarrow k=\dfrac{54}{90}=\dfrac{3}{5}$.</div></div>
+          <p class="warn">오답 주의: 최고차항 계수를 $1$로 지레짐작하고 풀면 안 된다 — 이 문제는 "양수 $k$"라고 명시했으므로 반드시 별도 조건($f(5)=54$)으로 결정해야 한다.</p>
+          <span class="answer-tag">정답: $k=\dfrac{3}{5}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 미지의 근을 조건으로 확정하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수 $f(x)$와 실수 $t$ ($t\ne0$, $t\ne2$)에 대하여 함수 $g(x)=f(x)\;(x\ge t)$, $-f(x)\;(x&lt;t)$가 실수 전체의 집합에서 연속이고, 모든 실수 $a$에 대하여 $\displaystyle\lim_{x\to a+}\dfrac{g(x)}{x(x-2)}$가 존재한다. $f(5)=30$일 때, $f(-2)$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 2: $f(0)=0$, $f(2)=0$ (분모 $x(x-2)$의 근).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 1: $f(t)=0$인데 $t\ne0,2$이므로 $t$는 세 번째 근 그 자체다. $f(x)=x(x-2)(x-t)$ (최고차항 계수 $1$).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f(5)=5\cdot3\cdot(5-t)=15(5-t)=30 \Rightarrow 5-t=2 \Rightarrow t=3$. 따라서 $f(x)=x(x-2)(x-3)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(-2)=(-2)(-2-2)(-2-3)=(-2)(-4)(-5)=-40$.</div></div>
+          <p class="warn">오답 주의: 부호 계산을 서두르다 $(-2)(-4)=8$까지는 맞고 $8\times(-5)$에서 부호를 놓쳐 $40$으로 잘못 답하는 경우가 많다. 음수 곱은 항상 마지막까지 하나씩 세어가며 확인한다.</p>
+          <span class="answer-tag">정답: $f(-2)=-40$</span>
+        </div></details>
+      </div>
+
+      <!-- ===== 심화 ===== -->
+      <div class="level-header filterable advanced">
+        <span class="level-badge badge-advanced">심화</span>
+        <span style="font-weight:600; color:#6a1b9a">0/0 극한을 우미분계수로 — 개념 3·4 결합</span>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 부호 반전이 없는 경우 ($t\le2$)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 양수인 삼차함수 $f(x)$와 실수 $t$에 대하여 함수 $g(x)=f(x)\;(x\ge t)$, $-f(x)\;(x&lt;t)$가 실수 전체의 집합에서 연속이고, 모든 실수 $a$에 대하여 $\displaystyle\lim_{x\to a+}\dfrac{g(x)}{x(x-2)}$가 존재한다. $t<2$이고 $f'(2)=9$일 때, $\displaystyle\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 2에 의해 $f(2)=0$이므로 $g(2)=f(2)=0$ (부호와 무관하게 $0$).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 4: $t<2$이므로 $x=2$와 그 오른쪽 근방은 모두 $x\ge t$ 영역 — 부호 반전 없이 $g(x)=f(x)$가 그대로 적용된다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>개념 3의 변형: $\displaystyle\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}=\lim_{x\to2+}\dfrac{f(x)}{x(x-2)}=\dfrac12\,g'_+(2)=\dfrac12\,f'(2)$ (반전이 없으므로 우미분계수 $=$ 보통의 미분계수).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$\dfrac12\,f'(2)=\dfrac12\times9=\dfrac92$.</div></div>
+          <p class="warn">오답 주의: $t<2$라는 조건을 확인하지 않고 무작정 부호를 뒤집어 $-\dfrac92$로 답하는 실수가 가장 많다. 부호 판정은 반드시 개념 4의 대소 비교부터 먼저 한다.</p>
+          <span class="answer-tag">정답: $\dfrac{9}{2}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 부호가 반전되는 경우 ($t>2$)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 양수인 삼차함수 $f(x)$와 실수 $t$에 대하여 함수 $g(x)=f(x)\;(x\ge t)$, $-f(x)\;(x&lt;t)$가 실수 전체의 집합에서 연속이고, 모든 실수 $a$에 대하여 $\displaystyle\lim_{x\to a+}\dfrac{g(x)}{x(x-2)}$가 존재한다. $t>2$이고 $f'(2)=6$일 때, $\displaystyle\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 2에 의해 $f(2)=0$이므로 $g(2)=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 4: $t>2$이므로 $x=2$의 오른쪽 근방($2&lt;x&lt;t$)은 여전히 $x&lt;t$ 영역 — $g(x)=-f(x)$가 적용된다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\displaystyle\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}=\lim_{x\to2+}\dfrac{-f(x)}{x(x-2)}=-\dfrac12\,f'(2)$ (부호가 반전되었으므로 $g'_+(2)=-f'(2)$).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$-\dfrac12\times6=-3$.</div></div>
+          <p class="warn">오답 주의: 심화 1과 조건이 거의 똑같아 보여도 $t$와 $2$의 대소 관계가 다르면 답의 부호까지 통째로 바뀐다 — "비슷해 보이는 문제"일수록 조건을 한 글자씩 다시 확인한다.</p>
+          <span class="answer-tag">정답: $-3$</span>
+        </div></details>
+      </div>
+
+      <!-- ===== 수능 대비 ===== -->
+      <div class="level-header filterable csat">
+        <span class="level-badge badge-csat">수능 대비</span>
+        <span style="font-weight:600; color:#c62828">21번 유형(준킬러) — 개념 1~4 종합</span>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 극한값에서 거꾸로 t를 역산하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수 $f(x)$와 실수 $t$에 대하여 함수
+          $$g(x)=\begin{cases}f(x)&(x\ge t)\\-f(x)&(x&lt;t)\end{cases}$$
+          가 실수 전체의 집합에서 연속이고, 모든 실수 $a$에 대하여 $\displaystyle\lim_{x\to a+}\dfrac{g(x)}{x(x-2)}$가 존재한다. $t$는 $f(x)=0$의 실근이고 $t>2$이며, $\displaystyle\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}=3$일 때, $f(-3)$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 1: $g$가 $x=t$에서 연속 $\Rightarrow f(t)=0$ ($t$는 $f$의 근, 조건과 일치).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 2: 분모의 근 $0,2$에서 극한이 존재 $\Rightarrow f(0)=0$, $f(2)=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$t>2$이므로 $t\ne0,2$ — 세 근은 $0,2,t$로 서로 다르다. 최고차항 계수가 $1$이므로 $f(x)=x(x-2)(x-t)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>개념 4: $t>2$이므로 $x=2$ 오른쪽 근방에서 $g(x)=-f(x)$. 개념 3의 변형에 의해 $\displaystyle\lim_{x\to2+}\dfrac{g(x)}{x(x-2)}=-\dfrac12 f'(2)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$f'(2)$를 직접 유도한다. $f(x)=x(x-2)(x-t)$를 전개하면 $f(x)=(x^2-2x)(x-t)=x^3-(t+2)x^2+2tx$이므로 $f'(x)=3x^2-2(t+2)x+2t$. $f'(2)=12-4(t+2)+2t=12-4t-8+2t=4-2t$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>조건에 대입: $-\dfrac12(4-2t)=3 \Rightarrow 4-2t=-6 \Rightarrow t=5$. ($t>2$ 만족 ✓)</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 7</span><div>$f(x)=x(x-2)(x-5)$. $f(-3)=(-3)(-3-2)(-3-5)=(-3)(-5)(-8)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 8 (검산)</span><div>$(-3)\times(-5)=15$, $15\times(-8)=-120$. 또한 $f'(2)=4-2(5)=-6$이고 $-\dfrac12\times(-6)=3$으로 조건과 정확히 일치함을 재확인.</div></div>
+          <p class="warn">오답 주의: $-\dfrac12 f'(2)=3$을 $f'(2)=3\times2=6$으로 부호를 놓쳐 잘못 계산하는 경우가 가장 흔하다. 양변에 $-2$를 곱한다는 사실을 정확히 지킨다 ($f'(2)=4-2t=-6$).</p>
+          <span class="answer-tag">정답: $f(-3)=-120$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 여러 자연수에 대해 부호를 한 번에 판정하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수 $f(x)$와 실수 $t=0$에 대하여 함수
+          $$g(x)=\begin{cases}f(x)&(x\ge0)\\-f(x)&(x<0)\end{cases}$$
+          이 실수 전체의 집합에서 연속이고, 모든 실수 $a$에 대하여 $\displaystyle\lim_{x\to a+}\dfrac{g(x)}{x(x-2)}$가 존재한다. $f(6)=12$일 때, $\displaystyle\lim_{x\to m+}\dfrac{g(x)}{x(x-2)}<0$을 만족시키는 자연수 $m$의 개수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$t=0$이므로 개념 1의 연속 조건 $f(0)=0$은 자동으로 필요하다. 개념 2에 의해 $f(2)=0$도 성립. 세 번째 근을 $\alpha$라 하면 $f(x)=x(x-2)(x-\alpha)$ (최고차항 계수 $1$).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(6)=6\cdot4\cdot(6-\alpha)=24(6-\alpha)=12 \Rightarrow 6-\alpha=\dfrac12 \Rightarrow \alpha=5.5$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>모든 자연수 $m\ge1$은 $t=0$보다 크거나 같으므로, $m$ 근방에서는 항상 $g(x)=f(x)$ — 부호 반전이 전혀 없다 (개념 4에서 $t\le$ 대상 값인 경우).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>따라서 $m=2$(분모의 근)를 포함한 모든 자연수 $m$에서 $\displaystyle\lim_{x\to m+}\dfrac{g(x)}{x(x-2)}=\dfrac{f(m)}{m(m-2)}$의 값은, $f(x)=x(x-2)(x-\alpha)$가 $x,\,x-2$를 정확히 인수로 가지므로 약분되어 $=(m-\alpha)$와 같다 (m=2에서는 개념 3의 극한 변형으로 같은 값에 도달함을 확인할 수 있다).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$(m-\alpha)<0 \iff m<\alpha=5.5$. 이를 만족하는 자연수는 $m=1,2,3,4,5$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6 (검산)</span><div>$m=6$이면 $6-5.5=0.5>0$이라 조건을 만족하지 않는다 — 실제로 $f(6)=12>0$이고 분모 $6(6-2)=24>0$이므로 비율이 양수임과 일치.</div></div>
+          <p class="warn">오답 주의: $m=2$는 분모가 $0$이 되는 특수한 점이라고 겁먹고 계산에서 제외하는 경우가 많다. 하지만 개념 3에서 배운 것처럼 $0/0$ 꼴도 극한값이 분명히 존재하므로 똑같이 부호 판정에 포함해야 한다.</p>
+          <span class="answer-tag">정답: $5$개</span>
+        </div></details>
+      </div>
+
+    </div><!-- /problems -->
+
+    <hr class="divider" />
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>단계</th><th>핵심 조작</th><th>얻는 것</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">① 연속성</td><td>$x=t$에서 좌극한 $=$ 우극한</td><td>$f(t)=0$ — 경계점 $t$는 반드시 $f$의 근</td></tr>
+          <tr style="background:#e0f7fa"><td style="font-weight:700">② 0인수 상쇄</td><td>분모가 $0$인 점에서 극한 존재</td><td>그 점에서 분자도 $0$ — $f$의 나머지 근이 확정</td></tr>
+          <tr><td style="font-weight:700">③ 우미분계수 해석</td><td>$0/0$ 꼴을 $\dfrac1x\cdot\dfrac{g(x)-g(2)}{x-2}$로 분해</td><td>$\dfrac12 g'_+(2)$ — 극한값을 미분계수로 계산</td></tr>
+          <tr style="background:#e0f7fa"><td style="font-weight:700">④ 부호 판정</td><td>$t$와 기준점의 대소 비교</td><td>$g=f$ 그대로인지 $g=-f$로 반전되는지 결정</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="background:#fce4ec; border-color:#f48fb1">
+      <div style="font-weight:700; color:#ad1457; margin-bottom:8px">💡 시험장 체크리스트</div>
+      <div>① 구간별로 정의된 함수가 연속이라는 조건을 보면 가장 먼저 "경계점 = 근"부터 확인한다.<br>
+      ② 분수식 극한이 "존재한다"는 조건이 나오면 분모를 인수분해해 $0$이 되는 지점을 <strong>전부</strong> 찾고, 그 지점에서 분자도 $0$인지 확인한다.<br>
+      ③ 분자·분모가 둘 다 $0$인 $0/0$ 꼴을 만나면 당황하지 말고 "미분계수의 정의로 되돌릴 수 있는가"부터 시도한다.<br>
+      ④ 우미분계수를 계산하기 전, 문제의 경계점 $t$와 지금 살펴보는 지점의 대소 관계부터 비교해 부호 반전 여부를 정한다.<br>
+      ⑤ 자연수 여러 개를 조사하는 문제는 표를 그려 하나씩 대입하며 부호를 체크하면 실수를 크게 줄일 수 있다.</div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>이 자료는 메가스터디 오르새쌤 강의("멋있는 작수 21")가 다룬 2026학년도 수능 수학 공통 21번의 풀이 논리 — <strong>분리함수의 연속 조건 → 분수 극한이 존재하기 위한 0인수 상쇄 → 0/0 꼴 극한의 우미분계수 해석 → 자연수 조건 매칭</strong> — 의 필연적 순서를 그대로 가져와 설명했습니다.</p>
+      <p style="margin-top:8px">다만 자막 요약만으로는 원 영상 문제의 조건 (나)에 등장하는 $g(-1)$, $-2g(1)$의 구체적인 자연수 값과 최종 계수 $k,\alpha$가 명확히 특정되지 않았습니다. 이에 따라 <strong>도입 예시와 8개 연습문항의 수치는 원본 영상 수치를 무리하게 재현하지 않고, 동일한 개념 흐름(연속성 → 0인수 → 우미분계수 → 부호 판정)을 정확히 가르치도록 새로 구성한 뒤 이 자료 작성 과정에서 전 과정을 직접 검산</strong>했습니다(도입, 기초 2, 기본 2, 심화 2, 수능 대비 2 문항 — 총 9개 세트 전부 손으로 재검산 완료, 확신도 ★★★). "수능 대비"는 출제 패턴을 재현한 난이도 라벨일 뿐이며, <strong>실재하는 특정 시험의 문항이 아닙니다.</strong></p>
+      <ul style="margin:10px 0 0 20px; font-size:14px">
+        <li>개념 4("$t$의 위치가 부호를 가른다")는 영상 요약에 암시된 논리를 학생 이해를 돕기 위해 명시적으로 체계화한 브릿지 설명입니다 — 수학적으로는 정확하지만 영상에서 실제로 이 표현을 그대로 썼는지는 확인되지 않았습니다(확신도 ★★).</li>
+        <li>영상 요약에 등장한 조건 (나)의 자연수 집합 $\{g(-1), -2g(1)\}$ 조건은 본 자료에 그대로 재현하지 않았습니다 — 구체적 수치가 불명확한 상태로 억지로 끼워 맞추면 오류가 생길 위험이 크다고 판단했습니다.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="background:#f5f5f5; font-size:13.5px; color:var(--sub)">
+      📺 <strong>원본 영상</strong>: <a href="https://www.youtube.com/watch?v=nYtudmJQnoo" target="_blank" rel="noopener" style="color:var(--primary)">[메가스터디] 수학 오르새쌤 - 멋있는 작수 21 (+내 한계를 깨는 훈련) — theMEGASTUDY</a><br>
+      📅 자료 생성: 2026-09-14 · 본 자료는 영상 요약을 기반으로 AI가 작성하였습니다. 학생 배포 전 교사 검토 권장.
+    </div>
+
+  </div><!-- /container -->
+
+  <footer>
+    생성일 2026-09-14 · 영상 출처: <a href="https://www.youtube.com/watch?v=nYtudmJQnoo" style="color:var(--primary)">theMEGASTUDY</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
