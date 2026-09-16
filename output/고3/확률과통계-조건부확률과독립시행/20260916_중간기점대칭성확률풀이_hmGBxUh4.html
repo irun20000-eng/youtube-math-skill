@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>중간 기점 분할과 왕복 대칭성으로 푸는 다단계 확률</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    table.grid { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+    table.grid th { background: var(--box-blue); font-weight: 700; }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3·N수 · 확률과 통계 — 조건부확률과 독립시행(다단계 확률)</div>
+    <h1>수형도도, 점화식도 없이 — <strong>중간 기점 분할</strong>과 <strong>왕복 대칭성</strong>으로 다단계 확률 끝내기</h1>
+    <p class="sub">여러 번 반복되는 시행을 절반 지점에서 잘라 재사용하는 '중간 기점(체크포인트)' 분할과, "가는 경로 수 = 돌아오는 경로 수"라는 왕복 대칭성의 원리를 처음부터 직접 확인하고, 8개 문항으로 연습한다</p>
+    <div class="quote">🎬 영상 핵심 한 줄: "대학 전공 수학인 마르코프 체인이나 복잡한 전이행렬을 몰라도, 시행의 정중앙인 '중간 기점'을 잡고 왕복 경로의 대칭성을 활용하면 고교 확률과 통계의 기본 원리만으로 완벽하게 해결된다" — 도입부 요약</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/hmGBxUh4Bbk" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/hmGBxUh4Bbk/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">마르코프 체인? 뭘 또 추가로 공부하라고?</div>
+        <div class="v-meta">📺 YouTube · 약 4분 · 수학한수</div>
+        <a class="v-link" href="https://youtu.be/hmGBxUh4Bbk" target="_blank" rel="noopener">https://youtu.be/hmGBxUh4Bbk</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: ① 한 번의 시행에서 상태가 어떤 확률(경우의 수)로 갈리는지 표로 파악할 수 있다 ② 여러 번의 시행을 정중앙에서 둘로 쪼개 '중간 기점'의 상태별 경우의 수로 계산량을 줄일 수 있다 ③ "가는 경로의 수 = 돌아오는 경로의 수"라는 왕복 대칭성이 성립하는 이유를 직접 확인하고, 이를 이용해 절반의 계산만으로 전체 경우의 수를 구할 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 시행이 늘어날수록 경우의 수는 왜 이렇게 빨리 늘어날까?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 카드 4장이 <strong>A, A, B, B</strong> 순서로 나란히 놓여 있다. 회전판을 돌려 나온 결과 $k$($k=1,2,3$)에 따라 $k$번째 카드와 $(k+1)$번째 카드의 자리를 서로 바꾼다(세 결과는 각각 $\dfrac13$의 확률로 나온다). 이 시행을 2번 반복했을 때, 카드의 배열이 처음과 같이 <strong>A, A, B, B</strong>가 될 확률을 구하시오.</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>처음 배열 AABB에서 1번 시행 후 어떻게 바뀌는지 모두 확인한다. 회전판 결과 1(1·2번째 교환)은 A와 A를 바꾸는 것이라 겉보기엔 그대로 AABB, 결과 3(3·4번째 교환)도 B와 B를 바꾸는 것이라 그대로 AABB다. 오직 결과 2(2·3번째 교환)만 A와 B를 바꿔 <strong>ABAB</strong>로 바뀐다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>즉 1번 시행 후 상태는 AABB(결과 1, 3 → 2가지) 또는 ABAB(결과 2 → 1가지)뿐이다. 이 두 상태에서 각각 한 번 더 시행해 다시 AABB로 돌아오는 경우를 센다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div><strong>AABB에서 다시 AABB로</strong>: 앞서와 같은 이유로 결과 1, 3의 2가지. <strong>ABAB에서 AABB로</strong>: ABAB의 2번째(B)와 3번째(A)를 바꾸는 결과 2가 유일하게 AABB를 만든다(1가지).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>따라서 2번 시행 후 AABB로 돌아오는 전체 경로 수는 (1번째 AABB, 2가지)$\times$(2번째도 AABB, 2가지) $+$ (1번째 ABAB, 1가지)$\times$(2번째에 AABB로 복귀, 1가지)다.
+            $$2\times2+1\times1=5\text{가지} \quad (\text{전체 } 3\times3=9\text{가지 중})$$
+            <div class="why">경우가 9가지뿐이라 오늘은 다 세어 봤지만, 시행이 4번, 6번으로 늘어나면 $3^4=81$, $3^6=729$로 폭증한다. 아래에서 이걸 다 세지 않고도 답을 구하는 두 가지 지름길 — <strong>중간 기점 분할</strong>과 <strong>왕복 대칭성</strong> — 을 처음부터 직접 유도해 본다.</div></div></div>
+          <span class="answer-tag">정답: $\dfrac{5}{9}$</span>
+        </div>
+      </details>
+      <div class="tip">이 문제처럼 작을 때는 9가지를 다 세도 되지만, 시행 횟수가 늘어나면 전체 경우의 수가 기하급수적으로 늘어난다는 것이 핵심 문제의식이다.</div>
+    </div>
+
+    <div class="section-title">💡 개념 설명 — 반은 세고, 반은 대칭으로 얻기</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 학습 환기 — 경우의 수의 곱의 법칙과 확률</div>
+      <p>이 자료는 아래 두 가지를 <strong>이미 배운 사실로 전제</strong>하고 시작한다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body"><strong>곱의 법칙</strong>: 어떤 사건이 일어나는 경우의 수가 $m$가지이고, 그 각각에 대해 다음 사건이 일어나는 경우의 수가 $n$가지이면, 두 사건이 연달아 일어나는 경우의 수는 $m\times n$가지다. 시행을 여러 번 반복할 때 "1번째 결과 하나하나에 대해 2번째 결과가 몇 가지씩 이어지는지"를 곱해서 더하는 것이 이 자료의 계산 방식이다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body"><strong>확률 $=$ (해당 경우의 수) $\div$ (전체 경우의 수)</strong>: 회전판의 결과가 모두 같은 확률로 나오는 경우, 굳이 확률을 곱하고 더하지 않아도 <strong>경우의 수만 세어 마지막에 전체로 한 번만 나누면</strong> 똑같은 답이 나온다. 이 자료는 계산을 더 간단히 하기 위해 끝까지 "경우의 수" 기준으로 세고, 맨 마지막에만 확률로 바꾼다.</div></div>
+      <div class="concept-box">이 두 가지만 있으면, "여러 번 반복되는 시행에서 처음 배열로 돌아오는 경우의 수"를 전부 나열하지 않고도 알아내는 두 가지 도구(중간 기점 분할·왕복 대칭성)를 처음부터 직접 유도할 수 있다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>한 번의 시행에서 상태가 어떻게 갈리는가</div>
+      <p>도입 문제의 카드 배열을 <strong>"상태"</strong>라고 부르자. 회전판을 한 번 돌릴 때마다 상태는 몇 가지 다른 상태로 갈릴 수 있는데, 매번 같은 규칙(같은 회전판)을 쓰므로 <strong>"상태 $X$에서 상태 $Y$로 가는 경우의 수"는 언제 계산해도 똑같은 값</strong>이다. 이 성질 덕분에 한 번 구해 둔 표를 계속 재사용할 수 있다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">도입 문제에서 이미 확인했듯, AABB에서 1번 시행 후에는 AABB(2가지) 또는 ABAB(1가지)로만 갈린다. 이 두 상태에서 다시 1번 더 시행하면 어디로 가는지 표로 정리한다.</div></div>
+      <table class="grid">
+        <tr><th>출발 상태</th><th>결과 1(1·2번째 교환)</th><th>결과 2(2·3번째 교환)</th><th>결과 3(3·4번째 교환)</th></tr>
+        <tr><td>AABB</td><td>AABB</td><td>ABAB</td><td>AABB</td></tr>
+        <tr><td>ABAB</td><td>BAAB</td><td>AABB</td><td>ABBA</td></tr>
+      </table>
+      <div class="concept-box">즉 상태가 AABB, ABAB뿐 아니라 BAAB, ABBA까지 늘어날 수 있다. 하지만 표만 한 번 만들어 두면, 몇 번을 시행하든 <strong>이 표를 반복해서 곱하고 더하기만 하면</strong> 된다 — 매번 새로 카드를 그려볼 필요가 없다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>중간 기점(체크포인트) 분할 — 시행을 절반으로 쪼개기</div>
+      <p>시행 횟수가 4번처럼 많아지면, 위 표를 한 단계씩 4번 적용해야 해서 여전히 손이 많이 간다. 여기서 <strong>"4번 시행 = 2번 시행 + 2번 시행"</strong>이라는 사실을 이용한다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">전체 4번의 시행 중 <strong>정중앙인 2번째 시행 직후</strong>를 중간 기점으로 잡는다. 도입 문제에서 이미 "AABB에서 2번 시행 후 각 상태에 도달하는 경우의 수"를 구했다: AABB 5가지, ABAB 2가지, 그리고 (표를 마저 계산하면) BAAB 1가지, ABBA 1가지 — 합이 $5+2+1+1=9=3^2$로 맞는다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">4번 시행 후 다시 AABB가 되려면, <strong>중간 기점의 각 상태에서 나머지 2번의 시행으로 다시 AABB에 도달</strong>해야 한다. "중간 기점 상태 $\to$ AABB(2번 시행)"의 경우의 수를 각 상태마다 곱해서 더하면 된다.
+            $$(\text{4번 후 AABB}) = \sum_{S} (\text{처음}\to S,\ 2\text{번}) \times (S \to \text{AABB},\ 2\text{번})$$
+            <div class="why">4번의 시행을 한 번에 보지 않고, 정중앙에서 갈라 "앞의 2번"과 "뒤의 2번"을 따로 센 뒤 곱해서 더한 것이다 — 곱의 법칙을 상태별로 적용한 것뿐이다.</div></div></div>
+      <div class="formula-box">$$(\text{4번 시행 후 } X) = \sum_{S} n(\text{처음} \to S,\ 2\text{번}) \times n(S \to X,\ 2\text{번})$$</div>
+      <div class="caution">⚠️ <strong>중간 기점 분할은 "매 시행의 규칙이 똑같을 때"만 쓸 수 있다</strong>. 회전판이 중간에 바뀌는 문제라면 이 지름길은 성립하지 않는다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>왕복 대칭성 — "가는 경우의 수 = 돌아오는 경우의 수"</div>
+      <p>개념 2를 쓰려면 "각 상태 $\to$ AABB(2번)"의 경우의 수를 <strong>새로 또</strong> 구해야 할 것 같지만, 사실 그럴 필요가 없다. 도입 문제에서 이미 구해 둔 "AABB $\to$ 각 상태(2번)"의 경우의 수를 <strong>그대로 뒤집어 재사용</strong>할 수 있기 때문이다.</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-body">이유는 간단하다 — 이 시행에서 쓰는 조작(어떤 두 자리를 맞바꾸는 것)은 <strong>같은 조작을 한 번 더 하면 원래대로 돌아오는 조작</strong>(자기 자신이 역조작)이다. 그래서 "AABB에서 시작해 ABAB에 도달한 경로"가 사용한 조작들을 <strong>거꾸로 순서만 뒤집어</strong> 다시 적용하면, ABAB에서 시작해 정확히 AABB로 돌아오는 경로가 된다.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-body">예를 들어 AABB $\to$ ABAB(2번)의 경로는 (결과1, 결과2)와 (결과3, 결과2) 두 가지다. 이 순서를 거꾸로 뒤집으면 각각 (결과2, 결과1)과 (결과2, 결과3)이 되는데, 이는 바로 ABAB $\to$ AABB(2번)의 경로 두 가지와 정확히 같다.</div></div>
+      <div class="visual">AABB → ABAB (2회)          ABAB → AABB (2회, 순서만 뒤집음)
+  (결과1, 결과2)  ─뒤집기→   (결과2, 결과1)
+  (결과3, 결과2)  ─뒤집기→   (결과2, 결과3)
+  경우의 수: 2가지                경우의 수: 2가지  (정확히 일치!)</div>
+      <div class="concept-box">이렇게 "경로를 거꾸로 뒤집는" 대응은 <strong>순서만 다를 뿐 서로 다른 경로를 서로 다른 경로로 정확히 1대1 대응</strong>시킨다(하나도 겹치거나 빠지지 않는다). 그러므로 <strong>어느 두 상태 $X, Y$ 사이든 "$X\to Y$($n$번)"의 경우의 수와 "$Y\to X$($n$번)"의 경우의 수는 항상 같다</strong> — 이것이 왕복 대칭성이다. 개념 2의 "각 상태 $\to$ AABB" 경우의 수를 새로 구하지 않고 "AABB $\to$ 각 상태"의 값을 그대로 쓸 수 있는 이유가 바로 이것이다.</div>
+      <div class="formula-box">$$(\text{4번 시행 후 AABB}) = \sum_{S} \big[n(\text{AABB} \to S,\ 2\text{번})\big]^2$$</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수 모음</div>
+      <div class="caution"><strong>실수 1 — 회전판 결과 중 겉보기엔 아무 변화가 없는 결과를 세는 것을 잊음.</strong> AABB에서 결과 1(A와 A 교환), 결과 3(B와 B 교환)은 눈에 보이는 변화가 없지만, 서로 다른 결과이므로 각각 별개의 경우로 세어야 한다.</div>
+      <div class="caution"><strong>실수 2 — 대칭성을 아무 상태 쌍에나 적용.</strong> 왕복 대칭성은 "매 시행의 조작이 자기 자신의 역조작"일 때만 성립한다. 조작이 비가역적(예: 한쪽 방향으로만 진행)이면 가는 경우의 수와 돌아오는 경우의 수가 다를 수 있다.</div>
+      <div class="caution"><strong>실수 3 — 중간 기점을 정중앙이 아닌 곳에 잡아 계산이 오히려 늘어남.</strong> $n$번 시행을 나눌 때는 $n/2$번째(정중앙)에서 나눠야 앞뒤 계산량이 균형 있게 줄어든다. 1번째나 3번째에서 나누면 절반의 이점이 줄어든다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span>한 번의 시행에서 상태 파악하기</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 1번 시행 후 상태 확률</div>
+        <div class="problem-body"><strong>문제:</strong> 도입 문제와 같은 규칙(카드 AABB, 회전판 결과 1·2·3이 각각 $\dfrac13$)에서, 1번 시행 후 카드 배열이 <strong>ABAB</strong>일 확률을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 1의 표에서 확인했듯, AABB에서 1번 시행 후 ABAB가 되는 것은 결과 2(2·3번째 교환)뿐이다 — 1가지.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>전체 결과는 3가지이므로 확률은 $\dfrac13$이다.
+            $$P(\text{1번 후 ABAB})=\frac{1}{3}$$</div></div>
+          <span class="answer-tag">정답: $\dfrac{1}{3}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 2번 시행 후 다른 상태에 도달할 확률</div>
+        <div class="problem-body"><strong>문제:</strong> 같은 규칙에서, 2번 시행 후 카드 배열이 <strong>ABAB</strong>일 확률을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>1번 시행 후 상태는 AABB(2가지) 또는 ABAB(1가지)다(도입 문제 STEP 1~2).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>2번째 시행에서 ABAB가 되려면: AABB에서 결과 2(1가지) 또는 ABAB에서 결과 1·3(각 1가지, 개념 1의 표) 중 하나여야 한다.
+            $$2\times1 + 1\times2 = 4\text{가지}$$
+            <div class="why">"1번째가 AABB인 2가지" 각각에 "2번째에 ABAB로 가는 1가지"를 곱하고, "1번째가 ABAB인 1가지"에 "2번째에도 ABAB에 머무는 2가지(결과1,3)"를 곱해 더한 것이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>전체 경우의 수는 $3^2=9$이므로 확률은 $\dfrac{4}{9}$다.</div></div>
+          <span class="answer-tag">정답: $\dfrac{4}{9}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span>중간 기점으로 4번 시행 계산하기</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 중간 기점 경우의 수로 4번 시행 계산(경우의 수)</div>
+        <div class="problem-body"><strong>문제:</strong> 같은 규칙(카드 AABB, 회전판 결과 1·2·3이 각각 $\dfrac13$)에서 시행을 4번 반복한다. 다음 표는 2번 시행 후 각 상태에 도달하는 경우의 수와, 그 상태에서 다시 2번 시행해 AABB로 돌아오는 경우의 수를 나타낸 것이다. 이를 이용해 4번 시행 후 다시 AABB가 되는 경우의 수를 구하시오.</div>
+        <table class="grid">
+          <tr><th>중간 기점 상태 $S$</th><th>처음$\to S$(2번)</th><th>$S\to$AABB(2번)</th></tr>
+          <tr><td>AABB</td><td>5</td><td>5</td></tr>
+          <tr><td>ABAB</td><td>2</td><td>2</td></tr>
+          <tr><td>BAAB</td><td>1</td><td>1</td></tr>
+          <tr><td>ABBA</td><td>1</td><td>1</td></tr>
+        </table>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>각 중간 기점 상태마다 "처음$\to S$" 경우의 수와 "$S\to$AABB" 경우의 수를 곱한다.
+            $$5\times5=25,\quad 2\times2=4,\quad 1\times1=1,\quad 1\times1=1$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>네 경우를 모두 더한다(중간 기점에서 서로 다른 상태를 거치는 경로는 겹치지 않으므로 그냥 더하면 된다).
+            $$25+4+1+1=31\text{가지}$$
+            <div class="why">4번 시행 전체를 하나하나 나열하면 $3^4=81$가지를 다 살펴야 하지만, 중간 기점에서 딱 4개의 상태로 갈라 계산하니 곱셈 4번과 덧셈만으로 끝났다.</div></div></div>
+          <span class="answer-tag">정답: 31가지</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 표로 주어진 중간 기점 데이터를 곱의 법칙으로 조합해 중간 기점 분할의 계산 절차 자체를 익히는 문항이다.</div>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 같은 상황을 확률로 표현하기</div>
+        <div class="problem-body"><strong>문제:</strong> 기본 1과 같은 상황에서, 4번 시행 후 카드 배열이 다시 AABB일 <strong>확률</strong>을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>기본 1에서 4번 시행 후 AABB가 되는 경우의 수는 31가지였다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>전체 경우의 수는 $3^4=81$가지이므로, 확률은 경우의 수를 그대로 전체로 나눈 것과 같다.
+            $$P=\frac{31}{81}$$
+            <div class="why">회전판의 세 결과가 매번 똑같은 확률 $\dfrac13$로 나오므로, 확률을 매 단계 곱하고 더하는 대신 <strong>경우의 수만 끝까지 세고 마지막에 한 번만 전체로 나누어도</strong> 정확히 같은 값이 나온다(개념 0 참고).</div></div></div>
+          <span class="answer-tag">정답: $\dfrac{31}{81}$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: "경우의 수로 끝까지 계산 후 마지막에 나누기"와 "매 단계 확률을 곱하기"가 똑같은 결과를 준다는 것을 확인시키는 문항이다.</div>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span>왕복 대칭성 직접 확인하고 활용하기</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 왕복 대칭성을 경로 나열로 직접 확인</div>
+        <div class="problem-body"><strong>문제:</strong> 같은 규칙에서 AABB $\to$ ABAB(2번 시행)의 경로를 모두 나열하면 (결과1, 결과2), (결과3, 결과2)의 2가지다. 이 사실만을 이용해서(직접 다시 세지 않고) ABAB $\to$ AABB(2번 시행)의 경로 수를 구하고, 그 경로를 모두 나열하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>이 시행의 조작(어떤 두 자리를 맞바꾸는 것)은 같은 조작을 한 번 더 적용하면 원래로 돌아오는 자기 역조작이다. 따라서 정방향 경로의 순서를 통째로 뒤집으면 역방향 경로가 된다(개념 3).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>(결과1, 결과2)를 뒤집으면 (결과2, 결과1)이 되고, (결과3, 결과2)를 뒤집으면 (결과2, 결과3)이 된다. 이 둘이 바로 ABAB $\to$ AABB(2번)의 경로다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>서로 다른 정방향 경로는 뒤집어도 서로 다른 경로로 남으므로(순서를 뒤집는 것은 1대1 대응), 개수는 정확히 <strong>2가지로 같다</strong>.</div></div>
+          <span class="answer-tag">정답: 2가지 — (결과2, 결과1), (결과2, 결과3)</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: "경로를 거꾸로 뒤집으면 반대 방향 경로가 된다"는 대칭성의 근거를 직접 손으로 확인시키는 문항이다.</div>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 대칭성으로 다시 세지 않고 답하기</div>
+        <div class="problem-body"><strong>문제:</strong> 같은 규칙에서 AABB $\to$ ABBA(2번 시행)의 경로 수가 1가지임이 알려져 있다. 이 사실만으로(다시 세지 않고) ABBA에서 시작해 2번 시행 후 다시 AABB가 되는 경로 수를 구하고, 그 이유를 서술하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>왕복 대칭성(개념 3)에 의해, 어느 두 상태 $X,Y$든 "$X\to Y$($n$번)"의 경우의 수는 "$Y\to X$($n$번)"의 경우의 수와 항상 같다 — 이 시행의 조작이 자기 역조작이기 때문이다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>따라서 "AABB $\to$ ABBA(2번) $=1$가지"이면, "ABBA $\to$ AABB(2번)"도 <strong>다시 셀 필요 없이</strong> 1가지다.</div></div>
+          <span class="answer-tag">정답: 1가지 (왕복 대칭성에 의해 다시 셀 필요 없음)</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 대칭성을 "계산을 절반으로 줄여주는 도구"로 실제로 활용하는 감각을 확인하는 문항이다.</div>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span>중간 기점 분할 + 왕복 대칭성 종합 유형 — 준킬러</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 5장 카드, 5개 결과 회전판으로 4번 시행</div>
+        <div class="problem-body"><strong>문제:</strong> 카드 5장이 <strong>P, P, Q, Q, Q</strong> 순서로 나란히 놓여 있다. 회전판을 돌려 나온 결과 $k$($k=1,2,3,4$)에 따라 $k$번째 카드와 $(k+1)$번째 카드의 자리를 서로 바꾸고, 결과 5가 나오면 자리를 바꾸지 않는다(다섯 결과는 각각 $\dfrac15$의 확률). 이 시행을 4번 반복했을 때, 카드의 배열이 처음과 같이 <strong>P, P, Q, Q, Q</strong>가 될 확률을 중간 기점 분할과 왕복 대칭성을 이용해 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>1번 시행 후 상태를 확인한다. PPQQQ에서 결과 1(P·P 교환), 결과 3(Q·Q 교환), 결과 4(Q·Q 교환), 결과 5(정지)는 겉보기에 변화가 없어 그대로 PPQQQ이고, 오직 결과 2(2·3번째, P·Q 교환)만 <strong>PQPQQ</strong>로 바꾼다. 즉 1번 후: PPQQQ 4가지, PQPQQ 1가지.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>PQPQQ에서 한 번 더 시행하면: 결과 1(P·Q 교환)은 QPPQQ, 결과 2(Q·P 교환)는 다시 PPQQQ, 결과 3(P·Q 교환)은 PQQPQ, 결과 4·5는 그대로 PQPQQ(2가지)로 갈린다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>이를 종합해 <strong>2번 시행 후(중간 기점)</strong> 상태별 경우의 수를 구한다.
+            $$\text{PPQQQ}: 4\times4+1\times1=17,\quad \text{PQPQQ}: 4\times1+1\times2=6,\quad \text{QPPQQ}: 1\times1=1,\quad \text{PQQPQ}: 1\times1=1$$
+            <div class="why">합을 확인하면 $17+6+1+1=25=5^2$로 전체 경우의 수와 일치한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>왕복 대칭성에 의해 "중간 기점 상태 $\to$ PPQQQ(2번)"의 경우의 수는 "PPQQQ $\to$ 중간 기점 상태(2번)"의 경우의 수와 각각 같으므로, 다시 셀 필요 없이 같은 값(17, 6, 1, 1)을 그대로 쓴다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>4번 시행 후 다시 PPQQQ가 되는 경우의 수는 각 상태별 (처음$\to S$)$\times$($S\to$처음)을 더한 것 — 즉 각 값의 제곱의 합이다.
+            $$17^2+6^2+1^2+1^2=289+36+1+1=327\text{가지}$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>전체 경우의 수는 $5^4=625$이므로 확률은
+            $$P=\frac{327}{625}$$</div></div>
+          <span class="answer-tag">정답: $\dfrac{327}{625}$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 상태 수가 4개로 늘어난 실전형 다단계 확률 문제에 중간 기점 분할과 왕복 대칭성을 그대로 적용해, "제곱의 합"이라는 계산 패턴이 상태 수와 무관하게 성립함을 확인하는 준킬러 문항이다.</div>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 조건부확률로 거꾸로 되짚기</div>
+        <div class="problem-body"><strong>문제:</strong> 수능 대비 1과 같은 규칙에서, 4번 시행 후 카드의 배열이 다시 <strong>P, P, Q, Q, Q</strong>가 되었다고 한다. 이때 <strong>3번째 시행에서 나온 결과가 5(정지)였을 조건부확률</strong>을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>조건부확률의 정의에 의해 구하는 값은 (분자: 4번 후 PPQQQ이고 3번째 결과가 5인 경우의 수) $\div$ (분모: 4번 후 PPQQQ인 전체 경우의 수)다. 분모는 수능 대비 1에서 이미 구한 327이다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>분자를 구하기 위해 다시 중간 기점(2번 시행 후)으로 나눈다. 상태별 경우의 수는 PPQQQ 17, PQPQQ 6, QPPQQ 1, PQQPQ 1(수능 대비 1의 STEP 3).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>3번째 결과가 정확히 5(정지)이면 그 상태는 2번째와 똑같이 유지된 채로 4번째 시행 하나만 남는다. 따라서 각 중간 기점 상태 $S$마다 <strong>(처음$\to S$, 2번) $\times$ 1(3번째는 정지 고정) $\times$ ($S\to$PPQQQ, 1번)</strong>을 곱해서 더하면 된다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>"$S\to$PPQQQ(1번)"의 경우의 수를 상태별로 구한다: PPQQQ에서 1번 시행 후 PPQQQ가 되는 경우는 결과 1,3,4,5의 4가지, PQPQQ에서는 결과 2의 1가지, QPPQQ와 PQQPQ에서는 1번 시행만으로 PPQQQ가 될 수 없어 0가지다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>이제 각 상태의 값을 곱해서 더한다.
+            $$17\times4 + 6\times1 + 1\times0 + 1\times0 = 68+6=74$$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>조건부확률의 정의대로 분자를 분모로 나눈다.
+            $$\frac{74}{327}$$
+            <div class="why">분모·분자 모두 중간 기점의 상태별 경우의 수를 그대로 재사용했다 — 새로운 계산 도구가 필요한 게 아니라, 이미 구한 중간 기점 데이터를 조건부확률의 정의(분자$\div$분모)에 맞게 조립한 것뿐이다.</div></div></div>
+          <span class="answer-tag">정답: $\dfrac{74}{327}$</span>
+        </div></details>
+        <div class="tip"><strong>출제 의도</strong>: 정방향 경우의 수 계산과 조건부확률의 정의를 결합해, "결과를 알 때 중간 시행 결과를 되짚는" 유형까지 같은 도구(중간 기점 분할)로 처리할 수 있음을 확인하는 준킬러 문항이다.</div>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료는 유튜브 영상 <strong>「마르코프 체인? 뭘 또 추가로 공부하라고?」</strong>(수학한수, 약 4분)의 구글 스파크 상세 요약본(챕터별 타임스탬프, 칠판 수식 verbatim, 예제 풀이 과정 포함)을 근거로 재구성했습니다. 자막 원본이 아닌 요약본을 대체 입력으로 사용했으며, 히어로 영역의 "영상 핵심 한 줄" 인용은 요약본의 텍스트를 그대로 사용한 것으로, 강사의 실제 발화를 verbatim으로 옮긴 것은 아님을 밝힙니다.</p>
+      <p style="margin-top:8px">영상은 대학 수준 용어인 "마르코프 체인"을 언급하며 이를 반박하는 형태로 설명하지만, 본 자료는 영상이 실제로 사용한 풀이 원리인 <strong>"중간 기점(체크포인트) 분할"</strong>과 <strong>"왕복 대칭성(가는 경우의 수 = 돌아오는 경우의 수)"</strong>만을 고교 교육과정 언어로 재구성했습니다. 이 두 원리는 같은 단원의 다른 학습자료(점화식 기반 "상태 묶음 계산" 자료)와 달리, <strong>점화식을 전혀 쓰지 않고 경우의 수 세기와 대칭성만으로</strong> 다단계 확률을 처리하는 관점을 다룹니다. 문항은 영상의 카드 4장(AAABBB, 주사위 6면)과 다른 <strong>새로운 수치(카드 4장/5장, 회전판 3면/5면)로 전부 새로 설계</strong>했으며, 실제 시험 문제를 재현하지 않았습니다. 8문항 전체를 <strong>본 세션에서 파이썬으로 모든 경우를 직접 전수조사(brute-force enumeration)하여 교차검산</strong>했습니다 — 도입·기초·기본 문항은 3개 회전판 결과의 모든 조합($3^1, 3^2, 3^4$가지)을, 수능 대비 문항은 5개 회전판 결과의 모든 조합($5^1, 5^2, 5^4$가지)을 하나하나 전산으로 나열해 "중간 기점 분할·왕복 대칭성 공식으로 구한 값"과 "전수조사로 직접 센 값"이 정확히 일치함을 확인했습니다. 심화 1의 경로 나열도 전수조사 결과에서 그대로 가져온 실제 경로입니다. 확신도는 전 문항 <strong>★★★</strong>이며 ⚠️ 플래그 항목은 없습니다.</p>
+      <p style="margin-top:8px">교육과정 확인: 확률과 통계 과목의 경우의 수(곱의 법칙)·조건부확률·독립시행을 이용한 다단계 확률 계산은 정상적인 수능 선택과목 범위이며, 대학 수준 이론(마르코프 체인의 정의, 전이행렬의 고유값 등)은 전혀 다루지 않았습니다. 문항 라벨의 <strong>"수능 대비"는 난이도 표시일 뿐 실재 기출이 아니며</strong>, 영상이 언급한 특정 회차·문항 번호는 본 자료 어디에도 표기하지 않았습니다.</p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260910_마르코프체인상태전이확률_zZNYV3Iq.html">체크포인트로 나누는 다단계 확률 (zZNYV3Iq)</a> · <a href="../../고2/수학II-다항함수의미분법/20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-09-16 · 영상 출처: <a href="https://youtu.be/hmGBxUh4Bbk" style="color:var(--primary)">수학한수</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
