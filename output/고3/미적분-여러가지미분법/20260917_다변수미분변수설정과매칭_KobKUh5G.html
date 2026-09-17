@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>다변수 미분 변수설정과 매칭 - 수능 미적분 28번 킬러 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3 · 미적분 — 여러 가지 미분법</div>
+    <h1>문자에 낚이지 마라 —<br>변수 재설정으로 뚫는 미적분 28번 다변수 킬러</h1>
+    <p class="sub">주어진 문자 $t$에 집착하지 않고 상황을 가장 잘 설명하는 새 변수 $\alpha$를 도입한 뒤, 매개변수·음함수·역함수 미분법 중 최적을 매칭한다</p>
+    <div class="quote">"근의 공식을 쓰는 순간 시험은 끝납니다. 교점은 그냥 문자로 잡고, 그 관계식을 미분으로 풀어내세요. 함수로 변수를 미분하려 하지 말고, 함수도 변수로 놓고 변수로 미분하면 됩니다." — 강사 인용(재구성)</div>
+    <div class="video-card">
+      <a class="thumb" href="https://www.youtube.com/watch?v=KobKUh5GOxY" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/KobKUh5GOxY/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">미적 28번, 이렇게 풀면 절대 안 틀립니다.</div>
+        <div class="v-meta">📺 YouTube · 약 11분 · 시대수학 김성호</div>
+        <a class="v-link" href="https://www.youtube.com/watch?v=KobKUh5GOxY" target="_blank" rel="noopener">https://www.youtube.com/watch?v=KobKUh5GOxY</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 문제에 주어진 문자(t 등)에 얽매이지 않고 상황을 가장 잘 설명하는 새 변수(교점 α 등)를 직접 설정한 뒤, 매개변수 미분·음함수 미분·역함수 미분 중 최적의 방법을 매칭하여 다변수 킬러 문항을 정확하고 빠르게 해결하기 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — g(t)라는 기호부터 낯설다면</div>
+    <div class="card">
+      <div class="problem-body">
+        <strong>도입 문제:</strong> 곡선 $y=x^3$과 직선 $y=tx$ ($t>0$)가 원점이 아닌 점에서 만난다.
+        이 교점의 $x$좌표를 $g(t)$라 하자. $g'(4)$의 값을 구하시오.
+      </div>
+      <div class="visual">g(t)라는 표기에 낚이지 말 것!
+
+  g(t)  ←  "t의 함수"라는 기호일 뿐, 실체는 그냥 "교점의 x좌표"
+
+전략: g(t) 대신 α라는 평범한 이름을 붙이고,
+     α와 t 사이의 '관계식'만 세운 뒤 그 관계식을 그대로 미분한다.
+     (α = √t 로 굳이 다 풀어놓지 않아도 된다!)</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 1</span>
+            <div>교점의 $x$좌표를 $g(t)$ 대신 새 변수 $\alpha$로 둔다 (원점이 아닌 교점이므로 $\alpha\neq0$).
+              <div class="why">함수 기호 g(t)에 얽매이면 어떻게 미분할지부터 막막해지므로, 먼저 평범한 변수 이름으로 바꿔 심리적 부담을 없앤다</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 2</span>
+            <div>교점 조건을 그대로 식으로 세운다: $\alpha^3 = t\alpha$. 양변을 $\alpha$($\neq0$)로 나누면 $\alpha^2 = t$.
+              <div class="why">두 그래프의 교점은 두 식의 값이 같아지는 x — 그 조건을 옮겨 적은 것일 뿐</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 3</span>
+            <div>$\alpha^2=t$의 양변을 $t$로 미분한다(음함수 미분): $2\alpha\cdot\dfrac{d\alpha}{dt} = 1 \implies \dfrac{d\alpha}{dt}=\dfrac{1}{2\alpha}$.
+              <div class="why">α를 t에 대한 함수로 보고 양변을 그대로 t로 미분한다 — α가 나올 때마다 연쇄법칙으로 dα/dt를 곱해준다</div>
+            </div>
+          </div>
+          <div class="sol-step">
+            <span class="sol-step-label">STEP 4</span>
+            <div>$t=4$일 때 $\alpha^2=4$이고, 원점이 아닌 교점이므로 $\alpha=2$(양의 값). 따라서 $\dfrac{d\alpha}{dt}\Big|_{t=4} = \dfrac{1}{2\cdot2}=\dfrac14$.
+              <div class="why">관계식 α²=t에 t=4를 대입해 그 순간의 α 값부터 확정한 뒤, STEP3의 결과에 대입한다</div>
+            </div>
+          </div>
+          <p class="warn">오답 주의: $\alpha=\sqrt{t}$로 명시적으로 풀어서 $g(t)=\sqrt t$, $g'(t)=\dfrac{1}{2\sqrt t}$ 공식을 외워도 답은 같지만, 문항이 복잡해지면 이런 명시적 풀이 자체가 불가능해진다. 처음부터 "관계식을 세우고 그 관계식을 미분"하는 습관을 들이는 것이 이 단원의 핵심이다.</p>
+          <span class="answer-tag">정답: g'(4) = 1/4</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <!-- 개념 1 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>다변수 미분 문제, 왜 어렵게 느껴지나 — 2단계 구조</div>
+      <p>수능 미적분 28번 같은 다변수 미분 킬러 문항을 보면 학생들은 "계산이 너무 복잡할 것 같다"는 압박감부터 느낍니다. 하지만 강사가 강조하는 것은, 이런 문제는 사실 <strong>두 단계로만 이루어져 있다</strong>는 사실입니다. 그리고 그중 진짜 변별력이 있는 단계는 계산이 아니라 '어떤 방법을 쓸지 판단하는 것'입니다.</p>
+      <div class="concept-box">
+        <strong>다변수 미분 문제의 2단계</strong><br>
+        ① <strong>조건식 수립</strong>: 문제 상황(넓이, 두 점 사이의 거리, 각도, 교점·접점의 좌표 등)을 식으로 세운다 — 이 자체는 중학교 도형 수준으로 어렵지 않다.<br>
+        ② <strong>미분법 매칭</strong>: 세운 식을 매개변수 미분·음함수 미분·역함수 미분·합성함수 미분 중 어떤 방법으로 미분해야 계산이 가장 쉬운지 판단한다.
+      </div>
+      <div class="caution">⚠️ 자주 하는 오해: "조건식이 복잡해 보이니 미분도 복잡할 것"이라 지레 겁먹는 것. 실제로는 조건식을 <strong>어떤 변수로 세우느냐</strong>에 따라 이후 미분의 난이도가 하늘과 땅 차이로 벌어집니다. 평가원이 진짜 변별하고 싶은 것은 "이 상황을 가장 편하게 미분할 수 있는 변수를 골라낼 수 있는가"입니다.</div>
+    </div>
+
+    <!-- 개념 2 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>여러 가지 미분법 총정리 — 매개변수·음함수·역함수, 언제 쓰나</div>
+      <p>다변수 문제를 풀려면 아래 세 가지 미분법의 <strong>이름과 조건</strong>을 정확히 구분할 수 있어야 합니다. 셋 다 결국 <strong>연쇄법칙(합성함수 미분법)</strong>이라는 하나의 원리에서 나옵니다. [선수 학습 환기: 연쇄법칙은 $y=f(g(x))$이면 $\dfrac{dy}{dx}=f'(g(x))\cdot g'(x)$라는, 이미 배운 미분법입니다.]</p>
+      <div class="concept-box">
+        <strong>① 매개변수 미분법</strong>: $x, y$가 모두 제3의 변수 $t$의 함수로 주어질 때($x=x(t)$, $y=y(t)$), $\dfrac{dy}{dx} = \dfrac{dy/dt}{dx/dt}$로 구한다.<br><br>
+        <strong>② 음함수 미분법</strong>: $x$와 $y$가 하나의 식 $F(x,y)=0$ 안에 뒤섞여 있어 $y=(x$의 식$)$으로 깔끔히 못 풀 때, $y$를 $x$의 함수로 보고 양변을 그대로 $x$로 미분한다(이때 $y$가 나올 때마다 연쇄법칙으로 $y'$을 곱한다).<br><br>
+        <strong>③ 역함수 미분법</strong>: $y=f(x)$의 역함수 $x=f^{-1}(y)$가 존재할 때, $\dfrac{dx}{dy} = \dfrac{1}{dy/dx}$ (단, $dy/dx\neq0$) — 즉 "거꾸로 미분"하고 싶으면 원래 미분값의 역수를 취한다.
+      </div>
+      <div class="tip">💡 판단 요령: 새로운 변수가 "둘을 이어주는 매개체" 역할이면 ①, 두 문자가 한 식 안에 그냥 얽혀 있으면 ②, "y를 알고 있는데 x를 구하고 싶다"처럼 방향을 뒤집고 싶으면 ③을 씁니다.</div>
+    </div>
+
+    <!-- 개념 3 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>왜 억지로 한 문자로 정리하면 안 되는가 — 적분과의 결정적 차이</div>
+      <p><strong>적분</strong>은 반드시 한 문자로 정리되어 있어야 치환적분·부분적분 같은 기법을 적용할 수 있습니다(적분 변수가 명확해야 하기 때문입니다). 반면 <strong>미분</strong>은 여러 문자가 뒤섞여 있어도 연쇄법칙 덕분에 "이 변수에 대한 저 변수의 순간변화율"을 각각 구한 뒤 곱하거나 나누기만 하면 원하는 미분계수를 얻을 수 있습니다. 그래서 굳이 근의 공식 등을 동원해 억지로 한 문자(예: $t$)만 남도록 식을 정리할 필요가 <strong>전혀 없습니다</strong> — 오히려 그 과정에서 무리식(루트)이 생겨 계산이 폭발합니다.</p>
+      <div class="caution">⚠️ 하수의 함정: 문제에 $g(t)$가 나오면 "$t$로 표현된 식"을 반드시 만들어야 한다는 강박에 빠져, 이차방정식을 근의 공식으로 풀어 $x=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}$ 같은 무리식을 얻습니다. 그 뒤 이 루트 낀 식을 다시 $t$로 미분하려다 시간을 다 쓰고 계산 실수까지 겹쳐 오답으로 이어집니다.</div>
+      <div class="tip">💡 고수의 마인드: "이 상황을 가장 잘 설명하는 변수가 뭘까?"를 먼저 묻습니다. 교점이면 교점의 좌표를, 접점이면 접점의 좌표를 <strong>새 변수로 이름 붙이는 것</strong>이 거의 항상 정답으로 가는 지름길입니다.</div>
+    </div>
+
+    <!-- 개념 4: 핵심 예제 완전 분해 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>실전 예제 완전 분해 — 교점 α로 f'(π/4) 구하기</div>
+      <p>이제 영상의 핵심 예제를 처음부터 끝까지 한 줄씩 분해합니다. <strong>상황</strong>: 2차함수 $y=x^2-2$와 원점을 지나고 $x$축의 양의 방향과 이루는 각이 $\theta$($0<\theta<\pi/2$)인 직선 $y=x\tan\theta$가 있습니다. 이 포물선과 직선으로 둘러싸인 대칭인 영역의 넓이를 $f(\theta)$라 할 때, $f'(\pi/4)$를 구하는 것이 목표입니다.</p>
+      <div class="caution">⚠️ 하수의 길: $x^2-(\tan\theta)x-2=0$을 근의 공식으로 풀어 $x=\dfrac{\tan\theta\pm\sqrt{\tan^2\theta+8}}{2}$ 같은 무리식을 얻고, 이걸 그대로 $\theta$로 미분하려 하면 루트 안에 삼각함수가 낀 식이 되어 10분을 써도 답이 안 나옵니다.</div>
+      <p><strong>고수의 길</strong>: 근의 공식을 쓰지 않고, 교점의 $x$좌표를 새 변수 $\alpha$($\alpha>0$)로 직접 이름 붙입니다. 대칭인 두 교점 구조를 갖는 이 도형의 넓이 공식으로부터 다음 두 관계식이 주어집니다 — 아래 넓이 관계식은 도형 자체에서 나오는 결과이므로 여기서는 그대로 출발점으로 사용하고, 이 강의의 진짜 핵심인 <strong>미분 전략</strong>에 집중합니다.</p>
+      <div class="formula-box">
+        ① 넓이 관계식: $f(\theta) = 2\alpha^3$<br>
+        ② 위치 관계식(교점이 포물선 위의 점이라는 조건에서): $\alpha\tan\theta = \alpha^2-2 \iff \tan\theta = \alpha - \dfrac{2}{\alpha}$
+      </div>
+      <p>이제부터가 진짜 실력을 가르는 부분입니다. 위 두 식을 <strong>α라는 하나의 매개변수로 연결</strong>한 뒤, 연쇄법칙으로 $f'(\theta)$를 완성합니다.</p>
+      <div class="step-row">
+        <span class="step-num">1</span>
+        <div class="step-body">②식의 양변을 $\alpha$로 미분합니다(음함수 미분 — 좌변의 $\theta$가 $\alpha$의 함수이므로 연쇄법칙을 적용):
+          $$\frac{d}{d\alpha}(\tan\theta) = \frac{d}{d\alpha}\left(\alpha-\frac{2}{\alpha}\right) \implies \sec^2\theta\cdot\frac{d\theta}{d\alpha} = 1+\frac{2}{\alpha^2}$$
+          <div class="why">좌변: $\tan\theta$를 $\alpha$로 미분하면 $\theta$가 $\alpha$의 함수이므로 $\sec^2\theta\cdot\dfrac{d\theta}{d\alpha}$(연쇄법칙). 우변: $-2\alpha^{-1}$의 도함수는 $2\alpha^{-2}$이므로 $1+2/\alpha^2$가 된다.</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num">2</span>
+        <div class="step-body">$\theta=\pi/4$일 때 $\alpha$의 값을 ②식에서 직접 구합니다: $\tan(\pi/4)=1$이므로
+          $$1 = \alpha-\frac{2}{\alpha} \implies \alpha^2-\alpha-2=0 \implies (\alpha-2)(\alpha+1)=0$$
+          $\alpha>0$이므로 $\alpha=2$.
+          <div class="why">인수분해로 나온 두 해 $\alpha=2, -1$ 중, 처음에 잡은 조건($\alpha>0$)을 만족하는 것만 남긴다</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num">3</span>
+        <div class="step-body">STEP1의 식에 $\theta=\pi/4$, $\alpha=2$를 대입합니다: 좌변의 $\sec^2(\pi/4) = \dfrac{1}{\cos^2(\pi/4)} = \dfrac{1}{(\sqrt2/2)^2}=\dfrac{1}{1/2}=2$. 우변은 $1+\dfrac{2}{2^2}=1+\dfrac12=\dfrac32$. 따라서
+          $$2\cdot\frac{d\theta}{d\alpha} = \frac32 \implies \frac{d\theta}{d\alpha} = \frac34$$
+          <div class="why">$\cos(\pi/4)=\sqrt2/2$는 특수각의 삼각비 — 이미 알고 있어야 하는 선수 지식이다</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num">4</span>
+        <div class="step-body">우리가 원하는 것은 $\dfrac{d\theta}{d\alpha}$가 아니라 $\dfrac{d\alpha}{d\theta}$입니다($f$가 $\alpha$의 함수이므로, 최종적으로 $\theta$에 대해 미분하려면 "$\alpha$가 $\theta$에 대해 얼마나 변하는지"가 필요하기 때문). 역함수 미분법으로 뒤집습니다:
+          $$\frac{d\alpha}{d\theta} = \frac{1}{d\theta/d\alpha} = \frac{1}{3/4} = \frac43$$
+          <div class="why">역함수 미분법: 두 변수의 순간변화율은 서로 역수 관계다</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num">5</span>
+        <div class="step-body">마지막으로 연쇄법칙(합성함수 미분법)으로 $f'(\theta)$를 완성합니다. ①식 $f(\theta)=2\alpha^3$에서 $\dfrac{df}{d\alpha}=6\alpha^2$이므로:
+          $$f'(\theta) = \frac{df}{d\alpha}\cdot\frac{d\alpha}{d\theta} = 6\alpha^2\cdot\frac{d\alpha}{d\theta} = 6(2)^2\cdot\frac43 = 24\cdot\frac43 = 32$$
+          <div class="why">f를 θ로 곧바로 미분하기 어려우니, f → α → θ로 이어지는 연쇄법칙 다리를 놓아 계산한다</div>
+        </div>
+      </div>
+      <div class="tip">💡 처음부터 끝까지 근의 공식이 단 한 번도 등장하지 않았습니다. 대신 "교점을 변수로 놓기 → 관계식 두 개 세우기 → α로 미분 → 역함수로 뒤집기 → 연쇄법칙으로 완성"이라는 5단계만 있었을 뿐입니다. 이것이 이 강의가 말하는 '미분법 매칭'의 정체입니다.</div>
+    </div>
+
+    <!-- 개념 5 -->
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>g(t)라는 기호에 겁먹지 마라 — 함수도 변수로 놓아라</div>
+      <p>모의고사에서 "$y=f(x)$와 $y=t$가 만나는 점의 $x$좌표를 $g(t)$라 하자"라는 조건이 나오면, 많은 학생이 $g(t)$라는 함수 기호 자체를 어떻게 미분해야 할지 몰라 당황합니다. 해법은 간단합니다: $g(t)$ 대신 그 교점을 그냥 새 변수 $\alpha$로 부릅니다. 그러면 조건은 단순히 $f(\alpha)=t$라는 <strong>관계식</strong> 하나가 됩니다.</p>
+      <div class="formula-box">
+        $f(\alpha)=t$라는 관계식의 양변을 $t$로 미분하면 (좌변에서 $\alpha$가 $t$의 함수이므로 연쇄법칙 적용):<br>
+        $f'(\alpha)\cdot\dfrac{d\alpha}{dt} = 1 \implies \dfrac{d\alpha}{dt} = \dfrac{1}{f'(\alpha)}\;\left(=g'(t)\right)$
+      </div>
+      <p>이 결과는 사실 개념2의 <strong>③ 역함수 미분법</strong>과 완전히 같은 식입니다. $g$는 곧 $f$의 역함수이기 때문입니다. 다만 $g(t)$라는 낯선 기호에 겁먹지 않고 "함수도 변수로 놓고, 변수로 미분한다"는 마인드만 있으면 이 공식을 스스로 만들어낼 수 있다는 것이 강사가 강조하는 핵심 문구입니다.</p>
+      <div class="caution">⚠️ 자주 하는 실수: $g(t)$를 실제로 식으로 풀어내려고(예: 삼차방정식을 직접 풀어) 시도하다가 시간을 낭비하는 경우가 많습니다. $f(\alpha)=t$ 관계식만 세워두고 바로 미분하면, $\alpha$의 구체적인 식을 몰라도 $g'(t)$ 값을 구할 수 있습니다(단, 특정 $t$ 값에서의 $g'(t)$를 구하려면 그 순간의 $\alpha$ 값은 대입해서 확인해야 합니다).</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <!-- 기초 -->
+      <div class="level-header filterable basic">
+        <span class="level-badge badge-basic">기초</span>
+        <span style="font-size:.95em;color:var(--sub)">음함수 미분·매개변수 미분 기본 계산 연습</span>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 원 위의 점에서 접선의 기울기(음함수 미분)</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 곡선 $x^2+y^2=25$ 위의 점 $(3,4)$에서 $\dfrac{dy}{dx}$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>먼저 $(3,4)$가 실제로 곡선 위의 점인지 확인한다: $3^2+4^2=9+16=25$. 맞다.
+                <div class="why">대입할 점이 곡선 위에 있는지 확인하지 않으면 이후 계산이 무의미해질 수 있다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$y$를 $x$의 함수로 보고 양변을 $x$로 미분한다(음함수 미분): $2x+2y\cdot y'=0$.
+                <div class="why">$y^2$을 x로 미분하면 연쇄법칙에 의해 $2y\cdot y'$이 된다 — $y$가 $x$의 함수이기 때문</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$y'$에 대해 정리한다: $2y\cdot y' = -2x \implies y' = -\dfrac{x}{y}$ ($y\neq0$).
+                <div class="why">양변을 2y로 나누어 y'만 남긴다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$x=3, y=4$를 대입한다: $y' = -\dfrac{3}{4}$.
+                <div class="why">STEP1에서 확인한 점의 좌표를 그대로 대입</div>
+              </div>
+            </div>
+            <span class="answer-tag">정답: dy/dx = -3/4</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 매개변수로 나타낸 곡선의 dy/dx</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 매개변수 $x=t^2+1$, $y=t^3-3t$로 나타내어진 곡선에서 $t=2$일 때
+          $\dfrac{dy}{dx}$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$x, y$를 각각 $t$로 미분한다: $\dfrac{dx}{dt}=2t$, $\dfrac{dy}{dt}=3t^2-3$.
+                <div class="why">매개변수 미분법의 첫 단계 — x, y 각각을 매개변수 t에 대해 미분</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>매개변수 미분 공식을 적용한다: $\dfrac{dy}{dx} = \dfrac{dy/dt}{dx/dt} = \dfrac{3t^2-3}{2t}$.
+                <div class="why">dy/dx를 직접 구하기 어려우므로, 공통 매개변수 t를 거쳐서 나눗셈으로 구한다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$t=2$를 대입한다: $\dfrac{3(4)-3}{2(2)} = \dfrac{9}{4}$.
+                <div class="why">STEP2의 식에 t=2를 그대로 대입</div>
+              </div>
+            </div>
+            <span class="answer-tag">정답: dy/dx = 9/4</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 기본 -->
+      <div class="level-header filterable standard">
+        <span class="level-badge badge-standard">기본</span>
+        <span style="font-size:.95em;color:var(--sub)">교점을 변수로 잡아 음함수 미분 · 역함수 미분법 적용</span>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 교점을 α로 놓고 음함수 미분(곱의 미분법칙 포함)</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 곡선 $y=x^2+3$과 직선 $y=tx$ ($t>2\sqrt3$)가 서로 다른 두 점에서 만난다.
+          두 교점의 $x$좌표 중 큰 값을 $g(t)$라 하자. $g(4)$와 $g'(4)$의 값을 각각 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$g(t)$ 대신 교점의 $x$좌표를 새 변수 $\alpha$로 둔다. 교점 조건 $x^2+3=tx$에서 $\alpha^2-t\alpha+3=0$.
+                <div class="why">함수 기호 대신 변수로 이름 붙이면 이후 미분이 쉬워진다(개념5 참고)</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$t=4$를 대입해 $g(4)$를 구한다: $\alpha^2-4\alpha+3=0 \implies (\alpha-1)(\alpha-3)=0 \implies \alpha=1$ 또는 $3$. 큰 값이므로 $g(4)=3$.
+                <div class="why">두 근 중 "큰 값"이라는 조건에 맞는 것만 선택</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>관계식 $\alpha^2-t\alpha+3=0$의 양변을 $t$로 미분한다. $\alpha$는 $t$의 함수이고 $t\alpha$는 두 함수의 곱이므로 곱의 미분법칙을 쓴다: $2\alpha\cdot\dfrac{d\alpha}{dt} - \left(\alpha + t\cdot\dfrac{d\alpha}{dt}\right) = 0$.
+                <div class="why">$t\cdot\alpha$를 t로 미분하면 (t의 미분)×α + t×(α의 미분) = α + t·dα/dt (곱의 미분법칙)</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$\dfrac{d\alpha}{dt}$에 대해 정리한다: $\dfrac{d\alpha}{dt}(2\alpha-t) = \alpha \implies \dfrac{d\alpha}{dt} = \dfrac{\alpha}{2\alpha-t}$.
+                <div class="why">dα/dt가 들어간 항을 좌변으로 묶어 인수분해</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 5</span>
+              <div>$t=4, \alpha=3$을 대입한다: $g'(4) = \dfrac{3}{2(3)-4} = \dfrac{3}{2}$.
+                <div class="why">STEP2에서 구한 α=3(=g(4))과 t=4를 STEP4의 식에 대입</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $t\alpha$를 미분할 때 $\alpha$가 $t$의 함수라는 사실을 잊고 그냥 $\alpha$로만 미분하면(곱의 미분법칙을 빠뜨리면) 완전히 틀린 답이 나온다.</p>
+            <span class="answer-tag">정답: g(4) = 3, g'(4) = 3/2</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 역함수의 미분계수</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 함수 $f(x)=x^3+x$는 실수 전체의 집합에서 증가함수이므로 역함수 $g(x)$가 존재한다.
+          $g(2)$와 $g'(2)$의 값을 각각 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$f(1)=1^3+1=2$이므로, 역함수의 정의($f(a)=b \iff g(b)=a$)에 의해 $g(2)=1$.
+                <div class="why">역함수 값을 구하려면 원래 함수에서 그 값을 만드는 x를 찾으면 된다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>역함수 미분법 공식을 적용한다: $g'(b) = \dfrac{1}{f'(g(b))}$. 여기서 $g(2)=1$이므로 $f'(1)$이 필요하다.
+                <div class="why">개념2의 ③번 공식 dx/dy = 1/(dy/dx)을 그대로 적용한 것</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$f'(x)=3x^2+1$이므로 $f'(1)=3(1)+1=4$. 따라서 $g'(2)=\dfrac{1}{4}$.
+                <div class="why">STEP1에서 구한 g(2)=1을 f'에 대입</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $g'(2)$를 구할 때 실수로 $f'(2)$를 대입하는 경우가 많다. 반드시 $f'(g(2))=f'(1)$을 대입해야 한다 — "2"는 y값이지 x값이 아니다.</p>
+            <span class="answer-tag">정답: g(2) = 1, g'(2) = 1/4</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 심화 -->
+      <div class="level-header filterable advanced">
+        <span class="level-badge badge-advanced">심화</span>
+        <span style="font-size:.95em;color:var(--sub)">접선의 각도 매개변수화 · 합성함수와 역함수 미분의 결합</span>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 접선의 각도를 새 변수로 미분(음함수 미분)</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 곡선 $y=x^2$ 위의 점 $P(a, a^2)$ ($a>0$)에서의 접선이 $x$축의 양의 방향과
+          이루는 각을 $\theta$ ($0<\theta<\pi/2$)라 하자. $a=2$일 때 $\dfrac{d\theta}{da}$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>점 $P$에서의 접선의 기울기는 $f'(a)=2a$이고, 이 기울기는 곧 $\tan\theta$이다. 관계식: $\tan\theta = 2a$.
+                <div class="why">개념4와 완전히 같은 구조 — 문제에 등장하는 각 θ를 새 변수 a로 연결하는 관계식부터 세운다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>양변을 $a$로 미분한다(음함수 미분, $\theta$는 $a$의 함수): $\sec^2\theta\cdot\dfrac{d\theta}{da} = 2$.
+                <div class="why">tanθ를 a로 미분하면 연쇄법칙에 의해 sec²θ·dθ/da</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$a=2$일 때 $\tan\theta = 2(2)=4$이므로, $\sec^2\theta = 1+\tan^2\theta = 1+16=17$.
+                <div class="why">삼각함수의 기본 관계식 sec²θ = 1+tan²θ를 이용하면 θ 값을 직접 구하지 않고도 sec²θ를 알 수 있다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>STEP2의 식에 대입한다: $17\cdot\dfrac{d\theta}{da}=2 \implies \dfrac{d\theta}{da}=\dfrac{2}{17}$.
+                <div class="why">STEP3에서 구한 sec²θ 값을 그대로 대입해 dθ/da만 남긴다</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $\sec^2\theta$를 구하려고 $\theta$ 값을 직접 구하려 하면(즉 $\tan\theta=4$인 각을 특수각으로 착각하면) 계산이 막힌다. $\sec^2\theta=1+\tan^2\theta$ 관계식으로 우회하는 것이 핵심이다.</p>
+            <span class="answer-tag">정답: dθ/da = 2/17</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 역함수 관계식과 합성함수 미분의 결합</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 함수 $f(x)=x^3+x$와 직선 $y=t$가 (모든 실수 $t$에 대해) 오직 한 점에서 만난다
+          ($f$는 모든 실수에서 증가함수이므로). 이 교점의 $x$좌표를 $g(t)$라 하고,
+          $h(t) = f\big(g(t)+1\big)$이라 하자. $h'(10)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>$g(t)$의 정의는 $f(g(t))=t$라는 관계식과 같다. $t=10$일 때 $f(x)=10$을 만족하는 $x$를 찾는다: $x=2$일 때 $2^3+2=10$이므로 $g(10)=2$.
+                <div class="why">g(t)를 함수 기호로만 보지 않고 f(α)=t라는 관계식으로 바꿔서 실제 값을 찾는다(개념5)</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>역함수 미분법으로 $g'(10)$을 구한다: $g'(t) = \dfrac{1}{f'(g(t))}$이므로 $f'(2)=3(2)^2+1=13$, 따라서 $g'(10)=\dfrac{1}{13}$.
+                <div class="why">개념5의 공식 dα/dt = 1/f'(α)를 그대로 적용</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$h(t)=f(g(t)+1)$을 합성함수 미분법(연쇄법칙)으로 미분한다: $h'(t) = f'\big(g(t)+1\big)\cdot \dfrac{d}{dt}\big(g(t)+1\big) = f'\big(g(t)+1\big)\cdot g'(t)$.
+                <div class="why">바깥 함수 f를 먼저 미분하고 안쪽 (g(t)+1)의 미분(=g'(t), 상수 1의 미분은 0)을 곱하는 표준 연쇄법칙</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>$t=10$을 대입한다: $g(10)+1 = 2+1=3$이므로 $f'(3) = 3(3)^2+1 = 28$. 따라서 $h'(10) = f'(3)\cdot g'(10) = 28\cdot\dfrac{1}{13} = \dfrac{28}{13}$.
+                <div class="why">STEP1, STEP2에서 구한 값들을 STEP3의 식에 순서대로 대입</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $h'(t)$를 구할 때 $g(t)+1$을 하나의 덩어리로 보지 않고 $f'(g(t))+1$처럼 잘못 미분하는 실수가 흔하다. 반드시 "바깥 함수의 미분 × 안쪽 함수의 미분" 순서를 지켜야 한다.</p>
+            <span class="answer-tag">정답: h'(10) = 28/13</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 수능 대비 -->
+      <div class="level-header filterable csat">
+        <span class="level-badge badge-csat">수능 대비</span>
+        <span style="font-size:.95em;color:var(--sub)">28번 유형(킬러) — 변수 재설정 전략의 완전한 재현과 확장</span>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 킬러 유형: 교점 α 설정으로 넓이의 순간변화율 구하기</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 2차함수 $y=x^2-2$와 원점을 지나고 $x$축의 양의 방향과 이루는 각이
+          $\theta$ ($0<\theta<\pi/2$)인 직선이 있다. 이 포물선과 직선으로 둘러싸인 대칭인 영역의 넓이를
+          $f(\theta)$라 하자. 교점의 $x$좌표를 $\alpha$ ($\alpha>0$)라 할 때 $f(\theta)=2\alpha^3$이
+          성립함이 알려져 있다. $f'(\pi/4)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>교점 $(\alpha, \alpha\tan\theta)$가 포물선 위의 점이라는 조건에서 위치 관계식을 세운다: $\alpha\tan\theta = \alpha^2-2 \implies \tan\theta = \alpha-\dfrac{2}{\alpha}$.
+                <div class="why">개념4 참고 — 근의 공식을 쓰지 않고 교점을 α로 이름 붙인 뒤 얻는 관계식</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>위 식의 양변을 $\alpha$로 미분(음함수 미분): $\sec^2\theta\cdot\dfrac{d\theta}{d\alpha} = 1+\dfrac{2}{\alpha^2}$.
+                <div class="why">좌변은 θ가 α의 함수이므로 연쇄법칙, 우변은 -2/α의 도함수인 2/α²에 1을 더한 것</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$\theta=\pi/4$를 STEP1의 식에 대입해 $\alpha$를 구한다: $1=\alpha-\dfrac2\alpha \implies \alpha^2-\alpha-2=0 \implies (\alpha-2)(\alpha+1)=0$. $\alpha>0$이므로 $\alpha=2$.
+                <div class="why">tan(π/4)=1이라는 특수각 값을 이용해 그 순간의 α를 확정</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>STEP2에 $\theta=\pi/4$, $\alpha=2$를 대입한다: $\sec^2(\pi/4)=2$, 우변 $=1+\dfrac24=\dfrac32$이므로 $2\cdot\dfrac{d\theta}{d\alpha}=\dfrac32 \implies \dfrac{d\theta}{d\alpha}=\dfrac34$.
+                <div class="why">cos(π/4)=√2/2이므로 sec²(π/4)=1/cos²(π/4)=2</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 5</span>
+              <div>역함수 미분법으로 뒤집는다: $\dfrac{d\alpha}{d\theta}=\dfrac{1}{3/4}=\dfrac43$. 마지막으로 $f(\theta)=2\alpha^3$에서 $\dfrac{df}{d\alpha}=6\alpha^2$이므로 연쇄법칙으로 완성한다: $f'(\theta) = 6\alpha^2\cdot\dfrac{d\alpha}{d\theta} = 6(4)\cdot\dfrac43 = 32$.
+                <div class="why">f → α → θ로 이어지는 연쇄법칙 다리(개념4의 5단계 전략)를 그대로 적용</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: $\dfrac{d\theta}{d\alpha}$와 $\dfrac{d\alpha}{d\theta}$를 헷갈려 역수를 취하지 않고 그대로 곱하면 완전히 다른 값이 나온다. 마지막에 무엇을 구하라는 것인지($f'(\theta)$, 즉 $\theta$에 대한 미분)를 항상 다시 확인해야 한다.</p>
+            <span class="answer-tag">정답: f'(π/4) = 32</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 킬러 유형: g(t) 재설정 + 곱의 미분법칙 확장</div>
+        <div class="problem-body">
+          <strong>문제:</strong> 최고차항의 계수가 $1$인 삼차함수 $f(x)=x^3-3x$와 상수 $t$ ($t>2$)에 대하여,
+          곡선 $y=f(x)$와 직선 $y=t$가 오직 한 점에서 만난다. 이 교점의 $x$좌표를 $g(t)$라 하고,
+          $h(t)=t\cdot g(t)$라 하자. $h'(18)$의 값을 구하시오.
+        </div>
+        <details>
+          <summary>풀이 보기</summary>
+          <div class="solution">
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 1</span>
+              <div>먼저 왜 교점이 하나뿐인지 확인한다. $f'(x)=3x^2-3=0$에서 $x=\pm1$이 극값의 위치이고, $f(-1)=-1+3=2$(극대), $f(1)=1-3=-2$(극소)이다. $t>2$는 극댓값 $2$보다 크므로, $y=t$는 $f$가 계속 증가하는 $x>1$ 구간에서만 유일하게 만난다.
+                <div class="why">삼차함수가 증가·감소를 반복하더라도, 극댓값보다 큰 y=t는 증가 구간에서 딱 한 번만 만난다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 2</span>
+              <div>$g(t)$ 대신 교점을 새 변수 $\alpha$로 두면 관계식은 $f(\alpha)=t$, 즉 $\alpha^3-3\alpha=t$.
+                <div class="why">개념5의 전략 그대로 — 함수 기호 대신 변수로 이름 붙인다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 3</span>
+              <div>$t=18$일 때 $\alpha$ 값을 직접 찾는다: $\alpha=3$을 대입하면 $27-9=18$이 성립한다. 따라서 $g(18)=3$.
+                <div class="why">삼차방정식을 일반적으로 풀 필요 없이, 정수해를 대입해 확인하면 충분하다</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 4</span>
+              <div>관계식 $\alpha^3-3\alpha=t$의 양변을 $t$로 미분한다(음함수 미분, $\alpha$는 $t$의 함수): $3\alpha^2\cdot\dfrac{d\alpha}{dt} - 3\cdot\dfrac{d\alpha}{dt} = 1 \implies \dfrac{d\alpha}{dt} = \dfrac{1}{3\alpha^2-3}$.
+                <div class="why">좌변의 각 항에 연쇄법칙을 적용한 뒤 dα/dt로 묶어 정리</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 5</span>
+              <div>$\alpha=3$을 대입한다: $g'(18)=\dfrac{d\alpha}{dt} = \dfrac{1}{3(9)-3} = \dfrac{1}{24}$.
+                <div class="why">STEP3에서 구한 α=3(=g(18))을 STEP4의 식에 대입</div>
+              </div>
+            </div>
+            <div class="sol-step">
+              <span class="sol-step-label">STEP 6</span>
+              <div>$h(t)=t\cdot g(t)$는 두 함수의 곱이므로 곱의 미분법칙을 적용한다: $h'(t) = g(t) + t\cdot g'(t)$. $t=18$을 대입하면 $h'(18) = g(18) + 18\cdot g'(18) = 3 + 18\cdot\dfrac{1}{24} = 3+\dfrac34 = \dfrac{15}{4}$.
+                <div class="why">STEP3의 g(18)=3과 STEP5의 g'(18)=1/24를 곱의 미분법칙 식에 대입</div>
+              </div>
+            </div>
+            <p class="warn">오답 주의: STEP1의 "왜 교점이 하나뿐인가"를 확인하지 않고 넘어가면, $t>2$ 조건이 왜 필요한지 이해하지 못한 채 답만 맞히는 셈이 된다. 다변수 킬러에서는 조건 하나하나가 다 이유가 있다.</p>
+            <span class="answer-tag">정답: h'(18) = 15/4</span>
+          </div>
+        </details>
+      </div>
+
+    </div><!-- #problems -->
+
+    <!-- ===== 검증 박스 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>이 자료는 「시대수학 김성호」 채널의 영상(KobKUh5GOxY, 약 11분)을 정리한 <strong>영상 요약 문서</strong>(전체 자막이 아닌, 타임스탬프별 상세 요약 + 칠판 수식 verbatim 기록)를 기초 자료로 삼아 AI가 재구성한 것입니다.</p>
+      <p style="margin-top:8px">⚠️ <strong>수능 대비 1</strong>(교점 α 설정, 정답 $f'(\pi/4)=32$)은 요약본에 기록된 영상의 실제 예제를 가깝게 재현한 문항입니다. 미분 전략(관계식 세우기 → 음함수 미분 → 값 대입 → 역함수 미분 → 연쇄법칙)의 전 과정을 처음부터 독립적으로 재검산하여 $f'(\pi/4)=32$가 정확히 일치함을 확인했습니다(확신도 ★★★). 다만 넓이 관계식 $f(\theta)=2\alpha^3$ 자체는 원본 영상 속 도형(그림)에서 유도되는 결과이며, 요약 문서에는 도형 그림 자체가 없어 그 유도 과정까지는 독립적으로 재현하지 못하고 요약본에 기록된 결과값을 그대로 사용했습니다 — 실제 수업에서 원본 영상의 도형을 함께 보여줄 것을 권장합니다.</p>
+      <p style="margin-top:8px"><strong>수능 대비 2</strong>(g(t) 재설정 + 곱의 미분법칙, 정답 $15/4$)는 영상의 핵심 전략(함수를 변수로 재설정 후 관계식을 직접 미분)을 그대로 살려 <strong>새로 설계한 확장 문항</strong>입니다. 삼차함수의 극값·문제 조건($t>2$)의 타당성·전 계산 과정을 처음부터 끝까지 독립적으로 재검산했습니다(확신도 ★★★). 그 외 기초 2문항·기본 2문항·심화 2문항 역시 모두 새로 설계하고 전 과정을 재검산한 문항입니다.</p>
+      <p style="margin-top:8px">문항은 영상 내용을 바탕으로 AI가 재구성한 연습 문제이며, 교과서 및 평가원 기출과 직접 대응하지 않습니다.
+      "수능 대비"는 <strong>난이도 라벨</strong>일 뿐 <strong>실재 기출 문제가 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+<!--REL_START--><!--REL_END-->
+<footer>
+    생성일 2026-09-17 · 영상 출처: <a href="https://www.youtube.com/watch?v=KobKUh5GOxY" style="color:var(--primary)">시대수학 김성호</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
