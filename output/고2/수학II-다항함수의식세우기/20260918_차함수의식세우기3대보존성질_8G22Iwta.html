@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>다항함수 식 세우기와 차함수의 3대 보존성질</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink:0; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 13.5px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .persp-head { font-weight: 700; color: var(--primary-dark); margin: 18px 0 6px; display:flex; align-items:center; gap:8px; }
+    .persp-badge { background: var(--primary); color:#fff; border-radius:6px; padding:2px 10px; font-size:12.5px; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅱ(미적분Ⅰ) — 다항함수의 식 세우기와 차함수의 성질</div>
+    <h1>계수 4개 잡고 연립방정식? 그만!<br>차함수 하나로 식·넓이·극점을 한 번에</h1>
+    <p class="sub">그래프가 직선을 <strong>관통·접함·변곡접선</strong>으로 만나는 형태만 보고 인수의 차수를 바로 읽어내고, 두 함수의 차 '차함수(f−g)'가 <strong>실근·넓이·평균값정리 지점</strong>을 그대로 보존한다는 사실로 계산량을 10분의 1로 줄인다.</p>
+    <div class="quote">"3차함수라는 말을 보자마자 계수 4개를 미지수로 잡고 연립방정식을 세우는 건 하수의 전형적인 실수다." — 영상 핵심 포인트</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/8G22IwtaJgg" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/8G22IwtaJgg/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">[ 노베특강 Ep.3 ] 문제 풀이의 기본! 다항함수의 식 세우기</div>
+        <div class="v-meta">📺 YouTube · 약 14분 · 수능수학 권구승</div>
+        <a class="v-link" href="https://youtu.be/8G22IwtaJgg" target="_blank" rel="noopener">https://youtu.be/8G22IwtaJgg</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 다항함수 그래프가 $x$축이나 직선과 만나는 기하학적 형태(관통 / 접함 / 변곡접선)로부터 인수의 거듭제곱 수를 즉시 구성하고, '차함수(f−g)'가 그대로 물려받는 <strong>3대 불변량(실근·인수 개수, 정적분 넓이, 평균값 정리를 만족하는 극점)</strong>을 이용해 함수식을 세우고 넓이·극점을 계산한다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 계수 4개 없이 3차함수 식을 10초 만에 완성하기</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 3차함수 $f(x)$의 그래프가 직선 $y=x$와 $x=0$에서 만나고(뚫고 지나감), $x=3$에서 접한다. $f(x)$를 구하고, $y=f(x)$와 $y=x$로 둘러싸인 부분의 넓이를 구하시오.</div>
+      <div class="visual">   y = x 위에서 바라본 f(x) - x 의 모습
+
+   y-x
+    │
+    │           ⌒← x=3 에서 접함(튕기고 지나감, 중근)
+────┼──●──────●────── x
+    │  0(관통)  3
+    │
+   "직선 y=x를 기준으로 삼으면
+    0에서는 뚫고, 3에서는 접하는 3차함수" 그 자체가 답의 재료다</div>
+      <details open>
+        <summary>풀이 보기 — 차함수로 10초 만에 f(x) 결정</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>기준선이 $x$축이 아니라 직선 $y=x$이므로, 새 함수 $h(x)=f(x)-x$를 만든다(이것이 '차함수').<div class="why">$f(x)$가 직선 $y=x$와 만나는 자리는 방정식 $f(x)=x$, 즉 $f(x)-x=0$의 해와 정확히 같다. 그래서 $f$ 대신 $h=f-x$를 관찰하면 "직선과의 관계"가 "$x$축과의 관계"로 바뀐다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$h(x)$는 $x=0$에서 $x$축을 뚫고 지나가므로 $(x-0)^1=x$를 인수로, $x=3$에서 접하므로(튕기고 부호가 안 바뀜) $(x-3)^2$을 인수로 갖는다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f$의 최고차항 계수가 $1$이므로 $h=f-x$도 최고차항 계수 $1$인 3차식이다. 따라서 $h(x)=x(x-3)^2$ (다른 인수는 없다 — 3차식인데 이미 차수 $1+2=3$을 다 썼기 때문).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(x)-x=x(x-3)^2$ 이므로 $x$를 이항하면 $f(x)=x(x-3)^2+x$. 연립방정식 없이 함수식이 끝났다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>넓이는 $\displaystyle\int_0^3 |f(x)-x|\,dx=\int_0^3 |x(x-3)^2|\,dx$인데, $x(x-3)^2$는 $[0,3]$에서 $x\ge0,\ (x-3)^2\ge0$이므로 항상 $0$ 이상 → 절댓값을 그대로 벗길 수 있다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>$\displaystyle\int_0^3 x(x-3)^2\,dx=\int_0^3 (x^3-6x^2+9x)\,dx=\Big[\tfrac{x^4}{4}-2x^3+\tfrac{9}{2}x^2\Big]_0^3=\tfrac{81}{4}-54+\tfrac{81}{2}=\tfrac{81-216+162}{4}=\tfrac{27}{4}$.</div></div>
+          <span class="answer-tag">정답: $f(x)=x(x-3)^2+x$, 넓이 $=\dfrac{27}{4}$ — 이 값과 계산 방식을 뒤에서 공식으로 5초 만에 재현한다</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <p>① <strong>인수정리</strong>: 다항함수 $f(x)$가 $x=a$에서 $x$축과 만나면(즉 $f(a)=0$이면) $f(x)$는 $(x-a)$를 인수로 갖는다. 즉 $f(x)=(x-a)Q(x)$ 꼴로 쓸 수 있다.</p>
+      <p style="margin-top:6px">② <strong>중근·삼중근이 그래프에서 뜻하는 것</strong>: $(x-a)^2$을 인수로 가지면 그래프가 $x=a$에서 축에 접했다가 다시 튕겨 나간다(부호가 안 바뀜). $(x-a)^3$을 인수로 가지면 접하는 것처럼 보이지만 결국 부호가 바뀌며 뚫고 지나간다(변곡접선).</p>
+      <p style="margin-top:6px">③ <strong>정적분의 기본정리</strong>: $f$의 한 부정적분을 $F$라 하면 $\displaystyle\int_a^b f(x)\,dx=F(b)-F(a)$.</p>
+      <p style="margin-top:6px">④ <strong>도함수와 접선의 기울기</strong>: $f'(a)$는 $x=a$에서 그래프에 그은 접선의 기울기이다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>인수의 개수 판정법 — 그래프가 만나는 3가지 형태</div>
+      <p>다항함수의 그래프가 어떤 직선(또는 $x$축)과 만날 때, "어떻게" 만나는지만 보면 그 자리에서 몇 제곱짜리 인수가 나오는지 바로 알 수 있다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body"><strong>관통형 (단일근)</strong>: $x=a$를 곧게 뚫고 지나감 → 인수 $(x-a)^1$ (일반적으로 홀수 차수).</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body"><strong>접함·튕김형 (중근)</strong>: $x=b$에서 뚫지 못하고 부호 변화 없이 튕겨 나감 → 인수 $(x-b)^2$ (일반적으로 짝수 차수).</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body"><strong>변곡접선형 (삼중근)</strong>: $x=c$에서 접선의 기울기가 $0$이 되면서도 결국 부호가 바뀌며 뚫고 지나감 → 인수 $(x-c)^3$ (3 이상의 홀수 차수).</div></div>
+      <div class="visual">관통(1승)         접함(2승)         변곡접선(3승)
+   \  /              \  /               \___
+    \/                 \/                    \___
+────●────         ────●────          ────●────
+   부호 바뀜         부호 안 바뀜        결국 부호 바뀜
+   (+ → −)          (+ → +)           (+ → −, 잠깐 평평)</div>
+      <div class="concept-box">3차함수 예: $x=0$을 뚫고 $x=3$에서 접하면 $f(x)=kx(x-3)^2$. 4차함수 예: $x=0$을 뚫고 $x=4$에서 변곡접선이면 $g(x)=kx(x-4)^3$.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>차함수(Difference Function)로 기울어진 기준선 다루기</div>
+      <p>지금까지는 기준이 $x$축($y=0$)이었다. 그런데 기준선이 기울어진 직선 $y=mx+n$이라면? <strong>$f(x)-(mx+n)$을 하나의 새 함수로 보는 것</strong>이 핵심이다. 이 $h(x)=f(x)-(mx+n)$을 '차함수'라 부른다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$f(x)$가 직선 $y=mx+n$과 만나는 자리는 방정식 $f(x)=mx+n$, 즉 $h(x)=f(x)-(mx+n)=0$의 해와 정확히 같다.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">따라서 $f$가 직선과 만나는 "형태"(관통/접함/변곡접선)를 개념 1의 방법 그대로 $h(x)$에 적용해 인수를 구성할 수 있다.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">$h(x)$의 인수식을 다 세운 뒤, 정의 $h(x)=f(x)-(mx+n)$에서 $-(mx+n)$을 이항하면 $f(x)=h(x)+(mx+n)$ — 연립방정식 없이 함수식이 바로 완성된다.</div></div>
+      <div class="formula-box">$$f(x)-(mx+n)=k(x-\alpha)^{p}(x-\beta)^{q}\cdots \;\;\Longrightarrow\;\; f(x)=k(x-\alpha)^{p}(x-\beta)^{q}\cdots+(mx+n)$$</div>
+      <div class="tip">도입 문제에서 $h(x)=f(x)-x=x(x-3)^2$로 세운 뒤 $x$만 이항해서 $f(x)$를 구한 것이 바로 이 알고리즘이다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>차함수의 3대 보존 성질 (유도)</div>
+      <p>차함수 $h(x)=f(x)-g(x)$(여기서 $g$는 보통 직선)를 만들면, 원래 $f$와 $g$ 사이의 관계가 신기하게도 $h$와 $x$축 사이의 관계로 완전히 그대로 옮겨간다. 이걸 세 가지로 나눠 증명한다.</p>
+
+      <div class="persp-head"><span class="persp-badge">성질 1</span>실근 및 인수 개수 보존</div>
+      <p>정의상 $h(x)=f(x)-g(x)$이므로:</p>
+      <div class="formula-box">$$f(\alpha)=g(\alpha) \iff f(\alpha)-g(\alpha)=0 \iff h(\alpha)=0$$</div>
+      <p>즉 $f$와 $g$가 만나는 $x$좌표는 곧 $h$가 $x$축과 만나는 $x$좌표다. 게다가 "몇 번 접하는가(중복도)"도 그대로 옮겨간다 — $h$가 $(x-\alpha)^2$을 인수로 가지면(접함) 그 자리에서 $f$와 $g$도 접하는 관계이기 때문이다.</p>
+
+      <div class="persp-head"><span class="persp-badge">성질 2</span>넓이 보존 (세로 선분 길이가 같다는 원리)</div>
+      <p>어떤 $x$좌표에서 곡선 $f(x)$와 직선 $g(x)$ 사이의 세로 거리는 $|f(x)-g(x)|=|h(x)|$이다. 이건 곧 $h(x)$와 $x$축($y=0$) 사이의 세로 거리 $|h(x)-0|$과 <strong>완전히 같은 숫자</strong>다. 넓이란 이 세로 선분들을 구간에 걸쳐 다 모은 것이므로:</p>
+      <div class="formula-box">$$\int_{\alpha}^{\beta} |f(x)-g(x)|\,dx=\int_{\alpha}^{\beta} |h(x)-0|\,dx=\int_{\alpha}^{\beta} |h(x)|\,dx$$</div>
+      <p>즉 <strong>[원래 곡선과 직선 사이의 넓이] = [차함수와 $x$축 사이의 넓이]</strong>다. 그래서 넓이를 구할 때 굳이 원함수를 전개해서 적분하지 않고, 차함수 상태에서 표준 넓이 공식을 바로 쓸 수 있다.</p>
+
+      <div class="persp-head"><span class="persp-badge">성질 3</span>평균값 정리(접선 기울기) 지점 보존</div>
+      <p>$h(x)=f(x)-(mx+n)$을 미분하면:</p>
+      <div class="formula-box">$$h'(x)=f'(x)-m$$</div>
+      <p>$h$의 극점(접선 기울기가 $0$인 곳)은 $h'(x)=0$인 곳이고, 이는 곧 $f'(x)=m$인 곳이다. 즉 <strong>$f$의 접선 기울기가 직선의 기울기 $m$과 같아지는 지점</strong>이 $h$의 극점 위치와 정확히 일치한다. 이 지점은 "$f$와 직선의 두 교점을 잇는 할선의 기울기와 같은 접선 기울기를 갖는 점"이라는 평균값 정리(MVT)의 결론과 같은 자리다.</p>
+      <div class="caution">3대 보존 성질은 "차함수를 만들면 계산이 편해진다"는 요령이 아니라, $h=f-g$라는 <strong>정의 자체에서 나오는 필연적인 결과</strong>다. 그래서 어떤 $f,g$ 조합에도 항상 성립한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>차함수 넓이 공식 유도 — 왜 $\dfrac{|a|}{12}L^4$ 인가</div>
+      <p>차함수가 $h(x)=a(x-p)^2(x-q)$ 꼴(한쪽은 접함=중근, 다른 쪽은 관통=단일근)일 때, 두 근 사이의 넓이를 매번 전개해서 적분하지 않고 공식으로 바로 구해보자. $L=|q-p|$라 하자.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">치환 $t=x-p$를 쓰면 $x-q=t-(q-p)=t-L$ (단, $q>p$로 놓았다 — 순서가 바뀌어도 결과는 절댓값으로 같아진다).</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$\displaystyle\int_p^q a(x-p)^2(x-q)\,dx=\int_0^L a\,t^2(t-L)\,dt=a\int_0^L (t^3-Lt^2)\,dt$.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">$=a\Big[\tfrac{t^4}{4}-\tfrac{L t^3}{3}\Big]_0^L=a\Big(\tfrac{L^4}{4}-\tfrac{L^4}{3}\Big)=a L^4\Big(\tfrac{3-4}{12}\Big)=-\tfrac{aL^4}{12}$.</div></div>
+      <div class="step-row"><span class="step-num">4</span><div class="step-body">넓이는 이 값의 절댓값이므로 $\dfrac{|a|L^4}{12}$.</div></div>
+      <div class="formula-box">$$\int_{p}^{q} \big|a(x-p)^2(x-q)\big|\,dx=\dfrac{|a|\,L^4}{12}\qquad (L=|q-p|)$$</div>
+      <p><strong>도입 문제 검산</strong>: $h(x)=x(x-3)^2$는 $a=1$, 두 근이 $0,3$이므로 $L=3$. 공식 적용: $\dfrac{1\times 3^4}{12}=\dfrac{81}{12}=\dfrac{27}{4}$ — 도입에서 직접 적분한 값과 정확히 일치한다.</p>
+      <div class="tip">이 공식은 <strong>"중근 하나 + 단일근 하나"</strong>로 이루어진 삼차식 차함수에만 바로 적용된다. 근의 형태가 다르면(예: 서로 다른 세 단일근) 직접 전개해서 적분해야 한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>4차함수(변곡접선) 예제로 총정리</div>
+      <p>직선 $y=x+1$과 4차함수 $f(x)$(최고차항 계수 $1$)가 $x=0$에서 관통, $x=4$에서 변곡접선(삼중근)을 이룬다고 하자.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$h(x)=f(x)-(x+1)$로 두면, $x=0$ 관통 → $(x-0)^1$, $x=4$ 변곡접선 → $(x-4)^3$. 차수 합이 $1+3=4$로 4차식과 일치하므로 $h(x)=x(x-4)^3$.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$(x+1)$을 이항: $f(x)=x(x-4)^3+(x+1)=x(x-4)^3+x+1$.</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">성질 3 확인: $h'(x)=f'(x)-1=0$이 되는 지점은 $f$의 접선 기울기가 직선 $y=x+1$의 기울기 $1$과 같아지는 지점 — 실제로 $x=4$에서 $h$가 삼중근을 가지므로 $h'(4)=0$이고, 이는 $f'(4)=1$을 뜻한다.</div></div>
+      <div class="concept-box">4차함수에서도 <strong>실근·인수 개수 보존, 넓이 보존, 접선 기울기 일치 지점 보존</strong>이 똑같이 성립한다 — 3대 보존 성질은 함수의 차수와 무관한 일반 원리다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">6</span>자주 하는 실수</div>
+      <div class="caution">① <strong>일반형 전개의 함정</strong>: "3차함수"라는 말을 보자마자 $f(x)=ax^3+bx^2+cx+d$로 놓고 조건 4개로 연립방정식을 세우는 것은 계산량이 몇 배로 늘어나는 비효율적인 접근이다. 교점·접점의 "형태"만 보고 차함수 인수로 바로 식을 세워야 한다.<br>② <strong>넓이 공식을 아무 근 형태에나 쓰는 실수</strong>: $\dfrac{|a|}{12}L^4$ 공식은 "중근 + 단일근" 조합에서만 성립한다. 서로 다른 세 단일근이면 공식이 다르므로 직접 적분해서 확인해야 한다.<br>③ <strong>차함수의 기준을 잘못 잡는 실수</strong>: 기준이 $x$축이 아니라 직선일 때는 반드시 $f(x)-(mx+n)$ 전체를 하나의 차함수로 보아야 한다. $f(x)$만 따로 인수분해하려 하면 애초에 직선과의 관계가 사라진다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 인수의 개수 판정</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)$의 그래프가 $x=2$에서 $x$축을 뚫고 지나가고, $x=5$에서 $x$축에 접했다가 튕겨 나간다(중근). 이 정보만으로 $f(x)$가 반드시 가져야 하는 인수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>관통형이므로 $x=2$에서는 $(x-2)^1$, 접함·튕김형이므로 $x=5$에서는 $(x-5)^2$을 인수로 갖는다.</p>
+          <span class="answer-tag">정답: $(x-2)(x-5)^2$을 인수로 가짐</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 최고차항 계수 1인 3차함수 식 세우기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 3차함수 $f(x)$의 그래프가 $x=0$에서 $x$축을 뚫고, $x=2$에서 $x$축에 접한다. $f(x)$를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$x$축이 기준이므로 차함수는 $f(x)$ 자기 자신이다. $x=0$ 관통 → $x$, $x=2$ 접함 → $(x-2)^2$. 차수 합이 $1+2=3$으로 3차식과 일치.</p>
+          <span class="answer-tag">정답: $f(x)=x(x-2)^2$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 기울어진 직선을 기준으로 식 세우기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 3차함수 $f(x)$의 그래프가 직선 $y=2x-1$과 $x=1$에서 만나고(관통), $x=4$에서 접한다. $f(x)$를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>차함수 $h(x)=f(x)-(2x-1)$을 만든다. $x=1$ 관통 → $(x-1)$, $x=4$ 접함 → $(x-4)^2$. 최고차항 계수 $1$이므로 $h(x)=(x-1)(x-4)^2$.</p>
+          <p>$-(2x-1)$을 이항: $f(x)=(x-1)(x-4)^2+(2x-1)$.</p>
+          <span class="answer-tag">정답: $f(x)=(x-1)(x-4)^2+2x-1$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 차함수 넓이 공식 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$인 3차함수 $f(x)$의 그래프가 $x=1$에서 $x$축에 접하고, $x=3$에서 뚫고 지나간다. $y=f(x)$와 $x$축으로 둘러싸인 부분의 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x)=2(x-1)^2(x-3)$ (중근 $1$, 단일근 $3$). 개념 4의 공식 $\dfrac{|a|L^4}{12}$에 $a=2$, $L=|3-1|=2$를 대입: $\dfrac{2\times 2^4}{12}=\dfrac{32}{12}=\dfrac{8}{3}$.</p>
+          <p class="why">검산: $\displaystyle\int_1^3 2(x-1)^2(x-3)\,dx$를 직접 전개해 적분해도 $-\dfrac{8}{3}$이 나오므로(구간에서 함수가 음수) 넓이는 $\dfrac{8}{3}$으로 일치.</p>
+          <span class="answer-tag">정답: $\dfrac{8}{3}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 4차함수(변곡접선) 식 세우기와 극점 확인</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 4차함수 $f(x)$의 그래프가 직선 $y=3x-2$와 $x=0$에서 관통, $x=3$에서 변곡접선(삼중근)을 이룬다. (1) $f(x)$를 구하시오. (2) $f'(x)=3$이 되는 $x$값 중 성질 3(평균값 정리 보존)에 의해 반드시 존재해야 하는 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>(1) $h(x)=f(x)-(3x-2)$. $x=0$ 관통 → $x$, $x=3$ 변곡접선 → $(x-3)^3$. $h(x)=x(x-3)^3$. 이항: $f(x)=x(x-3)^3+3x-2$.</p>
+          <p>(2) 성질 3에 의해 $h'(x)=f'(x)-3=0$인 지점은 $h(x)=x(x-3)^3$의 극점이다. $h$가 $x=3$에서 삼중근(변곡접선)을 가지므로 $h'(3)=0$ — 즉 $x=3$에서 $f'(3)=3$이 성립한다.</p>
+          <span class="answer-tag">정답: (1) $f(x)=x(x-3)^3+3x-2$ (2) $x=3$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 넓이 조건으로 미지수 결정</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $a>0$인 3차함수 $f(x)$의 그래프가 $x=0$에서 $x$축에 접하고, $x=2$에서 뚫고 지나간다. $y=f(x)$와 $x$축으로 둘러싸인 넓이가 $\dfrac{4}{3}$일 때, $a$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x)=a x^2(x-2)$ (중근 $0$, 단일근 $2$). 넓이 공식 $\dfrac{|a|L^4}{12}$에 $L=|2-0|=2$를 대입: $\dfrac{a\times 2^4}{12}=\dfrac{16a}{12}=\dfrac{4a}{3}$.</p>
+          <p>$\dfrac{4a}{3}=\dfrac{4}{3}$이므로 $a=1$.</p>
+          <span class="answer-tag">정답: $a=1$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러 유형(참·거짓 판별)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 3차함수 $f(x)$의 그래프가 직선 $y=x+1$과 $x=-1$에서 접하고, $x=2$에서 뚫고 지나간다. 다음 명제의 참, 거짓을 판별하시오: "$f'(x)=1$이 되는 $x$값 중 하나는 $x=-1$이다."</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>차함수 $h(x)=f(x)-(x+1)$을 만들면, $x=-1$ 접함 → $(x+1)^2$, $x=2$ 관통 → $(x-2)$. $h(x)=(x+1)^2(x-2)$.</p>
+          <p>성질 3에 의해 $h'(x)=f'(x)-1=0$인 지점이 $h$의 극점이다. $h$가 $x=-1$에서 중근(접함)을 가지므로 $x=-1$은 $h$의 극점이고, 따라서 $h'(-1)=0 \Rightarrow f'(-1)=1$이 성립한다.</p>
+          <span class="answer-tag">정답: 참</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 단답형 ($p+q$)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $3$인 3차함수 $f(x)$의 그래프가 직선 $y=-x+4$와 $x=1$에서 접하고, $x=4$에서 뚫고 지나간다. $y=f(x)$와 직선 $y=-x+4$로 둘러싸인 부분의 넓이를 $k=\dfrac{q}{p}$($p,q$는 서로소인 자연수)라 할 때 $p+q$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>차함수 $h(x)=f(x)-(-x+4)$는 $x=1$ 접함 → $(x-1)^2$, $x=4$ 관통 → $(x-4)$이고 최고차항 계수 $3$이므로 $h(x)=3(x-1)^2(x-4)$.</p>
+          <p>성질 2(넓이 보존)에 의해 구하는 넓이는 $\displaystyle\int_1^4 |h(x)|\,dx$와 같다. 공식 $\dfrac{|a|L^4}{12}$에 $a=3$, $L=|4-1|=3$을 대입: $\dfrac{3\times 3^4}{12}=\dfrac{243}{12}=\dfrac{81}{4}$.</p>
+          <p>$k=\dfrac{81}{4}$이므로 $q=81,\ p=4$는 서로소 → $p+q=85$.</p>
+          <span class="answer-tag">정답: $85$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상의 핵심 알고리즘(인수의 개수 판정 3가지, 차함수 정의와 이항을 통한 식 세우기, 3대 보존 성질, 접선 넓이 공식 $\frac{|a|}{12}L^4$)을 그대로 반영했고, 도입 문제·개념 4의 공식 유도·모든 연습문항의 계산을 직접 재검산했습니다.</p>
+      <p style="margin-top:8px">⚠️ <strong>추가 검토 권장(★★)</strong>: 심화 1·수능 대비 1의 "성질 3(평균값 정리 보존)"을 활용한 문항은 영상에 직접 등장한 예제가 아니라, 영상에서 설명한 원리(성질 3)를 다른 수치로 확장해 새로 구성한 것입니다. 원리 자체는 영상 내용과 수학적으로 동일하나, 학생에게 처음 접하는 유형일 수 있으므로 수업 중 개념 설명(카드 3)을 함께 짚어주시길 권장합니다. "수능 대비"는 난이도 라벨일 뿐이며 <strong>실재 기출문제가 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../수학II-다항함수의미분법/20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="../수학II-다항함수의미분법/20260901_다항함수거리곱과비율관계극값찾기_s9OQVJcd.html">다항함수 거리곱과 비율관계로 극값 빠르게 구하기 (s9OQVJcd)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-09-18 · 영상 출처: <a href="https://youtu.be/8G22IwtaJgg" style="color:var(--primary)">수능수학 권구승</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
