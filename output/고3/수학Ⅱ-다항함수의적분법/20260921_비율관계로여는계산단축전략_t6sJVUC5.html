@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>비율관계와 넓이공식으로 여는 계산 단축 전략</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3(N수 포함) · 수학Ⅱ — 다항함수의 미분법·적분법</div>
+    <h1>비율관계와 넓이공식으로<br>"기준 상태부터 확인하기" 전략</h1>
+    <p class="sub">미지수 $\alpha$를 두고 무작정 적분식을 세우기 전에, 가장 대칭적인 기준 상태의 값부터 계산해 두면 불가능한 경우를 계산 없이 걸러낼 수 있다</p>
+    <div class="quote">"미지수 $\alpha$로 무작정 적분식을 세우지 말고, 이미 알고 있는 상수 기준을 먼저 검토하는 것이 고수의 시간 단축법이다." — 영상 인용 [00:10:56]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://www.youtube.com/watch?v=t6sJVUC55q4" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/t6sJVUC55q4/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">비율 관계, 넓이 공식 몰랐던 사람? (3월 모의고사 15번, 21번)</div>
+        <div class="v-meta">📺 YouTube · 약 18분 · 어피셜 수학</div>
+        <a class="v-link" href="https://www.youtube.com/watch?v=t6sJVUC55q4" target="_blank" rel="noopener">https://www.youtube.com/watch?v=t6sJVUC55q4</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 3차·4차함수의 비율관계(2:1, 1:√3, 3:1, 1:√2)와 넓이공식을 도함수로부터 직접 유도해 "왜 성립하는지" 이해하고, 미지수 범위를 판정해야 하는 문제에서 대칭적인 기준 상태를 먼저 계산해 불가능한 경우를 배제하는 전략을 익힌다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 계산으로 다 해봐야 아는 걸까?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제(영상 속 예제 재구성):</strong> 최고차항의 계수가 $1$인 삼차함수 $f(x)$가 있고, $g(x)=\displaystyle\int_0^x f(t)\,dt$ 라 하자. $g(2)=-4$를 만족시키는 $f(x)$의 그래프가 $x$축과 만나는 방식은 여러 경우($\alpha<0$, $\alpha=0$, $0<\alpha<2$)로 나뉜다. 이 중 $0<\alpha<2$인 경우가 가능한지 판정하시오. (단, $\alpha$는 $f(x)$의 변곡점의 $x$좌표이다.)</div>
+      <div class="visual">    y
+    │
+    │        ╱‾‾   ← α=2 부근이면 곡선이 이미 위로 떠 있음
+    │      ╱
+────┼────╱────────── x
+    │   ╱   0        2
+    │ ╱
+  변곡점이 0과 2 사이에 있으면
+  [0,2] 구간 넓이가 기준(α=-2)보다 훨씨 작아진다</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$g(2)=\displaystyle\int_0^2 f(t)\,dt=-4$이므로 부호를 뒤집으면 $\displaystyle\int_0^2 (-f(t))\,dt = 4$, 즉 $[0,2]$ 구간에서 넓이 $4$가 필요하다.<div class="why">정적분 값이 음수라는 것은 그 구간에서 그래프가 $x$축 아래에 있다는 그림 정보이기 때문이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>가장 계산이 쉬운 "기준 상태"부터 검토한다. 변곡점이 $\alpha=-2$이고 최고차항 계수가 $1$인 대칭적인 경우, 3차함수 변곡 분할 넓이공식 $S=\dfrac{|a|}{4}L^4$에서 $L=2$이므로 $S=\dfrac{1}{4}\times2^4=4$.<div class="why">변곡점을 지나는 수평선은 3차함수를 좌우 대칭으로 나누므로, 계산이 가장 단순한 대칭 배치를 먼저 확인하는 것이 유리하다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>기준 상태($\alpha=-2$)에서 정확히 넓이 $4$가 채워진다. 이제 $\alpha$가 $0$과 $2$ 사이로 이동하면, 변곡점이 원점 쪽으로 가까워지면서 $[0,2]$ 구간 중 곡선이 $x$축 아래에 머무는 길이가 짧아진다.<div class="why">변곡점이 구간 안으로 들어올수록 함수가 더 빨리 $x$축 위로 올라오므로, 음수 구간의 넓이가 기준값보다 작아질 수밖에 없다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>따라서 $0<\alpha<2$인 경우 $[0,2]$ 구간의 넓이가 $4$에 도달할 수 없으므로 불가능하다. 이 판정에는 별도의 적분 계산이 필요 없다 — 기준값과 대소 비교만으로 충분하다.<div class="why">미지수를 두고 매번 적분식을 세우는 대신, 이미 알고 있는 극단적인 기준 상태의 값을 먼저 계산해 비교 대상으로 삼는 것이 이 전략의 핵심이다.</div></div></div>
+          <span class="answer-tag">정답: $0<\alpha<2$는 불가능</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명 — 비율관계는 왜 성립하는가</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>극값 조건:</strong> $f'(x)=0$이 되는 $x$에서 도함수의 부호가 바뀌면 극댓값·극솟값을 가진다.</li>
+        <li><strong>인수분해:</strong> 극값이나 접점을 이중근으로 갖는 다항식은 $a(x-p)^2(x-q)$ 또는 $a(x-p)(x-q)^2$ 꼴로 쓸 수 있다.</li>
+        <li><strong>정적분과 넓이:</strong> 곡선과 직선(또는 두 곡선)으로 둘러싸인 부분의 넓이는 두 함수의 차를 구간에서 정적분한 값의 절댓값이다.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>3차함수 — 극값 기준 비율 (2:1)의 증명</div>
+      <p>극대점을 지나는 접선(수평선)은 극대점에서 이중으로 접하고, 곡선과 한 번 더 만난다. 극대의 $x$좌표를 $0$, 그 접선과 다시 만나는 점의 $x$좌표를 $3\alpha$로 두면, 접선을 뺀 함수는 $x=0$에서 이중근을 가지므로 $f(x)-k=ax^2(x-3\alpha)$ 꼴이다.</p>
+      <div class="formula-box">
+        $$f(x)-k=ax^2(x-3\alpha) \implies f'(x)=a(3x^2-6\alpha x)=3ax(x-2\alpha)$$
+        $$f'(x)=0 \implies x=0 \text{ 또는 } x=2\alpha$$
+      </div>
+      <div class="step-row">
+        <div class="step-num">⚙</div>
+        <div class="step-body">극대($x=0$)와 극소($x=2\alpha$) 사이의 거리는 $2\alpha$이고, 극소($x=2\alpha$)에서 다시 만나는 점($x=3\alpha$)까지의 거리는 $\alpha$이다. 즉 극대→극소 : 극소→교점 $=2\alpha:\alpha=2:1$이다.</div>
+      </div>
+      <div class="tip"><strong>기억할 것:</strong> 이 비율은 미지수 $\alpha$의 값에 무관하게 항상 성립한다 — 계수 $a$나 거리 $\alpha$가 어떤 값이든 도함수를 풀면 $x=0, 2\alpha$가 나오기 때문이다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>4차함수 — 3중근 개형 비율 (3:1)의 증명</div>
+      <p>기울기가 $0$이지만 극값이 아닌 지점(변곡접선 지점)의 $x$좌표를 $0$으로, 곡선을 관통하는 교점의 $x$좌표를 $4\alpha$로 두면 $f(x)-k=ax^3(x-4\alpha)$ 꼴이다.</p>
+      <div class="formula-box">
+        $$f(x)-k=ax^3(x-4\alpha) \implies f'(x)=a(4x^3-12\alpha x^2)=4ax^2(x-3\alpha)$$
+        $$f'(x)=0 \implies x=0 \text{(중근, 극값 아님)} \text{ 또는 } x=3\alpha \text{(극소)}$$
+      </div>
+      <div class="step-row">
+        <div class="step-num">⚙</div>
+        <div class="step-body">기울기 $0$ 지점($x=0$)에서 극소($x=3\alpha$)까지 거리는 $3\alpha$이고, 극소에서 관통 교점($x=4\alpha$)까지 거리는 $\alpha$이다. 즉 $3\alpha:\alpha=3:1$이다.</div>
+      </div>
+      <div class="caution"><strong>주의:</strong> $x=0$은 기울기가 $0$이지만 극값이 아니다(3중근이므로 부호가 바뀌지 않는다). 이 지점을 극대로 착각해 다른 공식을 적용하면 틀린다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>3차함수 변곡 분할 넓이공식과 "기준 상태" 전략</div>
+      <p>변곡점은 3차함수 그래프의 점대칭 중심이다. 변곡점을 지나는 수평선으로 나뉜 한쪽 구간의 넓이는 변곡점부터 교점까지의 거리 $L$의 네제곱에 비례한다.</p>
+      <div class="formula-box">
+        $$S=\dfrac{|a|}{4}L^4 \quad (L=\text{변곡점부터 교점까지의 거리})$$
+      </div>
+      <div class="step-row">
+        <div class="step-num">⚙</div>
+        <div class="step-body"><strong>도입 문제와의 연결:</strong> 변곡점이 $\alpha=-2$, 최고차항 계수 $a=1$인 대칭 상태를 기준으로 삼으면 $L=2$, $S=\frac{1}{4}(2)^4=4$가 정확히 필요한 넓이와 일치한다. 이 기준값을 알고 있으면, 변곡점이 다른 위치($0<\alpha<2$)로 이동했을 때 넓이가 기준보다 작아지는지 크지는지를 계산 없이 비교할 수 있다.</div>
+      </div>
+      <div class="tip"><strong>전략 요약:</strong> 미지수의 범위를 판정해야 하는 문제에서는, 가장 대칭적이고 계산이 쉬운 특수한 배치(기준 상태)의 값을 먼저 구해두고, 그 값과 비교해 나머지 경우들을 빠르게 걸러낸다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span style="font-weight:600; color:#2e7d32">비율 대입으로 극점 찾기</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 3차함수 2:1 비율 직접 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)$가 $x=0$에서 극댓값을 갖고, $x=0$에서의 접선이 곡선과 $x=6$에서 다시 만난다. 극솟값의 $x$좌표를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">비율 적용</span><div>극대(0)→극소 : 극소→교점(6) $=2:1$이므로, 전체 거리 $6$을 $2:1$로 내분하면 극소의 $x$좌표는 $4$이다.</div></div>
+          <p class="warn">오답 주의: $6$을 그냥 반으로 나눠 $3$으로 답하는 실수가 많다. 비율은 $1:1$이 아니라 $2:1$이다.</p>
+          <span class="answer-tag">정답: $x=4$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 4차함수 3:1 비율 직접 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 사차함수 $f(x)$가 $x=0$에서 기울기가 $0$이지만 극값이 아니고, 이 지점의 접선이 곡선과 $x=8$에서 다시 만난다. 극솟값의 $x$좌표를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">비율 적용</span><div>기울기0 지점(0)→극소 : 극소→교점(8) $=3:1$이므로, 전체 거리 $8$을 $3:1$로 내분하면 극소의 $x$좌표는 $6$이다.</div></div>
+          <p class="warn">오답 주의: $3:1$ 비율에서 "가까운 쪽"이 극소가 아니라 기울기0 지점이라는 것을 헷갈리기 쉽다 — 극소는 항상 관통 교점에 더 가깝다.</p>
+          <span class="answer-tag">정답: $x=6$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span style="font-weight:600; color:#1565c0">넓이공식으로 미정계수 결정</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 변곡 분할 넓이공식으로 $a$ 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수 $a$인 삼차함수 $f(x)$의 변곡점을 지나는 수평선이 곡선과 만나는 두 점 사이의 거리가 $L=4$이고, 변곡점을 기준으로 나뉜 한쪽 구간의 넓이가 $16$일 때 $a$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">공식 대입</span><div>$S=\dfrac{a}{4}L^4=\dfrac{a}{4}\times4^4=64a$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">방정식</span><div>$64a=16 \Rightarrow a=\dfrac{1}{4}$.</div></div>
+          <p class="warn">오답 주의: $L$은 "변곡점부터 한쪽 교점까지" 거리이지 "두 교점 사이 전체 거리"가 아니다. 문제에서 어느 쪽을 주는지 그림으로 반드시 확인한다.</p>
+          <span class="answer-tag">정답: $a=\dfrac{1}{4}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 극값 접선 넓이공식으로 넓이 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 $2$인 삼차함수 $f(x)$가 $x=-1$에서 극댓값을 갖고 이 접선이 곡선과 $x=2$에서 다시 만난다. 접선과 곡선으로 둘러싸인 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">거리 계산</span><div>극대에서 교점까지 거리 $L=2-(-1)=3$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">공식 대입</span><div>$S=\dfrac{|a|}{12}L^4=\dfrac{2}{12}\times3^4=\dfrac{162}{12}=\dfrac{27}{2}$.</div></div>
+          <p class="warn">오답 주의: $L$은 극대에서 극소까지 거리가 아니라 극대에서 교점까지 거리다. 극소의 위치를 먼저 구하고 다시 더하는 실수를 피하려면 처음부터 극대→교점 거리를 직접 잡는다.</p>
+          <span class="answer-tag">정답: $\dfrac{27}{2}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span style="font-weight:600; color:#6a1b9a">기준 상태로 범위 배제하기</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 변곡점 위치에 따른 넓이 대소 비교</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 $1$인 삼차함수 $f(x)$의 변곡점의 $x$좌표를 $\alpha$라 하자. $g(x)=\displaystyle\int_0^x f(t)\,dt$가 $g(2)=-4$를 만족시킬 때, $\alpha=-2$인 경우 조건이 정확히 성립함이 알려져 있다. $\alpha=-1$일 때 $[0,2]$ 구간에서 필요한 넓이 $4$를 채울 수 있는지 판정하시오. (단, 변곡점을 지나는 수평선을 기준으로 그래프는 좌우 대칭이다.)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">기준 상태 확인</span><div>$\alpha=-2$일 때 $[0,2]$ 구간 전체가 변곡 분할 넓이 공식의 $L=2$ 구간과 정확히 겹쳐 $S=\frac{1}{4}(2)^4=4$가 채워진다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">이동 후 비교</span><div>$\alpha=-1$로 이동하면 $[0,2]$ 구간 중 변곡점보다 오른쪽에 있는 구간(넓이가 더 작은 부분)이 늘어나므로, 채워지는 넓이는 기준값 $4$보다 작아진다.</div></div>
+          <p class="warn">오답 주의: "변곡점이 조금만 이동했으니 넓이도 조금만 달라질 것"이라 생각해 성립한다고 오판하기 쉽다. 넓이는 거리의 네제곱에 비례해 민감하게 줄어든다.</p>
+          <span class="answer-tag">정답: $\alpha=-1$일 때는 넓이 $4$를 채울 수 없다</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 3중근 개형에서 역방향으로 계수 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수 $a$인 사차함수 $f(x)$가 $x=0$에서 기울기 $0$(극값 아님), 극솟값의 $x$좌표가 $3$이다. 기울기 $0$ 지점에서의 접선과 곡선으로 둘러싸인 넓이가 $\dfrac{81}{5}$일 때, $a$의 값을 구하시오. (넓이공식: $S=\dfrac{|a|}{20}L^5$, $L$은 기울기0 지점부터 관통 교점까지 거리)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">교점 위치</span><div>기울기0 지점(0)→극소(3) 거리 $3$이므로 비율 $3:1$에 의해 극소→관통 교점 거리는 $1$. 교점 $x=4$, $L=4$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">넓이식</span><div>$S=\dfrac{a}{20}\times4^5=\dfrac{1024a}{20}=\dfrac{256a}{5}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">방정식</span><div>$\dfrac{256a}{5}=\dfrac{81}{5} \Rightarrow a=\dfrac{81}{256}$.</div></div>
+          <p class="warn">오답 주의: $L$을 기울기0 지점→극소 거리($=3$)로 잘못 넣으면 전혀 다른 값이 나온다. 반드시 비율로 관통 교점까지의 거리를 먼저 구해야 한다.</p>
+          <span class="answer-tag">정답: $a=\dfrac{81}{256}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span style="font-weight:600; color:#b71c1c">준킬러 — 비율·넓이·판정 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러(정공법 vs 비율 비교)</div>
+        <div class="problem-body"><strong>문제:</strong> 사차함수 $f(x)$가 실수 전체의 집합에서 미분가능하고, $x=0$에서 기울기가 $0$(극값 아님), 극솟값이 $-16$이다. 최고차항의 계수가 $1$이고 극솟값의 $x$좌표가 $2$일 때, 기울기 $0$ 지점의 함숫값과 극솟값의 차를 (1) 판별식·완전제곱식을 쓰는 정공법과 (2) 비율관계를 쓰는 방법 두 가지로 구하고, 두 방법의 계산량을 비교 서술하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">비율관계 풀이</span><div>기울기0 지점(0)→극소(2) 거리 $l=2$. 3중근 개형 높이차 공식 $\Delta y=\dfrac{|a|l^4}{3}=\dfrac{1\times2^4}{3}=\dfrac{16}{3}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">계산량 비교</span><div>정공법은 $f(x)=x^4+bx^3+cx^2+dx+e$를 세우고 $f'(0)=0$, $f'(2)=0$(중근), $f(2)=-16$을 연립해 미지수 4개를 모두 결정한 뒤 $f(0)$을 구해야 하므로 식이 여러 줄 필요하다. 비율관계는 거리 $l=2$만 알면 공식 대입 한 번으로 높이차가 바로 나온다.</div></div>
+          <p class="warn">오답 주의: 이 문제에서 "극솟값 $-16$"은 높이차를 구하는 데 직접 쓰이지 않는다 — 높이차는 거리 $l$과 계수 $a$로만 결정되므로, 불필요한 정보에 이끌려 정공법으로 돌아가지 않도록 주의한다.</p>
+          <span class="answer-tag">정답: 높이차 $\dfrac{16}{3}$ (기울기0 지점의 함숫값은 $-16+\frac{16}{3}=-\frac{32}{3}$)</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 준킬러(기준 상태로 범위 배제)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 $1$인 삼차함수 $f(x)$의 변곡점의 $x$좌표를 $t$ ($t$는 실수)라 하자. $\displaystyle\int_{0}^{4} |f(x)-f(4)|\,dx = 4$를 만족시키는 $t$의 값 중, $t=2$일 때 조건이 정확히 성립함이 알려져 있다. $t$가 $2$보다 작을 때와 클 때 각각 조건을 만족시킬 수 있는지, 넓이의 증가·감소 방향을 근거로 판정하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">기준 상태 해석</span><div>$t=2$가 구간 $[0,4]$의 정중앙이므로, 변곡점을 지나는 수평선 $y=f(4)$을 기준으로 좌우 대칭인 가장 "표준적인" 배치이다. 이때 $[0,4]$ 구간 전체가 변곡 분할 넓이공식의 대상 구간과 정확히 일치한다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">이동 시 변화</span><div>$t$가 $2$보다 작아지면(변곡점이 구간 왼쪽으로 이동) 곡선이 $x=4$ 근처에서 $f(4)$ 값에 더 빨리 접근하므로, $[0,4]$에서 $|f(x)-f(4)|$가 이루는 넓이는 기준값보다 작아진다. $t$가 $2$보다 커지면 반대로 곡선이 구간 왼쪽에서 $f(4)$와 더 크게 벌어지므로 넓이가 기준값보다 커진다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">결론</span><div>따라서 넓이가 정확히 $4$로 유지되는 것은 대칭 기준 $t=2$ 근처의 매우 제한된 조건에서만 가능하며, $t \ne 2$인 일반적인 경우는 추가 조건 없이는 같은 값을 보장할 수 없다.</div></div>
+          <p class="warn">오답 주의: "$t$가 조금 달라도 넓이는 거의 같을 것"이라 생각하면 안 된다. 넓이는 거리의 거듭제곱에 비례하므로 기준 상태에서 벗어날수록 민감하게 변한다 — 항상 기준 상태를 먼저 계산해 두고 방향성만 논리적으로 판단하는 것이 핵심이다.</p>
+          <span class="answer-tag">정답: 대칭 기준 $t=2$에서만 조건이 정확히 성립하고, $t\ne2$이면 넓이가 기준값에서 벗어난다</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>유형</th><th>비율</th><th>넓이공식</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">3차 극값 접선</td><td>2:1</td><td>$\dfrac{|a|}{12}L^4$</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">3차 변곡점 분할</td><td>1:√3</td><td>$\dfrac{|a|}{4}L^4$</td></tr>
+          <tr><td style="font-weight:700">4차 3중근 개형</td><td>3:1</td><td>$\dfrac{|a|}{20}L^5$</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">4차 선대칭(W형)</td><td>1:√2</td><td>$\dfrac{|a|}{30}L^5$</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px; font-size:.92em; color:var(--sub)">전략: 미지수의 범위를 판정해야 하는 문제에서는 표 안의 공식으로 계산이 가장 쉬운 "기준 상태"의 값을 먼저 구하고, 그 값과 비교해 나머지 범위의 가능성을 논리적으로 배제한다.</p>
+    </div>
+
+    <!-- ===== 검증 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료의 도입 예제는 영상 [00:10:56]~[00:14:45] 구간에서 소개된 "기준 상태 먼저 확인" 풀이 전략을 재구성한 것이며, 개념 설명의 비율관계 증명은 영상 [00:00:55]~[00:08:48] 구간의 유도 과정을 도함수 계산으로 다시 정리했습니다. 수준별 문항은 같은 공식·전략을 다른 수치로 적용한 자체 구성 문항이며, 실재 기출문제를 그대로 재현한 것이 아닙니다.</p>
+      <p style="margin-top:8px">다항함수의 미분·정적분과 도형 응용 범위 내에서만 구성했습니다(삼각함수의 덧셈정리, 치환적분, 수열의 극한 등 선택 미적분 영역은 사용하지 않았습니다). "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div><!-- /container -->
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260825_정적분부호변화와삼차함수비율_POOkxnRH.html">정적분 부호변화와 삼차함수 비율 관계 (POOkxnRH)</a> · <a href="../../고2/수학II-도함수의활용/20260808_3차함수비율관계와특수점활용_5WEbC1T5.html">3차함수 비율관계와 특수점 활용 — 1차항 없는 삼차함수 스피드 풀이 (5WEbC1T5)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-09-21 · 영상 출처: <a href="https://www.youtube.com/watch?v=t6sJVUC55q4" style="color:var(--primary)">어피셜 수학</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
