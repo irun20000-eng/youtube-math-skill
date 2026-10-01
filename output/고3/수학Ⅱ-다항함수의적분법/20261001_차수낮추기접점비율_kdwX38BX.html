@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>차수 낮추기와 접점 비율관계로 잡는 다항함수 킬러문항</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3(N수 포함) · 수학Ⅱ — 다항함수의 적분과 미분가능성</div>
+    <h1>차수 낮추기와 접점 비율관계로<br>잡는 다항함수 킬러문항</h1>
+    <p class="sub">두 다항함수(또는 함수와 직선)가 원점을 공통으로 지날 때, 공통인수 $x$로 약분하면 차수가 하나 낮아진다 — 이 감각 하나로 복잡한 사차방정식도 저차 비율관계로 암산 가능해진다.</p>
+    <div class="quote">"식 안에 $-1$ 같은 상수가 보이면 적분 기호 밖으로 빼서 1차식으로 만들어라." — 영상 핵심 멘트</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/kdwX38BXWeE" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/kdwX38BXWeE/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">수능 전에 배워두세요.</div>
+        <div class="v-meta">📺 YouTube · 약 7분 · 수학강사 이정환</div>
+        <a class="v-link" href="https://youtu.be/kdwX38BXWeE" target="_blank" rel="noopener">https://youtu.be/kdwX38BXWeE</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 적분 안의 상수를 밖으로 빼서 식을 1차식으로 정리하는 이유를 이해하고, 원점을 지나는 두 다항함수(또는 함수와 직선)의 교점·접점 문제에서 공통인수 약분으로 차수를 낮추는 전략과, 그 결과로 얻는 저차함수의 비율관계(1:2 분할)를 직접 유도해 적용할 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 사차방정식을 암산으로 푸는 방법이 있다?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제(영상 속 문제 재구성):</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)$의 그래프가 $x$축과 $x=0,\,3,\,3$에서 만난다(즉 $f(x)=px(x-3)^2$, $p>0$). $g(x)=\displaystyle\int_0^x (f(t)-1)\,dt$ 라 하자. 실수 $t$에 대하여 함수 $y=|g(x)-tx|$ 가 미분가능하지 않은 점의 개수를 $h(t)$ 라 하면, $h(t)$ 가 불연속이 되는 $t$의 값이 정확히 2개뿐이다. $f(x)$를 구하시오.</div>
+      <div class="visual">  식을 왜 "x + g(x)" 로 묶는가?
+
+  g(x) = ∫[0,x](f(t)-1)dt = ∫[0,x]f(t)dt - x
+  ⇒  x + g(x) = ∫[0,x]f(t)dt   (좌변이 원점을 지나는 "순수한" 4차함수가 됨)
+
+  |g(x)-tx| = |(x+g(x)) - (t+1)x|
+  → "4차함수"와 "원점을 지나는 회전하는 직선 y=(t+1)x" 의 교점 문제로 변신!</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$g(x)=\displaystyle\int_0^x(f(t)-1)\,dt = \displaystyle\int_0^x f(t)\,dt - x$ 이므로, 양변에 $x$를 더하면 $x+g(x)=\displaystyle\int_0^x f(t)\,dt$ 가 된다.<div class="why">상수 $-1$이 적분 기호 안에 남아 있으면 $f$와 뒤섞여 식이 지저분해진다. 상수는 적분 기호 밖으로 빼서 $-x$라는 1차식으로 만들어 두면, 나중에 묶어서 소거하거나 더하기가 훨씨 쉬워진다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$|g(x)-tx| = |(x+g(x))-x-tx| = |(x+g(x))-(t+1)x|$. 여기서 $x+g(x)$는 $f$의 부정적분이므로 원점을 지나는 사차함수이고, $(t+1)x$는 원점을 지나는 직선이다.<div class="why">$h(t)$(미분 불가능한 점의 개수)를 직접 구하는 대신, "사차함수와 직선의 교점 개수"로 바꾸면 그림으로 생각할 수 있다 — 절댓값 $|A(x)|$는 $A(x)=0$이면서 부호가 바뀌는 지점(즉 두 그래프가 접하지 않고 가로지르는 교점)에서만 미분 불가능하다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>직선의 기울기 $t+1$을 $0$부터 서서히 늘려가며 원점을 중심으로 회전시킨다고 생각하면, 교점 개수(=미분 불가능한 점의 개수)가 갑자기 바뀌는 "불연속 순간"은 두 번 생긴다: (a) 직선이 $x$축과 겹칠 때, (b) 직선이 곡선의 완만한 쪽과 위에서 접하는 순간.<div class="why">직선이 곡선을 "가로지르다가 접하는 순간"에는 두 개의 교점이 하나로 합쳐지며 사라진다 — 바로 이 순간에 교점의 개수가 계단처럼 뛰어오르거나 떨어지므로 $h(t)$가 불연속이 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>불연속이 되는 $t$값이 정확히 $-k, k$ 꼴로 대칭이어야 하므로, (a)의 $t=-1$과 (b)의 $t$값이 원점에 대해 대칭을 이루도록 $k=1$이 결정되어, (b)는 $t=1$, 즉 기울기 $t+1=2$에서 접함을 알 수 있다.<div class="why">문제가 "$h(t)$가 불연속인 $t$값이 정확히 2개, $-k,k$ 형태"라고 못박아 주었으므로, 이 조건 자체가 $k$를 역으로 결정하는 단서가 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>사차함수 $y=x+g(x)$와 직선 $y=2x$는 원점을 공통으로 지나므로, 접하는 방정식의 양변에서 공통인수 $x$를 약분하면 차수가 하나 낮아져 "삼차함수와 상수함수 $y=2$의 교점" 문제로 바뀐다. 이 삼차함수는 $f$와 같은 뿌리골격(0과 3 사이의 비율관계)을 가지므로, 극대점은 $0$과 $3$ 사이를 $1:2$로 나누는 지점, 즉 $x=1$에서 나타난다.<div class="why">"차수 낮추기"의 핵심은 이것이다 — 원점을 지나는 두 식의 차를 보면 항상 공통인수 $x$가 생기고, 이를 약분하면 "4차함수끼리의 접함(중복근)"이 "3차함수와 가로선의 단순 교점"으로 차수가 하나 낮아진다. 그리고 3차함수 $ax(x-b)^2$ 꼴의 극대점은 항상 $0$과 $b$를 $1:2$로 내분하는 $x=\frac{b}{3}$에서 나타난다(아래 개념 설명 참고).</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 6</span><div>접점 $x=1$을 대입하여 $p$를 구하면 $p=2$가 나온다.<div class="why">약분으로 얻은 3차식에 $x=1$을 넣고 $y$값이 $2$가 되도록 맞추면 $p$가 바로 결정된다. 분모의 $4$와 $(x-3)^2=4$가 서로 상쇠되어 계산이 깔끔하게 끝나는 것도 "차수 낮추기"의 장점이다.</div></div></div>
+          <span class="answer-tag">정답: $f(x)=2x(x-3)^2$</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명 — 왜 이 기법이 통하는가</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>정적분의 선형성:</strong> $\displaystyle\int_0^x (f(t)-c)\,dt = \displaystyle\int_0^x f(t)\,dt - \displaystyle\int_0^x c\,dt = \displaystyle\int_0^x f(t)\,dt - cx$. 즉 상수는 적분 기호 밖으로 그냥 빼낼 수 있다.</li>
+        <li><strong>극값과 중복근:</strong> $f'(x)=0$이 되는 지점에서 부호가 바뀌면 극값이고, 그 $x$좌표는 ($f(x)-$극값$)=0$ 방정식의 중복근이다.</li>
+        <li><strong>절댓값 함수의 미분가능성:</strong> $y=|A(x)|$ 는 $A(x)=0$이면서 그 지점에서 $A(x)$의 부호가 바뀌면(홀수 번 중복근) 미분 불가능하다. 반대로 $A(x)=0$이지만 부호가 바뀌지 않으면(짝수 번 중복근, 즉 접하고 지나가지 않음) 매끄럽게 이어져 미분 가능하다. 이 규칙이 모든 "$h(t)$ 개수 세기" 문제의 출발점이다.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>적분 기호 밖으로 상수 빼기 — 왜 이렇게 바꾸는가</div>
+      <p>$g(x)=\displaystyle\int_0^x(f(t)-1)\,dt$ 처럼 적분 안에 상수가 섞여 있으면, $f$만 따로 떼어내기가 번거롭다. 정적분의 선형성(위 선수학습)을 이용해 상수를 밖으로 빼면 $g(x)=\displaystyle\int_0^x f(t)\,dt - x$ 가 되고, 양변에 $x$를 더하면 $x+g(x)=\displaystyle\int_0^x f(t)\,dt$ 라는 "깨끗한" 식을 얻는다.</p>
+      <div class="concept-box">직접 확인: $f(t)=3t^2+2$, $g(x)=\displaystyle\int_0^x(f(t)-4)\,dt$ 라 하면 $g(x)=\displaystyle\int_0^x(3t^2-2)\,dt=x^3-2x$. 여기에 $4x$를 더하면 $g(x)+4x=x^3+2x$, 그리고 실제로 $\displaystyle\int_0^x(3t^2+2)\,dt=x^3+2x$ — 정확히 일치한다.</div>
+      <div class="caution"><strong>자주 하는 실수:</strong> 상수를 뺄 때 부호를 헷갈려 $g(x)+x$ 대신 $g(x)-x$로 묶는 경우가 많다. 적분 기호 안의 "$-c$"는 적분 후 "$-cx$"가 되므로, 이를 상쇄하려면 반대로 "$+cx$"를 더해야 한다는 것을 항상 다시 확인한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>차수 낮추기 — 공통인수 약분의 원리</div>
+      <p>두 다항함수 $P(x)$, $Q(x)$가 모두 원점을 지난다면($P(0)=Q(0)=0$), 교점 방정식 $P(x)=Q(x)$, 즉 $P(x)-Q(x)=0$ 은 반드시 $x$를 인수로 가진다. $x\neq0$인 교점만 찾고 싶다면 양변을 $x$로 나누면 되는데, 이때 전체 식의 차수가 정확히 1만큼 낮아진다.</p>
+      <div class="formula-box">
+        $$x^2(x-6)^2 - kx = x\big[\,x(x-6)^2-k\,\big]$$
+        <p style="margin-top:8px; font-size:.92em; color:var(--sub)">사차식의 "원점이 아닌 교점"을 찾는 문제가, 대괄호 안의 3차방정식 $x(x-6)^2=k$ 를 푸는 문제로 차수가 낮아진다.</p>
+      </div>
+      <div class="step-row">
+        <div class="step-num">⚙</div>
+        <div class="step-body">특히 두 그래프가 원점에서 <strong>접하는</strong> 경우(단순 교점이 아니라 중복근), 약분 후에도 "접함"의 성질이 그대로 남아 하위 차수에서는 그 접점이 "단순 교점"으로 바뀐다. 이 덕분에 사차함수끼리의 복잡한 접선 조건이 3차함수의 평범한 수평선 교점 문제로 단순해진다.</div>
+      </div>
+      <div class="caution"><strong>자주 하는 실수:</strong> 약분은 "$x\neq0$ 인 범위에서"만 유효하다. 원점 자체가 교점(또는 접점)인지는 약분 전에 따로 확인해야 하며, 약분한 식에 다시 $x=0$을 넣어 판단하면 안 된다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>3차함수 비율관계 — $1:2$ 분할의 증명</div>
+      <p>$c(x)=ax(x-b)^2$ ($a\neq0$, $b\neq0$) 꼴의 삼차함수는 $x=0$에서 단순근, $x=b$에서 중복근을 가진다. 이 함수의 극값이 어디서 나타나는지 직접 미분해 확인해 보자.</p>
+      <div class="formula-box">
+        $$c'(x)=a\big[(x-b)^2+2x(x-b)\big]=a(x-b)\big[(x-b)+2x\big]=a(x-b)(3x-b)$$
+        $$c'(x)=0 \;\Longrightarrow\; x=\dfrac{b}{3} \text{ 또는 } x=b$$
+      </div>
+      <div class="step-row">
+        <div class="step-num">⚙</div>
+        <div class="step-body">$x=0$부터 $x=\dfrac{b}{3}$(극값)까지의 거리는 $\dfrac{b}{3}$, $x=\dfrac{b}{3}$부터 $x=b$(중복근)까지의 거리는 $\dfrac{2b}{3}$이다. 즉 $\dfrac{b}{3}:\dfrac{2b}{3}=1:2$ — $0$과 $b$ 사이를 $1:2$로 내분하는 지점에서 극값이 나타난다.</div>
+      </div>
+      <div class="tip"><strong>기억할 것:</strong> 이 비율은 계수 $a$나 거리 $b$가 어떤 값이든 항상 $1:2$로 성립한다. 도입 문제에서 $b=3$이면 극대점은 $x=\dfrac{3}{3}=1$ — 바로 이 비율관계 덕분에 복잡한 방정식을 풀지 않고도 접점의 위치를 암산으로 찾을 수 있다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>절댓값 그래프, 언제 뾰족해지는가</div>
+      <p>$y=|A(x)|$ 의 그래프는 $A(x)$가 양수인 구간에서는 $A(x)$ 그대로, 음수인 구간에서는 $-A(x)$로 뒤집힌 모양이다. 두 구간이 만나는 지점, 즉 $A(x)=0$인 지점에서 그래프가 "V"자처럼 꺾이면(부호가 바뀌면) 미분이 불가능하고, 반대로 $A(x)=0$이지만 양쪽 모두 같은 부호를 유지하며 매끄럽게 $0$에 닿았다가 다시 올라가면(짝수 번 중복근, 접하기만 함) 미분이 가능하다.</p>
+      <div class="concept-box">비유: 공을 바닥(절댓값의 꺾이는 지점 $A(x)=0$)에 떨어뜨렸을 때, 바닥을 "뚫고 지나가려다 튕겨 나오면" 뾰족한 꼭짓점(미분 불가능)이고, 바닥에 살짜 닿았다가 같은 쪽으로 다시 튀어 오르면 매끄러운 곡선(미분 가능)이다.</div>
+      <div class="caution"><strong>자주 하는 실수:</strong> "$A(x)=0$이면 무조건 미분 불가능"이라고 외워 버리는 경우가 많다. 중복근의 개수(짝수/홀수)까지 확인해야 정확한 개수를 셀 수 있다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span style="font-weight:600; color:#2e7d32">상수 빼기 · 차수 낮추기 기본기</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 적분 기호 밖으로 상수 빼기</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $f(x)=3x^2+2$ 에 대해 $g(x)=\displaystyle\int_0^x (f(t)-4)\,dt$ 라 하자. $g(x)+4x$ 를 $x$에 대한 식으로 나타내시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$g(x)=\displaystyle\int_0^x(3t^2+2-4)\,dt=\displaystyle\int_0^x(3t^2-2)\,dt=x^3-2x$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$g(x)+4x=x^3-2x+4x=x^3+2x$. (검산: $\displaystyle\int_0^x(3t^2+2)\,dt=x^3+2x$ 와 정확히 일치)</div></div>
+          <p class="warn">오답 주의: 상수 $-4$를 뺄 때 부호를 헷갈려 $g(x)-4x$로 계산하는 경우가 많다. 적분 안의 "$-4$"는 적분 후 "$-4x$"가 되므로, 이를 되돌리려면 "$+4x$"를 더해야 한다.</p>
+          <span class="answer-tag">정답: $x^3+2x$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 공통인수로 차수 낮추기 기본</div>
+        <div class="problem-body"><strong>문제:</strong> 두 함수 $y=x^2$, $y=kx$ ($k$는 $0$이 아닌 상수)의 그래프가 원점이 아닌 점에서 만난다. 그 교점의 $x$좌표를 $k$에 대한 식으로 나타내시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$x^2=kx \;\Rightarrow\; x^2-kx=0 \;\Rightarrow\; x(x-k)=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>공통인수 $x$로 약분(차수가 2차 → 1차로 낮아짐)하면 $x-k=0$, 즉 원점이 아닌 교점은 $x=k$.</div></div>
+          <p class="warn">오답 주의: $x=0$도 분명한 교점이지만 문제는 "원점이 아닌" 교점을 물었으므로 $x=k$만 답해야 한다.</p>
+          <span class="answer-tag">정답: $x=k$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span style="font-weight:600; color:#1565c0">비율관계 · 상수 빼기 응용</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 3차함수 비율관계 직접 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)=ax(x-9)^2$ ($a>0$)의 극대점의 $x$좌표를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f'(x)=a(x-9)(3x-9)=3a(x-9)(x-3)$ 이므로 $f'(x)=0$ 은 $x=3$ 또는 $x=9$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>비율관계에 의해 $0$과 $9$를 $1:2$로 내분하는 지점은 $x=\dfrac{9}{3}=3$. 부호를 확인하면($x<3$에서 증가, $3<x<9$에서 감소) $x=3$이 극대점이다.</div></div>
+          <p class="warn">오답 주의: 비율관계를 적용할 때 "가까운 쪽"이 극값이고 "먼 쪽"이 중복근(접점)이라는 것을 거꾸로 외우기 쉽다 — 항상 $0$에 더 가까운 쪽이 극값이다.</p>
+          <span class="answer-tag">정답: $x=3$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 상수 빼기와 미분으로 $f(x)$ 복원</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)$가 $f(0)=0$을 만족한다. $h(x)=\displaystyle\int_0^x(f(t)-5)\,dt$ 라 할 때, $h(x)+5x=x^2(x-4)$ 가 성립한다. $f(x)$ 를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>상수를 적분 기호 밖으로 빼는 원리에 의해 $h(x)+5x=\displaystyle\int_0^x f(t)\,dt$. 문제에서 이 값이 $x^2(x-4)=x^3-4x^2$ 로 주어졌다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\displaystyle\int_0^x f(t)\,dt=x^3-4x^2$ 의 양변을 $x$로 미분하면 $f(x)=3x^2-8x$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>검산: $f(0)=3(0)^2-8(0)=0$ — 문제의 조건과 일치한다.</div></div>
+          <p class="warn">오답 주의: $h(x)+5x$가 $\displaystyle\int_0^x f(t)\,dt$ 와 같다는 것을 놓치고, $h(x)$ 자체를 미분해 $f(x)-5$로 착각하는 경우가 많다.</p>
+          <span class="answer-tag">정답: $f(x)=3x^2-8x$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span style="font-weight:600; color:#6a1b9a">차수 낮추기로 접점·미정계수 찾기</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 사차함수와 직선의 접점 (차수 낮추기)</div>
+        <div class="problem-body"><strong>문제:</strong> 사차함수 $y=x^2(x-6)^2$ 의 그래프와 원점을 지나는 직선 $y=kx$ ($k>0$)가 원점이 아닌 점에서 접한다. 접점의 $x$좌표와 $k$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$x^2(x-6)^2-kx=x\big[\,x(x-6)^2-k\,\big]$. 원점이 아닌 접점을 찾으므로 공통인수 $x$로 약분하면, "$c(x)=x(x-6)^2$ 가 $y=k$ 와 접하는" 3차함수 문제로 차수가 낮아진다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>3차함수 $c(x)=x(x-6)^2$ 가 수평선과 접하는 지점은 $c$의 극값 지점이다. 비율관계에 의해 극대점은 $0$과 $6$을 $1:2$로 내분하는 $x=\dfrac{6}{3}=2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$k=c(2)=2(2-6)^2=2\times16=32$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">검산</span><div>원래 사차함수에서 $x=2$일 때 $y=2^2(2-6)^2=4\times16=64$, 직선은 $32\times2=64$ — 두 값이 일치해 접점임을 확인할 수 있다.</div></div>
+          <p class="warn">오답 주의: $x=6$(중복근)에서도 $c(x)=0$이 되어 접하는 것처럼 보이지만, 이때는 $k=0$이 되어 문제의 조건 $k>0$을 만족하지 않는다. $x=6$은 제외해야 한다.</p>
+          <span class="answer-tag">정답: 접점의 $x$좌표 $=2$, $k=32$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 극댓값이 주어졌을 때 미정계수 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 $a$ ($a>0$)인 삼차함수 $f(x)=ax(x-6)^2$ 의 극댓값이 $32$일 때, $a$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>비율관계에 의해 극대점의 $x$좌표는 $0$과 $6$을 $1:2$로 내분하는 $x=2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(2)=a\times2\times(2-6)^2=a\times2\times16=32a$. 이것이 극댓값 $32$와 같으므로 $32a=32$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>따라서 $a=1$.</div></div>
+          <p class="warn">오답 주의: 극댓값을 구할 $x$좌표를 $6$(중복근, 극솟값 $0$이 나오는 지점)으로 잘못 넣으면 전혀 다른 결과가 나온다. 반드시 비율관계로 극대점의 위치($x=2$)를 먼저 찾아야 한다.</p>
+          <span class="answer-tag">정답: $a=1$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span style="font-weight:600; color:#b71c1c">차수 낮추기 유형(킬러) — 개수 세기 종합</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러(미분 불가능한 점의 개수 변화)</div>
+        <div class="problem-body"><strong>문제:</strong> 삼차함수 $f(x)=x(x-6)^2$ 에 대하여, 실수 $k$에 대해 함수 $y=|f(x)-kx|$ 가 미분가능하지 않은 점의 개수를 $N(k)$ 라 하자. $N(k)$ 가 불연속이 되는 모든 $k$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)-kx=x(x-6)^2-kx=x\big[(x-6)^2-k\big]$. $x=0$은 항상 근이고, 괄호 $(x-6)^2=k$ 의 근은 $k\ge0$일 때 $x=6\pm\sqrt{k}$ 이다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$k<0$ 이면 괄호에 실근이 없어 $x=0$ 하나뿐인 단순근 → $N(k)=1$. $0<k<36$ (단 $6-\sqrt{k}\neq0$) 이면 $x=0,\,6-\sqrt{k},\,6+\sqrt{k}$ 모두 서로 다른 단순근 세 개 → $N(k)=3$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3 (경계 1)</span><div>$k=0$ 이면 괄호가 $(x-6)^2=0$, 즉 $x=6$ 중복근(짝수 → 부호 안 바뀜, 세지 않음)이 되어 $x=0$ 단순근 하나만 남는다 → $N(0)=1$. 하지만 $k\to0^+$ 이면 $N(k)=3$이었으므로 $k=0$ 에서 $N$이 불연속이다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4 (경계 2)</span><div>$k=36$ 이면 $6-\sqrt{36}=0$ 이 되어 괄호의 근 하나가 바깥의 $x=0$ 과 겹친다. 전체식은 $x\big[(x-6)^2-36\big]=x\cdot x(x-12)=x^2(x-12)$ — $x=0$ 이 짝수번 중복근이 되어 세지 않고, $x=12$ 단순근만 남는다 → $N(36)=1$. $k\neq36$ 인 주변에서는 $N(k)=3$ 이었으므로 $k=36$ 에서도 불연속이다.</div></div>
+          <p class="warn">오답 주의: "$k$가 조금만 달라져도 교점 개수는 비슷할 것"이라 생각하면 안 된다. 중복근이 생기는 순간(접하는 순간)에는 교점 두 개가 하나로 합쳐지거나 외부 근과 겹쳐 사라지므로 개수가 계단처럼 갑자기 변한다.</p>
+          <span class="answer-tag">정답: $k=0,\ 36$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 킬러(사차함수 버전 개수 세기 + 비율관계)</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $G(x)=x^2(x-9)^2$ 에 대하여, 실수 $k$에 대해 함수 $y=|G(x)-kx|$ 가 미분가능하지 않은 점의 개수를 $M(k)$ 라 하자. $M(k)$ 가 불연속이 되는 모든 $k$의 값의 합을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1 (차수 낮추기)</span><div>$G(x)-kx=x^2(x-9)^2-kx=x\big[\,x(x-9)^2-k\,\big]$. $c(x)=x(x-9)^2$ 로 놓으면, $x=0$(바깥 인수)과 $c(x)=k$(안쪽 3차방정식)의 근들을 함께 살펴야 한다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2 (비율관계로 모양 파악)</span><div>$c(x)=x(x-9)^2$ 의 극대점은 비율관계에 의해 $x=\dfrac{9}{3}=3$, 극댓값은 $c(3)=3(3-9)^2=3\times36=108$. 극소점은 $x=9$, 값은 $0$ (접하며 지나가지 않음).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3 (경계 1: $k=0$)</span><div>$k=0$ 이면 전체식이 $x\cdot c(x)=x\cdot x(x-9)^2=x^2(x-9)^2$ — $x=0$, $x=9$ 모두 짝수(2번) 중복근이라 둘 다 부호가 안 바뀐다 → $M(0)=0$. 하지만 $k$가 $0$보다 조금만 커지면 $c(x)=k$ 가 $0<x<9$ 구간에서 교점 두 개를 새로 만들고 $x=0$ 도 단순근으로 살아나 $M(k)=4$ 로 뛴다. 즉 $k=0$에서 불연속.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4 (경계 2: $k=108$)</span><div>$k=108$은 $c(x)=k$ 가 극댓값과 같아지는 접점 순간이다. 이때 $x=3$ 부근의 교점 두 개가 하나(짝수 중복근)로 합쳐져 사라지고, $x=0$(단순근)과 $x>9$쪽 교점(단순근) 두 개만 남는다 → $M(108)=2$. $k=108$ 바로 아래에서는 $M(k)=4$ 였으므로 여기서도 불연속.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>따라서 불연속이 되는 $k$값은 $0$과 $108$ 두 개이며, 그 합은 $0+108=108$.</div></div>
+          <p class="warn">오답 주의: $k=36$(기초 문항에서 쓰인 경계)과 혼동하지 않도록 주의한다. 이 문제는 "사차함수를 약분해 얻은 3차함수"의 극값(극댓값 $108$)이 경계가 되는 전혀 다른 구조다 — 매번 직접 비율관계로 극값을 다시 계산해야 한다.</p>
+          <span class="answer-tag">정답: $108$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>기법</th><th>핵심 아이디어</th><th>효과</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">상수를 적분 기호 밖으로</td><td>$\displaystyle\int_0^x(f(t)-c)dt=\displaystyle\int_0^x f(t)dt-cx$</td><td>적분식을 깨끗한 다항함수 하나로 정리</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">차수 낮추기</td><td>원점을 공통으로 지나는 두 식의 차는 $x$를 인수로 가짐 → 약분</td><td>4차 문제 → 3차 문제로 차수 1 감소</td></tr>
+          <tr><td style="font-weight:700">3차함수 비율관계</td><td>$ax(x-b)^2$ 의 극값은 $0,b$를 $1:2$로 내분하는 $x=\frac{b}{3}$</td><td>미분·연립 없이 극점 위치를 암산</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">절댓값 미분가능성</td><td>$A(x)=0$에서 부호가 바뀌면(홀수 중복근) 미분 불가능</td><td>$h(t)$류 "개수 세기" 문제의 판정 기준</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px; font-size:.92em; color:var(--sub)">전략: 원점을 지나는 두 다항함수(혹은 함수와 직선)의 교점·접점·개수 문제를 만나면, 먼저 상수를 정리해 식을 깨끗하게 만들고, 공통인수 $x$로 차수를 낮춘 뒤, 비율관계로 극점의 위치를 암산으로 찾는다.</p>
+    </div>
+
+    <!-- ===== 검증 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>본 자료의 도입 문제는 영상에서 소개된 "상수를 적분 기호 밖으로 빼기 → $x+g(x)$로 묶기 → 차수 낮추기 → 비율관계로 접점 찾기"의 풀이 흐름을 사용자가 제공한 영상 요약을 바탕으로 재구성한 것입니다. 최종 결과 $f(x)=2x(x-3)^2$ 는 제시된 수치 검산(접점 $x=1$ 대입 시 $\frac{p}{4}\times1\times(1-3)^2=p=2$)으로 확인했습니다. 개념 설명과 수준별 문항(기초~수능 대비)은 영상의 예제를 그대로 쓰지 않고, 같은 기법(상수 빼기·차수 낮추기·비율관계)을 전혀 다른 수치로 적용한 자체 구성 문항이며, 모든 문항의 정답은 직접 미분·대입으로 재검산했습니다.</p>
+      <p style="margin-top:8px">다항함수의 미분·정적분·접선·비율관계 범위 내에서만 구성했습니다(삼각함수의 덧셈정리, 치환적분·부분적분 등 선택 미적분 영역은 사용하지 않았습니다). "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div><!-- /container -->
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260825_정적분부호변화와삼차함수비율_POOkxnRH.html">정적분 부호변화와 삼차함수 비율 관계 (POOkxnRH)</a> · <a href="20260921_비율관계로여는계산단축전략_t6sJVUC5.html">비율관계와 넓이공식으로 여는 계산 단축 전략 (t6sJVUC5)</a> · <a href="20261001_숨겨진접선변곡점볼록성_-8-MOWng.html">숨겨진 접선과 변곡점 볼록성 (-8-MOWng)</a> · <a href="../../고2/수학II-다항함수의미분법/20260901_다항함수거리곱과비율관계극값찾기_s9OQVJcd.html">다항함수 거리곱과 비율관계로 극값 빠르게 구하기 (s9OQVJcd)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-01 · 영상 출처: <a href="https://youtu.be/kdwX38BXWeE" style="color:var(--primary)">수학강사 이정환</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>

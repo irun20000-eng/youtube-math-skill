@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이중 계산 막는 법 — 분할과 분배로 중복 없이 세기 (확률과 통계) | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; } /* pdf-mode.js 인쇄버튼을 툴바 아래로 (겹침 방지) */
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <!-- 툴바: add_back_button.py 가 갤러리 링크 id="gallery-back" 존재 시 건너뜀 → 여기 포함하면 중복 안 됨 -->
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 확률과 통계 — 순열과 조합</div>
+    <h1>이중 계산 막는 법 — <strong>분할과 분배</strong>로 중복 없이 세기</h1>
+    <p class="sub">🎯 "적어도 하나씩" 문제를 <strong>순서대로 뽑고 나중에 보정</strong>하면 반드시 중복이 생긴다. 뽑기 전에 <strong>개수를 자연수로 먼저 쪼개고(분할)</strong>, 각 경우를 조합으로 계산해 더하면 중복이 원천적으로 사라진다.</p>
+    <div class="quote">"뽑는 순서에 시간차를 두지 마라. 개수부터 쪼개는 게 최고의 안전망이다." — 영상 핵심 메시지 요약 [영상 후반부]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/1fH5xIM2k44" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/1fH5xIM2k44/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">이중 계산 막는 방법만 알면 끝. (ft. 분할과 분배)</div>
+        <div class="v-meta">📺 YouTube · 약 4분 · 수학강사 이정환</div>
+        <a class="v-link" href="https://youtu.be/1fH5xIM2k44" target="_blank" rel="noopener">https://youtu.be/1fH5xIM2k44</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: "적어도 하나씩" 조건의 경우의 수를, 순차 선택 후 보정하는 오답 대신 <strong>개수를 자연수로 분할 → 각 경우 조합 계산 → 합산</strong>하는 방법으로 중복 없이 정확히 구한다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 왜 36×7=252는 틀렸을까?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제 (영상 속 예제):</strong> 증권회사 3개($A_1,A_2,A_3$), 통신회사 3개($B_1,B_2,B_3$), 건설회사 4개($C_1,C_2,C_3,C_4$)가 있다. 각 분야에서 <strong>적어도 하나</strong>의 회사를 골라, 총 <strong>4개 회사</strong>에 지원서를 내는 경우의 수를 구하시오.</div>
+      <div class="visual">그룹            회사 수     최소 선택
+증권 (A1~A3)      3          ≥ 1
+통신 (B1~B3)      3          ≥ 1
+건설 (C1~C4)      4          ≥ 1
+                              총 4개 선택 (적어도 하나씩)
+
+[학생들의 오답]
+  ① 각 분야에서 1개씩 먼저 뽑기 : 3×3×4 = 36
+  ② 남은 10-3=7개 중 1개 더 뽑기 : 7
+  ③ 36 × 7 = 252   ← 정답(126)의 정확히 2배! 중복이 섞여 있다.
+
+[분할과 분배로 푼 정답]
+  4 = 2+1+1 로 먼저 쪼갠다 (유일한 분할)
+  (증2,통1,건1) + (증1,통2,건1) + (증1,통1,건2)
+   = 36      +  36      +  54     = 126</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>오답을 뜯어본다: 증권에서 먼저 $A_1$을 뽑고 나중에 "남은 7개" 중에서 $A_3$을 더 뽑은 경우와, 먼저 $A_3$을 뽑고 나중에 $A_1$을 더 뽑은 경우를 비교한다.<div class="why">두 경우 모두 최종적으로 선택된 회사 집합은 $\{A_1,A_3,B_1,C_1\}$로 완전히 같다. 그런데 "누구를 먼저, 누구를 나중에" 뽑았는지가 다르다는 이유로 서로 다른 경우로 두 번 세어졌다. 이게 이중 계산(Double Counting)이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>"그럼 2로 나누면 되지 않나?"라고 생각할 수 있다. 실제로 $252\div2=126$으로 정답과 일치한다.<div class="why">하지만 이건 이 문제가 "추가로 뽑는 개수가 딱 1개"인 특수한 상황이라 우연히 맞아떨어진 것이다. 그룹 크기(3,3,4)가 서로 다르고 추가 개수가 2개 이상으로 바뀌면 중복되는 정도가 경우마다 달라져서 일정한 수로 나눌 수 없게 된다 (이 자료 심화 2번에서 직접 확인한다).</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>안전한 방법은 "나중에 보정"이 아니라 <strong>"뽑기 전에 개수를 미리 확정"</strong>하는 것이다. 4개를 증권·통신·건설 세 그룹에 각각 1개 이상 배분하는 자연수의 분할을 모두 찾는다.<div class="why">세 그룹에 1개씩 먼저 배정하면 $1+1+1=3$개가 쓰이고, 남은 $4-3=1$개를 어느 그룹에 더 줄지만 결정하면 된다. 즉 $4=2+1+1$ 형태(어느 한 그룹만 2개, 나머지는 1개씩)가 유일한 분할이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>분할이 유일하므로, "어느 그룹이 2개를 갖는가"에 따라 경우를 3가지로 나눈다. 각 경우마다 그룹별로 조합 ${}_{n}C_{r}$을 한 번에 계산해 중복 없이 곱한다.<div class="why">한 그룹에서 2개를 뽑아야 한다면 처음부터 ${}_{3}C_{2}$처럼 "한 번에 2개 조합"으로 뽑아야 중복이 생기지 않는다. "1개 뽑고 나중에 1개 더"처럼 시간차를 두면 안 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>Case 1 (증권2,통신1,건설1): ${}_{3}C_{2}\times{}_{3}C_{1}\times{}_{4}C_{1}=3\times3\times4=36$<br>Case 2 (증권1,통신2,건설1): ${}_{3}C_{1}\times{}_{3}C_{2}\times{}_{4}C_{1}=3\times3\times4=36$<br>Case 3 (증권1,통신1,건설2): ${}_{3}C_{1}\times{}_{3}C_{1}\times{}_{4}C_{2}=3\times3\times6=54$<div class="why">세 경우는 "어느 그룹이 2개인가"로 서로 완전히 겹치지 않게 나뉘어 있어, 세 경우를 그냥 더하면 된다 (경우를 나눌 때 → 곱, 나눈 경우끼리 모을 때 → 합).</div></div></div>
+          <span class="answer-tag">정답: $36+36+54=126$</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>선수 지식 환기 — 조합 ${}_{n}C_{r}$이란?</div>
+      <p>조합 ${}_{n}C_{r}$은 서로 다른 $n$개 중에서 <strong>순서를 따지지 않고</strong> $r$개를 고르는 방법의 수이며, ${}_{n}C_{r}=\dfrac{n!}{r!(n-r)!}$로 계산한다. 예를 들어 ${}_{3}C_{2}=\dfrac{3!}{2!\cdot1!}=3$은 3명 중 2명을 뽑는 방법이 3가지라는 뜻이다. 이 자료의 모든 계산은 이 조합 공식을 반복해서 곱하고 더하는 것뿐이다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>왜 "순서대로 뽑기"가 중복을 낳는가</div>
+      <p>"일단 각 그룹에서 1개씩 뽑고, 남은 것 중에서 부족한 개수를 더 뽑는다"는 풀이는 겉보기에 자연스럽다. 문제는 <strong>"더 뽑는 그 1개"가 이미 처음에 뽑은 그룹에서 또 나올 수 있다는 점</strong>이다.</p>
+      <div class="concept-box">한 그룹에서 결국 2개를 뽑게 되는 모든 경우에서, "이 중 어느 것을 먼저 뽑았다고 볼 것인가"라는 <strong>불필요한 순서 정보</strong>가 끼어든다. 최종적으로 선택된 회사들의 집합(누가 뽑혔는지)만 중요한데, 뽑은 순서까지 구분해서 세다 보니 같은 결과를 여러 번 센다.</div>
+      <div class="caution">⚠️ "어차피 비슷하게 중복되니 끝에서 2나 3으로 나누면 되지 않을까?"는 위험한 생각이다. 그룹 크기가 다르고 추가로 뽑아야 하는 개수가 2개 이상으로 늘어나면, 경우마다 중복되는 정도가 달라져서 하나의 숫자로 나눌 수 없다 (심화 2번에서 직접 반례로 확인한다).</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>핵심 통찰 — 분할과 분배 (뽑기 전에 개수부터 쪼갠다)</div>
+      <p><strong>분할과 분배</strong>란, 각 그룹에서 몇 개씩 뽑을지를 <strong>뽑기 시작하기 전에</strong> 자연수로 먼저 정해버리는 전략이다. "조건을 만족하는 (그룹별 개수) 조합"을 모두 나열한 뒤, 각 조합에 대해서만 조합 공식을 적용한다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">전체 뽑을 개수와 그룹별 "최소 1개" 조건을 확인한다.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">먼저 모든 그룹에 1개씩 배정해 최소 조건을 만족시킨다. (이 단계에서 이미 그룹 수만큼 개수가 쓰인다.)</div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">남은 "여분의 개수"를 그룹들에게 어떻게 더 나눠줄 수 있는지, 모든 자연수 분할(또는 0 이상의 배분)을 찾는다. (단, 각 그룹이 가진 회사·인원 수를 넘을 수는 없다.)</div></div>
+      <div class="step-row"><span class="step-num">4</span><div class="step-body">분할마다 하나의 "Case"가 되고, Case는 서로 절대 겹치지 않는다. (한 Case는 "증권이 2개인 경우"처럼 그룹별 개수가 정확히 정해져 있어서, 다른 Case와 동시에 해당할 수 없다.)</div></div>
+      <div class="formula-box">전체 경우의 수 $=\displaystyle\sum_{\text{모든 Case}}\Big(\text{그 Case의 그룹별 개수로 조합을 전부 곱한 값}\Big)$</div>
+      <p>이것이 유도다: 경우를 나눌 때는 Case가 서로 겹치지 않으므로 <strong>더하고</strong>, 한 Case 안에서 그룹별로 동시에 뽑아야 하므로 <strong>곱한다</strong>. "경우 나누면 덧셈, 동시에 결정하면 곱셈"이라는 기본 원리 그대로다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>왜 이 방법엔 중복이 없는가</div>
+      <p>분할과 분배 방식에서는 <strong>"한 그룹에서 몇 개를 뽑는가"를 조합 ${}_{n}C_{r}$로 한 번에 결정</strong>한다. 예를 들어 어떤 그룹에서 2개를 뽑아야 한다면 ${}_{n}C_{2}$ 자체가 "그 그룹의 모든 2개 조합"을 중복 없이 딱 한 번씩 세어 주는 식이다. "1개 뽑고 나중에 1개 더"처럼 두 단계로 쪼개 뽑지 않기 때문에, "누가 먼저였는가"라는 불필요한 순서가 아예 생기지 않는다.</p>
+      <div class="tip">💡 영상 강사의 표현을 풀어 쓰면: "뽑는 데 시간차를 두지 마라." 한 그룹에서 2개가 필요하면 처음부터 ${}_{n}C_{2}$로 동시에 뽑아야 한다는 뜻이다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수 — 더블 체크로 검산하는 습관</div>
+      <p>분할과 분배로 구한 답이 맞는지 불안하다면, <strong>여사건(전체에서 조건을 어기는 경우를 빼는 방법)</strong>으로 다시 계산해 같은 값이 나오는지 확인하는 습관을 들이자. 이 자료의 모든 문항은 분할과 분배 풀이와 여사건 풀이, 두 방법이 서로 같은 값으로 맞아떨어지는 것을 직접 계산으로 확인했다.</p>
+      <div class="caution">⚠️ 가장 흔한 실수 2가지 — ① "그룹 크기가 같으니까 그냥 2로 나누자"처럼 섣불리 상수로 나누는 것, ② 분할을 할 때 어떤 그룹이 가진 인원·개수보다 더 많이 배정하는 것(불가능한 Case를 세는 것). 분할을 나열할 때마다 "이 그룹이 실제로 그만큼 가지고 있는가"를 꼭 확인한다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 두 동아리에서 대표 뽑기</div>
+        <div class="problem-body"><strong>문제:</strong> 수학 동아리 회원 3명, 과학 동아리 회원 2명이 있다. 두 동아리에서 <strong>적어도 한 명씩</strong> 포함하여 총 3명의 축제 대표를 뽑는 경우의 수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1.</strong> 그룹은 수학(3명)·과학(2명), 뽑을 총 인원은 3명, 각 그룹 최소 1명.</p>
+          <p><strong>STEP 2.</strong> 먼저 두 그룹에 1명씩 배정($1+1=2$명 사용), 남은 $3-2=1$명을 어느 그룹에 더 줄지 분할: $(수학2,과학1)$ 또는 $(수학1,과학2)$ — 두 가지뿐.</p>
+          <p><strong>STEP 3.</strong> Case 1 (수학2,과학1): ${}_{3}C_{2}\times{}_{2}C_{1}=3\times2=6$</p>
+          <p><strong>STEP 4.</strong> Case 2 (수학1,과학2): ${}_{3}C_{1}\times{}_{2}C_{2}=3\times1=3$</p>
+          <p><strong>STEP 5. 합산:</strong> $6+3=9$</p>
+          <p class="warn">여사건 검산: 전체 $5$명 중 $3$명 뽑기 ${}_{5}C_{3}=10$에서, 조건을 어기는 경우(과학 0명, 즉 수학에서만 3명: ${}_{3}C_{3}=1$)를 빼면 $10-1=9$. 일치한다.</p>
+          <span class="answer-tag">정답: 9</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 두 색 구슬 고르기</div>
+        <div class="problem-body"><strong>문제:</strong> 빨간 구슬 4개, 파란 구슬 2개가 있다. 두 색을 <strong>각각 적어도 1개씩</strong> 포함해 총 3개의 구슬을 고르는 경우의 수를 구하시오. (같은 색 구슬도 서로 다른 것으로 구분한다.)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1.</strong> 빨강(4개)·파랑(2개), 총 3개 선택, 각 색 최소 1개.</p>
+          <p><strong>STEP 2.</strong> 1개씩 먼저 배정, 남은 $3-2=1$개의 분할: $(빨강2,파랑1)$ 또는 $(빨강1,파랑2)$.</p>
+          <p><strong>STEP 3.</strong> Case 1 (빨강2,파랑1): ${}_{4}C_{2}\times{}_{2}C_{1}=6\times2=12$</p>
+          <p><strong>STEP 4.</strong> Case 2 (빨강1,파랑2): ${}_{4}C_{1}\times{}_{2}C_{2}=4\times1=4$</p>
+          <p><strong>STEP 5. 합산:</strong> $12+4=16$</p>
+          <p class="warn">여사건 검산: 전체 $6$개 중 $3$개 ${}_{6}C_{3}=20$에서 파랑 0개(빨강에서만 3개 ${}_{4}C_{3}=4$)를 빼면 $20-4=16$. 일치.</p>
+          <span class="answer-tag">정답: 16</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 세 부서 운영진 뽑기</div>
+        <div class="problem-body"><strong>문제:</strong> 체육부 2명, 음악부 2명, 미술부 3명이 축제 운영진에 지원했다. <strong>각 부에서 적어도 1명씩</strong> 포함하여 총 4명을 뽑는 경우의 수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1.</strong> 체육(2)·음악(2)·미술(3), 총 4명, 각 부 최소 1명. 세 부에 1명씩 배정하면 $3$명 사용, 남은 $4-3=1$명을 셋 중 한 부에 더 준다.</p>
+          <p><strong>STEP 2.</strong> 분할은 "어느 부가 2명을 갖는가"로 3가지: (체육2,음악1,미술1) / (체육1,음악2,미술1) / (체육1,음악1,미술2).</p>
+          <p><strong>STEP 3.</strong> Case 체육2: ${}_{2}C_{2}\times{}_{2}C_{1}\times{}_{3}C_{1}=1\times2\times3=6$</p>
+          <p><strong>STEP 4.</strong> Case 음악2: ${}_{2}C_{1}\times{}_{2}C_{2}\times{}_{3}C_{1}=2\times1\times3=6$</p>
+          <p><strong>STEP 5.</strong> Case 미술2: ${}_{2}C_{1}\times{}_{2}C_{1}\times{}_{3}C_{2}=2\times2\times3=12$</p>
+          <p><strong>STEP 6. 합산:</strong> $6+6+12=24$</p>
+          <p class="warn">여사건 검산: 전체 $7$명 중 4명 ${}_{7}C_{4}=35$에서 "체육 0명"(${}_{5}C_{4}=5$) + "음악 0명"(${}_{5}C_{4}=5$) + "미술 0명"(${}_{4}C_{4}=1$)을 빼면($두 부 동시 0명은 인원 부족으로 모두 0건$) $35-(5+5+1)=24$. 일치.</p>
+          <span class="answer-tag">정답: 24</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 학년별 도서관 봉사자 뽑기</div>
+        <div class="problem-body"><strong>문제:</strong> 1학년 지원자 2명, 2학년 지원자 2명, 3학년 지원자 4명 중에서 <strong>각 학년에서 적어도 1명씩</strong> 포함하여 도서관 봉사자 4명을 뽑는 경우의 수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1.</strong> 1학년(2)·2학년(2)·3학년(4), 총 4명, 각 학년 최소 1명. 1명씩 배정 후 남은 $4-3=1$명을 분할.</p>
+          <p><strong>STEP 2.</strong> 분할 3가지: (1학년2,2학년1,3학년1) / (1학년1,2학년2,3학년1) / (1학년1,2학년1,3학년2).</p>
+          <p><strong>STEP 3.</strong> Case 1학년2: ${}_{2}C_{2}\times{}_{2}C_{1}\times{}_{4}C_{1}=1\times2\times4=8$</p>
+          <p><strong>STEP 4.</strong> Case 2학년2: ${}_{2}C_{1}\times{}_{2}C_{2}\times{}_{4}C_{1}=2\times1\times4=8$</p>
+          <p><strong>STEP 5.</strong> Case 3학년2: ${}_{2}C_{1}\times{}_{2}C_{1}\times{}_{4}C_{2}=2\times2\times6=24$</p>
+          <p><strong>STEP 6. 합산:</strong> $8+8+24=40$</p>
+          <p class="warn">여사건 검산: 전체 $8$명 중 4명 ${}_{8}C_{4}=70$. "1학년 0명"(${}_{6}C_{4}=15$)+"2학년 0명"(${}_{6}C_{4}=15$)+"3학년 0명"(${}_{4}C_{4}=1$)을 빼고, "1·2학년 동시 0명"(3학년에서만 4명, ${}_{4}C_{4}=1$)을 다시 더해준다: $70-(15+15+1)+1=40$. 일치.</p>
+          <span class="answer-tag">정답: 40</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 네 분야 봉사자 뽑기 (분할이 4가지로 늘어남)</div>
+        <div class="problem-body"><strong>문제:</strong> 환경 분야 2명, 교육 분야 2명, 의료 분야 3명, 문화 분야 3명이 봉사 활동에 지원했다. <strong>각 분야에서 적어도 1명씩</strong> 포함하여 총 5명을 뽑는 경우의 수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1.</strong> 환경(2)·교육(2)·의료(3)·문화(3), 총 5명, 네 분야 각 최소 1명. 네 분야에 1명씩 배정하면 $4$명 사용, 남은 $5-4=1$명을 넷 중 한 분야에 더 준다.</p>
+          <p><strong>STEP 2.</strong> 분할은 "어느 분야가 2명을 갖는가"로 4가지뿐이다 (여분이 딱 1명이라, 두 분야가 동시에 2명이 될 수는 없다).</p>
+          <p><strong>STEP 3.</strong> Case 환경2: ${}_{2}C_{2}\times{}_{2}C_{1}\times{}_{3}C_{1}\times{}_{3}C_{1}=1\times2\times3\times3=18$</p>
+          <p><strong>STEP 4.</strong> Case 교육2: ${}_{2}C_{1}\times{}_{2}C_{2}\times{}_{3}C_{1}\times{}_{3}C_{1}=2\times1\times3\times3=18$</p>
+          <p><strong>STEP 5.</strong> Case 의료2: ${}_{2}C_{1}\times{}_{2}C_{1}\times{}_{3}C_{2}\times{}_{3}C_{1}=2\times2\times3\times3=36$</p>
+          <p><strong>STEP 6.</strong> Case 문화2: ${}_{2}C_{1}\times{}_{2}C_{1}\times{}_{3}C_{1}\times{}_{3}C_{2}=2\times2\times3\times3=36$</p>
+          <p><strong>STEP 7. 합산:</strong> $18+18+36+36=108$</p>
+          <p class="warn">여사건 검산(포함-배제): 전체 $10$명 중 5명 ${}_{10}C_{5}=252$에서 "어느 한 분야 0명"인 경우들을 빼고 "두 분야 동시 0명"(가능한 조합만)을 다시 더하면 $252-154+10=108$. 일치한다(계산이 까다로우니 분할과 분배 쪽을 신뢰하자).</p>
+          <span class="answer-tag">정답: 108</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — "그냥 나누면 되지 않나?"의 함정을 직접 확인하기</div>
+        <div class="problem-body"><strong>문제:</strong> 급식 봉사 지원자 3명, 환경 봉사 지원자 3명, 교육 봉사 지원자 4명 중에서 <strong>각 분야 적어도 1명씩</strong> 포함하여 총 5명을 뽑으려 한다. 한 학생이 "각 분야에서 1명씩 먼저 뽑고($3\times3\times4=36$가지), 남은 $10-3=7$명 중에서 2명을 더 뽑으면($ {}_{7}C_{2}=21$가지) 끝"이라며 $36\times21=756$이라고 답했다. 이 풀이가 왜 틀렸는지 설명하고, 분할과 분배로 올바른 답을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1 (오답 분석).</strong> 도입 문제에서는 "추가로 뽑을 인원"이 딱 1명이라 $252\div2=126$처럼 일정한 수로 나누는 게 우연히 맞았다. 하지만 이 문제는 추가 인원이 2명이라, 그 2명이 "같은 분야에서 몰아서 나온 경우"와 "서로 다른 두 분야에서 나눠 나온 경우"가 섞여 있어 중복되는 정도가 경우마다 다르다.</p>
+          <p><strong>STEP 2.</strong> 실제로 $756\div5=151.2$이고 $756\div3=252$, $756\div4=189$ 등 어떤 정수로도 깔끔하게 나눠서 정답이 나오지 않는다. 즉 "적당한 수로 나누기"는 이 경우 통하지 않는다 — 처음부터 뽑기 전에 개수를 쪼개야 하는 이유다.</p>
+          <p><strong>STEP 3 (분할).</strong> 급식(3)·환경(3)·교육(4), 총 5명, 각 최소 1명. 1명씩 배정 후 남은 $5-3=2$명을 세 분야에 나누는 모든 방법을 찾는다: 한 분야가 2명 더 받는 경우 3가지 — (급식3,환경1,교육1) / (급식1,환경3,교육1) / (급식1,환경1,교육3) — 와 두 분야가 1명씩 더 받는 경우 3가지 — (급식2,환경2,교육1) / (급식2,환경1,교육2) / (급식1,환경2,교육2) — 로 총 6가지다.</p>
+          <p><strong>STEP 4.</strong> (급식3,환경1,교육1): ${}_{3}C_{3}\times{}_{3}C_{1}\times{}_{4}C_{1}=1\times3\times4=12$ &nbsp;|&nbsp; (급식1,환경3,교육1): ${}_{3}C_{1}\times{}_{3}C_{3}\times{}_{4}C_{1}=3\times1\times4=12$ &nbsp;|&nbsp; (급식1,환경1,교육3): ${}_{3}C_{1}\times{}_{3}C_{1}\times{}_{4}C_{3}=3\times3\times4=36$</p>
+          <p><strong>STEP 5.</strong> (급식2,환경2,교육1): ${}_{3}C_{2}\times{}_{3}C_{2}\times{}_{4}C_{1}=3\times3\times4=36$ &nbsp;|&nbsp; (급식2,환경1,교육2): ${}_{3}C_{2}\times{}_{3}C_{1}\times{}_{4}C_{2}=3\times3\times6=54$ &nbsp;|&nbsp; (급식1,환경2,교육2): ${}_{3}C_{1}\times{}_{3}C_{2}\times{}_{4}C_{2}=3\times3\times6=54$</p>
+          <p><strong>STEP 6. 합산:</strong> $12+12+36+36+54+54=204$</p>
+          <p class="warn">여사건 검산: 전체 $10$명 중 5명 ${}_{10}C_{5}=252$. "급식 0명"(${}_{7}C_{5}=21$)+"환경 0명"(${}_{7}C_{5}=21$)+"교육 0명"(${}_{6}C_{5}=6$)을 빼면(두 분야 동시 0명은 인원 부족으로 모두 0건) $252-(21+21+6)=204$. 분할과 분배의 답과 정확히 일치한다 — 오답의 $756$과는 전혀 다른 값임을 확인했다.</p>
+          <span class="answer-tag">정답: 204 (오답 756과 비교 — 2나 3으로 나누어도 맞지 않음을 직접 확인)</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 분할과 분배 유형(준킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> 교내 축제 운영위원회를 꾸리기 위해 과학실험부 지원자 3명, 환경지킴이 지원자 2명, 봉사단 지원자 3명이 신청했다. <strong>각 동아리에서 적어도 1명씩</strong> 포함하여 위원 4명을 뽑는 경우의 수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1.</strong> 과학(3)·환경(2)·봉사(3), 총 4명, 각 최소 1명. 1명씩 배정 후 남은 $4-3=1$명을 분할.</p>
+          <p><strong>STEP 2.</strong> 분할 3가지: (과학2,환경1,봉사1) / (과학1,환경2,봉사1) / (과학1,환경1,봉사2).</p>
+          <p><strong>STEP 3.</strong> Case 과학2: ${}_{3}C_{2}\times{}_{2}C_{1}\times{}_{3}C_{1}=3\times2\times3=18$</p>
+          <p><strong>STEP 4.</strong> Case 환경2: ${}_{3}C_{1}\times{}_{2}C_{2}\times{}_{3}C_{1}=3\times1\times3=9$</p>
+          <p><strong>STEP 5.</strong> Case 봉사2: ${}_{3}C_{1}\times{}_{2}C_{1}\times{}_{3}C_{2}=3\times2\times3=18$</p>
+          <p><strong>STEP 6. 합산:</strong> $18+9+18=45$</p>
+          <p class="warn">여사건 검산: 전체 $8$명 중 4명 ${}_{8}C_{4}=70$에서 "과학 0명"(${}_{5}C_{4}=5$)+"환경 0명"(${}_{6}C_{4}=15$)+"봉사 0명"(${}_{5}C_{4}=5$)을 빼면 $70-25=45$. 일치.</p>
+          <span class="answer-tag">정답: 45</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 분할과 분배 유형(준킬러, 특정 인원 고정)</div>
+        <div class="problem-body"><strong>문제:</strong> 디자인 공모전 심사위원단을 그래픽팀 3명, 영상팀 3명, 기획팀 2명 중에서 뽑으려 한다. <strong>각 팀에서 적어도 1명씩</strong> 포함하여 총 4명을 뽑되, 그래픽팀의 특정 디자이너 A는 <strong>반드시 포함</strong>되어야 한다. 경우의 수를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1.</strong> A가 이미 뽑혔다고 고정하면, A는 그래픽팀의 "최소 1명" 조건을 자동으로 채운다. 이제 남은 일은 그래픽팀의 나머지 2명·영상팀 3명·기획팀 2명 중에서 <strong>3명을 더</strong> 뽑는 것인데, 영상팀과 기획팀은 아직 아무도 뽑히지 않았으므로 여전히 각각 적어도 1명이 필요하다. 그래픽팀은 이미 A로 조건을 채웠으니 추가로는 0명이어도 된다.</p>
+          <p><strong>STEP 2 (분할).</strong> 그래픽 추가($g$, 0~2명) + 영상($v$, 1명 이상) + 기획($k$, 1명 이상) $=3$. 가능한 조합을 모두 찾는다: $(g,v,k)=(0,1,2),\,(0,2,1),\,(1,1,1)$. ($g=2$면 $v+k=1$인데 둘 다 1명 이상이어야 해서 불가능하다.)</p>
+          <p><strong>STEP 3.</strong> $(0,1,2)$: ${}_{2}C_{0}\times{}_{3}C_{1}\times{}_{2}C_{2}=1\times3\times1=3$</p>
+          <p><strong>STEP 4.</strong> $(0,2,1)$: ${}_{2}C_{0}\times{}_{3}C_{2}\times{}_{2}C_{1}=1\times3\times2=6$</p>
+          <p><strong>STEP 5.</strong> $(1,1,1)$: ${}_{2}C_{1}\times{}_{3}C_{1}\times{}_{2}C_{1}=2\times3\times2=12$</p>
+          <p><strong>STEP 6. 합산:</strong> $3+6+12=21$</p>
+          <p class="warn">검산: A 고정 조건이 없는 원래 문제(그래픽3·영상3·기획2, 각 최소 1명, 총 4명)의 전체 답은 $45$다. 그중 "그래픽이 2명 뽑히고 그 2명 중 A가 포함"된 경우는 $18\times\frac{2}{3}=12$, "그래픽이 1명만 뽑히고 그게 A"인 경우는 $(18+9)\times\frac{1}{3}=9$이므로 $12+9=21$. 두 방법이 일치한다.</p>
+          <span class="answer-tag">정답: 21</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <!-- ===== 검증/교사 검토 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상(수학강사 이정환, "이중 계산 막는 방법만 알면 끝. ft. 분할과 분배")의 핵심 — "적어도 하나씩" 조건에서 순차 선택이 유발하는 이중 계산을, 개수를 미리 자연수로 분할하는 전략으로 원천 차단한다 — 을 그대로 살려 8개 문항을 새 숫자·새 상황으로 재구성했다. 도입 문항만 영상 속 예제(증권3·통신3·건설4, 정답 126)를 그대로 사용했고, 기초~수능대비 8문항은 모두 새로 창작한 문제다.</p>
+      <p style="margin-top:8px">모든 문항은 ① 분할과 분배(경우를 나눠 조합을 곱하고 합산)와 ② 여사건(전체에서 조건 위반 경우를 빼는 포함-배제) 두 가지 독립된 방법으로 직접 계산해 같은 값이 나오는 것을 확인했다. 특히 심화 2번은 "추가 인원이 2명 이상일 때는 상수로 나누는 방법이 통하지 않는다"($756$을 어떤 정수로 나눠도 $204$가 나오지 않음)는 것을 수치로 직접 증명해, 영상이 경고하는 함정을 구체적으로 체감하도록 설계했다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+    <!-- 관련 자료: add_related.py 가 자동 주입(여기 비워둔다) -->
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260703_원순열구별안됨과기준점자리종류_QsWeZRoP.html">원순열의 본질 — 구별 안 됨과 회전수·기준점 (확률과 통계) (QsWeZRoP)</a> · <a href="../확률과통계-통계/20260727_이항분포관계식과확률변수제곱평균_YGoi6Pv.html">이항분포 고난도 — 관계식 세워 E(X제곱) 구하기 (확률과 통계) (YGoi6Pv)</a> · <a href="../확률과통계-통계/20260904_표본평균의분포와모평균신뢰구간_개념.html">표본평균의 분포와 모평균 추정 (확률과 통계) (개념)</a> · <a href="../../고3/확률과통계-조건부확률과독립시행/20260916_중간기점대칭성확률풀이_hmGBxUh4.html">중간 기점 분할과 왕복 대칭성으로 푸는 다단계 확률 (hmGBxUh4)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-01 · 영상 출처: <a href="https://youtu.be/1fH5xIM2k44" style="color:var(--primary)">수학강사 이정환</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
