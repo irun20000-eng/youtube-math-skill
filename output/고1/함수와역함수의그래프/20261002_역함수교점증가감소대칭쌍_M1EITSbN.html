@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>원함수와 역함수의 교점 — 증가함수는 y=x 위, 감소함수는 대칭쌍 | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:860px;width:calc(100% - 0px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고1-공통수학-함수와 역함수의 그래프]</div><h1>원함수와 역함수의 교점 — <strong>증가함수는 $y=x$ 위, 감소함수는 대칭쌍</strong></h1><p class="sub">🎯 "역함수와의 교점은 무조건 $y=x$ 위에 있다"는 건 반은 맞고 반은 틀렸다. 증가함수일 땐 맞지만, 감소함수일 땐 $y=x$ 바깥에서 $(\alpha,\beta)$ 와 $(\beta,\alpha)$ 짝으로도 나타난다.</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=M1EITSbNbiw" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/M1EITSbNbiw/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 10분만에 알려주는 수능 개념, 역함수와 교점!</div><div class="v-meta">📺 수학의 인덕션, 약 9분 · 2026-09-26</div><a class="v-link" href="https://www.youtube.com/watch?v=M1EITSbNbiw" target="_blank" rel="noopener">https://www.youtube.com/watch?v=M1EITSbNbiw</a></div></div></div>
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 흔한 오개념 깨뜨리기</h2>
+      <article class="problem basic">
+        <h3>예시 — "역함수와의 교점은 항상 $y=x$ 위에 있다"는 참일까?</h3>
+        <p class="problem-body"><strong>질문:</strong> 함수 $f(x)$ 와 그 역함수 $f^{-1}(x)$ 의 그래프가 만나는 점은, 늘 직선 $y=x$ 위에만 있을까?</p>
+        <details open>
+          <summary>📖 정답과 이유 (한눈에)</summary>
+          <div class="solution">
+            <p><strong>정답: 아니다.</strong> $f$ 가 <strong>증가함수</strong>일 때만 참이다. $f$ 가 <strong>감소함수</strong>라면 $y=x$ 를 벗어난 곳에서도 교점이 생길 수 있다.</p>
+            <p><strong>왜 증가함수는 $y=x$ 위에만?</strong> 교점 $(a,b)$ ($a\neq b$ 라고 가정)가 있다면 $f(a)=b$ 이고 $f(b)=a$ 이다. 만약 $a<b$ 라면 "$x$ 가 커지는데($a\to b$) $y$ 는 작아진다($b\to a$, 즉 $f(a)>f(b)$)"가 되어 증가함수 정의와 정면으로 모순된다. 따라서 $a=b$, 즉 $y=x$ 위일 수밖에 없다.</p>
+            <p class="key-point"><strong>핵심:</strong> 감소함수는 이 모순이 발생하지 않는다 — $x$ 가 커지는데 $y$ 가 작아지는 건 감소함수의 정의 그 자체이기 때문이다. 그래서 감소함수는 $y=x$ 바깥에도 교점을 가질 수 있다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (증가함수의 필연성 · 감소함수의 대칭쌍 · 실전 적용)</h2>
+
+      <div class="concept-block">
+        <h3>① 선수 지식 — 역함수의 정의</h3>
+        <div class="prereq">
+          <p>$f$ 가 일대일대응(증가 또는 감소함수)일 때, $f(p)=q$ 이면 $f^{-1}(q)=p$ 이다. 즉 $f$ 의 그래프 위의 점 $(p,q)$ 는, $f^{-1}$ 의 그래프에서는 점 $(q,p)$ 로 나타난다 — <strong>$x$ 좌표와 $y$ 좌표가 뒤바뀐다</strong>는 것이 역함수 그래프가 $y=x$ 에 대해 대칭인 이유다.</p>
+          <p>점 $(p,q)$ 가 $y=f(x)$ 와 $y=f^{-1}(x)$ 의 <strong>공통점(교점)</strong> 이라는 것은, $f(p)=q$ <strong>이면서 동시에</strong> $f(q)=p$ 라는 뜻이다(두 번째 식은 $f^{-1}(p)=q \iff f(q)=p$ 에서 나온다).</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 핵심 — 증가함수는 $y=x$ 위에만 (귀류법)</h3>
+        <div class="step-derive">
+          <p>교점 $(a,b)$ 가 있다고 하자. 정의에 의해 $f(a)=b$, $f(b)=a$.</p>
+          <p>$a\neq b$ 라고 가정(귀류법). 일반성을 잃지 않고 $a<b$ 라 하자.</p>
+          <p>$f$ 는 증가함수이므로 $a<b \implies f(a)<f(b)$, 즉 $b<a$.</p>
+          <p>그런데 애초에 $a<b$ 라고 했는데 결론이 $b<a$ — 모순!</p>
+          <p>따라서 $a\neq b$ 라는 가정이 틀렸다. $\therefore a=b$, 교점은 반드시 $y=x$ 위에 있다.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 핵심 — 감소함수는 대칭쌍으로 존재</h3>
+        <p>감소함수에서는 $a<b$ 일 때 $f(a)>f(b)$ 가 정의 그 자체이므로, 위 귀류법의 모순이 발생하지 않는다. 대신 다음 대칭 구조가 성립한다:</p>
+        <div class="formula-box">
+          $$f(\alpha)=\beta \;\text{ 이고 }\; f(\beta)=\alpha \quad\Longrightarrow\quad (\alpha,\beta) \text{ 가 교점이면 } (\beta,\alpha) \text{ 도 반드시 교점}$$
+        </div>
+        <div class="insight">
+          감소함수에서 $y=x$ 바깥의 교점은 <strong>항상 둘씩 짝</strong>을 지어 나타난다. 혼자 떨어진 교점은 있을 수 없다(단, $y=x$ 위의 교점은 자기 자신이 곧 짝이므로 혼자 있어도 된다).
+        </div>
+        <div class="prereq">
+          <p>예: $y=\dfrac1x$(분수함수, $x>0$)는 $f=f^{-1}$ 인 특수한 경우라 그래프 전체가 자기 자신과 겹친다. 기울기 $-1$ 인 직선 $y=-x+k$ 도 마찬가지(직선 전체가 교점). 이런 자기자신역함수(self-inverse) 상황은 "교점이 무수히 많은" 예외적 특수 케이스다.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 핵심 — 교점이 홀수 개면, 가운데 하나는 반드시 $y=x$ 위</h3>
+        <p>감소함수의 교점은 $y=x$ 바깥에서는 둘씩 짝져서 나오므로, 전체 교점 개수 중 $y=x$ 바깥 쌍이 차지하는 개수는 항상 <strong>짝수</strong>다. 따라서 교점 전체 개수가 <strong>홀수</strong>라면, 남는 나머지 1개는 반드시 $y=x$ 위에 있어야 한다.</p>
+        <div class="insight">
+          교점 개수가 홀수(1개, 3개, 5개, …)이고 $x$ 좌표 순서로 나열했을 때, <strong>정중앙의 교점</strong>은 반드시 $(k,k)$ 꼴로 $y=x$ 위에 위치한다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 실전 적용 흐름 — 영상 예제 ①(무리함수, 증가함수)</h3>
+        <p><strong>문제:</strong> $f(x)=\sqrt{2x-6}+k$ 와 역함수가 서로 다른 두 점에서 만나도록 하는 실수 $k$ 의 범위를 구하시오.</p>
+        <div class="step-derive">
+          <p><strong>증가함수 판정:</strong> $\sqrt{\phantom{x}}$ 는 증가함수이므로 $f$ 도 증가함수 → 교점은 $y=x$ 위에서만 찾으면 된다. $f(x)=x$ 를 바로 푼다.</p>
+          <p><strong>방정식:</strong> $\sqrt{2x-6}+k=x \implies \sqrt{2x-6}=x-k$. 양변 제곱: $2x-6=(x-k)^2 \implies x^2-2(k+1)x+(k^2+6)=0$.</p>
+          <p><strong>접점(경계) 조건:</strong> $\dfrac{D}{4}=(k+1)^2-(k^2+6)=2k-5$. $D=0$ 이면 $k=\dfrac52$(접하는 경계, 교점 1개).</p>
+          <p><strong>시작점 조건:</strong> $f$ 의 정의역은 $x\ge3$, 시작점은 $(3,k)$. 제곱 과정에서 생기는 가짜 근(원래 식 $x-k\ge0$ 을 만족 못 하는 근)을 걸러내려면 시작점이 $y=x$ 아래쪽이거나 그 위에 걸쳐야 한다 → $k\le3$.</p>
+        </div>
+        <div class="formula-box">$$\therefore\; \frac52 < k \le 3$$</div>
+        <p class="problem-body" style="font-size:0.93em;">(검산) $k=3$: $x^2-8x+15=0 \to x=3,5$ 모두 유효(두 점 ✓). $k=2.5$: 중근(접점, 교점 1개 — 경계 제외). $k=3.5$: 근 중 하나가 $x-k<0$ 이 되어 무효화되어 교점이 1개뿐 — 그래서 상한 $k\le3$ 이 필요하다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 함정 — 흔히 놓치는 2가지</h3>
+        <div class="callout">
+          <p>① <strong>"교점 = $y=x$ 위"라는 성급한 일반화</strong>: 함수가 감소함수인지 먼저 확인하지 않고 바로 $f(x)=x$ 로 풀면, 대칭쌍으로 존재하는 $y=x$ 바깥 교점을 통째로 놓친다.</p>
+          <p>② <strong>제곱으로 생기는 가짜 근</strong>: 무리방정식을 풀 때 양변을 제곱하면 원래 식의 부호 조건(여기선 $x-k\ge0$)을 만족 못 하는 가짜 해가 섞여 들어올 수 있다. 판별식만 보지 말고 정의역·시작점까지 반드시 확인해야 한다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — 증가함수의 교점 (1차함수)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=3x-2$ 와 $f^{-1}(x)$ 의 교점을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 증가함수 확인:</strong> 기울기 $3>0$ → 증가함수. 교점은 $y=x$ 위에만 존재.</p>
+            <p><strong>STEP 2 — 방정식:</strong> $f(x)=x \implies 3x-2=x \implies 2x=2 \implies x=1$.</p>
+            <p class="answer"><strong>정답:</strong> 교점 $(1,1)$ 하나뿐.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 감소함수인데 교점이 $y=x$ 위? (홀수 개 원리 선체험)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=-2x+3$ 과 $f^{-1}(x)$ 의 교점을 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 역함수:</strong> $y=-2x+3 \implies x=\dfrac{3-y}{2} \implies f^{-1}(x)=-\dfrac12x+\dfrac32$.</p>
+            <p><strong>STEP 2 — 교점:</strong> 서로 다른 두 직선(기울기 $-2$ 와 $-\dfrac12$, 평행 아님)은 정확히 한 점에서 만난다. $-2x+3=-\dfrac12x+\dfrac32 \implies -\dfrac32x=-\dfrac32 \implies x=1$, $y=1$.</p>
+            <p class="answer"><strong>정답:</strong> 교점은 $(1,1)$ 단 하나.</p>
+            <p class="key-point"><strong>포인트:</strong> $f$ 는 감소함수이지만 교점이 단 1개(홀수 개)뿐이므로, 개념 ④의 "홀수 개면 가운데 하나는 $y=x$ 위" 원리에 의해 이 유일한 교점도 $y=x$ 위에 있다 — 감소함수라고 무조건 $y=x$ 바깥이라 생각하면 안 된다.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 증가함수(무리함수), 두 교점 직접 계산</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=\sqrt{x-1}+1$ ($x\ge1$) 과 $f^{-1}(x)$ 의 교점을 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 증가함수 확인:</strong> $\sqrt{\phantom{x}}$ 은 증가함수이므로 $f$ 도 증가함수 → $f(x)=x$ 로 직행.</p>
+            <p><strong>STEP 2 — 방정식:</strong> $\sqrt{x-1}+1=x \implies \sqrt{x-1}=x-1$. $u=x-1\ge0$ 로 치환: $\sqrt u = u \implies u=u^2 \implies u(u-1)=0 \implies u=0,1$.</p>
+            <p><strong>STEP 3 — 복원:</strong> $u=0 \to x=1$, $u=1 \to x=2$. 둘 다 $x\ge1$ 조건을 만족.</p>
+            <p class="answer"><strong>정답:</strong> 교점 $(1,1)$, $(2,2)$ — 모두 $y=x$ 위.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 대칭쌍 개념의 직접 적용</h3>
+        <p class="problem-body"><strong>문제:</strong> 감소함수 $f(x)$ 에 대해 점 $(2,5)$ 가 $y=f(x)$ 와 $y=f^{-1}(x)$ 의 교점 중 하나임이 알려져 있다. $f(2)$ 의 값과, 이 점이 교점이기 위해 추가로 성립해야 하는 식, 그리고 $f(5)$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — $f(2)$ 값:</strong> 점 $(2,5)$ 가 $y=f(x)$ 위에 있으므로 $f(2)=5$.</p>
+            <p><strong>STEP 2 — 대칭쌍 조건:</strong> 개념 ③에 의해 $(\alpha,\beta)=(2,5)$ 가 교점이면 $(\beta,\alpha)=(5,2)$ 도 반드시 교점이다. 이는 $f(5)=2$ 를 의미한다.</p>
+            <p class="answer"><strong>정답:</strong> $f(2)=5$, 추가로 성립해야 하는 식은 $f(5)=2$, 따라서 $f(5)=2$.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 감소함수(이차함수 가지), 가짜 해 걸러내기</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=-x^2+2$ ($x\ge0$) 과 $f^{-1}(x)$ 의 교점을 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 감소함수 확인:</strong> $x\ge0$ 에서 $f'(x)=-2x\le0$ → 감소함수. $y=x$ 위뿐 아니라 바깥 대칭쌍도 가능성 있음.</p>
+            <p><strong>STEP 2 — 연립:</strong> 교점 $(p,q)$ 는 $q=-p^2+2$ 와 $p=-q^2+2$ 를 동시에 만족($p,q\ge0$, $f$ 의 정의역 제한).</p>
+            <p><strong>STEP 3 — 변끼리 빼기:</strong> $q-p=-p^2+q^2=(q-p)(q+p)$. 이항: $(q-p)\big[1-(p+q)\big]=0$.</p>
+            <p><strong>STEP 4a — 경우 1 ($q=p$):</strong> $p=-p^2+2 \implies p^2+p-2=0 \implies (p+2)(p-1)=0 \implies p=1$ ($p\ge0$ 이므로 $p=-2$ 는 버림). 점 $(1,1)$.</p>
+            <p><strong>STEP 4b — 경우 2 ($p+q=1$):</strong> $q=1-p$ 를 $q=-p^2+2$ 에 대입: $p^2-p-1=0 \implies p=\dfrac{1\pm\sqrt5}{2}$. $p\ge0$ 인 것은 $p=\dfrac{1+\sqrt5}{2}\approx1.618$. 그런데 이때 $q=1-p\approx-0.618<0$ — 정의역 $x\ge0$ 위반, 즉 <strong>가짜 해</strong>로 버려야 한다.</p>
+            <p class="answer"><strong>정답:</strong> 교점은 $(1,1)$ 하나뿐.</p>
+            <p class="key-point"><strong>핵심:</strong> 교점 개수가 1개(홀수)이므로 개념 ④와도 정확히 일치 — $y=x$ 위의 점 하나만 남는다.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 영상 예제 ①, 숫자 그대로 재현</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=\sqrt{2x-6}+k$ 와 역함수가 서로 다른 두 점에서 만나도록 하는 실수 $k$ 의 범위를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 증가함수 → $y=x$ 직행:</strong> $\sqrt{2x-6}+k=x \implies \sqrt{2x-6}=x-k$.</p>
+            <p><strong>STEP 2 — 제곱:</strong> $2x-6=(x-k)^2 \implies x^2-2(k+1)x+(k^2+6)=0$.</p>
+            <p><strong>STEP 3 — 판별식(접점 경계):</strong> $\dfrac D4=(k+1)^2-(k^2+6)=2k-5=0 \implies k=\dfrac52$.</p>
+            <p><strong>STEP 4 — 시작점 조건:</strong> 정의역 $x\ge3$, 시작점 $(3,k)$ 가 $y=x$ 아래쪽이거나 걸쳐야 가짜 해 없이 두 점 확보 → $k\le3$.</p>
+            <p class="answer"><strong>정답:</strong> $\dfrac52 < k \le 3$</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 구간별 정의 함수(준킬러)</h3>
+        <p class="problem-body"><strong>문제:</strong> 함수 $f(x)=\begin{cases}ax+b & (x<1)\\ cx^2+\dfrac52x & (x\ge1)\end{cases}$ 가 실수 전체에서 연속이고, $y=f(x)$ 와 $y=f^{-1}(x)$ 의 교점의 $x$ 좌표가 $-1,1,2$ 일 때, 상수 $a,b,c$ 의 값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 증가함수 가정 배제:</strong> 만약 $f$ 가 증가함수라면 세 교점 모두 $y=x$ 위, 즉 $(-1,-1),(1,1),(2,2)$ 여야 한다. 그런데 $x\ge1$ 구간은 아래로 볼록한 이차함수이므로 직선 $y=x$ 와 최대 2개까지만 만날 수 있어 3개가 나올 수 없다 — 모순. 따라서 $f$ 는 <strong>감소함수</strong>다.</p>
+            <p><strong>STEP 2 — 대칭쌍 매칭:</strong> 교점이 3개(홀수)이므로 $x$ 좌표 순서상 정중앙인 $x=1$ 은 반드시 $y=x$ 위, 즉 점 $(1,1)$. 나머지 $x=-1$ 과 $x=2$ 는 서로 대칭쌍을 이루어야 하므로 $(-1,2)$ 와 $(2,-1)$ 로 확정.</p>
+            <p><strong>STEP 3 — 1차 부분($x<1$) 결정:</strong> 직선이 $(-1,2)$ 와 $(1,1)$ 을 지남. 기울기 $=\dfrac{1-2}{1-(-1)}=-\dfrac12$. $y-1=-\dfrac12(x-1) \implies y=-\dfrac12x+\dfrac32$. 따라서 $a=-\dfrac12$, $b=\dfrac32$.</p>
+            <p><strong>STEP 4 — 2차 부분($x\ge1$) 결정:</strong> $(2,-1)$ 을 대입: $-1=c(4)+\dfrac52(2)=4c+5 \implies 4c=-6 \implies c=-\dfrac32$.</p>
+            <p><strong>STEP 5 — 연속 조건 검산:</strong> $x=1$ 좌극한 $a+b=-\dfrac12+\dfrac32=1$, 우극한 $c+\dfrac52=-\dfrac32+\dfrac52=1$ — 일치 ✓.</p>
+            <p class="answer"><strong>정답:</strong> $a=-\dfrac12,\; b=\dfrac32,\; c=-\dfrac32$</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 홀수 개 대칭 구조를 삼차함수로 확인(준킬러)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=-x^3$ 과 $f^{-1}(x)$ 의 교점을 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 감소함수 확인:</strong> $f'(x)=-3x^2\le0$ (등호는 $x=0$ 하나뿐, 전체적으로 감소함수). 교점은 $y=x$ 위 또는 대칭쌍으로 존재 가능.</p>
+            <p><strong>STEP 2 — 연립:</strong> 교점 $(p,q)$: $q=-p^3$ 이고 $p=-q^3$. 첫 식을 둘째에 대입: $p=-(-p^3)^3=-(-p^9)=p^9$.</p>
+            <p><strong>STEP 3 — 방정식:</strong> $p^9-p=0 \implies p(p^8-1)=0 \implies p(p^4-1)(p^4+1)=0 \implies p(p^2-1)(p^2+1)(p^4+1)=0$.</p>
+            <p><strong>STEP 4 — 실근만 추리기:</strong> $p^2+1=0$ 과 $p^4+1=0$ 은 실근이 없다(제곱·네제곱이 $-1$). 남는 건 $p=0$ 또는 $p^2-1=0 \implies p=\pm1$.</p>
+            <p><strong>STEP 5 — 좌표 복원:</strong> $p=0 \to q=-0=0$, 점 $(0,0)$. $p=1 \to q=-1$, 점 $(1,-1)$. $p=-1 \to q=1$, 점 $(-1,1)$.</p>
+            <p><strong>STEP 6 — 검산:</strong> $(1,-1)$: $f(1)=-1=q$ ✓, $f(-1)=1=p$ ✓ — 대칭쌍 $(1,-1)\leftrightarrow(-1,1)$ 확인.</p>
+            <p class="answer"><strong>정답:</strong> 교점은 $(0,0)$, $(1,-1)$, $(-1,1)$ 총 3개 (홀수 개, 가운데 $(0,0)$ 이 $y=x$ 위, 나머지 둘은 대칭쌍).</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 적용 결과</h3>
+    <p>본 자료는 영상에서 빠르게 지나간 귀류법 증명과 대칭쌍 원리를 중수준(하위 40%) 학습자도 따라갈 수 있도록 풀어 작성:</p>
+    <ul>
+      <li><strong>증가함수 명제의 "왜"</strong> → 귀류법 전 과정을 단계별로 분리해 서술 (개념 ②).</li>
+      <li><strong>대칭쌍 원리의 근거</strong> → 역함수 정의($f(p)=q \iff f^{-1}(q)=p$)에서 출발해 유도 (개념 ①·③).</li>
+      <li><strong>홀수 개 ↔ 가운데 점 $y=x$</strong> → 개념 ④로 명시하고, 기초 2·심화 1·수능 대비 2에서 반복 확인.</li>
+      <li><strong>제곱으로 생기는 가짜 해</strong> → 심화 1·2에서 정의역 조건으로 직접 걸러내는 절차를 명시.</li>
+      <li><strong>실전 응용</strong> → 수능 대비 1(구간별 함수 계수 결정), 수능 대비 2(삼차함수로 대칭쌍 구조 재확인)로 확장.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li>심화 1·영상 예제 ①의 "시작점이 $y=x$ 아래쪽/걸침이어야 두 교점"이라는 기하적 판단은 그래프 개형에 대한 직관적 설명이며, 모든 유사 문제에 기계적으로 적용하기보다 매번 그래프 개형을 직접 확인하는 습관이 필요함. (확신도 ★★)</li>
+      <li>"수능 대비"는 출제 패턴·난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:860px;width:calc(100% - 0px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../../고2/수학II-도함수의활용/20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html">교점 개수 함수와 3차함수 높이차 2대1 공식 (ONHx5OaS)</a> · <a href="../../고3/미적분-여러가지미분법/20260821_역함수미분법과t형태발견법_lHmHtmBH.html">역함수의 미분법 — g'(c)=1/f'(a)로 3초 만에 잡는 법 (lHmHtmBH)</a> · <a href="../../고3/미적분-적분법/20260710_역함수적분과치환적분역함수미분_mBc94D-3.html">역함수 적분과 치환적분 — 역함수의 도함수를 눈치채라 (고3 미적분) (mBc94D-3)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-10-02 | 영상 출처: <a href="https://www.youtube.com/watch?v=M1EITSbNbiw">https://www.youtube.com/watch?v=M1EITSbNbiw</a> (수학의 인덕션, 게시 2026-09-26)</p>
+    <p>본 자료는 AI가 영상 요약을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
