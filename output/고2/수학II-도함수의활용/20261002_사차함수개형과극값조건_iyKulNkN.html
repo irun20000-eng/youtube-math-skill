@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사차함수의 4대 개형과 극댓값 조건 — 도함수 면적으로 읽는 극값 | 학습자료</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    :root {
+      --bg: #ffffff; --text: #1a1a1a; --border: #e0e0e0; --summary-bg: #f4f4f7;
+      --warning-bg: #e8f5e9; --warning-border: #4caf50;
+      --basic: #4caf50; --standard: #2196f3; --advanced: #ff9800; --exam: #f44336;
+      --button-bg: #e8e8ec; --button-active: #1a1a1a; --button-active-text: #ffffff;
+      --prereq-bg: #fff8e1; --prereq-border: #ffa726;
+    }
+    body.dark {
+      --bg: #1a1a1a; --text: #e0e0e0; --border: #444; --summary-bg: #2a2a2a;
+      --warning-bg: #1f3a23; --button-bg: #333; --button-active: #fff; --button-active-text: #1a1a1a;
+      --prereq-bg: #3a2a10; --prereq-border: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      line-height: 1.75; max-width: 900px; margin: 0 auto;
+      padding: 24px 20px 80px; background: var(--bg); color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+    header h1 { font-size: 1.7em; margin-bottom: 12px; }
+    header .meta-row { font-size: 0.95em; margin: 4px 0; opacity: 0.85; }
+    header a { color: inherit; text-decoration: underline; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; align-items: center; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--button-bg); color: var(--text); font-size: 0.95em; cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button.active { background: var(--button-active); color: var(--button-active-text); border-color: var(--button-active); }
+
+    section { margin: 32px 0; }
+    section h2 { font-size: 1.3em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    .concept-block { margin: 20px 0; }
+    .concept-block h3 {
+      font-size: 1.15em; margin-top: 28px;
+      padding: 6px 12px; background: var(--summary-bg); border-radius: 4px;
+      border-left: 4px solid var(--standard);
+    }
+    .concept-block .callout {
+      background: var(--summary-bg); border-left: 4px solid var(--standard);
+      padding: 12px 16px; margin: 12px 0; border-radius: 4px;
+    }
+    .concept-block .formula-box {
+      background: var(--summary-bg); padding: 14px 18px; border-radius: 6px;
+      margin: 12px 0; text-align: center; font-size: 1.05em;
+    }
+    .concept-block .prereq {
+      background: var(--prereq-bg); border-left: 4px solid var(--prereq-border);
+      padding: 10px 14px; margin: 12px 0; border-radius: 4px; font-size: 0.95em;
+    }
+    .concept-block .prereq::before {
+      content: "📚 선수 지식 환기 — "; font-weight: 700;
+    }
+    .concept-block .insight {
+      background: linear-gradient(to right, var(--summary-bg), transparent);
+      border-left: 4px solid var(--exam); padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+    }
+    .concept-block .insight::before {
+      content: "💡 핵심 통찰 — "; font-weight: 700; color: var(--exam);
+    }
+    .concept-block .step-derive {
+      counter-reset: derive-step;
+      background: var(--summary-bg); padding: 14px 18px 14px 22px; border-radius: 6px;
+      margin: 12px 0;
+    }
+    .concept-block .step-derive p {
+      counter-increment: derive-step; position: relative; padding-left: 26px; margin: 8px 0;
+    }
+    .concept-block .step-derive p::before {
+      content: counter(derive-step); position: absolute; left: 0; top: 2px;
+      width: 20px; height: 20px; background: var(--standard); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.78em; font-weight: 700;
+    }
+
+    article.problem {
+      margin: 16px 0; padding: 16px 20px; border: 1px solid var(--border);
+      border-left: 4px solid var(--basic); border-radius: 8px; background: var(--bg);
+    }
+    article.problem.basic     { border-left-color: var(--basic); }
+    article.problem.standard  { border-left-color: var(--standard); }
+    article.problem.advanced  { border-left-color: var(--advanced); }
+    article.problem.exam-style{ border-left-color: var(--exam); }
+    article.problem.hidden    { display: none; }
+    article.problem h3 { font-size: 1.05em; margin: 0 0 10px 0; }
+    .problem-body { margin: 8px 0 12px; }
+
+    details { margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    summary {
+      cursor: pointer; font-weight: 600; padding: 8px 12px;
+      background: var(--summary-bg); border-radius: 4px; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: 0.85em; }
+    details[open] summary::before { content: "▼ "; }
+
+    .solution { padding: 12px 8px 4px; }
+    .solution p { margin: 8px 0; }
+    .solution .why {
+      font-size: 0.9em; opacity: 0.85; padding: 4px 10px;
+      background: var(--summary-bg); border-radius: 4px; margin-left: 12px;
+      border-left: 3px solid var(--prereq-border);
+    }
+    .solution .why::before { content: "↳ 왜? "; font-weight: 600; color: var(--prereq-border); }
+    .solution .answer { font-weight: 600; }
+    .solution .key-point { color: var(--standard); }
+    .solution .warning { color: var(--exam); }
+    .solution .intent {
+      font-style: italic; opacity: 0.85;
+      border-left: 3px solid var(--border); padding-left: 12px; margin-top: 12px;
+    }
+
+    .review-box {
+      border: 2px solid var(--warning-border); background: var(--warning-bg);
+      padding: 16px 20px; margin: 32px 0 16px; border-radius: 8px;
+    }
+    .review-box h3 { margin-top: 0; }
+    .review-box ul { margin: 8px 0; padding-left: 20px; }
+
+    footer { text-align: center; opacity: 0.6; font-size: 0.9em; margin-top: 40px; }
+
+    #scrollTopBtn {
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; font-size: 1.2em; padding: 0; display: none; z-index: 100;
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; max-width: none; padding: 0 12px; }
+      .controls, #darkModeToggle, #scrollTopBtn { display: none !important; }
+      details { border-top: none; padding-top: 0; }
+      details > summary { display: none; }
+      details > .solution { display: block !important; padding: 0 0 0 8px; }
+      details:not([open]) > .solution { display: block !important; }
+      article.problem.hidden { display: block !important; }
+      article.problem { page-break-inside: avoid; border: 1px solid #999; border-left-width: 4px; }
+      .review-box { page-break-before: always; }
+      a { color: black; text-decoration: none; }
+    }
+
+    /* === 하이브리드 이관: B 스타일 hero + 스티키 툴바 (A 변수 사용) === */
+    .hero{background:linear-gradient(135deg,#1a237e,#1565c0 60%,#0288d1);color:#fff;padding:34px 28px;border-radius:14px;text-align:center;margin-bottom:24px;}
+    .hero .tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 16px;font-size:13px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;line-height:1.35;margin-bottom:10px;color:#fff;border:none;}
+    .hero p.sub{font-size:15px;opacity:.93;max-width:660px;margin:0 auto;}
+    .video-card{max-width:680px;margin:22px auto 0;background:var(--summary-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;text-align:left;}
+    .video-card a.thumb{flex-shrink:0;position:relative;width:180px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;display:block;}
+    .video-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .video-card .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(229,57,53,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+    .video-card .info{flex:1;min-width:0;color:var(--text);}
+    .video-card .v-title{font-weight:700;font-size:15px;margin-bottom:4px;}
+    .video-card .v-meta{font-size:13px;opacity:.75;margin-bottom:6px;}
+    .video-card .v-link{font-size:13px;color:var(--standard);word-break:break-all;}
+    .controls.hybrid-toolbar{position:sticky;top:0;z-index:50;margin:-24px -20px 20px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);}
+    .controls.hybrid-toolbar .spacer{flex:1;}
+    .controls.hybrid-toolbar a.back{padding:7px 14px;border-radius:8px;border:1px solid var(--standard);background:var(--standard);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;}
+    .pdf-toolbar{top:64px !important;}
+    @media(max-width:600px){.video-card{flex-direction:column;align-items:stretch;}.video-card a.thumb{width:100%;}}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:860px;width:calc(100% - 0px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+  <div class="controls hybrid-toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button onclick="filterLevel('all', this)" class="active">전체</button>
+    <button onclick="filterLevel('basic', this)">기초</button>
+    <button onclick="filterLevel('standard', this)">기본</button>
+    <button onclick="filterLevel('advanced', this)">심화</button>
+    <button onclick="filterLevel('exam-style', this)">수능 대비</button>
+  </div>
+
+
+  <div class="hero"><div class="tag">[고2-수학Ⅱ-도함수의 활용]</div><h1>사차함수의 4대 개형과 <strong>극댓값 조건</strong></h1><p class="sub">🎯 최고차항이 양수인 사차함수는 도함수 $f'(x)=0$(삼차방정식)의 근의 형태에 따라 딱 4가지 개형으로 갈린다. 그중 극댓값을 갖는 건 단 하나 — 서로 다른 세 실근(W형)뿐. 그리고 그 안엔 거의 절반이 놓치는 함정 조건이 하나 숨어 있다.</p><div class="video-card"><a class="thumb" href="https://www.youtube.com/watch?v=iyKulNkNU7w" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/iyKulNkNU7w/hqdefault.jpg" alt="영상 썸네일" loading="lazy" /><span class="play-icon">▶</span></a><div class="info"><div class="v-title">원본 영상 — 기본중에 기본!! 사차함수에 대해 얼마나 알고 계신가요?</div><div class="v-meta">📺 수학의 인덕션, 약 5분 · 2026-06-12</div><a class="v-link" href="https://www.youtube.com/watch?v=iyKulNkNU7w" target="_blank" rel="noopener">https://www.youtube.com/watch?v=iyKulNkNU7w</a></div></div></div>
+
+  <main>
+
+    <section id="example">
+      <h2>📌 도입: 영상이 던진 핵심 질문</h2>
+      <article class="problem basic">
+        <h3>예시 — 사차함수, 극댓값을 가질 수 있을까?</h3>
+        <p class="problem-body"><strong>질문:</strong> 최고차항의 계수가 양수인 사차함수 $f(x)$ 는 아래로 볼록한 U자 모양만 있는 게 아니다. 그런데 이 함수가 <strong>극댓값</strong>(국소적으로 솟아오른 봉우리)을 가지려면, 도함수 $f'(x)=0$ 의 근이 어떤 모습이어야 할까?</p>
+        <details open>
+          <summary>📖 왜 이 질문이 중요한가 (한눈에)</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 도함수는 삼차방정식:</strong> $f(x)$ 가 사차식이면 $f'(x)$ 는 반드시 삼차식이다. 삼차방정식 $f'(x)=0$ 은 (중복도 포함) 복소근이 정확히 3개이며, 실근의 개수는 1개 또는 3개(중근 포함)뿐이다.</p>
+            <p><strong>STEP 2 — 실근의 "형태"가 중요:</strong> 실근이 1개뿐이거나, 3개라도 겹치는 근(중근)이 있으면 함수는 계속 내려가다 한 번만 꺾이는 모양이 된다. 오직 <strong>서로 다른 세 실근</strong>일 때만 증가-감소-증가-감소 식으로 두 번 이상 방향이 바뀌며 봉우리(극대)가 생긴다.</p>
+            <p class="key-point"><strong>핵심:</strong> 사차함수가 극댓값을 가지려면 도함수가 서로 다른 세 실근을 가져야 한다 — 이 영상은 이 명제를 4가지 개형 분류와 함께 증명하고, 실전에서 가장 많이 틀리는 함정까지 짚는다.</p>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section id="concept">
+      <h2>💡 개념 설명 (4대 개형 · 도함수 면적 · 극댓값 조건)</h2>
+
+      <div class="concept-block">
+        <h3>① 선수 지식 — 삼차방정식 근의 형태 복습</h3>
+        <div class="prereq">
+          <p>삼차방정식은 (중복도를 포함해) 복소근이 정확히 3개다. 허근은 반드시 켤레쌍으로 짝수 개 나오므로, 삼차방정식의 실근 개수는 <strong>1개 또는 3개</strong>만 가능하다(2개는 불가능).</p>
+          <p>3개인 경우도 다시 나뉜다: ⓐ 서로 다른 세 실근, ⓑ 중근 하나 + 다른 실근 하나(실근 2종류), ⓒ 삼중근(실근 1종류).</p>
+        </div>
+        <p>도함수의 부호가 근을 지날 때 바뀌는지 여부가 극값의 존재를 결정한다는 것은 이미 배운 내용이다. 이번엔 그걸 사차함수 전체의 "모양 분류"로 확장한다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>② 핵심 — 사차함수의 4대 개형</h3>
+        <p>최고차항 계수가 양수인 사차함수 $f(x)$ 에 대해, 도함수 $f'(x)=0$(삼차방정식)의 근의 형태별로 정리하면:</p>
+        <div class="step-derive">
+          <p><strong>서로 다른 세 실근</strong> ($\alpha<\beta<\gamma$): 부호가 $-,+,-,+$ 순서로 두 번 바뀜 → 감소-증가-감소-증가, 즉 <strong>극소-극대-극소</strong>의 W자 모양. (극소 2개, 극대 1개)</p>
+          <p><strong>중근 + 다른 실근 하나</strong>: 중근에서는 부호가 안 바뀌고(스쳐 지나감), 다른 실근에서만 바뀜 → <strong>극소 1개만</strong> 존재. 중근 지점은 기울기가 순간 0이 되는 수평 변곡점(흔히 "아프리카 개형"으로 부름).</p>
+          <p><strong>삼중근</strong>: 부호가 그 한 점에서만 안 바뀌고 전체적으로 한 번도 안 바뀜(앞뒤 다 같은 부호) → <strong>극소 1개</strong>, 좌우 대칭의 완만한 U자형(ex: $y=x^4$).</p>
+          <p><strong>실근 1개 + 허근 2개</strong>: 실근 딱 하나에서만 부호가 바뀜 → <strong>극소 1개</strong>, 비대칭 U자형.</p>
+        </div>
+        <div class="insight">
+          4가지 중 <strong>딱 하나</strong>(서로 다른 세 실근, W형)만 극댓값을 갖는다! 나머지 세 개형은 전부 극솟값 1개뿐, 극댓값은 존재하지 않는다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>③ 왜 극댓값은 W형에서만 나오는가 (부호표로 확인)</h3>
+        <p>W형이 아닌 세 경우 모두, 부호가 "한 번만" 바뀌거나 "안 바뀐다"는 공통점이 있다. 증가하다 감소로, 다시 증가로 돌아서려면 최소 두 번은 부호가 바뀌어야 하는데, 중근·삼중근·허근 케이스는 전부 그 두 번째 반전이 일어나지 않는다. 그래서 극솟값만 한 번 찍고 끝까지 증가(혹은 감소)한다.</p>
+        <p class="key-point"><strong>핵심:</strong> 극댓값이 있으려면 "내려가다 → 올라가다 → 다시 내려가다"의 3단 변화가 필요하고, 이는 서로 다른 세 실근일 때만 가능하다.</p>
+      </div>
+
+      <div class="concept-block">
+        <h3>④ 도함수의 면적과 극값 높이차 (미적분학의 기본정리)</h3>
+        <div class="prereq">
+          <p>미적분학의 기본정리: $f(b)-f(a) = \displaystyle\int_a^b f'(x)\,dx$. 즉 원함수의 두 지점 사이 높이 변화량은 그 구간에서 도함수가 만드는 <strong>정적분 면적(부호 포함)</strong>과 정확히 같다.</p>
+        </div>
+        <p>W형에서 극소 $x=\alpha$, 극대 $x=\beta$, 극소 $x=\gamma$ 라 하면, $f(\beta)-f(\alpha) = \int_\alpha^\beta f'(x)dx$ 이고 $f(\beta)-f(\gamma) = \int_\gamma^\beta f'(x)dx$(부호 음수) 이다. 두 구간 중 <strong>가로 폭(간격)이 넓은 쪽</strong>일수록 둘러싸인 면적이 커지는 경향이 있어, 원함수에서 그쪽으로 <strong>더 깊이</strong> 내려간다.</p>
+        <div class="insight">
+          구간이 좁은데 오히려 더 깊이 파고드는 사차함수 개형은 수학적으로 성립할 수 없다(일반적인 경우). 두 극솟값 중 어느 쪽이 더 낮은지, 직접 좌표를 계산하지 않고도 <strong>도함수 그래프의 가로 간격</strong>만 보고 짐작할 수 있다는 뜻이다.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑤ 극댓값을 가질 조건 — 실전 풀이 흐름 (영상 예제)</h3>
+        <p><strong>문제:</strong> $f(x) = x^4 + 2x^3 + ax^2$ 이 극댓값을 갖도록 하는 실수 $a$ 의 범위를 구하시오.</p>
+        <div class="step-derive">
+          <p><strong>도함수 계산:</strong> $f'(x) = 4x^3+6x^2+2ax$. 공통인수 $2x$ 로 묶으면 $f'(x) = 2x(2x^2+3x+a)$.</p>
+          <p><strong>조건 설정:</strong> 이미 $x=0$ 이 근으로 확보되어 있다. 극댓값을 가지려면 $f'(x)=0$ 이 <strong>서로 다른 세 실근</strong>을 가져야 하므로, 나머지 이차식 $g(x)=2x^2+3x+a$ 가 $x=0$ 과는 <strong>다른</strong> 서로 다른 두 실근을 가져야 한다.</p>
+          <p><strong>판별식 조건:</strong> $g(x)=0$ 이 서로 다른 두 실근을 가지려면 $D = 3^2-4(2)(a) = 9-8a>0 \implies a<\dfrac{9}{8}$.</p>
+          <p><strong>함정 — 중복근 배제:</strong> 만약 $g(0)=a=0$ 이면, $g(x)=0$ 의 두 근 중 하나가 $x=0$ 이 되어버려 전체적으로 $x=0$ 이 중근이 된다(서로 다른 실근이 2개로 줄어듦). 따라서 $a\neq0$ 이 반드시 추가되어야 한다.</p>
+        </div>
+        <div class="formula-box">
+          $$D=9-8a>0 \;\Rightarrow\; a<\frac{9}{8}, \qquad g(0)=a\neq0$$
+          $$\therefore\; a<0 \;\;\text{또는}\;\; 0<a<\frac{9}{8}$$
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3>⑥ 함정 — 가장 많이 틀리는 지점</h3>
+        <div class="callout">
+          <p>① <strong>$a\neq0$ 누락</strong>: 판별식 $D>0$ 만 풀고 끝내면 $a<9/8$ 전체를 답으로 쓰는 실수를 한다. 공통인수로 이미 빼놓은 근($x=0$)을 나머지 이차식이 <strong>다시</strong> 가지면 안 된다는 점을 꼭 확인해야 한다.</p>
+          <p>② <strong>"극값이 있다" ≠ "극댓값이 있다"</strong>: 중근+실근, 삼중근, 허근 2개 케이스는 모두 극솟값은 있지만 극댓값은 없다. 문제가 "극값을 갖는다"가 아니라 "<strong>극댓값</strong>을 갖는다"라고 물으면 반드시 서로 다른 세 실근 조건까지 확인해야 한다.</p>
+          <p>③ <strong>최고차항 부호</strong>: 이 모든 분류는 최고차항이 <strong>양수</strong>일 때 기준이다. 음수면 극대·극소가 통째로 뒤바뀐다(W형의 극대 1개·극소 2개가 극소 1개·극대 2개로).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <h2>📝 수준별 문항 (8문항 — 기초 2 · 기본 2 · 심화 2 · 수능 대비 2)</h2>
+
+      <h3 class="level-header">🟢 기초</h3>
+
+      <article class="problem basic">
+        <h3>기초 1 — W형 개형과 세 극값 계산</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^4-2x^2+1$ 에 대해 도함수 $f'(x)=0$ 의 근을 모두 구하여 개형을 분류하고, 세 극값을 모두 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 도함수:</strong> $f'(x) = 4x^3-4x = 4x(x-1)(x+1)$.</p>
+            <p><strong>STEP 2 — 근:</strong> $x=-1,0,1$ — 서로 다른 세 실근 → <strong>W형</strong>.</p>
+            <p><strong>STEP 3 — 값:</strong> $f(-1)=1-2+1=0$, $f(0)=1$, $f(1)=1-2+1=0$.</p>
+            <p class="answer"><strong>정답:</strong> W형. 극솟값 $0$ (at $x=-1$), 극댓값 $1$ (at $x=0$), 극솟값 $0$ (at $x=1$).</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem basic">
+        <h3>기초 2 — 아프리카 개형(중근+실근) 판정</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^4+4x^3$ 에 대해 도함수 $f'(x)=0$ 의 근을 모두 구하여 개형을 분류하고, 존재하는 극값을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 도함수:</strong> $f'(x)=4x^3+12x^2 = 4x^2(x+3)$.</p>
+            <p><strong>STEP 2 — 근:</strong> $x=0$(중근), $x=-3$(단순근) → 중근+실근 → <strong>아프리카 개형</strong> (극댓값 없음, 극솟값 1개).</p>
+            <p><strong>STEP 3 — 부호:</strong> $x<-3$: 음수(감소), $-3<x<0$: 양수(증가), $x>0$: 여전히 양수(계속 증가, $x=0$ 은 수평 변곡점일 뿐 부호가 안 바뀜).</p>
+            <p><strong>STEP 4 — 값:</strong> $f(-3)=81-108=-27$.</p>
+            <p class="answer"><strong>정답:</strong> 아프리카 개형(중근+실근). 극솟값 $-27$ (at $x=-3$), 극댓값 없음.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔵 기본</h3>
+
+      <article class="problem standard">
+        <h3>기본 1 — 도함수 면적으로 더 깊은 극솟값 짚기</h3>
+        <p class="problem-body"><strong>문제:</strong> 사차함수 $f(x)$ 의 도함수가 $f'(x)=(x+2)x(x-3)$ 일 때, 두 극솟값(각각 $x=-2$, $x=3$에서) 중 어느 쪽이 더 작은지 구간 폭만으로 먼저 짐작하고, 실제로 정적분을 계산해 확인하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 개형 확인:</strong> 근 $-2,0,3$ (서로 다른 세 실근) → W형. 부호: $x<-2$ 음수, $-2<x<0$ 양수, $0<x<3$ 음수, $x>3$ 양수 → 극소($-2$)-극대($0$)-극소($3$).</p>
+            <p><strong>STEP 2 — 구간 폭 비교:</strong> $0$에서 $-2$까지 폭 $2$, $0$에서 $3$까지 폭 $3$. 오른쪽 구간이 더 넓으므로 <strong>오른쪽으로 더 깊이 내려갈 것</strong>으로 예상.</p>
+            <p><strong>STEP 3 — 전개:</strong> $f'(x)=(x+2)x(x-3)=x^3-x^2-6x$, 원시함수 $f(x)=\dfrac{x^4}{4}-\dfrac{x^3}{3}-3x^2+C$.</p>
+            <p><strong>STEP 4 — 정적분 계산:</strong> $\displaystyle\int_{-2}^0 f'(x)dx = f(0)-f(-2) = \frac{16}{3}$ (양수, 증가 확인). $\displaystyle\int_0^3 f'(x)dx = f(3)-f(0) = -\frac{63}{4}$ (음수, 감소 확인).</p>
+            <p class="answer"><strong>정답:</strong> $f(0)-f(-2)=\dfrac{16}{3}\approx5.33$, $f(0)-f(3)=\dfrac{63}{4}=15.75$. $\dfrac{63}{4}>\dfrac{16}{3}$ 이므로 $x=3$ 에서의 극솟값이 더 깊다 — 구간 폭 예상과 일치.</p>
+            <p class="key-point"><strong>검산:</strong> 폭이 넓은 쪽(③)이 실제로 더 많이 내려감을 직접 계산으로 확인했다.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem standard">
+        <h3>기본 2 — 영상 예제의 숫자 바꿔 풀기 (전이 연습)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x) = x^4-4x^3+ax^2$ 이 극댓값을 갖도록 하는 실수 $a$ 의 범위를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 도함수:</strong> $f'(x)=4x^3-12x^2+2ax = 2x(2x^2-6x+a)$.</p>
+            <p><strong>STEP 2 — 판별식:</strong> $g(x)=2x^2-6x+a=0$ 이 서로 다른 두 실근을 가지려면 $D=36-8a>0 \implies a<\dfrac{9}{2}$.</p>
+            <p><strong>STEP 3 — 중복근 배제:</strong> $g(0)=a\neq0$.</p>
+            <p class="answer"><strong>정답:</strong> $a<0$ 또는 $0<a<\dfrac{9}{2}$</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🟠 심화</h3>
+
+      <article class="problem advanced">
+        <h3>심화 1 — 공통근 함정이 다르게 숨은 경우</h3>
+        <p class="problem-body"><strong>문제:</strong> 사차함수 $f(x)$ 의 도함수가 $f'(x)=(x-1)(x^2-4x+k)$ 일 때, $f(x)$ 가 극댓값을 갖도록 하는 실수 $k$ 의 범위를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 조건 파악:</strong> 이미 $x=1$ 이 근으로 확보됨. 극댓값을 가지려면 이차식 $h(x)=x^2-4x+k$ 가 $x=1$ 과 <strong>다른</strong> 서로 다른 두 실근을 가져야 한다.</p>
+            <p><strong>STEP 2 — 판별식:</strong> $D=16-4k>0 \implies k<4$.</p>
+            <p><strong>STEP 3 — 공통근 배제:</strong> $h(1)=1-4+k=k-3=0$ 이면 $x=1$ 이 $h(x)=0$ 의 근도 되어 중근이 생긴다. 따라서 $k\neq3$.</p>
+            <p class="answer"><strong>정답:</strong> $k<4$ 이고 $k\neq3$</p>
+            <p class="key-point"><strong>핵심:</strong> 공통인수가 항상 $2x$ 처럼 $x=0$ 형태로만 나오는 게 아니다. 어떤 값이 공통으로 빠져나왔든, 나머지 이차식이 그 값을 "다시" 근으로 갖지 않는지 대입해서 확인하는 습관이 중요하다.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem advanced">
+        <h3>심화 2 — 위장된 완전제곱 찾기</h3>
+        <p class="problem-body"><strong>문제:</strong> $g(x)=x^4-8x^3+18x^2+c$ ($c$는 상수)의 극값의 개수와 종류를 판정하고, 존재하는 극값을 $c$ 로 나타내시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 도함수:</strong> $g'(x)=4x^3-24x^2+36x = 4x(x^2-6x+9) = 4x(x-3)^2$.</p>
+            <p><strong>STEP 2 — 근의 형태:</strong> $x=0$(단순근), $x=3$(중근, 완전제곱식으로 위장되어 있었음) → 중근+실근 → 아프리카 개형.</p>
+            <p><strong>STEP 3 — 부호:</strong> $(x-3)^2\ge0$ 이 항상 성립하므로 $g'(x)$ 의 부호는 $x$ 의 부호와 같다. $x<0$ 음수, $0<x<3$ 양수, $x>3$ 에서도 여전히 양수(부호 안 바뀜, $x=3$ 은 수평 변곡점).</p>
+            <p class="answer"><strong>정답:</strong> 극값은 $x=0$ 에서의 극솟값 $g(0)=c$ 하나뿐이다. 극댓값은 없다.</p>
+            <p class="key-point"><strong>함정:</strong> $(x-6x+9)$ 꼴이 완전제곱식 $(x-3)^2$ 임을 못 알아채면 서로 다른 세 실근으로 착각해 극댓값이 있다고 오판하기 쉽다.</p>
+          </div>
+        </details>
+      </article>
+
+      <h3 class="level-header">🔴 수능 대비</h3>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 1 — 정수 조건 세기 유형(준킬러)</h3>
+        <p class="problem-body"><strong>문제:</strong> $f(x)=x^4-2x^3+ax^2$ 이 극댓값을 갖도록 하는 정수 $a$ 중 $-10$ 이상 $10$ 이하인 것의 개수를 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 도함수:</strong> $f'(x)=4x^3-6x^2+2ax=2x(2x^2-3x+a)$.</p>
+            <p><strong>STEP 2 — 조건:</strong> $g(x)=2x^2-3x+a=0$ 이 서로 다른 두 실근(단, $x=0$ 제외)을 가져야 함. $D=9-8a>0 \implies a<\dfrac{9}{8}$, $g(0)=a\neq0$.</p>
+            <p><strong>STEP 3 — 정수 범위:</strong> $-10\le a\le10$ 이고 $a<\dfrac98(=1.125)$ 인 정수는 $a\in\{-10,-9,\dots,-1,0,1\}$ 중 $0$을 제외한 것.</p>
+            <p><strong>STEP 4 — 개수:</strong> $-10$부터 $-1$까지 $10$개, 여기에 $a=1$ 추가 → 총 $11$개.</p>
+            <p class="answer"><strong>정답:</strong> $11$개</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="problem exam-style">
+        <h3>수능 대비 2 — 도함수 면적으로 극값 역산(준킬러)</h3>
+        <p class="problem-body"><strong>문제:</strong> 사차함수 $f(x)$ 의 도함수가 $f'(x)=6(x+1)x(x-3)$ 이고 극댓값이 $f(0)=20$ 일 때, 오른쪽 극솟값 $f(3)$ 을 구하시오.</p>
+        <details>
+          <summary>📖 풀이 보기</summary>
+          <div class="solution">
+            <p><strong>STEP 1 — 개형 확인:</strong> 근 $-1,0,3$(서로 다른 세 실근, W형). 부호: $x<-1$ 음수, $-1<x<0$ 양수(극소 at $-1$), $0<x<3$ 음수(극대 at $0$), $x>3$ 양수(극소 at $3$).</p>
+            <p><strong>STEP 2 — 전개:</strong> $f'(x)=6(x+1)x(x-3)=6x^3-12x^2-18x$.</p>
+            <p><strong>STEP 3 — 기본정리 적용:</strong> $f(3)-f(0)=\displaystyle\int_0^3 f'(x)dx = \Big[\frac{3}{2}x^4-4x^3-9x^2\Big]_0^3 = (121.5-108-81)-0=-67.5=-\dfrac{135}{2}$.</p>
+            <p><strong>STEP 4 — 역산:</strong> $f(3)=f(0)-\dfrac{135}{2}=20-67.5=-47.5$.</p>
+            <p class="answer"><strong>정답:</strong> $f(3)=-\dfrac{95}{2}$</p>
+            <p class="key-point"><strong>핵심:</strong> 극값들의 "실제 좌표"를 몰라도, 도함수의 정적분(면적)만으로 한 극값에서 다른 극값을 바로 계산할 수 있다 — 개념 ④의 실전 적용.</p>
+          </div>
+        </details>
+      </article>
+
+    </section>
+
+  </main>
+
+  <div class="review-box">
+    <h3>✅ 학습자 가이드라인 적용 결과</h3>
+    <p>본 자료는 영상에서 빠르게 지나간 개형 분류·조건을 중수준(하위 40%) 학습자도 따라갈 수 있도록 풀어 작성:</p>
+    <ul>
+      <li><strong>4대 개형의 "왜"</strong> → 삼차방정식 근의 개수 제약(복소근 짝수쌍)부터 출발해 부호 변화 횟수로 유도 (개념 ①~③).</li>
+      <li><strong>도함수 면적 ↔ 높이차</strong> → 미적분학의 기본정리를 명시하고, 기본 1에서 직접 정적분으로 검산.</li>
+      <li><strong>극댓값 조건의 두 단계(판별식 + 중복근 배제)</strong> → 영상 예제를 STEP별로 분리하고, 기본 2·심화 1에서 숫자·형태를 바꿔 전이 연습.</li>
+      <li><strong>위장된 함정</strong> → 심화 2에서 완전제곱식으로 숨은 중근을 알아채는 연습 추가.</li>
+      <li><strong>실전 응용</strong> → 수능 대비 1(정수 세기), 수능 대비 2(면적 역산)로 확장.</li>
+    </ul>
+    <p>다만 다음은 교사 검토 권장:</p>
+    <ul>
+      <li>개념 ④의 "구간 폭이 넓을수록 더 깊이 내려간다"는 일반적인 경향 서술이며, 도함수의 구체적 형태(계수)에 따라 예외가 있을 수 있음 — 엄밀한 일반증명이 아니라 직관적 설명임에 유의. (확신도 ★★)</li>
+      <li>"수능 대비"는 출제 패턴·난이도 라벨일 뿐 실재 수능 기출이 아닙니다.</li>
+    </ul>
+  </div>
+
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:860px;width:calc(100% - 0px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html">실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기 (OJyw8C5k)</a> · <a href="20260716_정수조건부등식과곱의미분정수결정_FZTeYWax.html">정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학Ⅱ) (FZTeYWax)</a> · <a href="20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html">교점 개수 함수와 3차함수 높이차 2대1 공식 (ONHx5OaS)</a> · <a href="20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a></div><!--REL_END-->
+<footer>
+    <p>생성일: 2026-10-02 | 영상 출처: <a href="https://www.youtube.com/watch?v=iyKulNkNU7w">https://www.youtube.com/watch?v=iyKulNkNU7w</a> (수학의 인덕션, 게시 2026-06-12)</p>
+    <p>본 자료는 AI가 영상 요약을 기반으로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장.</p>
+    <p style="margin-top: 8px; font-size: 0.85em;">단축키: <kbd>D</kbd> 다크모드 · <kbd>1~5</kbd> 난이도 필터</p>
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDarkMode() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      const buttons = document.querySelectorAll('.controls button');
+      buttons.forEach(b => { if (b.id !== 'darkModeToggle') b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      const articles = document.querySelectorAll('#problems article.problem');
+      articles.forEach(a => {
+        if (level === 'all' || a.classList.contains(level)) a.classList.remove('hidden');
+        else a.classList.add('hidden');
+      });
+      const headers = document.querySelectorAll('#problems h3');
+      headers.forEach(h => {
+        if (level === 'all') { h.style.display = ''; return; }
+        let cur = h.nextElementSibling, hasVisible = false;
+        while (cur && cur.tagName === 'ARTICLE') {
+          if (!cur.classList.contains('hidden')) { hasVisible = true; break; }
+          cur = cur.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filterBtns = document.querySelectorAll('.controls button:not(#darkModeToggle)');
+      if (e.key === 'd' || e.key === 'D') toggleDarkMode();
+      else if (e.key === '1') filterBtns[0]?.click();
+      else if (e.key === '2') filterBtns[1]?.click();
+      else if (e.key === '3') filterBtns[2]?.click();
+      else if (e.key === '4') filterBtns[3]?.click();
+      else if (e.key === '5') filterBtns[4]?.click();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+  <script>/*filterLevel-scroll-patch*/(function(){var _f=window.filterLevel;if(_f)window.filterLevel=function(l,b){_f(l,b);if(l!=="all"){var p=document.getElementById("problems");if(p)p.scrollIntoView({behavior:"smooth",block:"start"});}};})();</script>
+</body>
+</html>
