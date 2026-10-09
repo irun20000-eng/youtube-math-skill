@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>숨겨진 매개변수 미분법 — 사인법칙·덧셈정리로 푸는 미적분 킬러</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3(N수 포함) · 미적분 — 여러 가지 미분법(매개변수 미분법)</div>
+    <h1>문자 하나에 낚이지 마라 —<br>숨겨진 매개변수로 뚫는 미적분 킬러</h1>
+    <p class="sub">두 변수가 동시에 변하는 도형 문제에서, 직접 한쪽을 다른 쪽의 식으로 세우려 하면 식이 지저분해진다. 둘 다를 종속시키는 "진짜 독립변수"(매개변수) 하나를 찾아 각각 미분한 뒤 나누면, 삼각함수 덧셈정리와 결합해 깔끔하게 정리된다.</p>
+    <div class="quote">"보조선을 그어 사후적으로 쉽게 풀었다고 자랑하는 풀이는 시험장에서 재현이 안 된다. 두 변수가 공통으로 의존하는 각 하나를 잡아, 그 각에 대해 각각 미분하고 나누는 것 — 이게 필연적인 도구다." — 영상 핵심 멘트 재구성</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/N5VDEMLGV7E" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/N5VDEMLGV7E/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">평가원: "9모 28번? 노코멘트하겠습니다" (2027학년도 9월 모평 미적분28번)</div>
+        <div class="v-meta">📺 YouTube · 약 29분 · 선승범 수학</div>
+        <a class="v-link" href="https://youtu.be/N5VDEMLGV7E" target="_blank" rel="noopener">https://youtu.be/N5VDEMLGV7E</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 두 변수 $s,\ \varphi$가 모두 같은 매개변수 $\theta$에 종속될 때 $\dfrac{d\varphi}{ds}=\dfrac{d\varphi/d\theta}{ds/d\theta}$ 로 구하는 매개변수 미분법을 유도부터 직접 재현할 수 있다. 사인법칙에서 나온 $\sin(\varphi-\theta)$ 꼴 관계식을 덧셈정리로 전개하고 $\cos\varphi$로 나누어 $\tan\varphi$ 식으로 바꾸는 "탄젠트화" 테크닉을 적용할 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — 두 변수를 동시에 움직이는 "제3의 변수"는 왜 필요한가?</div>
+    <div class="card">
+      <div class="problem-body"><strong>생각해보기:</strong> 반지름이 $1$인 원 위의 점 $P$가 각 $\theta$만큼 돌면, 점 $P$의 $x$좌표 $x=\cos\theta$와 $y$좌표 $y=\sin\theta$가 동시에 바뀐다. $\theta=\dfrac{\pi}{3}$인 순간, $y$가 $x$에 대해 변하는 비율 $\dfrac{dy}{dx}$는 얼마일까?</div>
+      <div class="visual">  x와 y를 서로의 식으로 직접 바꾸려면 y=√(1-x²) 처럼 근호가 등장해 복잡해진다.
+  하지만 두 식이 "같은 θ"에서 나왔다는 사실을 쓰면:
+
+    dx/dθ = -sinθ ,  dy/dθ = cosθ
+    ⇒ dy/dx = (dy/dθ) / (dx/dθ) = cosθ / (-sinθ)   ← θ 하나만 알면 끝!</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$x=\cos\theta,\ y=\sin\theta$ 를 각각 $\theta$에 대해 미분한다: $\dfrac{dx}{d\theta}=-\sin\theta,\ \dfrac{dy}{d\theta}=\cos\theta$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>두 변수 모두 "같은 $\theta$가 움직여서" 바뀌는 것이므로, $\dfrac{dy}{dx}=\dfrac{dy/d\theta}{dx/d\theta}=\dfrac{\cos\theta}{-\sin\theta}$ 로 계산할 수 있다(아래 개념 1에서 이 공식 자체를 유도한다).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\theta=\dfrac{\pi}{3}$ 에서 $\cos\theta=\dfrac12,\ \sin\theta=\dfrac{\sqrt3}{2}$ 이므로 $\dfrac{dy}{dx}=\dfrac{1/2}{-\sqrt3/2}=-\dfrac{1}{\sqrt3}=-\dfrac{\sqrt3}{3}$.</div></div>
+          <p class="warn">검산: 원 위에서 $y=\sqrt{1-x^2}$ 로 직접 미분하면 $\dfrac{dy}{dx}=\dfrac{-x}{\sqrt{1-x^2}}=\dfrac{-x}{y}=-\dfrac{\cos\theta}{\sin\theta}$ — 같은 결과.</p>
+          <span class="answer-tag">정답: $\dfrac{dy}{dx}=-\dfrac{\sqrt3}{3}$</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명 — 매개변수 미분법과 덧셈정리 탄젠트화</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>합성함수의 미분(연쇄법칙):</strong> $y$가 $\theta$의 함수이고 $\theta$가 $x$의 함수이면 $\dfrac{dy}{dx}=\dfrac{dy}{d\theta}\cdot\dfrac{d\theta}{dx}$. 아래 개념 1의 공식은 이 연쇄법칙을 거꾸로 쓴 것이다.</li>
+        <li><strong>사인법칙:</strong> 삼각형의 세 변 $a,b,c$와 대각 $A,B,C$ 사이에 $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=\dfrac{c}{\sin C}$ 가 성립한다.</li>
+        <li><strong>$\tan$의 도함수:</strong> $(\tan x)'=\sec^2x=1+\tan^2x$. 탄젠트로 정리된 식을 미분할 때 반드시 쓰인다.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>매개변수 미분법 — 공식 유도</div>
+      <p>① <strong>정의</strong>: 두 변수 $s,\varphi$가 모두 제3의 변수(매개변수) $\theta$에 종속되어 있을 때(즉 $s=s(\theta),\ \varphi=\varphi(\theta)$), $\dfrac{d\varphi}{ds}$를 $\theta$를 거쳐서 구하는 방법이다.</p>
+      <p style="margin-top:10px">② <strong>비유로 이해하기</strong>: 두 사람이 같은 음악(박자 $\theta$)에 맞춰 춤을 춘다고 하자. 한 사람은 왼쪽으로($s$), 다른 사람은 위로($\varphi$) 움직인다. 각자 "박자당 속도"($ds/d\theta$, $d\varphi/d\theta$)를 알면, "한 사람이 왼쪽으로 $1$ 움직일 때 다른 사람은 얼마나 위로 움직이는가"($d\varphi/ds$)는 두 속도의 비율로 바로 알 수 있다 — 굳이 "왼쪽으로 간 거리"를 직접 "위로 간 거리"의 식으로 바꿀 필요가 없다.</p>
+      <p style="margin-top:10px">③ <strong>왜 이렇게 될까? (유도)</strong> 연쇄법칙에서 $\dfrac{d\varphi}{ds}=\dfrac{d\varphi}{d\theta}\cdot\dfrac{d\theta}{ds}$ 인데, $\dfrac{d\theta}{ds}$는 $\dfrac{ds}{d\theta}$의 역수($\dfrac{d\theta}{ds}=\dfrac{1}{ds/d\theta}$, 역함수 미분법)이므로</p>
+      <div class="formula-box">$$\frac{d\varphi}{ds}=\frac{d\varphi}{d\theta}\cdot\frac{1}{ds/d\theta}=\frac{d\varphi/d\theta}{ds/d\theta}$$</div>
+      <p>④ <strong>자주 하는 실수</strong>: 미분하기 전에 "그 순간의 값"(예: 특정 각도, 특정 $\tan$값)을 식에 먼저 대입해 버리는 경우가 많다. 하지만 미분은 "변할 수 있는 상태"에서 해야 의미가 있다 — 반드시 일반적인 $\theta$ 상태에서 관계식과 미분을 모두 끝낸 뒤, 맨 마지막 단계에서만 구체적인 값을 대입한다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>사인법칙 + 덧셈정리 → "탄젠트화" 테크닉</div>
+      <p>도형 문제에서 두 각이 한 식에 얽혀 나오면, 사인법칙으로 $A\sin(\varphi-\theta)=B\sin\varphi$ 꼴(여기서 $A,B$는 변의 길이)의 관계식이 만들어진다. 이걸 그대로 미분하면 $\cos(\varphi-\theta)$ 항까지 섞여 매우 복잡해지므로, 먼저 덧셈정리로 전개해 $\sin\varphi,\cos\varphi$만 남긴 뒤 탄젠트 하나의 식으로 묶는다.</p>
+      <div class="formula-box">
+        $$A\sin(\varphi-\theta)=B\sin\varphi \;\Longrightarrow\; A(\sin\varphi\cos\theta-\cos\varphi\sin\theta)=B\sin\varphi$$
+        <p style="margin-top:8px; font-size:.92em; color:var(--sub)">양변을 $\cos\varphi$로 나눈다 (단, $\cos\varphi\neq0$):</p>
+        $$A\tan\varphi\cos\theta-A\sin\theta=B\tan\varphi \;\Longrightarrow\; \tan\varphi\,(A\cos\theta-B)=A\sin\theta$$
+      </div>
+      <div class="step-row"><div class="step-num">⚙</div><div class="step-body">식 전체가 $\sin\varphi,\cos\varphi$ 두 개가 아니라 $\tan\varphi$ 하나로 정리된다. 이제 조건으로 주어진 $\tan\varphi$ 값을 바로 대입하기 좋은 형태가 됐고, 양변을 $\theta$로 미분할 때도 $(\tan\varphi)'=\sec^2\varphi\cdot\varphi'$ 공식 하나만 쓰면 된다.</div></div>
+      <div class="caution"><strong>자주 하는 실수:</strong> $\cos\varphi$로 나누는 단계를 빼고 $\sin\varphi,\cos\varphi$가 뒤섞인 식을 그대로 미분하려 하면, 곱의 미분법이 두 번 겹쳐 식이 통제 불능으로 복잡해진다. 탄젠트 하나로 통일하는 것이 핵심 선택이다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>탄젠트 식의 양변을 $\theta$로 미분하기</div>
+      <p>개념 2에서 얻은 $\tan\varphi\,(A\cos\theta-B)=A\sin\theta$ 는 $\theta$가 변하는 동안 항상 성립하는 관계식(항등식)이다. 양변을 $\theta$로 미분하면, 좌변은 곱의 미분법 — $\tan\varphi$ 는 $\theta$에 대한 합성함수이므로 $\dfrac{d}{d\theta}\tan\varphi=\sec^2\varphi\cdot\dfrac{d\varphi}{d\theta}$ 가 된다.</p>
+      <div class="formula-box">$$\sec^2\varphi\cdot\frac{d\varphi}{d\theta}\cdot(A\cos\theta-B)+\tan\varphi\cdot(-A\sin\theta)=A\cos\theta$$</div>
+      <div class="tip"><strong>기억할 것:</strong> 이 식에는 $\dfrac{d\varphi}{d\theta}$ 가 딱 한 번만 등장한다. $\sec^2\varphi,\ \tan\varphi,\ \cos\theta,\ \sin\theta$ 의 "그 순간의 값"을 모두 알면, 일차방정식 하나로 $\dfrac{d\varphi}{d\theta}$ 를 바로 구할 수 있다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span style="font-weight:600; color:#2e7d32">매개변수 미분 공식 직접 적용</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 매개변수 $t$로 주어진 $x,y$의 $dy/dx$</div>
+        <div class="problem-body"><strong>문제:</strong> $x=t^2+1,\ y=2t$ 일 때, $t=2$에서 $\dfrac{dy}{dx}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>각각 $t$로 미분: $\dfrac{dx}{dt}=2t,\ \dfrac{dy}{dt}=2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>개념 1의 공식 $\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}=\dfrac{2}{2t}=\dfrac1t$ 에 $t=2$를 대입한다.</div></div>
+          <p class="warn">검산: $y=2t=2\sqrt{x-1}$ 로 직접 써서 미분하면 $\dfrac{dy}{dx}=\dfrac{1}{\sqrt{x-1}}=\dfrac1t$ — 같은 결과.</p>
+          <span class="answer-tag">정답: $\dfrac{dy}{dx}=\dfrac12$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 사인법칙 관계식에서 $\tan\varphi$ 값 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 어떤 순간 $\theta$에서 $\cos\theta=\dfrac45,\ \sin\theta=\dfrac35$ 이고, $5\sin(\varphi-\theta)=3\sin\varphi$ 가 성립한다. 이때 $\tan\varphi$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 2의 "탄젠트화" 공식 $\tan\varphi(A\cos\theta-B)=A\sin\theta$ 에 $A=5,\ B=3$을 대입: $\tan\varphi(5\cos\theta-3)=5\sin\theta$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$5\cos\theta-3=5\cdot\dfrac45-3=4-3=1$, $5\sin\theta=5\cdot\dfrac35=3$ 이므로 $\tan\varphi\cdot1=3$.</div></div>
+          <span class="answer-tag">정답: $\tan\varphi=3$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span style="font-weight:600; color:#1565c0">두 변수 모두 삼각함수인 매개변수 미분</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 삼각함수로 주어진 매개변수 미분</div>
+        <div class="problem-body"><strong>문제:</strong> $x=2\cos\theta+\theta,\ y=2\sin\theta$ 일 때, $\theta=\dfrac{\pi}{2}$ 에서 $\dfrac{dy}{dx}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$\dfrac{dx}{d\theta}=-2\sin\theta+1,\ \dfrac{dy}{d\theta}=2\cos\theta$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\theta=\dfrac{\pi}{2}$ 에서 $\sin\theta=1,\cos\theta=0$ 이므로 $\dfrac{dx}{d\theta}=-2(1)+1=-1,\ \dfrac{dy}{d\theta}=2(0)=0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\dfrac{dy}{dx}=\dfrac{dy/d\theta}{dx/d\theta}=\dfrac{0}{-1}=0$.</div></div>
+          <span class="answer-tag">정답: $\dfrac{dy}{dx}=0$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — $\tan\varphi$ 식을 $\theta$로 미분해 $d\varphi/d\theta$ 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 어떤 순간 $\theta_0$에서 $\cos\theta=\dfrac45,\ \sin\theta=\dfrac35,\ \tan\varphi=\dfrac32$ 이고, 항등식 $\tan\varphi\,(5\cos\theta-2)=5\sin\theta$ 가 모든 $\theta$에서 성립한다. 이때 $\dfrac{d\varphi}{d\theta}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>개념 3의 공식(여기서 $A=5,B=2$) $\sec^2\varphi\cdot\dfrac{d\varphi}{d\theta}\cdot(5\cos\theta-2)+\tan\varphi\cdot(-5\sin\theta)=5\cos\theta$ 를 쓴다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\tan\varphi=\dfrac32$ 이므로 $\sec^2\varphi=1+\tan^2\varphi=1+\dfrac94=\dfrac{13}{4}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$5\cos\theta-2=5\cdot\dfrac45-2=4-2=2$, $5\sin\theta=5\cdot\dfrac35=3$, $5\cos\theta=4$. 대입: $\dfrac{13}{4}\cdot\dfrac{d\varphi}{d\theta}\cdot2+\dfrac32\cdot(-3)=4$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$\dfrac{13}{2}\dfrac{d\varphi}{d\theta}-\dfrac92=4 \;\Rightarrow\; \dfrac{13}{2}\dfrac{d\varphi}{d\theta}=4+\dfrac92=\dfrac{17}{2} \;\Rightarrow\; \dfrac{d\varphi}{d\theta}=\dfrac{17}{13}$.</div></div>
+          <p class="warn">오답 주의: $\tan\varphi$ 값을 미분 전에 식에 대입한 뒤 그 식을 미분하면 $\varphi$가 상수처럼 취급돼 $\dfrac{d\varphi}{d\theta}$ 항이 통째로 사라진다. 반드시 미분을 먼저 끝내고, 그 다음 수치를 대입해야 한다(개념 1 자주 하는 실수 참고).</p>
+          <span class="answer-tag">정답: $\dfrac{d\varphi}{d\theta}=\dfrac{17}{13}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span style="font-weight:600; color:#6a1b9a">매개변수 미분법 체인을 끝까지 연결</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — $\tan\varphi$ 값을 먼저 유도한 뒤 $d\varphi/d\theta$ 계산</div>
+        <div class="problem-body"><strong>문제:</strong> 어떤 순간 $\theta_0$에서 $\cos\theta=\dfrac45,\ \sin\theta=\dfrac35$ 이고, 항등식 $5\sin(\varphi-\theta)=2\sin\varphi$ 가 모든 $\theta$에서 성립한다. 이 순간의 $\dfrac{d\varphi}{d\theta}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>기초 2와 같은 방식으로 탄젠트화: $\tan\varphi(5\cos\theta-2)=5\sin\theta$. $5\cos\theta-2=2,\ 5\sin\theta=3$ 이므로 $\tan\varphi\cdot2=3 \Rightarrow \tan\varphi=\dfrac32$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>기본 2와 똑같은 상황(같은 $A=5,B=2$, 같은 $\theta$)이 되었으므로, 그 결과를 그대로 적용하면 $\dfrac{d\varphi}{d\theta}=\dfrac{17}{13}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3 (출제 의도)</span><div>이 문항은 "$\tan\varphi$를 조건으로 바로 주는 것"이 아니라 "사인법칙 항등식에서 $\tan\varphi$를 먼저 유도해야 하는" 상황을 묻는다 — 실전에서는 $\tan\varphi$가 숫자로 주어지지 않고 관계식 속에 숨어 있는 경우가 더 많다.</div></div>
+          <span class="answer-tag">정답: $\dfrac{d\varphi}{d\theta}=\dfrac{17}{13}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — $d\varphi/d\theta$ 를 다시 $d\varphi/ds$ 로 환산</div>
+        <div class="problem-body"><strong>문제:</strong> 심화 1과 같은 순간, $s=s(\theta)=5\sin\theta-2\theta$ 라 하자. 이 순간의 $\dfrac{d\varphi}{ds}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$\dfrac{ds}{d\theta}=5\cos\theta-2=5\cdot\dfrac45-2=4-2=2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>심화 1에서 $\dfrac{d\varphi}{d\theta}=\dfrac{17}{13}$ 을 구했으므로, 개념 1의 공식으로 $\dfrac{d\varphi}{ds}=\dfrac{d\varphi/d\theta}{ds/d\theta}=\dfrac{17/13}{2}=\dfrac{17}{26}$.</div></div>
+          <p class="warn">정리: "사인법칙 항등식 → 탄젠트화 → 양변 $\theta$미분 → $d\varphi/d\theta$ → 다시 $ds/d\theta$로 나눠 $d\varphi/ds$" 가 이 단원의 표준 파이프라인이다. 영상이 다루는 2027학년도 9모 미적분 28번도 이 다섯 단계를 그대로 거친다(아래 검증 란 참고).</p>
+          <span class="answer-tag">정답: $\dfrac{d\varphi}{ds}=\dfrac{17}{26}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span style="font-weight:600; color:#b71c1c">전 과정을 처음부터 끝까지 재현</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 매개변수 미분법 유형(준킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> 어떤 순간 $\theta_0$에서 $\cos\theta=\dfrac35,\ \sin\theta=\dfrac45$ 이고, 항등식 $5\sin(\varphi-\theta)=\sin\varphi$ 가 모든 $\theta$에서 성립한다. $s(\theta)=5\sin\theta-\theta$ 라 할 때, 이 순간의 $\dfrac{d\varphi}{ds}$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>탄젠트화($A=5,B=1$): $\tan\varphi(5\cos\theta-1)=5\sin\theta$. $5\cos\theta-1=5\cdot\dfrac35-1=3-1=2$, $5\sin\theta=5\cdot\dfrac45=4$. $\tan\varphi=\dfrac42=2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\sec^2\varphi=1+\tan^2\varphi=1+4=5$. 양변 $\theta$미분: $\sec^2\varphi\cdot\dfrac{d\varphi}{d\theta}\cdot(5\cos\theta-1)+\tan\varphi\cdot(-5\sin\theta)=5\cos\theta$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>대입: $5\cdot\dfrac{d\varphi}{d\theta}\cdot2+2\cdot(-4)=3 \;\Rightarrow\; 10\dfrac{d\varphi}{d\theta}-8=3 \;\Rightarrow\; \dfrac{d\varphi}{d\theta}=\dfrac{11}{10}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$\dfrac{ds}{d\theta}=5\cos\theta-1=2$ 이므로 $\dfrac{d\varphi}{ds}=\dfrac{11/10}{2}=\dfrac{11}{20}$.</div></div>
+          <p class="warn">출제 의도: $A,B$ 상수와 삼각비 조합을 바꿔도 "탄젠트화 → 미분 → 나누기"라는 파이프라인이 똑같이 적용됨을 확인시키는 문항이다.</p>
+          <span class="answer-tag">정답: $\dfrac{d\varphi}{ds}=\dfrac{11}{20}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 매개변수 미분법 유형(킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> 어떤 순간 $\theta_0$에서 $\cos\theta=\dfrac{5}{13},\ \sin\theta=\dfrac{12}{13}$ 이고, 항등식 $13\sin(\varphi-\theta)=3\sin\varphi$ 가 모든 $\theta$에서 성립한다. $s(\theta)=13\sin\theta-3\theta$ 라 할 때, 이 순간의 $\dfrac{d\varphi}{ds}$ 의 값을 $\dfrac{q}{p}$ ($p,q$는 서로소인 자연수) 꼴로 나타낼 때 $p+q$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>탄젠트화($A=13,B=3$): $\tan\varphi(13\cos\theta-3)=13\sin\theta$. $13\cos\theta-3=5-3=2$, $13\sin\theta=12$. $\tan\varphi=\dfrac{12}{2}=6$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\sec^2\varphi=1+36=37$. 양변 $\theta$미분: $37\cdot\dfrac{d\varphi}{d\theta}\cdot2+6\cdot(-12)=5$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$74\dfrac{d\varphi}{d\theta}-72=5 \;\Rightarrow\; 74\dfrac{d\varphi}{d\theta}=77 \;\Rightarrow\; \dfrac{d\varphi}{d\theta}=\dfrac{77}{74}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$\dfrac{ds}{d\theta}=13\cos\theta-3=2$. $\dfrac{d\varphi}{ds}=\dfrac{77/74}{2}=\dfrac{77}{148}$. $77=7\times11,\ 148=4\times37$ 이므로 두 수는 서로소.</div></div>
+          <p class="warn">검산: 분자·분모를 다시 전개해도 $77/148$ 이 더 약분되지 않음을 확인했다 — 수능 단답형은 $p+q$ 묻기 전 반드시 약분 여부를 확인해야 한다.</p>
+          <span class="answer-tag">정답: $q=77,\ p=148,\ p+q=225$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>단계</th><th>핵심 아이디어</th><th>효과</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">매개변수 설정</td><td>두 변수가 모두 같은 $\theta$에 종속됨을 인식</td><td>$dy/dx=\dfrac{dy/d\theta}{dx/d\theta}$ 로 직접 계산 가능</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">덧셈정리 탄젠트화</td><td>$A\sin(\varphi-\theta)=B\sin\varphi$ 를 전개 후 $\cos\varphi$로 나눔</td><td>$\sin\varphi,\cos\varphi$ 두 개 대신 $\tan\varphi$ 하나로 통일</td></tr>
+          <tr><td style="font-weight:700">양변 $\theta$ 미분</td><td>$\sec^2\varphi\cdot\varphi'\cdot(A\cos\theta-B)+\tan\varphi\cdot(-A\sin\theta)=A\cos\theta$</td><td>$d\varphi/d\theta$ 를 일차방정식으로 구함</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">재환산</td><td>$d\varphi/ds=\dfrac{d\varphi/d\theta}{ds/d\theta}$</td><td>최종 요구값(길이에 대한 변화율)으로 변환</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px; font-size:.92em; color:var(--sub)">전략: 도형 문제에서 두 변수가 동시에 바뀐다면 먼저 "둘을 공통으로 지배하는 각"을 찾는다. 그 각에 대한 관계식을 사인법칙으로 세우고, 덧셈정리로 탄젠트화한 뒤 양변을 미분한다 — 수치는 미분이 끝난 다음에만 대입한다.</p>
+    </div>
+
+    <!-- ===== 검증 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>이 자료는 「선승범 수학」 채널의 영상(N5VDEMLGV7E, 약 29분)을 정리한 <strong>영상 요약 문서</strong>(전체 자막이 아닌, 타임스탬프별 상세 요약 + 칠판 수식 verbatim 기록)를 기초 자료로 삼아 AI가 재구성한 것입니다.</p>
+      <p style="margin-top:8px">⚠️ 요약 문서의 계산 체인을 처음부터 독립적으로 재검산한 결과, 두 군데 내부 불일치를 발견했습니다. (1) 요약은 "$t=5\cos\theta-2$" 자체를 $t$의 값과 그 순간의 $dt/d\theta$ 양쪽에 동시에 썼는데, 이는 $t=5\cos\theta-2$라면 $dt/d\theta=-5\sin\theta$ 가 되어야 하므로 모순입니다 — 실제로는 $s(\theta)=5\sin\theta-2\theta$ 처럼 적분(또는 선형) 구조여야 $ds/d\theta=5\cos\theta-2$ 가 성립합니다. (2) 요약은 $\tan f=3$ 과 $\cos\theta=4/5$ 를 동시에 조건으로 제시했지만, 사인법칙 항등식 $\tan\varphi(5\cos\theta-2)=5\sin\theta$ 에 대입하면 좌변 $6$, 우변 $3$으로 성립하지 않습니다 — 올바른 값은 $\tan\varphi=3/2$ 입니다. 또한 요약의 마지막 줄 "$20\,df/d\theta-9=4 \Rightarrow df/d\theta=17/13$" 은 그 앞 등식($df/d\theta=13/20$)과도 맞지 않는 산술 오류입니다.</p>
+      <p style="margin-top:8px">이에 본 자료는 $s(\theta)=5\sin\theta-2\theta,\ \tan\varphi=3/2$ 로 모든 수치를 독립적으로 재구성했으며(심화 1~2), 그 결과 최종값 $d\varphi/ds=17/26$ 은 요약 문서가 주장한 값과 정확히 일치했습니다 — 풀이 기법(사인법칙 → 덧셈정리 탄젠트화 → 매개변수 미분법)은 영상과 동일하되, 중간 수치는 처음부터 다시 검산한 값을 사용했습니다(확신도 ★★★). 기초·기본·수능 대비 문항은 같은 기법의 자체 재구성 문항이며, 영상 속 원문제를 그대로 옮긴 것이 아닙니다.</p>
+      <p style="margin-top:8px">본 영상은 고3(2027학년도 수능 응시생) 선택과목 "미적분"(매개변수 미분법, 삼각함수 덧셈정리)을 다룹니다. 이 영역은 현 고2 학생의 수능 범위(대수+미적분Ⅰ)에는 포함되지 않으므로, 고2 학생에게는 적합하지 않습니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div><!-- /container -->
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260614_다변수실제변수연쇄법칙_10NhvK7s.html">다변수·실제변수·연쇄법칙 — 계산을 줄이는 미분 전략 (10NhvK7s)</a> · <a href="20260821_역함수미분법과t형태발견법_lHmHtmBH.html">역함수의 미분법 — g'(c)=1/f'(a)로 3초 만에 잡는 법 (lHmHtmBH)</a> · <a href="20260917_다변수미분변수설정과매칭_KobKUh5G.html">다변수 미분 변수설정과 매칭 (KobKUh5G)</a> · <a href="../../고1/수학Ⅰ-삼각함수의활용/20260505_사인법칙코사인법칙_W9ReLryy.html">사인법칙·코사인법칙 — 삼각형 해석의 본질 (W9ReLryy)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-09 · 영상 출처: <a href="https://youtu.be/N5VDEMLGV7E" style="color:var(--primary)">선승범 수학</a><br>
+    AI가 영상 요약 자료 기초로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
