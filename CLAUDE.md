@@ -106,7 +106,7 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
 
 | 용도 | Drive folder ID |
 |------|----------------|
-| **스파크(Spark) 요약본** (INBOX 입력원, 2026-08-06 교체) | `1TEHzkORlQLtsu2CKGgy2TZMIiW-NWMdr` |
+| ~~스파크(Spark) 요약본~~ (2026-10-15 은퇴 — 입력원은 `yt-inbox` 브랜치 brief) | `1TEHzkORlQLtsu2CKGgy2TZMIiW-NWMdr` |
 | **스파크 `_done`** (공유 완료 마커, claude_work 와 공용) | `1_XTvautWp8O40l1ZX8Jea97I26SJofAL` |
 | Vault root (010-Youtube-Obsi)* | `11kYZv_E3Go4_jhSIaNSqrVw1TjlJ8J7d` |
 | **수학영상노트** (영상 자료 스텁) | `1zDFrYoqtRLZP3QxpPKnPkwvP2UZav__k` |
@@ -118,7 +118,23 @@ push 후 사용자에게 알림: "GitHub Actions 가 1~2분 내 갤러리 갱신
 
 > **❌ 폐지(2026-08-06)**: 옛 GAS INBOX 폴더(`1K1KndlwA4iY2VVasAcW8aDPu6AfyL2Bv`, 죽은 경로 — GAS가 더 이상 채우지 않음), 옛 INBOX 전용 `_done`(`1bkWZTT-OhPHuAlCagXnwgUgLpRqiWFL2`), `_queue`(`1aZb2Xuy_xFaPLdkgBxeca3YxYZ5-pM_5`). `_queue`는 애초에 실제 로직에서 한 번도 쓰인 적 없는 죽은 개념이라 대체 없이 삭제. 아래 "스파크 기반 트랙 A" 섹션 참조.
 
-### 📥 스파크(Spark) 기반 트랙 A — 입력원 전환 (2026-08-06)
+### 📥 Aside 기초자료(brief) 기반 트랙 A — 입력원 재전환 (2026-10-15, 현행)
+
+구글 스파크가 10월 초 산출을 멈춰, 입력원을 **Aside 기초자료(brief)** 로 바꿨다.
+
+- 사용자 PC 의 **Aside 가 평일 08:30 KST** 에 재생목록 `일단모아` 를 읽고, 수학·공부법 영상으로 분류한 것의
+  유튜브 메타데이터 + **한국어 자막 전문(타임스탬프 포함)** 을 이 레포의 **`yt-inbox` 브랜치** `briefs/<video_id>.md` 로 올린다.
+  규격은 그 브랜치 `README.md`(schema `yt-brief/v1`). 일반 영상은 claude_work 레포 수신함으로 간다.
+- brief 머리말의 `route` 가 분류 결과다: `math` → 트랙 A, `study_method` → 트랙 C. (분류 키워드는
+  `process_inbox.py` 와 같은 목록 + 오분류 보정 — 예: `블로그` 의 `로그` 는 무시. 교육 담론·학부모 대담처럼
+  문제풀이가 아닌 영상은 Aside 가 일반으로 돌린다.)
+- 클라우드는 유튜브 자막이 IP 차단되지만 brief 가 자막을 실어 오므로, A-2 의 `fetch_subtitle.py` 단계를
+  **brief 변환으로 대체**한다(아래 A-1). Drive 구글 문서를 거치지 않아 이스케이프·이모지 깨짐도 없다.
+- 공유 `_done` 마커 규약(아래)은 그대로 유지한다 — 추가 안전망.
+
+### 📥 (은퇴 2026-10-15) 스파크(Spark) 기반 트랙 A — 입력원 전환 (2026-08-06)
+
+> ⛔ 역사 기록. 스파크 폴더는 더 이상 채워지지 않는다. 루틴은 이 절을 수행하지 말 것(공유 `_done` 마커 규약만 유효).
 
 claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기반으로 전환하면서, 이 레포도 같은 스파크 폴더를 입력원으로 본다.
 
@@ -154,17 +170,25 @@ claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기�
 
 ## 🎬 영상 → 학습자료 워크플로우 (트랙 A)
 
-### A-1. 09:00 KST 자동 루틴 (스파크 기반, 2026-08-06 신규 생성)
+### A-1. 09:00 KST 자동 루틴 (Aside brief 기반, 2026-10-15 교체)
 
-매일 09:00 KST, 새 세션을 띄우는 Routine 이 자동 수행(정기 처리):
+평일 09:00 KST, 새 세션을 띄우는 Routine 이 자동 수행(정기 처리). **회차당 최대 3건**(초과분은 brief 가 남아 있어 다음 회차가 이어서):
 
-1. Drive MCP `search_files(parentId=스파크 1TEHzkORlQLtsu2CKGgy2TZMIiW-NWMdr)` 로 문서 목록, `search_files(parentId=_done 1_XTvautWp8O40l1ZX8Jea97I26SJofAL)` 로 완료 마커 목록 확보.
-2. video_id 가 이미 `_done/{video_id}.done` 로 있으면 skip(1차 방어).
-3. 남은 문서를 `read_file_content(fileId)` 로 읽어 로컬 스테이징 폴더에 평문 `.md` 로 저장.
-4. `python scripts/process_inbox.py --inbox <스테이징폴더>` 로 타입 판별(위 "스파크 기반 트랙 A" 섹션 참조 — 공부법 0순위 → 수학 1/2순위).
-5. `type=math` 인 것만 아래 A-2 의 3~8단계(자료 생성 ~ 결과 보고)를 그대로 수행. `type=study_method` 인 것은 "📝 수학 공부법 자료 워크플로우 (트랙 C)" 절차를 수행.
-6. 완료한 건은 `_done/{video_id}.done` 마커 생성(math는 `pipeline: math`, 공부법은 `pipeline: study_method` 필수 포함). 어느 쪽도 아니라 skip한 문서는 마커를 만들지 않는다.
-7. 처리할 새 수학 영상이 없으면 "처리할 새 자료 없음"만 보고.
+1. **목록**: `git fetch origin yt-inbox` → `git ls-tree --name-only origin/yt-inbox briefs/` 로 brief 목록.
+2. **중복 검사(이중)**: Drive MCP `search_files(parentId=_done 1_XTvautWp8O40l1ZX8Jea97I26SJofAL)` 에 `{video_id}.done` 이 있거나,
+   `youtube-math-auto/scripts/output_path.py` 의 `find_existing()` 이 매치하면 skip.
+3. **brief 읽기**: `git show origin/yt-inbox:briefs/<video_id>.md > /tmp/brief/<video_id>.md`.
+   `schema: yt-brief/v1`·`## 자막` 절 확인. 머리말 `route` 로 트랙을 정한다(`math` / `study_method`).
+   자막을 읽어 보니 수학 문제·개념도 공부법도 아니면(예: 교육 정책 담론) **만들지 말고 skip + 보고**(마커 만들지 않음).
+4. **자막 파일로 변환**: brief 의 `## 자막` 절 본문(`[mm:ss] 문장` 줄들)을 `subs/<video_id>.ko.txt` 로 저장한다.
+   이것이 A-2 2단계(`fetch_subtitle.py`) 산출물을 대신한다 — **클라우드에서 `fetch_subtitle.py` 를 부르지 말 것**(IP 차단).
+   `## 영상 설명` 은 맥락 참고용(학원 시간표·광고는 무시).
+5. `route=math` → 아래 A-2 의 **3~8단계**(자료 생성 ~ 결과 보고)를 그대로 수행. `route=study_method` → "📝 수학 공부법 자료 워크플로우 (트랙 C)".
+   - 자막은 강사의 **말**만 담는다. 판서·화면 속 문제의 수식은 없다 — 자막으로 복원되지 않는 문제 조건을
+     추측해 원문제를 재현하려 하지 말고, 강의가 설명한 **개념·판단 기준**을 중심으로 새 문항을 만든다(기존 A-2 자막 경로와 동일).
+     자막만으로 강의의 핵심이 잡히지 않으면 만들지 말고 보고의 "🔶 판단 애매"에 남긴다.
+6. 완료한 건은 `_done/{video_id}.done` 마커 생성(math는 `pipeline: math`, 공부법은 `pipeline: study_method` + `source: aside-brief`).
+7. 처리할 새 brief 가 없으면 "처리할 새 자료 없음"만 보고. 이 루틴은 `yt-inbox` 브랜치에 **쓰지 않는다**.
 
 ### A-2. 세션에서 직접 처리할 때 (URL + 자동 자막 추출)
 
