@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>좌우미분계수 상쇄로 미분가능성 빠르게 판정하기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅱ — 다항함수의 미분법</div>
+    <h1>좌우미분계수 상쇄로 미분가능성 빠르게 판정하기</h1>
+    <p class="sub">꺾인 두 그래프를 더하거나 빼면 미분가능해질 수 있을까? 좌·우미분계수를 따로 계산해 "차이가 상쇄되는가"만 확인하면, 절댓값이 섞인 함수의 미분가능성을 그래프 없이도 바로 판정할 수 있다.</p>
+    <div class="quote">"우미 빼기 좌미가 얼마? 빵. 이 말은 무슨 말이야? 오른쪽 기울기랑 왼쪽 기울기랑 차이가 발생하지 않아." — 강사 인용 [02:53]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/qKIRYtAFgvI" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/qKIRYtAFgvI/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">아는 사람은 압도적으로 빨리 푸는 미분 문제 유형</div>
+        <div class="v-meta">📺 YouTube · 8:37 · 수능 수학은 이동준</div>
+        <a class="v-link" href="https://youtu.be/qKIRYtAFgvI" target="_blank" rel="noopener">https://youtu.be/qKIRYtAFgvI</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 좌·우미분계수는 "빼기·더하기"에 대해 각각 따로 계산해도 된다는 선형성을 이해하고, 이를 이용해 $f\pm g$의 미분가능성을 그래프 없이 좌·우미분계수의 차(또는 합)만으로 판정한다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 두 꺾인 그래프를 빼면?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 어떤 함수 $f(x)$는 $x=1$에서 왼쪽 기울기 $1$, 오른쪽 기울기 $5$로 꺾여 있다(미분 불가능). 또 다른 함수 $g(x)$는 $x=1$에서 왼쪽 기울기 $m_1$, 오른쪽 기울기 $m_2$로 꺾여 있다. $h(x)=f(x)-g(x)$가 $x=1$에서 미분가능하도록 하는 $m_2-m_1$의 값을 구하라.</div>
+      <div class="visual">
+f의 기울기:  왼쪽 1    오른쪽 5        (f는 x=1에서 꺾임)
+g의 기울기:  왼쪽 m1   오른쪽 m2       (g도 x=1에서 꺾임)
+─────────────────────────────────────────────
+h=f-g 의 왼쪽 기울기 = 1 - m1
+h=f-g 의 오른쪽 기울기 = 5 - m2
+h가 미분가능 ⟺ (1-m1) = (5-m2)  ⟺  m2-m1 = 4
+      </div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>좌·우미분계수는 "빼기"에 대해 각각 따로 계산해도 된다: $h$의 왼쪽 기울기 $=f$의 왼쪽 기울기 $-$ $g$의 왼쪽 기울기 $=1-m_1$<div class="why">극한의 뺄셈 성질 때문이다: 두 극한이 각각 존재하면 "차의 극한 = 극한의 차"가 항상 성립한다. 좌·우미분계수도 결국 한쪽 극한이므로 이 성질을 그대로 쓸 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>같은 방식으로 $h$의 오른쪽 기울기 $=5-m_2$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$h$가 $x=1$에서 미분가능하려면 왼쪽 기울기 $=$ 오른쪽 기울기: $1-m_1=5-m_2$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>정리하면 $m_2-m_1=5-1=4$<div class="why">식을 옮기면 $m_2-m_1=5-1$이 되어, 두 함수 각각의 "꺾임의 크기(오른쪽기울기$-$왼쪽기울기)"가 똑같아야 한다는 것을 알 수 있다 — $f$의 꺾임 $5-1=4$와 $g$의 꺾임 $m_2-m_1$이 일치해야 한다.</div></div></div>
+          <span class="answer-tag">정답: $m_2-m_1=4$</span>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 환기 — 미분가능성과 좌·우미분계수</div>
+      <p>함수가 $x=a$에서 <strong>미분가능</strong>하다는 것은 $x=a$에서의 좌미분계수와 우미분계수가 같아서, 하나의 접선 기울기 $f'(a)$가 정해진다는 뜻이다. 두 값이 다르면 그래프가 그 점에서 뾰족하게 꺾여 있어 접선을 하나로 정할 수 없다 — 미분 불가능이다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>핵심 — 좌·우미분계수의 선형성 (유도)</div>
+      <p>두 함수 $f,g$에 대해 $x=a$에서의 우미분계수를 각각 $f'(a+)$, $g'(a+)$라 하면, $(f-g)$의 우미분계수는 정확히 $f'(a+)-g'(a+)$다. 좌미분계수도 마찬가지다.</p>
+      <div class="formula-box">
+        $(f-g)'(a+)=\displaystyle\lim_{x\to a+}\dfrac{\big(f(x)-g(x)\big)-\big(f(a)-g(a)\big)}{x-a}=\lim_{x\to a+}\dfrac{f(x)-f(a)}{x-a}-\lim_{x\to a+}\dfrac{g(x)-g(a)}{x-a}=f'(a+)-g'(a+)$
+      </div>
+      <p>즉 "빼기(또는 더하기)의 한쪽 미분계수 = 각 함수의 한쪽 미분계수를 빼기(또는 더하기)"이다. 이 성질 덕분에, 전체 함수의 미분가능성을 "좌미분계수가 같은가, 우미분계수가 같은가"라는 두 숫자의 비교만으로 판정할 수 있다. 영상에서는 이것을 "$h=f-g$의 미분가능은 미분계수끼리 빼면 된다"라고 표현한다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>절댓값 함수의 좌·우미분계수 — "꺾임의 크기" (유도)</div>
+      <p>다항함수 $p(x)$가 $p(a)=0$, $p'(a)=k\;(k\ne0)$ (단순근)이라면, $y=|p(x)|$는 $x=a$에서 뾰족하게 꺾인다. $x>a$ 쪽과 $x<a$ 쪽 중 한쪽은 $p(x)$가 양수, 다른 한쪽은 음수가 되기 때문이다.</p>
+      <p>예를 들어 $k>0$인 경우: $x>a$에서는(아주 가까이) $p(x)>0$이므로 $|p(x)|=p(x)$, 우미분계수 $=p'(a)=k$. $x<a$에서는 $p(x)<0$이므로 $|p(x)|=-p(x)$, 좌미분계수 $=-p'(a)=-k$.</p>
+      <div class="formula-box">$|p(x)|$의 우미분계수 $-$ 좌미분계수 $= k-(-k)=2k=2|k|$ (꺾임의 크기, 항상 $0$ 이상)</div>
+      <p>($k<0$인 경우도 똑같이 계산하면 꺾임의 크기가 $2|k|$로 나온다 — 부호에 상관없이 "꺾임의 크기"는 늘 $2\times|$원래 함수의 기울기$|$다.)</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>응용 — 절댓값의 차·합이 미분가능할 조건</div>
+      <p><strong>차 $|f|-|g|$</strong>: 두 절댓값 함수가 $x=a$에서 공통으로 꺾일 때(둘 다 $a$가 단순근), $|f|$의 꺾임 크기는 $2|m|$ ($m=f'(a)$), $|g|$의 꺾임 크기는 $2|k|$ ($k=g'(a)$)다. $(|f|-|g|)$가 미분가능하려면 두 꺾임의 크기가 같아야 하므로 $|m|=|k|$.</p>
+      <p><strong>합 $|f|+|g|$</strong>: 이번엔 꺾임의 크기가 서로 더해진다 ($2|m|+2|k|$). 이 값은 항상 $0$ 이상이고, $m\ne0,k\ne0$이면 반드시 양수이므로 상쇄될 수 없다 — 즉 두 함수가 실제로 꺾이는 한(단순근을 가지는 한) 합은 절대 미분가능해질 수 없다. 합이 미분가능하려면 처음부터 $f(a)=0$ 또는 $g(a)=0$ 근처에서 부호가 바뀌지 않아 애초에 꺾이지 않아야 한다 — 즉 <strong>각각이 이미 미분가능</strong>해야 한다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수</div>
+      <p>절댓값 함수 $|p(x)|$가 "모든 점에서" 꺾인다고 오해하면 안 된다. $p(a)\ne0$인 점에서는 $p$가 그 근처에서 부호를 바꾸지 않으므로 $|p|$는 그냥 $p$ 또는 $-p$와 똑같이 매끄럽다. 꺾임은 오직 <strong>$p(x)=0$이 되는 점(그중에서도 단순근)</strong>에서만 일어난다.</p>
+      <div class="caution">함정: $p(a)=0$이지만 $p'(a)=0$인 경우(예: $p(x)=(x-a)^2\times(\cdots)$처럼 중근)는 $p$가 $a$ 근처에서 부호를 바꾸지 않을 수 있다 — 이때는 $|p|$가 오히려 미분가능할 수도 있다. "근이면 무조건 꺾인다"고 단정하지 말고 부호 변화를 직접 확인하자.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 좌·우미분계수 직접 구하기 (1)</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=|x-3|$의 $x=3$에서의 좌미분계수와 우미분계수를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$x>3$에서 $f(x)=x-3$, 도함수 $1$ → 우미분계수 $1$.</p>
+          <p>$x<3$에서 $f(x)=3-x$, 도함수 $-1$ → 좌미분계수 $-1$.</p>
+          <p class="warn">오답 주의: 절댓값 안의 식 $x-3$ 자체의 기울기($1$)와 좌·우미분계수를 혼동하지 않도록, 반드시 구간을 나눠 식을 직접 써보자.</p>
+          <span class="answer-tag">정답: 좌미분계수 $-1$, 우미분계수 $1$</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 좌·우미분계수 직접 구하기 (2)</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=|2x+4|$의 $x=-2$에서의 좌미분계수와 우미분계수를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$2x+4=0$이 되는 점은 $x=-2$. $x>-2$에서 $2x+4>0$이므로 $f(x)=2x+4$, 도함수 $2$ → 우미분계수 $2$.</p>
+          <p>$x<-2$에서 $2x+4<0$이므로 $f(x)=-(2x+4)$, 도함수 $-2$ → 좌미분계수 $-2$.</p>
+          <p class="warn">오답 주의: 절댓값 안의 $1$차식의 계수가 $2$이므로 꺾임의 크기도 그만큼 커진다($2\times2=4$) — 계수를 빼먹고 $\pm1$로 답하는 실수에 주의.</p>
+          <span class="answer-tag">정답: 좌미분계수 $-2$, 우미분계수 $2$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 이차함수의 절댓값이 꺾이는 점</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^2-1$일 때, $g(x)=|f(x)|$의 $x=1$에서의 좌·우미분계수를 구하고 미분가능성을 판정하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(1)=0$, $f'(x)=2x$이므로 $f'(1)=2$ (단순근, $k=2\ne0$).</p>
+          <p>$x>1$ 근처에서 $f(x)=x^2-1>0$이므로 $g=f$, 우미분계수 $=f'(1)=2$.</p>
+          <p>$x<1$ 근처에서 $f(x)<0$이므로 $g=-f$, 좌미분계수 $=-f'(1)=-2$.</p>
+          <p>좌미분계수 $-2\ne$ 우미분계수 $2$이므로 <strong>미분가능하지 않다</strong>. (꺾임의 크기 $2|k|=4=2-(-2)$로 일치, 검산 완료)</p>
+          <p class="warn">오답 주의: $f(1)=0$만 확인하고 $f'(1)\ne0$(단순근인지)까지 확인하지 않으면 꺾이는지 아닌지 판정할 수 없다.</p>
+          <span class="answer-tag">정답: 좌미분계수 $-2$, 우미분계수 $2$, 미분가능하지 않음</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 매끄러운 함수를 빼도 꺾임은 사라지지 않는다</div>
+        <div class="problem-body"><strong>문제:</strong> 어떤 함수 $f(x)$가 $x=1$에서 좌미분계수 $2$, 우미분계수 $6$을 갖는다(미분 불가능). $x=1$에서 미분가능한(좌·우미분계수가 모두 $m$으로 같은) 함수 $g(x)$에 대해, $h(x)=f(x)-g(x)$가 $x=1$에서 미분가능하도록 하는 $m$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$h$의 좌미분계수 $=2-m$, 우미분계수 $=6-m$.</p>
+          <p>미분가능 조건: $2-m=6-m\;\Rightarrow\;2=6$. 이는 $m$의 값과 관계없이 거짓이다.</p>
+          <p class="warn">오답 주의: "$g$를 적절히 고르면 $f$의 꺾임을 없앨 수 있을 것"이라는 직관은 틀렸다. $g$가 매끄러운 함수(좌·우미분계수가 같음)라면 $m$이 양쪽에서 똑같이 빠지므로 $f$의 꺾임의 크기($6-2=4$)는 절대 사라지지 않는다. 꺾임을 상쇄하려면 $g$ 자신도 그 점에서 꺾여 있어야 한다(도입 문제 참고).</p>
+          <span class="answer-tag">정답: 존재하지 않음 (어떤 $m$을 선택해도 미분가능해질 수 없음)</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 꺾임의 크기를 맞추는 미지수 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)$가 $x=2$에서 좌미분계수 $1$, 우미분계수 $7$을 갖는다. 함수 $g(x)$가 $x=2$에서 좌미분계수 $m_1$, 우미분계수 $m_2$를 갖고, $h(x)=f(x)-g(x)$가 $x=2$에서 미분가능할 때 $m_2-m_1$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$h$의 좌미분계수 $=1-m_1$, 우미분계수 $=7-m_2$.</p>
+          <p>미분가능 조건: $1-m_1=7-m_2\;\Rightarrow\;m_2-m_1=7-1=6$.</p>
+          <p class="warn">오답 주의: $m_1,m_2$ 각각의 값은 이 조건만으로 결정되지 않는다. 결정되는 것은 "$g$의 꺾임의 크기" $m_2-m_1$뿐이며, 이는 $f$의 꺾임의 크기 $7-1=6$과 정확히 같아야 한다.</p>
+          <span class="answer-tag">정답: $m_2-m_1=6$</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 두 개의 꺾임점을 동시에 판정</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=|x^2-4x+3|$에 대해 $x=1$과 $x=3$에서의 미분가능성을 각각 판정하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $p(x)=x^2-4x+3=(x-1)(x-3)$. $p(1)=0,\;p(3)=0$이고 $p'(x)=2x-4$이므로 $p'(1)=-2\ne0$, $p'(3)=2\ne0$ — 두 점 모두 단순근이다.</p>
+          <p><strong>STEP 2</strong> — $x=1$에서: $p'(1)=-2<0$이므로 ($x<1$ 근처에서 $p>0$, $x>1$ 근처에서 $p<0$ — 직접 대입 $p(0.9)=0.21>0$, $p(1.1)=-0.19<0$으로 확인) 좌미분계수 $=p'(1)=-2$, 우미분계수 $=-p'(1)=2$. 좌$\ne$우 → <strong>미분가능하지 않음</strong>.</p>
+          <p><strong>STEP 3</strong> — $x=3$에서: $p'(3)=2>0$이므로 ($p(2.9)=-0.19<0$, $p(3.1)=0.21>0$으로 확인) 좌미분계수 $=-p'(3)=-2$, 우미분계수 $=p'(3)=2$. 좌$\ne$우 → <strong>미분가능하지 않음</strong>.</p>
+          <p class="warn">오답 주의: 두 근이 모두 "단순근"이라는 것을 반드시 확인해야 한다. 만약 $p(x)=(x-1)^2(x-3)$처럼 $x=1$이 중근이었다면 $x=1$에서는 부호가 바뀌지 않아 미분가능할 수도 있다.</p>
+          <span class="answer-tag">정답: $x=1$, $x=3$ 모두 미분가능하지 않음</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 꺾임의 크기 비교</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=|2x-2|$, $g(x)=|5x-5|$에 대해 $h(x)=f(x)-g(x)$가 $x=1$에서 미분가능한지 판정하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $f(x)=|2(x-1)|$: $x>1$에서 $f=2(x-1)$, 우미분계수 $2$; $x<1$에서 $f=-2(x-1)$, 좌미분계수 $-2$.</p>
+          <p><strong>STEP 2</strong> — $g(x)=|5(x-1)|$: 같은 방식으로 우미분계수 $5$, 좌미분계수 $-5$.</p>
+          <p><strong>STEP 3</strong> — $h=f-g$: 우미분계수 $=2-5=-3$, 좌미분계수 $=-2-(-5)=3$.<div class="why">$f$의 꺾임의 크기는 $2\times2=4$, $g$의 꺾임의 크기는 $2\times5=10$으로 서로 다르다 — "응용 ③"에서 본 조건 $|m|=|k|$ ($2\ne5$)를 만족하지 않으므로 상쇄되지 않는다.</div></p>
+          <p><strong>STEP 4</strong> — 좌미분계수 $3\ne$ 우미분계수 $-3$ → <strong>미분가능하지 않다</strong>.</p>
+          <p class="warn">오답 주의: 두 절댓값 함수가 "같은 점에서 꺾인다"고 해서 차가 자동으로 매끄러워지는 것은 아니다. 꺾임의 크기(기울기의 절댓값)까지 서로 같아야 한다.</p>
+          <span class="answer-tag">정답: 미분가능하지 않음</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 겉모습에 속지 않기</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=|4x-8|$, $g(x)=|-4x+8|$에 대해 $h(x)=f(x)-g(x)$가 $x=2$에서 미분가능한지 판정하고, 미분가능하다면 미분계수를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $-4x+8=-(4x-8)$이므로 $g(x)=|-(4x-8)|=|4x-8|$ (절댓값은 안의 부호를 바꿔도 값이 같다).<div class="why">$|-a|=|a|$는 절댓값의 기본 성질이다. 이 때문에 $f(x)$와 $g(x)$는 사실 완전히 같은 함수다.</div></p>
+          <p><strong>STEP 2</strong> — 따라서 $h(x)=f(x)-g(x)=f(x)-f(x)=0$ (모든 $x$에서 상수함수 $0$).</p>
+          <p><strong>STEP 3</strong> — 상수함수는 모든 점에서 미분가능하고 도함수는 $0$이다. 따라서 $x=2$에서도 미분가능하며 $h'(2)=0$.</p>
+          <p class="warn">오답 주의: $f,g$ 둘 다 각각 $x=2$에서 미분 불가능한(뾰족한) 함수처럼 보여서 "당연히 차도 미분 불가능"이라고 서둘러 판단하면 안 된다. 식을 정리하면 $f=g$라서 차가 통째로 $0$이 되는 극단적인 경우도 있다 — 항상 식을 먼저 정리하자.</p>
+          <span class="answer-tag">정답: 미분가능, $h'(2)=0$</span>
+        </div></details>
+      </div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상(수능 수학은 이동준)은 두 꺾인 함수의 차(또는 합)가 미분가능해지는 조건을 "좌·우미분계수를 각각 따로 빼거나 더해보면 된다"는 선형성으로 설명하고, 특히 절댓값 함수끼리의 차·합에서는 "꺾임의 크기(기울기의 절댓값)가 같은가"로 간단히 판정할 수 있음을 보여준다. 본 자료는 영상의 "우미 빼기 좌미가 얼마? 빵" 표현과 수치 예시(기울기 $1,5$ / $m_1,m_2$)의 구조를 그대로 가져와 재구성했다.</p>
+      <p style="margin-top:8px">영상 후반에 등장한 "46번·47번" 문제는 화면 속 구체적인 식과 그림을 자막만으로 복원할 수 없어 재현하지 않았다. 같은 판정 원리를 검증 가능한 새 수치로 다시 구성했다. <strong>"수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260901_다항함수거리곱과비율관계극값찾기_s9OQVJcd.html">다항함수 거리곱과 비율관계로 극값 빠르게 구하기 (s9OQVJcd)</a> · <a href="20260914_미분불가능함수합의좌우미분계수상쇄조건_J-5j45D5.html">미분 불가능 함수의 합 — 좌우미분계수 상쇄조건 (수학Ⅱ) (J-5j45D5)</a> · <a href="20260921_미분가능성유형정리인수차수판정_pjhx5x0i.html">미분가능성 유형 정리 (pjhx5x0i)</a> · <a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-15 · 영상 출처: <a href="https://youtu.be/qKIRYtAFgvI" style="color:var(--primary)">수능 수학은 이동준</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
