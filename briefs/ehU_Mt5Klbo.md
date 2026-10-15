@@ -4,7 +4,7 @@ video_id: ehU_Mt5Klbo
 url: https://www.youtube.com/watch?v=ehU_Mt5Klbo
 title: "합성함수의 극대/극소를 판정하는 방법 | 미적분 [수능실전_한석만의방법]"
 channel: "한석만TV"
-published: 2021-02-25
+published: 2021-02-26
 duration_sec: 1054
 duration: "17:34"
 playlist: 일단모아

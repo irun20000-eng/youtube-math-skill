@@ -4,7 +4,7 @@ video_id: 9R5TM8FZQrw
 url: https://www.youtube.com/watch?v=9R5TM8FZQrw
 title: "\"일차항 압수 ㅋㅋ\" 23수능 22번을 박살내는 단 하나의 논리 : 전단 면역"
 channel: "수학한수"
-published: 2026-03-06
+published: 2026-03-07
 duration_sec: 376
 duration: "6:16"
 playlist: 일단모아

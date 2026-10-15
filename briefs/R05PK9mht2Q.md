@@ -4,7 +4,7 @@ video_id: R05PK9mht2Q
 url: https://www.youtube.com/watch?v=R05PK9mht2Q
 title: "미분 적분을 왜 배우는지만 알아도 쉬워집니다"
 channel: "수학혁명 김지석"
-published: 2025-03-10
+published: 2025-03-11
 duration_sec: 575
 duration: "9:35"
 playlist: 일단모아
