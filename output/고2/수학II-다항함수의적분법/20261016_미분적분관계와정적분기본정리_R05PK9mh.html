@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>미분과 적분의 관계로 넓이 구하기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 수학Ⅱ — 다항함수의 적분법</div>
+    <h1>미분과 적분의 관계로 "모르는 넓이" 구하기</h1>
+    <p class="sub">넓이 $S(x)$의 식을 몰라도, $S(x)$를 미분하면 아는 함수 $f(x)$가 나온다는 사실 하나만 있으면 거꾸로(=적분) 계산해서 $S(x)$를 구할 수 있다. 이 "거꾸로 계산"의 원리를 미분계수의 정의부터 차근차근 유도한다.</p>
+    <div class="quote">"미적분이 개발되기 이전에는 $f(x)$ 식을 안다고 하더라도 이 넓이를 구한다는 것은 정말 어려운 일이었어요." — 강사 인용 [03:00]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/R05PK9mht2Q" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/R05PK9mht2Q/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">미분 적분을 왜 배우는지만 알아도 쉬워집니다</div>
+        <div class="v-meta">📺 YouTube · 9:35 · 수학혁명 김지석</div>
+        <a class="v-link" href="https://youtu.be/R05PK9mht2Q" target="_blank" rel="noopener">https://youtu.be/R05PK9mht2Q</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 넓이함수 $S(x)$의 도함수가 왜 $f(x)$가 되는지(정적분의 기본정리의 아이디어) 유도 과정을 통해 이해하고, 이를 이용해 정적분 값과 위치·속도 문제를 직접 계산한다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 일차함수라면 두 가지 방법이 같은 답을 준다</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> $f(x)=6x+2$ 일 때, $y=f(x)$와 $x$축, 직선 $x=0$, $x=2$로 둘러싸인 도형(사다리꼴)의 넓이를 (1) 사다리꼴 넓이 공식과 (2) "넓이함수 $S(x)$를 미분하면 $f(x)$가 된다"는 원리로 구한 부정적분 두 가지 방법으로 구하고, 같은 값이 나오는지 비교하라. (단, $S(0)=0$)</div>
+      <div class="visual">
+[사다리꼴 공식]                    [미분의 역연산(부정적분)]
+윗변 f(0)=2, 아랫변 f(2)=14         S'(x)=f(x)=6x+2 → S(x)=3x²+2x+C
+넓이 = (2+14)/2 × 2 = 16           S(0)=0 → C=0 → S(2)=3·4+2·2=16
+                 ⇘  같은 답 16  ⇙
+      </div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>사다리꼴 공식: $f(0)=2$, $f(2)=6\cdot2+2=14$이므로 넓이 $=\dfrac{(2+14)}{2}\times 2=16$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>이번엔 "$S(x)$를 미분하면 $f(x)$가 나온다"는 관계 $S'(x)=f(x)=6x+2$를 거꾸로 풀어 $S(x)$를 찾는다. $3x^2$을 미분하면 $6x$, $2x$를 미분하면 $2$가 나오므로 $S(x)=3x^2+2x+C$<div class="why">미분해서 $6x+2$가 나오는 식을 "거꾸로 추적"하는 것이 바로 부정적분이다. 상수 $C$는 미분하면 사라지므로 반드시 남겨 둬야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>조건 $S(0)=0$을 대입: $3(0)^2+2(0)+C=0 \Rightarrow C=0$. 따라서 $S(x)=3x^2+2x$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$S(2)=3(4)+2(2)=12+4=16$. 두 방법의 답이 정확히 일치한다.</div></div>
+          <span class="answer-tag">정답: 16</span>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 환기 — 미분계수와 순간변화율</div>
+      <p>함수 $y=f(x)$에서 $x$가 $a$에서 $a+h$까지 변할 때의 <strong>평균변화율</strong>은 $\dfrac{f(a+h)-f(a)}{h}$이다. 이 $h$를 한없이 $0$에 가깝게 보내 얻는 극한값이 <strong>순간변화율</strong>이자 미분계수 $f'(a)$이며, 그래프 위에서는 점 $(a,f(a))$에서의 접선의 기울기와 같다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>핵심 — 넓이함수를 미분하면 왜 $f(x)$가 나올까 (유도)</div>
+      <p>$y=f(x)$와 $x$축 사이, $0$부터 $x$까지의 넓이를 $S(x)$라 하자. $x$를 아주 조금 $h$만큼 늘려 $S(x+h)$를 생각하면, 늘어난 넓이 $S(x+h)-S(x)$는 폭이 $h$이고 높이가 대략 $f(x)$인 아주 얇은 직사각형 모양과 거의 같다.</p>
+      <div class="formula-box">$\dfrac{S(x+h)-S(x)}{h}\approx f(x)\quad\Longrightarrow\quad \lim_{h\to0}\dfrac{S(x+h)-S(x)}{h}=S'(x)=f(x)$</div>
+      <p><strong>즉, 넓이함수 $S(x)$의 도함수는 $f(x)$ 그 자체다.</strong> $h$가 작아질수록 "얇은 직사각형으로 근사한 것"과 "실제 늘어난 넓이"의 차이는 $0$에 가까워지므로, 극한을 취하면 정확히 $f(x)$가 남는다. 영상에서는 이것을 "$S$를 미분하면 경계선에서의 길이(=높이) $f(x)$가 나온다"고 표현한다. 이것이 바로 <strong>정적분의 기본정리</strong>의 핵심 아이디어다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>거꾸로 계산 — 부정적분으로 모르는 넓이 구하기</div>
+      <p>$S'(x)=f(x)$라는 관계를 알고 있으면, $f(x)$를 미분해서 나오는 원래 함수 $S(x)$를 거꾸로 찾을 수 있다. 이렇게 "미분해서 $f(x)$가 되는 함수를 찾는 것"을 <strong>부정적분</strong>이라 하고, 그중 하나를 $F(x)$라 쓰면 일반적인 답은 $F(x)+C$ ($C$는 상수) 꼴이다.</p>
+      <div class="concept-box">미적분이 만들어지기 전에는 $f(x)$식을 알아도 그 밑넓이가 얼마인지 구할 방법이 없었다(구분구적법은 계산이 매우 복잡했다). 미분의 정의로부터 "$S'(x)=f(x)$"라는 관계가 성립한다는 것이 밝혀지면서, 거꾸로(=적분) 계산만으로 넓이라는 "미스터리"를 풀 수 있게 됐다.</div>
+      <div class="formula-box">$a$부터 $b$까지의 넓이(정적분) $=F(b)-F(a)$ ($F'(x)=f(x)$) — 이를 <strong>정적분의 기본정리</strong>라 한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>같은 아이디어의 확장 — 순간속도도 결국 미분</div>
+      <p>위치함수 $s(t)$에서 평균속도는 $\dfrac{s(t+h)-s(t)}{h}$(기울기)이고, $h\to0$일 때의 극한이 <strong>순간속도</strong> $v(t)=s'(t)$다. 이것은 "넓이함수를 미분하면 높이가 나온다"는 것과 완전히 같은 구조 — 위치를 미분하면 속도, 속도를 미분하면 가속도가 나온다. 영상은 이 아이디어가 위치 이동뿐 아니라 키의 성장 속도, 주가의 변화 속도, 배터리 충전 속도처럼 "시간에 따라 변하는 모든 수치"에 똑같이 적용된다고 설명한다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수</div>
+      <p>$S'(x)=f(x)$로부터 $S(x)$를 구할 때 상수 $C$를 빠뜨리면 안 된다 — 미분하면 상수는 사라지므로, 거꾸로 찾을 때는 "어떤 상수가 더해져도 미분하면 같은 $f(x)$가 나온다"는 사실을 항상 염두에 둬야 한다. 조건(예: $S(0)=0$)이 주어지면 그 값을 대입해 $C$를 반드시 결정한다.</p>
+      <div class="caution">함정: 정적분의 기본정리 $F(b)-F(a)$에서 순서를 거꾸로 $F(a)-F(b)$로 계산하면 부호가 반대로 나온다. "나중 값에서 처음 값을 뺀다"는 순서를 습관화하자.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 조건으로부터 부정적분 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $S'(x)=4x+3$이고 $S(0)=1$일 때, $S(2)$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>미분해서 $4x+3$이 나오는 식을 찾는다: $2x^2$을 미분하면 $4x$, $3x$를 미분하면 $3$이 나오므로 $S(x)=2x^2+3x+C$.</p>
+          <p>$S(0)=C=1$이므로 $S(x)=2x^2+3x+1$. 따라서 $S(2)=8+6+1=15$.</p>
+          <p class="warn">오답 주의: $S(0)=1$을 대입해 $C$를 구하는 과정을 빠뜨리면 안 된다 — 조건이 없으면 $S(x)$가 하나로 정해지지 않는다.</p>
+          <span class="answer-tag">정답: 15</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 위치함수에서 순간속도</div>
+        <div class="problem-body"><strong>문제:</strong> 위치함수 $s(t)=t^2-4t+5$에 대해, $t=3$에서의 순간속도를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>순간속도는 위치함수의 도함수다: $v(t)=s'(t)=2t-4$.</p>
+          <p>$v(3)=2(3)-4=2$.</p>
+          <span class="answer-tag">정답: 2</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 조건 하나로 부정적분의 상수 결정</div>
+        <div class="problem-body"><strong>문제:</strong> $S'(x)=3x^2-2x+1$이고 $S(1)=4$일 때, $S(2)$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>미분해서 $3x^2-2x+1$이 나오는 식: $S(x)=x^3-x^2+x+C$.</p>
+          <p>$S(1)=1-1+1+C=1+C=4\Rightarrow C=3$. 따라서 $S(x)=x^3-x^2+x+3$.</p>
+          <p>$S(2)=8-4+2+3=9$.</p>
+          <p class="warn">오답 주의: $S(1)$을 계산할 때 $1^3-1^2+1=1$이지 $3$이 아니다 — 거듭제곱 계산을 서두르다 틀리기 쉽다.</p>
+          <span class="answer-tag">정답: 9</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 정적분의 기본정리로 직접 넓이 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=2x$일 때, $F(x)=x^2$이 $f$의 부정적분임을 이용해 $1$부터 $3$까지의 정적분 값을 구하고, 사다리꼴 넓이 공식으로 구한 값과 비교하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>정적분의 기본정리</strong>: $\displaystyle\int_1^3 f(x)\,dx=F(3)-F(1)=9-1=8$.</p>
+          <p><strong>사다리꼴 공식으로 확인</strong>: $f(1)=2$, $f(3)=6$이므로 넓이 $=\dfrac{(2+6)}{2}\times(3-1)=4\times2=8$.</p>
+          <p>두 방법의 답이 일치한다 — $F(x)$가 복잡해서 도형 공식을 쓸 수 없을 때도 정적분의 기본정리는 항상 같은 방식으로 작동한다.</p>
+          <span class="answer-tag">정답: 8</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 넓이함수의 최댓값을 구간에서 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> $S'(x)=6x^2-6x$이고 $S(0)=5$일 때, 구간 $[0,2]$에서 $S(x)$의 최댓값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — 부정적분으로 $S(x)$ 구하기: $S(x)=2x^3-3x^2+C$, $S(0)=C=5$이므로 $S(x)=2x^3-3x^2+5$.</p>
+          <p><strong>STEP 2</strong> — 증가·감소 분석: $S'(x)=6x^2-6x=6x(x-1)$이므로 $x=0$과 $x=1$에서 $S'(x)=0$.</p>
+          <p><strong>STEP 3</strong> — $0<x<1$에서 $S'(x)<0$(감소), $1<x<2$에서 $S'(x)>0$(증가). 즉 $x=1$에서 극소.<div class="why">예를 들어 $x=0.5$를 대입하면 $6(0.5)(-0.5)=-1.5<0$, $x=1.5$를 대입하면 $6(1.5)(0.5)=4.5>0$으로 직접 확인할 수 있다.</div></p>
+          <p><strong>STEP 4</strong> — 닫힌구간 $[0,2]$의 최댓값은 극값이 아니라 양 끝점 중 하나에서 나온다: $S(0)=5$, $S(2)=2(8)-3(4)+5=16-12+5=9$. 따라서 최댓값은 $S(2)=9$.</p>
+          <p class="warn">오답 주의: $x=1$은 극소점이므로 최댓값과는 무관하다 — 극값과 최댓값(닫힌구간 끝점 포함 비교)을 혼동하면 안 된다.</p>
+          <span class="answer-tag">정답: 9</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 속도의 부호가 바뀌는 운동에서 이동거리</div>
+        <div class="problem-body"><strong>문제:</strong> 수직선 위를 움직이는 점의 위치가 $s(t)=t^3-6t^2+9t$ ($t\ge0$)일 때, $t=0$부터 $t=4$까지 이 점이 실제로 움직인 거리(이동거리)를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — 속도 $v(t)=s'(t)=3t^2-12t+9=3(t-1)(t-3)$. $v(t)=0$이 되는 시각은 $t=1, 3$ — 이 순간 운동 방향이 바뀐다.</p>
+          <p><strong>STEP 2</strong> — $t=0,1,3,4$에서의 위치: $s(0)=0$, $s(1)=1-6+9=4$, $s(3)=27-54+27=0$, $s(4)=64-96+36=4$.</p>
+          <p><strong>STEP 3</strong> — 각 구간에서 움직인 거리(방향이 바뀌므로 구간별로 끊어서 절댓값을 더한다): $[0,1]$에서 $|4-0|=4$, $[1,3]$에서 $|0-4|=4$, $[3,4]$에서 $|4-0|=4$.<div class="why">위치가 단순히 처음과 끝만 비교하면(=변위) $s(4)-s(0)=4$이지만, 중간에 방향이 두 번 바뀌므로 "실제로 걸은 거리"는 각 구간의 거리를 모두 더해야 한다.</div></p>
+          <p><strong>STEP 4</strong> — 전체 이동거리 $=4+4+4=12$.</p>
+          <p class="warn">오답 주의: $s(4)-s(0)=4$를 바로 이동거리로 쓰면 안 된다 — 이것은 변위(처음·끝 위치 차이)일 뿐, 왕복한 만큼은 반영되지 않는다.</p>
+          <span class="answer-tag">정답: 12</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 극값 조건으로 상수 구하고 정적분 계산</div>
+        <div class="problem-body"><strong>문제:</strong> 다항함수 $S(x)=x^3-6x^2+kx-1$ ($k$는 상수)이 $x=1$에서 극값을 갖는다. $f(x)=S'(x)$라 할 때, $k$의 값과 정적분 $\displaystyle\int_0^2 f(x)\,dx$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $S'(x)=3x^2-12x+k$. $x=1$에서 극값을 가지려면 $S'(1)=0$: $3-12+k=0\Rightarrow k=9$.</p>
+          <p><strong>STEP 2</strong> — 검증: $k=9$이면 $S'(x)=3x^2-12x+9=3(x-1)(x-3)$. $x=1$ 좌우로 부호가 양$\to$음으로 바뀌므로($x=0$ 대입: $3(-1)(-3)=9>0$, $x=2$ 대입: $3(1)(-1)=-3<0$) 실제로 극값(극대)이 맞다.<div class="why">이 확인이 중요하다 — $S'(1)=0$만으로는 극값인지 보장되지 않는다. 좌우 부호가 바뀌는지까지 확인해야 진짜 극값이다.</div></p>
+          <p><strong>STEP 3</strong> — $f(x)=S'(x)=3x^2-12x+9$이고, 정적분의 기본정리에 의해 $\displaystyle\int_0^2 f(x)\,dx=S(2)-S(0)$ (상수 $-1$은 빼기 과정에서 서로 사라진다).</p>
+          <p><strong>STEP 4</strong> — $S(x)=x^3-6x^2+9x-1$이므로 $S(2)=8-24+18-1=1$, $S(0)=-1$. 따라서 $S(2)-S(0)=1-(-1)=2$.</p>
+          <span class="answer-tag">정답: $k=9$, $\displaystyle\int_0^2 f(x)\,dx=2$</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 넓이의 변화율(순간 변화율의 응용)</div>
+        <div class="problem-body"><strong>문제:</strong> 반지름의 길이가 $r$인 원의 넓이는 $S(r)=\pi r^2$이다. 반지름이 매초 $2$씩 일정하게 늘어나( $r=2t$ ) $t=3$일 때, 넓이의 시간 $t$에 대한 순간 변화율 $\dfrac{dS}{dt}$를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $r=2t$를 $S(r)=\pi r^2$에 대입해 시간만의 함수로 바꾼다: $S(t)=\pi(2t)^2=4\pi t^2$.</p>
+          <p><strong>STEP 2</strong> — $S(t)=4\pi t^2$을 $t$에 대해 미분: $\dfrac{dS}{dt}=8\pi t$.<div class="why">$\pi$는 그냥 상수이므로 $4\pi t^2$을 미분하는 것은 $4t^2$을 미분해서 $\pi$를 곱하는 것과 같다 — 다항함수 미분과 완전히 같은 방식이다.</div></p>
+          <p><strong>STEP 3</strong> — $t=3$을 대입: $\dfrac{dS}{dt}\Big|_{t=3}=8\pi(3)=24\pi$.</p>
+          <p class="warn">오답 주의: $r=2t$를 먼저 대입하지 않고 $S'(r)=2\pi r$에 $r=2(3)=6$만 대입해 "$12\pi$"로 끝내면 안 된다 — 우리가 구하는 것은 $r$에 대한 변화율이 아니라 <strong>시간 $t$에 대한</strong> 변화율이므로, 처음부터 $t$만의 식으로 바꾼 뒤 미분해야 한다.</p>
+          <span class="answer-tag">정답: $24\pi$</span>
+        </div></details>
+      </div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상(수학혁명 김지석)은 "넓이함수 $S(x)$를 미분하면 경계선의 길이 $f(x)$가 나온다"는 사실, 그리고 이를 거꾸로 이용해(적분) 미스터리였던 넓이·곡선의 길이를 구할 수 있게 된 역사적 전환점을 설명한다. 본 자료는 영상이 짚은 "$f(x)$식은 알아도 넓이 $S(x)$를 구하기는 어려웠다" "$S$를 미분하면 $f$가 나온다"는 서술을 미분계수의 정의부터 유도해 보이고, 순간속도 비유와 정적분의 기본정리로 확장했다.</p>
+      <p style="margin-top:8px">영상은 수식 전개보다 "왜 미적분이 중요한가"라는 개념적 설명에 집중하므로, 본 자료의 모든 수치 문항(도입 문제, 기초~수능대비 문항)은 같은 개념을 검증 가능한 숫자로 새롭게 구성한 것이다. <strong>"수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="20260708_정적분의활용넓이속도거리꿀팁과오개념_개념.html">정적분의 활용 넓이 속도와 거리 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a> · <a href="20260714_넓이비와부정적분함숫값차비율관계_xA9JGa0t.html">넓이 비와 부정적분 함숫값 차 — 비율 관계 연쇄 적용 (수학Ⅱ) (xA9JGa0t)</a> · <a href="20260817_적분넓이팩토리얼일반화공식_X-cjFae.html">적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법 (X-cjFae)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-16 · 영상 출처: <a href="https://youtu.be/R05PK9mht2Q" style="color:var(--primary)">수학혁명 김지석</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
