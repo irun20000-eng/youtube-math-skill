@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>열린구간에서 최솟값이 존재하는지 판정하는 법 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2~고3 · 수학Ⅱ — 도함수의 활용</div>
+    <h1>열린구간에서 최솟값이 존재하는지 판정하는 법</h1>
+    <p class="sub">열린구간에서는 극솟값이 곧 최솟값이 되는 게 아니다. "극소값"과 "구간 양 끝으로 갈 때의 극한값"을 비교해야 진짜 최솟값이 존재하는지 알 수 있다. 이 비교를 도함수의 정적분(올라간 양·내려간 양)으로 계산하는 방법을 익힌다.</p>
+    <div class="quote">"올라간 양, 내려간 양 — 그건 도함수의 정적분을 가지고 갈 수 있어." — 강사 인용 [02:16]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/iN7rM6QQ79k" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/iN7rM6QQ79k/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">이 문제 느낌 옵니다.</div>
+        <div class="v-meta">📺 YouTube · 11:13 · 수학강사 이정환</div>
+        <a class="v-link" href="https://youtu.be/iN7rM6QQ79k" target="_blank" rel="noopener">https://youtu.be/iN7rM6QQ79k</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 열린구간에서 함수가 최솟값을 갖는지 안 갖는지 "극솟값 vs 경계 극한값" 비교로 판정하고, 그 비교를 도함수의 정적분(올라간 양·내려간 양)으로 계산하는 방법을 익힌다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 극소값이 있어도 최솟값이 없을 수 있다</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> $h(x)=x^3-3x$에 대해 열린구간 $(-3,3)$에서 $h(x)$가 최솟값을 갖는지 판정하라.</div>
+      <div class="visual">
+h'(x) = 3x²-3 = 3(x-1)(x+1)  →  x=-1(극대), x=1(극소)
+h(-1)=2(극대값)      h(1)=-2(극소값)
+경계 극한: h(-3)→-18,  h(3)→18   ← 열린구간이라 대입 불가, 극한만
+
+   -18        2         -2        18
+  (x→-3+)   극대      극소      (x→3-)
+    ↓ 증가     ↓ 감소     ↓ 증가
+                   -2 보다 훨씬 작은 -18에 한없이 가까워짐! → 최솟값 없음
+      </div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$h'(x)=3x^2-3=3(x-1)(x+1)=0$에서 $x=-1,1$. $x=-1$에서 극대($h(-1)=-1+3=2$), $x=1$에서 극소($h(1)=1-3=-2$).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>열린구간 $(-3,3)$이므로 $x=-3,3$ 자체는 포함되지 않지만, $x\to-3+$, $x\to3-$일 때 $h(x)$가 어디로 가는지(극한값)는 확인할 수 있다: $h(-3)=-27+9=-18$, $h(3)=27-9=18$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>구간 $(-3,-1)$에서 $h'(x)>0$(증가)이므로 $h$는 $-18$ 근처에서 시작해 $2$까지 증가한다.<div class="why">예를 들어 $x=-2$를 대입하면 $h'(-2)=3(4)-3=9>0$으로 직접 확인된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>따라서 $x$가 $-3$에 가까워질수록 $h(x)$는 $-18$에 한없이 가까워지는데, 이 값은 극소값 $-2$보다 훨씬 작다. $x=-3$ 자체는 열린구간에 없으므로 $-18$에 "도달"하지는 못하지만, $-2$보다 작은 값들(예: $-17.9$, $-10$, $-5$ 등)은 실제로 $h$가 그 사이에서 지나가며 도달한다 — 즉 극소값 $-2$ 밑으로 내려가는 값들이 분명히 존재한다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>그런데 가장 작은 값에 해당하는 $-18$ 자체에는 끝내 도달하지 못하므로(열린구간), "가장 작은 값"이 따로 존재하지 않는다. <strong>따라서 $h(x)$는 $(-3,3)$에서 최솟값을 갖지 않는다.</strong></div></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 환기 — 증가·감소와 극대·극소</div>
+      <p>도함수 $f'(x)$의 부호가 $+\to-$로 바뀌는 점에서 $f$는 <strong>극대</strong>, $-\to+$로 바뀌는 점에서 <strong>극소</strong>를 갖는다. 극값은 "그 주변 아주 가까운 곳"에서만 가장 크거나 작다는 뜻이고, 구간 전체에서 가장 큰(작은) 값인 <strong>최댓값(최솟값)</strong>과는 다른 개념이다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>핵심 — 두 지점의 함숫값 비교는 도함수의 정적분으로 (유도)</div>
+      <p>정적분의 기본정리에 의해, 임의의 두 점 $a<b$에 대해 다음이 항상 성립한다.</p>
+      <div class="formula-box">$h(b)-h(a)=\displaystyle\int_a^b h'(x)\,dx$</div>
+      <p>이 적분값은 $h'(x)>0$인 구간(올라간 양, $+$)과 $h'(x)<0$인 구간(내려간 양, $-$)을 모두 합친 값이다. 즉 <strong>"내려간 양이 올라간 양보다 많다"는 $h(b)<h(a)$와 정확히 같은 말</strong>이다. $h(x)$의 구체적인 식을 몰라도 $h'$의 부호(그래프 모양)만 알면 두 지점 중 어느 쪽이 더 큰지(또는 작은지) 판정할 수 있다 — 이것이 영상이 강조하는 "올라간 양·내려간 양으로 접근"하는 방법이다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>판정법 — 열린구간 $(p,q)$에서 최솟값이 존재하는 조건</div>
+      <p>열린구간 $(p,q)$에서 다항함수 $h$가 유한 개의 극값만 갖는다고 하자. 극소값 중 가장 작은 후보를 $x=c$라 할 때, 다음 비교로 최솟값 존재 여부를 판정한다.</p>
+      <div class="concept-box">
+        ① $h(c)\le h(p+)$ (왼쪽 경계 극한값) <strong>그리고</strong> $h(c)\le h(q-)$ (오른쪽 경계 극한값) 이면 → 최솟값 $=h(c)$ <strong>존재</strong>한다(등호가 성립해도 괜찮다 — $x=c$는 구간 안에 실제로 있으므로 그 값에 도달한다).<br>
+        ② 둘 중 하나라도 경계 극한값이 $h(c)$보다 <strong>작으면</strong> → 그 경계 쪽으로 $h(c)$보다 더 작은 값들이 존재하지만, 경계 자체에는 도달하지 못하므로 → 최솟값이 <strong>존재하지 않는다</strong>.
+      </div>
+      <p>다항함수는 모든 실수에서 연속이므로, 열린구간의 끝점에서의 극한값은 그냥 그 $x$값을 식에 대입한 값과 같다(단, 끝점 자체가 구간에 포함되지 않는다는 점만 유의).</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>등호가 성립해도 최솟값은 존재한다</div>
+      <p>경계 극한값이 극소값과 <strong>정확히 같은 경우</strong>에도 최솟값은 존재한다 — 경계 쪽은 그 값에 "가까워지기만 하고 도달하지 못하지만", 극소점 $x=c$는 구간 안의 실제 점이라 그 값에 진짜로 도달하기 때문이다. 즉 판정 기준은 "작거나 같으면(≤) 존재, 작으면(<, 즉 경계가 극소값보다 작으면) 존재하지 않는다"로, 등호 쪽은 존재 판정에 포함된다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수</div>
+      <p>닫힌구간처럼 생각해서 "끝점에서 최솟값이 나온다"고 단정하면 안 된다 — 열린구간은 끝점 자체에서 함숫값을 갖지 않으므로 끝점이 최솟값이 될 수 없다. 반대로 "극소값이 곧 최솟값"이라고 무조건 단정하는 것도 실수다 — 반드시 양 끝 경계 극한값과 비교하는 과정을 거쳐야 한다.</p>
+      <div class="caution">함정: 극소값이 하나뿐이라고 해서 자동으로 최솟값이 되는 것은 아니다. 구간이 열려 있으면 "경계 쪽으로 갈수록 더 내려가는지"를 반드시 따로 확인해야 한다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 내부에 꼭짓점이 있는 이차함수</div>
+        <div class="problem-body"><strong>문제:</strong> $h(x)=x^2-4x+1$ 에 대해 열린구간 $(0,5)$에서 $h(x)$가 최솟값을 갖는지 판정하고, 갖는다면 그 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$h'(x)=2x-4=0\Rightarrow x=2$ (극소, 포물선의 꼭짓점). $h(2)=4-8+1=-3$.</p>
+          <p>경계 극한값: $h(0)=1$, $h(5)=25-20+1=6$. 둘 다 $-3$보다 크므로(② 조건 해당 없음), 극소값이 그대로 최솟값이 된다.</p>
+          <span class="answer-tag">정답: 최솟값 $-3$ (존재함)</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 도함수의 정적분으로 두 값 비교하기</div>
+        <div class="problem-body"><strong>문제:</strong> $h(x)=x^3-3x^2+2$에 대해 $\displaystyle\int_0^2 h'(x)\,dx$의 값을 구하고, $h(2)-h(0)$을 직접 계산한 값과 비교하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$h'(x)=3x^2-6x$이므로 $\displaystyle\int_0^2(3x^2-6x)\,dx=\Big[x^3-3x^2\Big]_0^2=(8-12)-0=-4$.</p>
+          <p>직접 계산: $h(0)=2$, $h(2)=8-12+2=-2$. $h(2)-h(0)=-2-2=-4$.</p>
+          <p>두 값이 일치한다 — $h$가 $x=0$에서 $x=2$까지 전체적으로 $4$만큼 "내려갔다"는 뜻이다.</p>
+          <span class="answer-tag">정답: $-4$ (일치함)</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 경계 극한값과 극소값이 같은 경우</div>
+        <div class="problem-body"><strong>문제:</strong> $h(x)=x^3-3x+2$에 대해 열린구간 $(-2,2)$에서 $h(x)$가 최솟값을 갖는지 판정하고, 갖는다면 그 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $h'(x)=3x^2-3=3(x-1)(x+1)=0\Rightarrow x=-1,1$. $x=-1$ 극대($h(-1)=-1+3+2=4$), $x=1$ 극소($h(1)=1-3+2=0$).</p>
+          <p><strong>STEP 2</strong> — 경계 극한값: $h(-2)=-8+6+2=0$, $h(2)=8-6+2=4$.</p>
+          <p><strong>STEP 3</strong> — 왼쪽 경계 극한값 $h(-2)=0$이 극소값 $h(1)=0$과 <strong>정확히 같다</strong>. 하지만 $x=-2$는 구간에 포함되지 않아 그 값에 도달하지 못하고, $x=1$은 구간 안의 실제 점이라 $0$에 도달한다.<div class="why">구간 $(-2,-1)$에서 $h$는 $0$ 근처에서 시작해 $4$까지 증가하므로, $0$보다 작은 값은 전혀 지나가지 않는다 — 즉 $0$ 밑으로 내려가는 구간이 없다.</div></p>
+          <p><strong>STEP 4</strong> — 오른쪽도 $h(2)=4>0$이라 문제없다. 따라서 "작거나 같으면 존재"라는 기준에 의해 <strong>최솟값은 $0$으로 존재한다</strong>(극소점 $x=1$에서).</p>
+          <p class="warn">오답 주의: 경계값과 극소값이 같다고 "같은 값이 두 번 나와서 최솟값이 모호하다"고 생각하면 안 된다 — 실제로 그 값에 도달하는 쪽($x=1$)이 있으므로 최솟값은 명확히 존재한다.</p>
+          <span class="answer-tag">정답: 최솟값 $0$ (존재함, $x=1$에서)</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 극소값이 없고 경계로 계속 내려가는 경우</div>
+        <div class="problem-body"><strong>문제:</strong> $h(x)=-x^3+3x+1$에 대해 열린구간 $(0,3)$에서 $h(x)$가 최솟값을 갖는지 판정하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $h'(x)=-3x^2+3=3(1-x)(1+x)$. 구간 $(0,3)$ 안의 근은 $x=1$뿐이고, $0<x<1$에서 $h'>0$(증가), $1<x<3$에서 $h'<0$(감소)이므로 $x=1$은 <strong>극대</strong>다($h(1)=-1+3+1=3$) — 극소는 이 구간 안에 없다.</p>
+          <p><strong>STEP 2</strong> — 극소 후보가 없으므로, $h$는 $x=1$까지 증가한 뒤 끝까지(경계 쪽으로) 계속 감소한다. 오른쪽 경계 극한: $h(3)=-27+9+1=-17$.</p>
+          <p><strong>STEP 3</strong> — $x$가 $3$에 가까워질수록 $h(x)$는 $-17$에 한없이 가까워지며, 그 사이에 $h(1)=3$보다 작은 값들을 모두 지나간다. 하지만 $x=3$ 자체에는 도달하지 못하므로, 더 이상 작아질 수 없는 "가장 작은 값"이 존재하지 않는다.</p>
+          <p><strong>STEP 4</strong> — <strong>따라서 $h(x)$는 $(0,3)$에서 최솟값을 갖지 않는다.</strong></p>
+          <p class="warn">오답 주의: 극소값이 하나도 없다고 해서 "최솟값도 당연히 없다"고 넘겨짚으면 안 된다 — 만약 감소하던 함수가 경계 쪽에서 유한한 값으로 멈추지 않고 계속 작아지는 패턴인지 매번 확인해야 한다(이 문제는 실제로 계속 작아지는 경우였다).</p>
+          <span class="answer-tag">정답: 최솟값 없음</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — $f(x)-tx$ 꼴에서 최솟값 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3-3x^2$에 대해 $g(x)=f(x)-9x$라 하자. 열린구간 $(0,4)$에서 $g(x)$가 최솟값을 갖는지 판정하고, 갖는다면 그 값을 "올라간 양·내려간 양" 비교까지 포함해 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $g(x)=x^3-3x^2-9x$, $g'(x)=3x^2-6x-9=3(x-3)(x+1)$. 구간 $(0,4)$ 안의 근은 $x=3$뿐.</p>
+          <p><strong>STEP 2</strong> — $0<x<3$에서 $g'(x)<0$(감소, 예: $x=1$: $3(1-3)(1+1)=-12<0$), $3<x<4$에서 $g'(x)>0$(증가, 예: $x=3.5$: $3(0.5)(4.5)=6.75>0$). 따라서 $x=3$은 극소. $g(3)=27-27-27=-27$.</p>
+          <p><strong>STEP 3</strong> — 경계 극한: $g(0)=0$, $g(4)=64-48-36=-20$.</p>
+          <p><strong>STEP 4</strong> — "올라간 양·내려간 양"으로 다시 확인: 구간 $(0,3)$에서 내려간 양 $=\displaystyle\int_0^3 g'(x)\,dx=g(3)-g(0)=-27-0=-27$(즉 $27$만큼 내려감). 구간 $(3,4)$에서 올라간 양 $=g(4)-g(3)=-20-(-27)=7$(즉 $7$만큼 올라감).<div class="why">내려간 양($27$)이 올라간 양($7$)보다 훨씬 많으므로, 오른쪽 경계로 다시 올라가도 $g(3)=-27$보다 커지기만 하지(=$-20$), 그 밑으로는 못 내려간다.</div></p>
+          <p><strong>STEP 5</strong> — $g(0)=0$, $g(4)=-20$ 모두 $g(3)=-27$보다 크므로, 극소값이 그대로 최솟값이 된다.</p>
+          <span class="answer-tag">정답: 최솟값 $-27$ (x=3에서, 존재함)</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 극소점이 경계에 걸리면 최솟값이 사라진다</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=x^3-3x^2$에 대해 $g(x)=f(x)-24x$라 하자. 열린구간 $(0,4)$에서 $g(x)$가 최솟값을 갖는지 판정하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $g(x)=x^3-3x^2-24x$, $g'(x)=3x^2-6x-24=3(x-4)(x+2)$.</p>
+          <p><strong>STEP 2</strong> — $g'(x)=0$의 근은 $x=4,-2$인데, 둘 다 열린구간 $(0,4)$의 <strong>경계이거나 바깥</strong>이다 — 구간 안에는 근이 없다.<div class="why">특히 $x=4$는 원래 극소가 되어야 할 자리인데, 이 열린구간은 $x=4$를 포함하지 않으므로 그 극소점 자체가 구간 밖으로 빠져버렸다.</div></p>
+          <p><strong>STEP 3</strong> — 구간 안(예: $x=2$)에서 $g'(2)=3(2-4)(2+2)=3(-2)(4)=-24<0$이므로, $g$는 $(0,4)$ 전체에서 계속 <strong>감소</strong>한다.</p>
+          <p><strong>STEP 4</strong> — 오른쪽 경계 극한: $g(4)=64-48-96=-80$. $x$가 $4$에 가까워질수록 $g(x)$는 $-80$에 한없이 가까워지지만, $x=4$ 자체에는 도달하지 못한다. 구간 전체가 끝까지 감소하기만 하므로 "가장 작은 값"이 따로 존재하지 않는다.</p>
+          <p><strong>STEP 5</strong> — <strong>따라서 $g(x)$는 $(0,4)$에서 최솟값을 갖지 않는다.</strong></p>
+          <p class="warn">오답 주의: $g'(4)=0$이라는 이유로 "$x=4$에서 최솟값 $-80$을 가진다"고 쓰면 안 된다 — $x=4$는 애초에 이 열린구간에 포함되지 않는 점이다.</p>
+          <span class="answer-tag">정답: 최솟값 없음</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 최솟값을 갖게 하는 정수 t의 최댓값</div>
+        <div class="problem-body"><strong>문제:</strong> 삼차함수 $f(x)=x^3-3x^2$에 대해 $g(x)=f(x)-tx$ ($t$는 상수)라 하자. 열린구간 $(0,4)$에서 $g(x)$가 최솟값을 갖도록 하는 <strong>정수 $t$의 최댓값</strong>을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>STEP 1</strong> — $g'(x)=3x^2-6x-t=0$의 두 근의 합은 $\dfrac{6}{3}=2$로 $t$와 무관하게 항상 $2$다(이차방정식의 근과 계수의 관계). 두 근을 $r_1<r_2$라 하면 $r_1+r_2=2$.</p>
+          <p><strong>STEP 2</strong> — $t\ge0$일 때는 작은 근 $r_1\le0$이 되어 구간 밖(또는 경계)으로 빠지고, 큰 근 $r_2$만 구간 안의 극소로 작동한다(앞의 심화 1·2 문항과 같은 구조). $r_2$가 $4$보다 작아야 극소점이 열린구간 안에 남는다.</p>
+          <p><strong>STEP 3</strong> — $r_2=4$가 되는 경계값을 구해 보면: $g'(4)=3(16)-24-t=48-24-t=24-t=0\Rightarrow t=24$. 즉 $t=24$에서 극소점이 정확히 경계 $x=4$로 밀려나 버린다(심화 2와 같은 상황) — 이때는 최솟값이 존재하지 않는다.</p>
+          <p><strong>STEP 4</strong> — $t<24$이면 $r_2<4$이므로 극소점이 구간 안에 남고, 왼쪽은 $g(0^+)$에서 시작해 계속 감소하다 $r_2$에서 극소를 찍고 다시 증가하는 패턴(심화 1과 같은 구조)이라 양 끝보다 항상 작다 — 최솟값이 존재한다.<div class="why">$t=23$일 때 직접 확인: $g'(x)=3x^2-6x-23$의 두 근의 합은 $2$, 큰 근은 약 $3.94$로 $4$보다 작아 구간 안에 들어온다.</div></p>
+          <p><strong>STEP 5</strong> — $t<24$를 만족하는 가장 큰 정수는 $t=23$이다.</p>
+          <p class="warn">오답 주의: $t=24$도 포함해서 "최댓값 $24$"라고 답하면 안 된다 — $t=24$에서는 극소점이 경계로 빠져 최솟값이 사라진다(등호가 성립하면 안 되는 경우임을 심화 2에서 확인했다).</p>
+          <span class="answer-tag">정답: 23</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 보기 판별: 최솟값이 존재할 때 반드시 성립하는 것</div>
+        <div class="problem-body"><strong>문제:</strong> 삼차함수 $f(x)$와 실수 $t$에 대해 $g(x)=f(x)-tx$라 하고, $g$가 열린구간 $(p,q)$에서 최솟값을 갖는다고 하자. 다음 중 <strong>반드시 성립하는 것</strong>을 모두 고르면?<br>
+          ㄱ. $g$는 $(p,q)$에서 극솟값을 가진다.<br>
+          ㄴ. $g$의 극솟값은 $g(p^+)$(왼쪽 경계 극한값)보다 작거나 같다.<br>
+          ㄷ. $g$의 극솟값은 $g(q^-)$(오른쪽 경계 극한값)보다 <strong>반드시 작다</strong>(등호 성립 불가).
+        </div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p><strong>ㄱ (참)</strong> — 최솟값이 존재한다면 그 값은 구간 안의 어떤 점에서 실제로 도달돤다(경계는 구간에 없으므로). 그 점에서의 값은 주변 어디보다도 작거나 같으므로, 정의상 그 점은 항상 극솟값이기도 하다.</p>
+          <p><strong>ㄴ (참)</strong> — 만약 $g(p^+)$가 극솟값보다 더 작다면, $x$가 $p$ 쪽으로 가까워질 때 극솟값보다 작은 값들을 실제로 지나가게 되어(연속함수이므로) 극솟값이 전체 최솟값일 수 없다 — 이는 "최솟값이 존재한다"는 가정과 모순이다. 따라서 극솟값은 항상 $g(p^+)$보다 작거나 같아야 한다.</p>
+          <p><strong>ㄷ (거짓)</strong> — 앞의 기본 1 문항에서 보았듯, 경계 극한값이 극솟값과 <strong>정확히 같아도</strong> 최솟값은 존재한다. 등호가 성립하는 경우를 "반드시 작다(등호 불가)"로 단정하면 틀린다.<div class="why">등호가 허용되는 이유는, 구간 안의 극소점은 실제로 그 값에 도달하지만 경계는 접근만 할 뿐 도달하지 못하기 때문이다 — "같은 값이라도 누가 그 값에 도달하느냐"가 다르다.</div></p>
+          <span class="answer-tag">정답: ㄱ, ㄴ</span>
+        </div></details>
+      </div>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상(수학강사 이정환)은 "열린구간에서 최솟값을 갖는 조건"을 가·나 조건(등호 포함 여부)으로 구분해 분석하며, 올라간 양·내려간 양을 도함수의 정적분으로 비교하는 방법을 제시한다. 영상 속 실제 문항은 화면에만 제시된 구체적 수치(상수 $a$, 조건식 등)를 음성 자막만으로 정확히 복원할 수 없어 그대로 재현하지 않았다. 대신 같은 핵심 아이디어("극솟값 vs 경계 극한값 비교", "등호가 성립해도 존재", "$f(x)-tx$ 구조") 를 활용해 새 수치로 구성한 문항들로 대체했다.</p>
+      <p style="margin-top:8px">특히 기본 1 문항과 수능 대비 2 문항의 ㄷ 보기는 영상이 강조한 "등호가 있어도 성립/없어도 불성립"이라는 미묘한 구분을 직접 다루도록 설계했다. <strong>"수능 대비"는 난이도 라벨일 뿐 실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260520_교점개수함수와높이차2대1공식_ONHx5OaS.html">교점 개수 함수와 3차함수 높이차 2대1 공식 (ONHx5OaS)</a> · <a href="20260520_다항함수비율관계와직각삼각형_Jw8F2akj.html">다항함수의 비율 관계와 직각삼각형 3요소 (Jw8F2akj)</a> · <a href="20260520_차함수특강관계내리기와보정_WhojOfqC.html">차함수 특강 (WhojOfqC)</a> · <a href="20260629_실근개수홀짝성으로극값판별_OJyw8C5k.html">실근의 개수와 차수 홀짝성으로 극값 판별 — 극점만 조사하기 (OJyw8C5k)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-16 · 영상 출처: <a href="https://youtu.be/iN7rM6QQ79k" style="color:var(--primary)">수학강사 이정환</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
