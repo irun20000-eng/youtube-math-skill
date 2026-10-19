@@ -124,6 +124,30 @@ def build_study_method_path(
     return base / "공부법" / u / fname
 
 
+def build_culture_path(
+    base_dir: Path | str,
+    field: str,
+    topic: str,
+    when: date | None = None,
+) -> Path:
+    """교양(한국 고1~고3 수능 교육과정 단원에 대응되지 않는 수학 심화/확장 콘텐츠) 자료 경로.
+
+    output/교양/{분야}/{YYYYMMDD}_{핵심주제}_교양.html
+
+    대상: 정수론·조합론·수학사 등 흥미로운 수학 콘텐츠이지만 대수/미적분Ⅰ/확률과통계
+    교육과정 단원 어디에도 억지로 끼워 맞출 수 없는 영상(예: Farey 수열, 스턴-브로콧 트리).
+    video_id는 파일명에 넣지 않는다(본문 영상 링크로 충분) — 대신 파일명이 "_교양"으로
+    끝나는 것을 기준으로 regen_index.py 가 source="culture" 갤러리 카드/필터를 판별한다
+    (공부법 자료가 "_공부법" 접미사로 판별되는 것과 동일한 방식).
+    """
+    base = Path(base_dir)
+    when = when or date.today()
+    f = normalize_unit(field)
+    t = sanitize(topic, max_len=24)
+    fname = f"{when:%Y%m%d}_{t}_교양.html"
+    return base / "교양" / f / fname
+
+
 def parse_output_path(path: Path | str) -> dict | None:
     """build_output_path의 역과정. 파일명 패턴이 안 맞으면 None."""
     p = Path(path)
