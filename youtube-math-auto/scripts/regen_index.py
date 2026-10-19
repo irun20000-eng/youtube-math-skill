@@ -122,6 +122,7 @@ def gather(output_dir: Path) -> list[dict]:
         rel = html.relative_to(output_dir)
         is_concept = html.stem.endswith("_개념")
         is_study = html.stem.endswith("_공부법")
+        is_culture = html.stem.endswith("_교양")
         parsed = parse_output_path(rel)
         if not parsed and is_concept and len(rel.parts) >= 3:
             # 개념 자료(_개념): 영상 ID 대신 명시 접미사 → 폴백 파싱
@@ -138,6 +139,14 @@ def gather(output_dir: Path) -> list[dict]:
                 parsed = {"grade": rel.parts[0], "unit": rel.parts[1],
                           "date": m.group(1), "topic": m.group(2),
                           "video_id_short": html.stem}
+        if not parsed and is_culture and len(rel.parts) >= 3:
+            # 교양 자료(_교양): 교육과정 단원에 안 묶이는 콘텐츠 → 폴백 파싱
+            # (실제 video_id는 본문 영상 링크에서 extract_meta 로 복구해 썸네일에 쓴다)
+            m = re.match(r"(\d{8})_(.+)_교양$", html.stem)
+            if m:
+                parsed = {"grade": rel.parts[0], "unit": rel.parts[1],
+                          "date": m.group(1), "topic": m.group(2),
+                          "video_id_short": html.stem}
         if not parsed:
             continue
         meta = extract_meta(html)
@@ -145,7 +154,9 @@ def gather(output_dir: Path) -> list[dict]:
         full_vid = extract_video_id_from_url(meta["url"]) if meta["url"] else None
         rel_posix = rel.as_posix()
         d = parsed["date"]
-        source = "concept" if is_concept else ("study" if is_study else "video")
+        source = ("concept" if is_concept else
+                   "study" if is_study else
+                   "culture" if is_culture else "video")
         rows.append({
             **parsed,
             **meta,
@@ -164,7 +175,7 @@ def detect_duplicates(rows: list[dict]) -> dict[str, list[dict]]:
     """같은 video_id_short(8자)를 가진 자료가 2개 이상 있으면 보고."""
     by_vid: dict[str, list[dict]] = {}
     for r in rows:
-        if r.get("source") in ("concept", "study"):   # 개념·공부법 자료는 영상 중복 판정 제외
+        if r.get("source") in ("concept", "study", "culture"):   # 개념·공부법·교양 자료는 영상 중복 판정 제외
             continue
         by_vid.setdefault(r["video_id_short"], []).append(r)
     return {k: v for k, v in by_vid.items() if len(v) > 1}
@@ -390,6 +401,7 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
   .card[data-grade="고3"] { --stripe: #d9760a; }
   .card[data-grade="미분류"] { --stripe: #8698ab; }
   .card[data-grade="공부법"] { --stripe: #7b1fa2; }
+  .card[data-grade="교양"] { --stripe: #00897b; }
 
   #toast {
     position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px);
@@ -486,6 +498,7 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
       <button data-source="video">🎬 영상</button>
       <button data-source="concept">📘 개념</button>
       <button data-source="study">📝 공부법</button>
+      <button data-source="culture">🎓 교양</button>
     </div>
     <div class="unit-wrap" id="unitWrap">
       <button class="unit-toggle" id="unitToggle" type="button"
@@ -840,15 +853,18 @@ def render_html(rows: list[dict], dups: dict[str, list[dict]]) -> str:
 
         is_concept = r.get("source") == "concept"
         is_study = r.get("source") == "study"
+        is_culture = r.get("source") == "culture"
         if thumb:
             thumb_html = f'<img src="{_esc(thumb)}" loading="lazy" alt="{_esc(title)}">'
         elif is_concept:
             thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;font-weight:700">📘 개념 학습자료</div>'
         elif is_study:
             thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#4a148c,#7b1fa2);color:#fff;font-weight:700">📝 공부법 자료</div>'
+        elif is_culture:
+            thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#00695c,#00897b);color:#fff;font-weight:700">🎓 교양 자료</div>'
         else:
             thumb_html = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999">썸네일 없음</div>'
-        src_badge = '📝 공부법' if is_study else ('📘 개념' if is_concept else '🎬 영상')
+        src_badge = '🎓 교양' if is_culture else ('📝 공부법' if is_study else ('📘 개념' if is_concept else '🎬 영상'))
         original_link = (
             f'<a class="ghost" href="{_esc(url)}" target="_blank" rel="noopener" '
             f'title="원본 영상 열기">▶ 원본</a>'

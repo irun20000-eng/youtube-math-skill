@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>72.7%는 최소 몇 명인가 — 파레이 수열 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #00897b; --primary-dark: #00695c; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e0f2f1; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --tip-bg: #e0f2f1;
+      --btn-bg: #eef1f4; --btn-active: #00897b;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #10302c; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --tip-bg: #10302c;
+      --primary: #4db6ac; --primary-dark: #80cbc4; --btn-bg: #2a2f36; --btn-active: #4db6ac;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .hero { background: linear-gradient(135deg, #00695c 0%, #00897b 60%, #26a69a 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .summary-list { padding-left: 1.3em; }
+    .summary-list li { margin: 8px 0; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 14px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .step-body .step-title { font-weight: 700; display: block; margin-bottom: 4px; }
+    .quote-card { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 14px 20px; margin: 12px 0; font-size: .96em; }
+    .quote-card .qt-time { color: var(--sub); font-size: .82em; margin-top: 6px; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .quiz-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 14px; }
+    .quiz-q { font-weight: 700; margin-bottom: 6px; }
+    .quiz-a { margin-top: 10px; background: var(--sol-bg); border-radius: 8px; padding: 12px 16px; }
+    .flash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 12px; }
+    .flash-card { background: var(--tip-bg); border-radius: 10px; padding: 14px 16px; font-size: .92em; }
+    .flash-card .fc-term { font-weight: 700; color: var(--primary-dark); margin-bottom: 4px; }
+    .ref-list { padding-left: 1.3em; font-size: .92em; color: var(--sub); }
+    .ref-list li { margin: 6px 0; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #00695c !important; } details > .quiz-a { display: block !important; } summary { display: none; } .card, .quiz-card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+  </div>
+
+  <div class="hero">
+    <div class="tag">🎓 수학 교양 · 정수론</div>
+    <h1>72.7%는 최소 몇 명인가? — 파레이 수열이 푸는 "최소 인원" 문제</h1>
+    <p class="sub">설문 결과가 "72.7%가 그렇다고 답했다"처럼 소수점 한 자리로만 나왔을 때,
+      그 뒤에 숨어 있는 가장 적은 인원수를 수학으로 정확히 찾아내는 이야기.</p>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/bMpRM6DsTNo" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/bMpRM6DsTNo/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">How Many People Were Really in This Poll? | The Farey Sequence</div>
+        <div class="v-meta">📺 YouTube · 26:07 · Kia Keng's nerd folder</div>
+        <a class="v-link" href="https://youtu.be/bMpRM6DsTNo" target="_blank" rel="noopener">https://youtu.be/bMpRM6DsTNo</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">🎯 한눈에 보기</div>
+    <div class="card">
+      <ol class="summary-list">
+        <li>"72.7%가 그렇다고 답했다"는 설문 결과가 나왔다면, 가장 적게 잡아 몇 명이 참여했을 수 있을까?
+          답은 <strong>11명</strong>이다 ($8/11 \approx 72.7\%$).</li>
+        <li>이 문제는 "주어진 소수 구간 안에 들어가는, 분모가 가장 작은 분수 찾기"로 바뀐다.</li>
+        <li>1816년 영국 지질학자 John Farey가 관찰한 분수들의 성질(파레이 수열)이 이 문제를 깔끔하게 풀어준다.</li>
+        <li>핵심 도구는 "틀린" 분수 더하기 — 분자는 분자끼리, 분모는 분모끼리 더하는 메디언트(mediant) 연산이다.</li>
+        <li>같은 아이디어가 포드 원(Ford circle), 스턴–브로콧 트리(Stern–Brocot tree), 심지어 리만 가설과도 이어진다.</li>
+      </ol>
+    </div>
+
+    <div class="section-title">💡 핵심 개념</div>
+    <div class="card">
+
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <span class="step-title">문제를 다시 쓰기</span>
+          <p>"72.7%"는 사실 소수 둘째 자리에서 끊어 적은 근삿값이다. 실제 비율은 72.65%~72.75% 사이 어딘가에
+            있었을 것이다. 그러면 질문은 이렇게 바뀐다 — <em>이 구간 안에 있는 분수 중에서 분모가 가장 작은
+            것은 무엇인가?</em> 그 분모가 바로 "있을 수 있는 가장 적은 인원수"다.</p>
+        </div>
+      </div>
+      <div class="formula-box">$\dfrac{8}{11} = 0.7272\ldots \in (0.7265,\ 0.7275)$</div>
+      <div class="step-row">
+        <div class="step-body">
+          <p>$8/11$은 이 구간 안에 들어가고, 분모가 11보다 작은 분수는 이 구간 안에 하나도 없다는 것을
+            증명하면 "11명"이라는 답이 확정된다.</p>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <span class="step-title">"틀린" 분수 더하기 — 메디언트</span>
+          <p>분수 $\frac{a}{b}$와 $\frac{c}{d}$의 <strong>메디언트</strong>는 분자는 분자끼리, 분모는
+            분모끼리 더한 $\frac{a+c}{b+d}$다. 보통의 분수 덧셈 $\frac{a}{b}+\frac{c}{d}=\frac{ad+bc}{bd}$와는
+            전혀 다른 연산이라, 수학 선생님이 보면 "틀렸다"고 할 연산이다. 그런데 신기하게도, 두 분수 사이에
+            있는 분수 중 분모가 가장 작은(가장 간단한) 분수가 항상 이 메디언트다.</p>
+        </div>
+      </div>
+      <div class="formula-box">$\dfrac{a}{b},\ \dfrac{c}{d}\ \longrightarrow\ \dfrac{a+c}{b+d}$</div>
+
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <span class="step-title">이웃한 파레이 분수의 성질</span>
+          <p>분모가 $n$ 이하인 모든 분수를 크기 순으로 나열한 것이 파레이 수열 $F_n$이다. $F_n$에서 바로
+            이웃한 두 분수 $\frac{a}{b} < \frac{c}{d}$는 언제나 $bc-ad=1$을 만족한다.</p>
+          <p>이 성질은 격자점(정수 좌표) 그림으로 증명할 수 있다 — 원점에서 $(b,a)$로 가는 벡터와
+            $(d,c)$로 가는 벡터가 만드는 평행사변형의 넓이가 정확히 $bc-ad$인데, 두 분수가 "진짜 이웃"이면
+            그 평행사변형 안(둘레 포함)에 다른 격자점이 전혀 없어서 넓이가 가질 수 있는 가장 작은 값인
+            1이 되어야 한다.</p>
+        </div>
+      </div>
+      <div class="formula-box">$\dfrac{a}{b} < \dfrac{c}{d}$ 가 이웃이면 $bc - ad = 1$</div>
+
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <span class="step-title">메디언트로 답을 좁혀 가기</span>
+          <p>$0/1$과 $1/1$에서 출발해, 매번 지금 가진 두 분수의 메디언트를 구한다. 그 값이 목표 구간보다
+            작으면 왼쪽 경계를 그 메디언트로, 크면 오른쪽 경계를 그 메디언트로 바꿔 구간을 점점 좁혀 간다.
+            이 과정이 바로 스턴–브로콧 트리를 한 칸씩 내려가는 것과 같다.</p>
+          <p>Step 3의 성질 덕분에, 이 길을 따라가다 구간 안에 처음 들어오는 분수가 바로 "그 구간에서
+            분모가 가장 작은 분수"임이 보장된다 — 분모가 더 작은 분수가 숨어 있어서 이 과정이 답을
+            건너뛸 가능성은 없다.</p>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <span class="step-title">포드 원과 스턴–브로콧 트리</span>
+          <p><strong>포드 원(Ford circle)</strong>: 분수 $a/b$마다 수직선 위 그 점에서 반지름
+            $\frac{1}{2b^2}$인 원을 그리면, 서로 다른 분수의 두 원은 절대 겹치지 않고, 오직 이웃한
+            분수의 원끼리만 한 점에서 접한다.</p>
+          <p><strong>스턴–브로콧 트리(Stern–Brocot tree)</strong>: 메디언트를 계속 반복해서 만들어 가면,
+            모든 양의 유리수가 정확히 한 번씩 나타나는 무한 이진트리가 만들어진다.</p>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <span class="step-title">더 멀리 — $\pi$의 최선 근사와 "서로소일 확률"</span>
+          <p>분모가 작으면서 $\pi$에 가장 가까운 분수를 찾는 문제도 같은 메디언트식 사고로 이해할 수 있다.
+            5세기 중국 수학자 조충지(Zu Chongzhi)가 찾은 $355/113$은, 분모가 그보다 작은 어떤 분수보다도
+            $\pi$에 더 가깝고, 그보다 더 나은 분수는 분모가 $16604$인 $52163/16604$가 나오기 전까지 없다.</p>
+          <p>또한, 임의로 고른 두 자연수가 서로소(공약수가 1뿐)일 확률은 $\dfrac{6}{\pi^2} \approx 61\%$다 —
+            파레이 수열이 얼마나 "빽빽하게" 분포하는지와 관련된 결과다.</p>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <span class="step-title">아직 안 풀린 이야기 — 리만 가설</span>
+          <p>파레이 수열의 분수들이 등간격 위치에서 얼마나 벗어나 있는지(Farey discrepancy)를 측정하면,
+            그 크기가 리만 가설과 동치인 형태로 연결된다는 결과가 있다(Franel–Landau, 1924). 다만 영상에서
+            보여준 수치 그래프는 컴퓨터로 계산한 <em>관찰 데이터</em>일 뿐이며, 리만 가설 자체는 여전히
+            수학계의 미해결 문제다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">✏️ 직접 해보기</div>
+    <div class="quiz-card">
+      <div class="quiz-q">"33.3%가 그렇다고 답했다"는 설문 결과가 나왔다면, 최소 몇 명이 참여했을 수 있을까?</div>
+      <details><summary>풀이 보기</summary><div class="quiz-a">
+        $33.3\% = \dfrac{1}{3}$ — 즉 3명 중 1명. 분모가 더 작은 분수(예: $1/2,\ 1/1$ 등)는 33.3% 근처
+        구간에 들어오지 않으므로, 최소 인원은 <strong>3명</strong>이다.
+      </div></details>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q">같은 설문에서 숫자 하나만 바꿔 "33.4%"가 되었다면, 최소 인원은 어떻게 달라질까?</div>
+      <details><summary>풀이 보기</summary><div class="quiz-a">
+        33.4%는 $1/3 = 33.3\overline{3}\%$ 바로 옆, 아주 좁은 구간(33.35%~33.45%)이다. 이 구간에는
+        $1/3$처럼 분모가 작은 분수가 전혀 들어오지 않는다. 메디언트 이진 탐색을 그대로 따라가 보면,
+        이 구간에 처음 들어오는 분수의 분모는 <strong>287</strong>이다 — 소수점 하나가 "있을 수 있는 가장
+        작은 설문 인원"을 거의 100배 가까이 키운 셈이다.
+      </div></details>
+    </div>
+
+    <div class="section-title">❓ 복습 퀴즈</div>
+    <div class="quiz-card">
+      <div class="quiz-q">Q1. 메디언트(mediant)란 무엇인가?</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">
+        $\frac{a}{b}$와 $\frac{c}{d}$의 메디언트는 $\frac{a+c}{b+d}$. 분자는 분자끼리, 분모는 분모끼리
+        더하는 연산으로, 보통의 분수 덧셈과는 다르다.
+      </div></details>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q">Q2. 파레이 수열 $F_n$에서 이웃한 두 분수 $\frac{a}{b}<\frac{c}{d}$가 항상 만족하는 식은?</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">$bc-ad=1$.</div></details>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q">Q3. 포드 원의 가장 중요한 특징은 무엇인가?</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">
+        분수마다 반지름 $\frac{1}{2b^2}$인 원을 그리면, 서로 다른 분수의 원은 절대 겹치지 않고
+        이웃한 분수의 원끼리만 한 점에서 접한다.
+      </div></details>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q">Q4. 스턴–브로콧 트리에는 양의 유리수가 몇 번씩 나타나는가?</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">모든 양의 유리수가 정확히 한 번씩 나타난다.</div></details>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q">Q5. 이 영상에서 리만 가설이 증명되었는가?</div>
+      <details><summary>정답 보기</summary><div class="quiz-a">
+        아니다. 파레이 수열의 간격 불규칙성과 리만 가설이 동치 형태로 연결된다는 결과가 알려져 있을 뿐,
+        리만 가설 자체는 여전히 미해결 문제다.
+      </div></details>
+    </div>
+
+    <div class="section-title">📌 기억할 것</div>
+    <div class="flash-grid">
+      <div class="flash-card"><div class="fc-term">파레이 수열 (Farey sequence)</div>분모가 $n$ 이하인 모든 분수를 크기 순으로 나열한 수열 $F_n$.</div>
+      <div class="flash-card"><div class="fc-term">메디언트 (mediant)</div>$\frac{a}{b},\frac{c}{d} \to \frac{a+c}{b+d}$. "틀린" 분수 더하기.</div>
+      <div class="flash-card"><div class="fc-term">이웃 조건</div>$F_n$에서 이웃한 $\frac{a}{b}<\frac{c}{d}$는 $bc-ad=1$.</div>
+      <div class="flash-card"><div class="fc-term">포드 원 (Ford circle)</div>분수마다 그리는 원. 이웃한 분수의 원끼리만 접한다.</div>
+      <div class="flash-card"><div class="fc-term">스턴–브로콧 트리</div>메디언트로 만들어 가는, 모든 양의 유리수를 한 번씩 담는 이진트리.</div>
+      <div class="flash-card"><div class="fc-term">서로소 확률</div>임의의 두 자연수가 서로소일 확률 $=\frac{6}{\pi^2}\approx 61\%$.</div>
+    </div>
+
+    <div class="section-title">📚 참고 자료</div>
+    <div class="card">
+      <ul class="ref-list">
+        <li>J. Farey, "On a curious property of vulgar fractions", <em>Philosophical Magazine</em> 47 (1816)</li>
+        <li>A.-L. Cauchy, "Démonstration d'un théorème curieux sur les nombres" (1816)</li>
+        <li>L. R. Ford, "Fractions", <em>American Mathematical Monthly</em> 45 (1938)</li>
+        <li>J. Franel and E. Landau, <em>Nachrichten der Gesellschaft der Wissenschaften zu Göttingen</em> (1924)</li>
+        <li>G. H. Hardy and E. M. Wright, <em>An Introduction to the Theory of Numbers</em>, ch. III</li>
+        <li>영상: "How Many People Were Really in This Poll? | The Farey Sequence" — Kia Keng's nerd folder (YouTube)</li>
+      </ul>
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 안내</div>
+      <p>이 자료는 한국 고1~고3 수능 교육과정 단원(대수·미적분Ⅰ·확률과통계)에 대응되지 않는
+        "교양" 심화 콘텐츠입니다. 수능 대비 자료가 아니며, 영문 영상의 자막·설명을 기초로 AI가
+        번역·정리했습니다. 리만 가설처럼 미해결 문제로 언급된 내용은 증명된 사실이 아니라
+        관찰·추측임을 분명히 밝힙니다.</p>
+    </div>
+
+  </div>
+
+  <footer>
+    생성일 2026-10-19 · 영상 출처: <a href="https://youtu.be/bMpRM6DsTNo" style="color:var(--primary)">Kia Keng's nerd folder</a><br>
+    AI가 영상 자막·설명을 기초로 자동 생성한 교양 정리자료입니다. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
