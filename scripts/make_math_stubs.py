@@ -89,6 +89,14 @@ def yq(s: str) -> str:
     return '"' + s.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
+def opt(key: str, value: str) -> str:
+    """값이 있을 때만 `key: value\\n` 한 줄을 돌려준다. 없으면 줄 자체를 쓰지 않는다.
+
+    빈 따옴표(`key: ""`)는 옵시디언 속성 패널이 날짜·숫자·목록 타입과 충돌한다고 경고한다.
+    """
+    return f"{key}: {value}\n" if value else ""
+
+
 def build_stub(html_path: Path) -> tuple[Path, str]:
     rel = html_path.relative_to(OUTPUT)          # 고1/단원/파일.html
     parts = rel.parts
@@ -120,10 +128,8 @@ def build_stub(html_path: Path) -> tuple[Path, str]:
         body = f"""---
 type: math-concept-stub
 title: {yq(title)}
-created: {created}
-grade: {yq(grade)}
+{opt("created", created)}grade: {yq(grade)}
 unit: {yq(unit)}
-difficulty: ""
 topics: [{yq(unit)}]
 tags: [math, concept]
 related: [{related}]
@@ -152,14 +158,8 @@ source: concept-request
         body = f"""---
 type: youtube-math-stub
 title: {yq(title)}
-created: {created}
-url: {url}
-video_id: {vid}
-channel: ""
-published: ""
-grade: {yq(grade)}
+{opt("created", created)}{opt("url", url)}{opt("video_id", vid)}grade: {yq(grade)}
 unit: {yq(unit)}
-difficulty: ""
 topics: [{yq(unit)}]
 tags: [math]
 related: [{related}]
