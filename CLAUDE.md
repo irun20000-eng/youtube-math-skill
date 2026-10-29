@@ -170,6 +170,7 @@ claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기�
 - **각 키는 한 번만 쓴다.** 특히 `source:` 는 템플릿 값(`backfill`, `concept-request`, `aside-brief` 등) 하나만 쓰고, 본문 작성 중 다시 추가하지 않는다. 쓰기 전에 frontmatter 안에서 키 중복이 없는지 훑는다.
 - **문자열 값은 큰따옴표로 감싸고 내부 `"`, `\` 는 이스케이프한다.** (`title`, `grade`, `unit`, `oneliner` 등. `[`·`"`·`'` 로 시작하거나 `: ` 를 포함한 값은 따옴표 없이 쓰면 YAML 오류.)
 - 날짜는 `YYYY-MM-DD` 한 형식만 쓴다.
+- **갤러리 주소(`html_url`, 본문 "갤러리에서 보기" 링크)에 `output/` 를 넣지 않는다.** Pages 는 `output/` 를 루트로 발행하므로 올바른 주소는 `https://irun20000-eng.github.io/youtube-math-skill/<학년>/<단원>/<파일>.html` 이다(`manifest.json` 의 `url` 값 그대로). `/youtube-math-skill/output/...` 는 404 (2026-10-15 이후 스텁 6편에서 발생, 2026-10-29 볼트에서 수정). 쓰기 전에 주소를 한 번 열어 200 인지 확인한다.
 
 ### `make_math_stubs.py` 위치 (혼동 방지)
 
