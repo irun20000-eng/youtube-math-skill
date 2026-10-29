@@ -162,6 +162,15 @@ claude_work 리포가 노트 파이프라인을 구글 스파크 요약본 기�
 2. **★ 작성 후 검증**: 응답에서 받은 `id` 로 `get_file_metadata(id)` → `title`·`parentId` 가 의도(부모 폴더 ID 와 일치) 와 맞는지 1회 확인. silent failure 의 마지막 안전망.
 3. 사용자 보고에 Drive 파일 링크 `https://drive.google.com/file/d/{id}/view` 를 항상 포함.
 
+### 스텁 frontmatter 작성 규칙 (옵시디언 속성 오류 방지, 2026-10-29)
+
+옵시디언은 같은 속성 이름에 타입이 섞이면(예: 어떤 노트는 `published: ""`, 어떤 노트는 날짜) 속성 패널에 경고를 띄우고, 같은 키가 두 번 나오면 YAML 오류로 빨간 글씨가 된다.
+
+- **값을 모르는 속성은 줄 자체를 쓰지 않는다.** `difficulty: ""`, `published: ""`, `channel: ""` 처럼 빈 따옴표를 넣지 않는다. (줄을 남기고 싶으면 `difficulty:` 처럼 값 없이 둔다.)
+- **각 키는 한 번만 쓴다.** 특히 `source:` 는 템플릿 값(`backfill`, `concept-request`, `aside-brief` 등) 하나만 쓰고, 본문 작성 중 다시 추가하지 않는다. 쓰기 전에 frontmatter 안에서 키 중복이 없는지 훑는다.
+- **문자열 값은 큰따옴표로 감싸고 내부 `"`, `\` 는 이스케이프한다.** (`title`, `grade`, `unit`, `oneliner` 등. `[`·`"`·`'` 로 시작하거나 `: ` 를 포함한 값은 따옴표 없이 쓰면 YAML 오류.)
+- 날짜는 `YYYY-MM-DD` 한 형식만 쓴다.
+
 ### `make_math_stubs.py` 위치 (혼동 방지)
 
 - **PC(Windows) 갤러리→옵시디언 백필 전용** 도구. 정기 워크플로우 아님.
