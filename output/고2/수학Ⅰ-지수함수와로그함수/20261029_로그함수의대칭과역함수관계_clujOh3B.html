@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로그함수의 대칭이동과 역함수 관계로 좌표 구하기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 대수 — 지수함수와 로그함수</div>
+    <h1>로그함수의 대칭이동과 역함수 관계로 좌표 구하기</h1>
+    <p class="sub">로그함수·지수함수가 직선 $y=x$에 대해 서로 역함수 관계라는 사실로, 그래프 위의 점을 대칭이동·회전시켜 좌표와 미지수를 구하는 전략</p>
+    <div class="quote">"중요한 걸 잊으면 안 돼. 지수로그 함수 문제는 지수로그 함수를 직접 이용해서 푸는게 아니라 대수적인 관계를 끌어내가면서 문제를 푸는 거야. 좌표 같은 걸 이용해서 식을 세워서 식들 사이의 관계를 가지고 푸는 거라고." — 강사 인용 [01:09]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/clujOh3BE58" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/clujOh3BE58/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">D-27, 이 풀이는 꼭 공부하세요.</div>
+        <div class="v-meta">📺 YouTube · 9:25 · 수학강사 이정환</div>
+        <a class="v-link" href="https://youtu.be/clujOh3BE58" target="_blank" rel="noopener">https://youtu.be/clujOh3BE58</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 로그함수와 지수함수가 직선 $y=x$에 대해 서로 역함수 관계임을 이용해, 그래프 위의 점을 대칭이동하거나 회전시켜 좌표와 미지수를 구할 수 있다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 점을 대칭이동하면 어떤 함수 위로 가는가</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 함수 $y=\log_2x$의 그래프 위의 점 $(4,2)$를 직선 $y=x$에 대하여 대칭이동한 점의 좌표를 구하고, 그 점이 어떤 함수의 그래프 위에 있는지 말하라.</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$y=x$에 대한 대칭이동은 $x$좌표와 $y$좌표를 바꾸는 것이다. $(4,2) \to (2,4)$.<div class="why">직선 $y=x$에 대해 대칭이동하면 점 $(p,q)$는 $(q,p)$가 됩니다 — 좌표를 서로 바꾸는 것과 같습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$y=\log_2x$의 역함수는 $y=2^x$이므로, 원래 그래프 위의 점을 $y=x$로 대칭이동한 점은 항상 역함수의 그래프 위에 있다.<div class="why">함수와 역함수의 그래프는 $y=x$에 대해 서로 대칭이기 때문입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>확인: $2^2=4$이므로 점 $(2,4)$는 $y=2^x$ 위에 있다.<div class="why">실제로 대입해 성립하는지 검산하는 습관이 필요합니다.</div></div></div>
+          <span class="answer-tag">정답: (2,4), 함수 y=2^x 위의 점</span>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 개념 환기 — 역함수의 그래프는 y=x에 대해 대칭</div>
+      <p>함수 $y=f(x)$의 그래프 위의 점 $(p,q)$를 직선 $y=x$에 대해 대칭이동하면 점 $(q,p)$가 되고, 이 점은 $f$의 역함수 $y=f^{-1}(x)$의 그래프 위에 있습니다. 로그함수 $y=\log_ax$와 지수함수 $y=a^x$는 서로 역함수 관계이므로, 한 그래프 위의 점을 $y=x$로 대칭시키면 반드시 다른 그래프 위의 점이 됩니다.</p>
+      <div class="formula-box">점 $(p,q)$가 $y=\log_ax$ 위에 있다 $\iff$ 점 $(q,p)$는 $y=a^x$ 위에 있다</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>핵심개념 1 — 원점을 중심으로 한 90° 회전</div>
+      <p>두 점 $A, B$가 원점 $O$에 대해 $OA=OB$이고 $\angle AOB=90^\circ$이면, $A$를 원점을 중심으로 반시계방향으로 $90^\circ$ 회전한 점이 바로 $B$입니다.</p>
+      <div class="concept-box">점 $(x,y)$를 원점에서 반시계방향으로 $90^\circ$ 회전하면 $(-y,x)$가 됩니다. (예: $(3,1) \to (-1,3)$)</div>
+      <div class="formula-box">$(x,y) \ \xrightarrow{\text{원점 기준 반시계 } 90^\circ} \ (-y,\ x)$</div>
+      <div class="caution">주의: 시계방향으로 $90^\circ$ 회전하면 $(x,y)\to(y,-x)$로 달라집니다. 문제에서 회전 방향이 명시되지 않았다면 두 경우를 모두 검토해야 합니다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>핵심개념 2 — 로그함수의 평행이동은 확대·축소로도 보인다</div>
+      <div class="concept-box">"로그 함수에서는 y축 평행 이동이 안으로 들어와서 확대 축소로 해석을 할 수가 있어." — 강사 인용 [04:53]</div>
+      <p>$y=\log_ax$를 $y$축 방향으로 $c$만큼 평행이동한 식은 $y=\log_ax+c$입니다. 그런데 $c=\log_aa^c$이므로 $y=\log_ax+\log_aa^c=\log_a(a^cx)$로도 쓸 수 있습니다. 즉 바깥에서 더해준 $c$가 안쪽 $x$에 $a^c$를 곱하는 확대·축소로 바뀌어 나타납니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>핵심개념 3 — 좌표를 몰라도 '관계식'으로 푼다</div>
+      <p>로그·지수함수 문제에서 점의 좌표를 직접 구하기 어려울 때는, 각 점이 자기 함수를 만족한다는 사실과 점들 사이의 기하적 관계(대칭, 거리, 회전)를 각각 식으로 세운 뒤 연립해서 풉니다. 함수값을 억지로 계산하려 하지 말고, 식과 식 사이의 '관계'를 끌어내는 것이 핵심입니다.</p>
+      <div class="tip">실전 전략: ① 점을 함수 위의 점 $(t, f(t))$ 형태로 표현한다. ② 대칭·회전·거리 조건을 좌표 공식으로 바꾼다. ③ 두 식을 연립해 미지수를 좁힌다. ④ 증가함수 성질을 이용해 해가 유일한지 확인한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수</div>
+      <p>① 역함수 관계와 단순한 평행이동·대칭을 혼동. ② $\angle AOB=90^\circ$라는 각도 조건을 넓이나 길이 조건으로 잘못 바꿔 풀이. ③ 회전 방향(시계/반시계)을 구분하지 않고 공식을 적용.</p>
+      <div class="caution">점이 함수 위에 있다는 조건과 두 점 사이의 기하적 조건(회전, 대칭, 거리)은 서로 다른 식입니다. 두 조건을 모두 세운 뒤 연립해야 미지수가 정확히 구해집니다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 로그값 직접 계산</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $y=\log_3x$의 그래프 위의 점이 $(9,k)$일 때, $k$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>점이 그래프 위에 있으므로 $k=\log_39$.<div class="why">그래프 위의 점이라는 말은 그 좌표가 함수식을 만족한다는 뜻입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$9=3^2$이므로 $\log_39=2$.<div class="why">로그는 '몇 번 거듭제곱해야 그 수가 되는가'를 묻는 것이므로 밑을 직접 거듭제곱해 확인합니다.</div></div></div>
+          <span class="answer-tag">정답: k=2</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 대칭이동한 점의 좌표</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $y=\log_2(x-1)+3$의 그래프 위의 점에서 $x=3$일 때의 $y$값을 구하고, 이 점을 직선 $y=x$에 대해 대칭이동한 점의 좌표를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$x=3$을 대입: $y=\log_2(3-1)+3=\log_22+3$.<div class="why">점의 좌표를 구하려면 먼저 $x$값을 함수식에 그대로 대입합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\log_22=1$이므로 $y=1+3=4$. 점은 $(3,4)$.<div class="why">$\log_aa=1$은 로그의 가장 기본적인 성질입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$y=x$에 대해 대칭이동하면 좌표를 서로 바꾸어 $(4,3)$.<div class="why">대칭이동의 정의 그대로 $x,y$좌표를 교환합니다.</div></div></div>
+          <span class="answer-tag">정답: (4,3)</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 90° 회전 공식 연습</div>
+        <div class="problem-body"><strong>문제:</strong> 점 $A(2,8)$을 원점을 중심으로 반시계방향으로 $90^\circ$ 회전한 점의 좌표를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>공식 $(x,y)\to(-y,x)$를 적용한다.<div class="why">원점 기준 반시계 $90^\circ$ 회전은 좌표를 이 공식으로 그대로 바꿀 수 있습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$A(2,8)$에서 $x=2,y=8$이므로 $(-8,2)$.<div class="why">$x$자리에 $-y$(즉 $-8$), $y$자리에 $x$(즉 $2$)를 넣습니다.</div></div></div>
+          <span class="answer-tag">정답: (-8,2)</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 역함수 그래프 위의 점 확인</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $y=\log_2x$의 그래프 위의 점 $A(16,\log_216)$을 $y=x$에 대해 대칭이동한 점 $B$의 좌표를 구하고, $B$가 어떤 함수의 그래프 위에 있는지 말하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$\log_216=4$이므로 $A=(16,4)$.<div class="why">$2^4=16$이므로 $\log_216=4$입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$y=x$ 대칭이동은 좌표 교환이므로 $B=(4,16)$.<div class="why">대칭이동의 정의를 그대로 적용합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$y=\log_2x$의 역함수는 $y=2^x$이므로 $B$는 $y=2^x$ 위에 있다. 확인: $2^4=16$ ✓.<div class="why">역함수 그래프 위의 점이라는 사실은 항상 성립하므로, 대입해서 다시 확인합니다.</div></div></div>
+          <span class="answer-tag">정답: B(4,16), 함수 y=2^x 위의 점</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 90° 회전과 로그함수의 결합</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=2\log_2x\ (x>0)$, $g(x)=2\log_2(-x)\ (x<0)$이 있다. 점 $A(a,f(a))\ (a>1)$가 $f$의 그래프 위에 있고, 원점 $O$에 대하여 $OA$를 반시계방향으로 $90^\circ$ 회전시킨 점 $B$가 $g$의 그래프 위에 있다. $a$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>회전 공식 $(x,y)\to(-y,x)$를 적용하면 $A(a,f(a)) \to B(-f(a),\,a)$.<div class="why">$OA=OB$, $\angle AOB=90^\circ$라는 조건이 바로 '90° 회전하면 겹친다'는 뜻입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$B$가 $g(x)=2\log_2(-x)$ 위에 있으므로 $a=g(-f(a))=2\log_2\big(f(a)\big)$.<div class="why">$g$의 $x$자리에 $B$의 $x$좌표 $-f(a)$를 넣으면 $g(-f(a))=2\log_2\big(-(-f(a))\big)=2\log_2 f(a)$가 됩니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f(a)=2\log_2a$이므로 $a=2\log_2(2\log_2a)$. $a=4$를 대입: $f(4)=2\log_24=4$, 그리고 $2\log_2\big(f(4)\big)=2\log_24=4=a$. 성립한다.<div class="why">식이 복잡하므로 후보값을 직접 대입해 양변이 같아지는지 확인하는 것이 가장 확실합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$a>1$에서 $h(a)=2\log_2(2\log_2a)$는 $a$가 커질수록 함께 커지는 증가함수이므로 방정식 $a=h(a)$의 해는 하나뿐이다. 따라서 $a=4$가 유일한 답.<div class="why">증가함수는 같은 값을 두 번 내지 않으므로, 한 번 찾은 해가 바로 유일한 해임을 보장합니다.</div></div></div>
+          <p class="warn">오답 주의: 회전 방향을 반시계 대신 시계로 잘못 적용하면 $B=(f(a),-a)$가 되어 전혀 다른 식이 나옵니다.</p>
+          <span class="answer-tag">정답: a=4</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 원점까지의 거리로 미지수 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=\log_3x$의 그래프 위의 점 $A(a,\log_3a)\ (a>1)$이 있다. 원점 $O$에서 $A$까지의 거리가 $\sqrt{10}$일 때, $a$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>거리 공식에서 $OA^2=a^2+(\log_3a)^2=10$.<div class="why">원점에서 점 $(x,y)$까지의 거리는 $\sqrt{x^2+y^2}$이므로, 거리의 제곱을 먼저 세우면 계산이 쉬워집니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$a>1$이면 $a^2$과 $(\log_3a)^2$ 모두 $a$가 커질수록 함께 커지므로, 좌변 전체도 증가함수이고 방정식의 해는 유일하다.<div class="why">증가함수이면 같은 값을 두 번 주지 않으므로, 하나의 해를 찾으면 그것이 유일한 답임을 확신할 수 있습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$a=3$을 대입: $3^2+(\log_33)^2=9+1=10$. 성립한다.<div class="why">$\log_33=1$이므로 대입이 간단합니다.</div></div></div>
+          <p class="warn">오답 주의: 조건이 $a>1$로 제한돼 있으므로 $\log_3a$가 음수가 되는 $0<a<1$ 구간은 아예 고려하지 않아도 됩니다.</p>
+          <span class="answer-tag">정답: a=3</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 회전·로그함수 결합 유형(준킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $f(x)=4\log_2x\ (x>0)$, $g(x)=4\log_2(-x)\ (x<0)$이 있다. 점 $A(a,f(a))\ (a>1)$와 원점에 대해 $OA$를 반시계방향으로 $90^\circ$ 회전시킨 점 $B$가 $g$의 그래프 위에 있을 때, $a$의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>심화 1과 똑같은 방식으로 $B=(-f(a),a)$, 그리고 $a=g(-f(a))=4\log_2\big(f(a)\big)$.<div class="why">계수만 2에서 4로 바뀌었을 뿐, 회전과 '그래프 위에 있다'는 조건을 식으로 바꾸는 과정은 동일합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(a)=4\log_2a$이므로 $a=4\log_2(4\log_2a)$. $a=16$을 대입: $f(16)=4\log_216=4\times4=16$, 그리고 $4\log_2\big(f(16)\big)=4\log_216=16=a$. 성립한다.<div class="why">계수가 커지면 후보값도 함께 커지는지 먼저 가늠해보고 대입하면 시행착오를 줄일 수 있습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$h(a)=4\log_2(4\log_2a)$도 $a>1$에서 증가함수이므로 $a=16$이 유일한 해.<div class="why">심화 1과 동일한 논리로 해의 유일성을 보장합니다.</div></div></div>
+          <p class="warn">오답 주의: 심화 1의 답 $a=4$를 계수를 바꾼 이 문제에 그대로 쓰면 안 됩니다 — 계수가 바뀌면 만족하는 값도 함께 바뀝니다.</p>
+          <span class="answer-tag">정답: a=16</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 지수·로그 역함수와 거리 유형(준킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $h(x)=2^x-1$의 그래프 위의 점 $A(2,h(2))$가 있다. $A$를 직선 $y=x$에 대하여 대칭이동한 점 $B$가 함수 $k(x)=\log_2(x+1)$의 그래프 위에 있음을 확인하고, 선분 $AB$의 길이를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$h$의 역함수를 구하면: $y=2^x-1 \Rightarrow y+1=2^x \Rightarrow x=\log_2(y+1)$. 즉 $h^{-1}(x)=\log_2(x+1)=k(x)$.<div class="why">$k=h^{-1}$임을 먼저 확인해야 '대칭이동하면 반드시 $k$ 위에 있다'는 사실을 쓸 수 있습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$A=(2,h(2))=(2,2^2-1)=(2,3)$.<div class="why">점의 좌표를 구하려면 함수식에 $x=2$를 그대로 대입합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$k=h^{-1}$이므로 $A$를 $y=x$에 대해 대칭이동한 점 $B=(3,2)$는 반드시 $k$ 위에 있다. 확인: $k(3)=\log_2(3+1)=\log_24=2$ — 맞다.<div class="why">역함수 관계이면 이 성질이 항상 성립하므로, 직접 계산해서 재확인합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$AB=\sqrt{(3-2)^2+(2-3)^2}=\sqrt{1+1}=\sqrt2$.<div class="why">두 점 사이의 거리는 거리 공식으로 바로 계산합니다.</div></div></div>
+          <p class="warn">오답 주의: 만약 $A$가 우연히 직선 $y=x$ 위의 점이라면 대칭이동해도 자기 자신이 되어 $AB=0$이 됩니다 — 항상 $A$가 $y=x$ 위에 있는지 먼저 확인하는 습관이 필요합니다.</p>
+          <span class="answer-tag">정답: AB=√2</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상은 로그함수와 지수함수가 서로 역함수 관계라는 사실을 이용해, 좌표를 모르는 상태에서도 세 가지 방법(직접 대입, 위치 관계 해석, 역함수 대칭)으로 같은 문제를 풀어내는 과정을 보여줍니다. 이 자료는 그 핵심 아이디어(역함수 그래프의 대칭, 원점 중심 90° 회전, '대수적 관계로 푼다'는 전략)를 그대로 담았습니다.</p>
+      <p style="margin-top:8px">영상 속 원문제는 화면에 제시된 조건(좌표 설정, 넓이 조건 등)이 자막만으로는 정확히 복원되지 않아, 같은 전략을 적용할 수 있는 새 문항으로 재구성했습니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출문제가 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260808_지수로그함수확대축소원점직선_G6iWQpMu.html">지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율 (G6iWQpMu)</a> · <a href="20260427_지수함수차이비율공식과도형우선해석_MJWwaaju.html">지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ) (MJWwaaju)</a> · <a href="20260509_지수함수점근선차이비율사다리꼴_DArDb6p7.html">지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ) (DArDb6p7)</a> · <a href="20260831_지수로그90도회전원보조선_Iet2uhLY.html">지수·로그함수 90도 회전과 원 보조선 — 준킬러 21번 격파 (Iet2uhLY)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-29 · 영상 출처: <a href="https://youtu.be/clujOh3BE58" style="color:var(--primary)">수학강사 이정환</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>산술기하평균과 코시-슈바르츠 부등식으로 최대최소 구하기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고1 · 수학(하) — 여러 가지 부등식</div>
+    <h1>산술기하평균과 코시-슈바르츠 부등식으로 최대최소 구하기</h1>
+    <p class="sub">전개 없이 최솟값·최댓값을 바로 구하는 두 부등식의 관계와 등호 조건까지 완벽하게 챙기는 전략</p>
+    <div class="quote">"우리고 1일수학에 있는 두 개짜리 산술기하랑 두 개짜리 코슈바르스는요. 서로 포함됩니다." — 강사 인용 [00:38]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/Pd8gtcTmTh4" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/Pd8gtcTmTh4/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">고1이라면 절대 정석 쓰지 마세요 (시험용 스킬 꿀팁)</div>
+        <div class="v-meta">📺 YouTube · 4:28 · NJC 수학 | 내신 1타</div>
+        <a class="v-link" href="https://youtu.be/Pd8gtcTmTh4" target="_blank" rel="noopener">https://youtu.be/Pd8gtcTmTh4</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 산술기하평균과 코시-슈바르츠 부등식의 관계를 이해하고, 합이나 곱이 일정할 때 나머지 값의 최댓값·최솟값을 등호 조건까지 포함해 구할 수 있다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 산술기하평균으로 최댓값 빠르게 구하기</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> $a>0,\ b>0$이고 $a+b=10$일 때, $ab$의 최댓값을 구하라.</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$a+b=10$이고 $a,b>0$이므로 산술기하평균을 적용하면 $a+b \ge 2\sqrt{ab}$.<div class="why">두 양수의 합과 곱의 관계를 다루는 문제이므로 산술기하평균이 바로 떠올라야 합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$10 \ge 2\sqrt{ab}$이므로 양변을 2로 나누면 $5 \ge \sqrt{ab}$.<div class="why">양수 2로 양변을 나누어도 부등식의 방향은 바뀌지 않습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>양변이 모두 0 이상이므로 제곱하면 $ab \le 25$.<div class="why">$\sqrt{ab}\ge0$이고 $5\ge0$이므로, 두 값 모두 음이 아닐 때 제곱해도 부등식 방향이 유지됩니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>등호는 $a=b$일 때이므로 $a+b=10$과 연립하면 $a=b=5$.<div class="why">부등식만으로는 '그 값에 실제로 도달하는지'를 보장하지 않으므로, 등호 조건을 식에 대입해 직접 확인해야 합니다.</div></div></div>
+          <span class="answer-tag">정답: 최댓값 25 (a=b=5일 때)</span>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 개념 환기 — 제곱은 절대 음수가 아니다</div>
+      <p>어떤 실수를 제곱해도 그 값은 0보다 작아질 수 없습니다. 즉 실수 $x$에 대해 항상 $x^2 \ge 0$입니다. 이 사실 하나가 오늘 배우는 두 부등식(산술기하평균, 코시-슈바르츠) 전체의 뿌리입니다. 예를 들어 실수 $a,b$에 대해 $(a-b)^2 \ge 0$을 전개하면 $a^2-2ab+b^2 \ge 0$, 즉 $a^2+b^2 \ge 2ab$라는 부등식이 그대로 나옵니다.</p>
+      <div class="formula-box">$(a-b)^2 \ge 0 \;\Rightarrow\; a^2+b^2 \ge 2ab$ (등호: $a=b$)</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>핵심개념 1 — 산술기하평균 (AM-GM)</div>
+      <p>$a>0,\ b>0$일 때, 두 수의 산술평균 $\dfrac{a+b}{2}$는 항상 기하평균 $\sqrt{ab}$보다 크거나 같습니다.</p>
+      <div class="concept-box">유도: $a,b>0$이면 $\sqrt a,\sqrt b$도 실수이므로, 선수개념의 식에서 $a,b$ 대신 $\sqrt a, \sqrt b$를 넣어 $(\sqrt a-\sqrt b)^2 \ge 0$을 전개하면 $a-2\sqrt{ab}+b \ge 0$, 즉 $a+b \ge 2\sqrt{ab}$가 됩니다. 등호는 $\sqrt a=\sqrt b$, 즉 $a=b$일 때입니다.</div>
+      <div class="formula-box">$a+b \ge 2\sqrt{ab}$ &nbsp;(단, $a,b>0$, 등호: $a=b$)</div>
+      <div class="caution">주의: $a>0,\ b>0$ 조건을 반드시 먼저 확인해야 합니다. 음수가 섞이면 이 식 자체가 성립하지 않습니다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>핵심개념 2 — 코시-슈바르츠 부등식</div>
+      <p>네 실수 $a,b,c,d$에 대하여 다음이 항상 성립합니다.</p>
+      <div class="formula-box">$(a^2+b^2)(c^2+d^2) \ge (ac+bd)^2$ &nbsp;(등호: $ad=bc$)</div>
+      <div class="concept-box">유도: 좌변에서 우변을 뺀 식을 직접 전개하면 $(a^2+b^2)(c^2+d^2)-(ac+bd)^2=(ad-bc)^2$으로 깔끔하게 정리됩니다. 제곱은 항상 0 이상이므로 좌변이 우변보다 크거나 같고, 등호는 $ad-bc=0$, 즉 $ad=bc$일 때입니다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>핵심개념 3 — 두 부등식은 사실 한 가족이다</div>
+      <div class="concept-box">"우리고 1일수학에 있는 두 개짜리 산술기하랑 두 개짜리 코슈바르스는요. 서로 포함됩니다." — 강사 인용 [00:38]</div>
+      <p>실제로 코시-슈바르츠에 $a=\sqrt x,\ b=\sqrt y,\ c=\sqrt y,\ d=\sqrt x$를 넣으면 $(x+y)(y+x) \ge (\sqrt{xy}+\sqrt{xy})^2=4xy$에서 $(x+y)^2 \ge 4xy$가 나오고, $x,y>0$이므로 양변의 제곱근을 취하면 $x+y \ge 2\sqrt{xy}$, 즉 산술기하평균이 그대로 유도됩니다. 코시-슈바르츠가 산술기하평균을 품고 있는 더 넓은 부등식인 셈입니다.</p>
+      <div class="tip">실전 전략: ① '곱이 일정 + 합의 최소'면 산술기하평균, '제곱의 합이 일정 + 1차식의 최대'면 코시-슈바르츠를 먼저 떠올린다. ② 복잡한 식은 통째로 한 문자로 치환한 뒤 적용한다. ③ 반드시 등호가 성립하는 값을 직접 대입해 확인한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수</div>
+      <p>① 산술기하평균을 쓸 때 $a>0,\ b>0$ 조건을 확인하지 않고 바로 적용. ② 코시-슈바르츠를 쓸 때 등호 조건 $ad=bc$를 확인하지 않고 최댓값·최솟값이라고 단정. ③ 최솟값을 구하는 문제에 산술기하평균을 반대로 서술.</p>
+      <div class="caution">등호 성립 여부를 확인하지 않으면, 부등식은 '~보다 크거나 같다'는 사실만 보여줄 뿐 실제로 그 값에 도달하는지는 보장하지 않습니다. 반드시 등호가 성립하는 구체적인 값을 찾아 대입해 확인해야 합니다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 산술기하평균으로 최솟값 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $x>0$일 때, $x+\dfrac{4}{x}$의 최솟값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$x>0$이면 $\dfrac4x>0$이므로 산술기하평균을 적용할 수 있습니다.<div class="why">두 항이 모두 양수인지 먼저 확인해야 산술기하평균을 쓸 수 있습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x+\dfrac4x \ge 2\sqrt{x\cdot\dfrac4x}=2\sqrt4=4$.<div class="why">두 항의 곱 $x\cdot\frac4x=4$에서 $x$가 소거되어 상수가 됩니다 — 이것이 산술기하평균을 쓸 수 있다는 신호입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>등호는 $x=\dfrac4x$, 즉 $x^2=4$에서 $x=2$ ($x>0$).<div class="why">등호 조건을 직접 풀어 최솟값이 실제로 도달 가능한지 확인합니다.</div></div></div>
+          <p class="warn">오답 주의: 곱 $x\cdot\frac4x$를 계산하지 않고 '$2\sqrt4$'만 외워서 쓰면, 곱이 상수가 아닌 식에도 잘못 적용하게 됩니다.</p>
+          <span class="answer-tag">정답: 최솟값 4 (x=2일 때)</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 합이 일정할 때 곱의 최댓값</div>
+        <div class="problem-body"><strong>문제:</strong> $a>0,\ b>0$이고 $a+b=8$일 때, $ab$의 최댓값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$a,b>0,\ a+b=8$이므로 산술기하평균 $a+b\ge2\sqrt{ab}$를 적용합니다.<div class="why">합이 일정하고 곱의 최댓값을 묻는 전형적인 산술기하평균 상황입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$8\ge2\sqrt{ab}$에서 $\sqrt{ab}\le4$, 양변을 제곱하면 $ab\le16$.<div class="why">양변 모두 음이 아니므로 제곱해도 부등식 방향이 유지됩니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>등호는 $a=b$. $a+b=8$과 연립하면 $a=b=4$.<div class="why">등호 성립 조건을 실제 제약식에 대입해 도달 가능성을 확인합니다.</div></div></div>
+          <p class="warn">오답 주의: $8\ge2\sqrt{ab}$를 2로 나누는 계산을 빠뜨리고 바로 제곱하면 $64\ge ab$처럼 틀린 식이 나옵니다.</p>
+          <span class="answer-tag">정답: 최댓값 16 (a=b=4일 때)</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 계수가 있는 산술기하평균</div>
+        <div class="problem-body"><strong>문제:</strong> $x>0$일 때, $2x+\dfrac{8}{x}$의 최솟값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$2x>0,\ \dfrac8x>0$이므로 산술기하평균 적용이 가능합니다.<div class="why">두 항 모두 양수인지 먼저 확인합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$2x+\dfrac8x \ge 2\sqrt{2x\cdot\dfrac8x}=2\sqrt{16}=8$.<div class="why">곱 $2x\cdot\frac8x=16$으로 $x$가 소거되어 상수가 됩니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>등호는 $2x=\dfrac8x$, 즉 $x^2=4$에서 $x=2$ ($x>0$).<div class="why">등호 조건을 풀어 최솟값이 도달 가능한지 확인합니다.</div></div></div>
+          <p class="warn">오답 주의: 계수 2를 빼먹고 $x+\frac8x$처럼 계산하면 최솟값이 달라집니다.</p>
+          <span class="answer-tag">정답: 최솟값 8 (x=2일 때)</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 코시-슈바르츠로 1차식의 최댓값</div>
+        <div class="problem-body"><strong>문제:</strong> 실수 $a,b$가 $a^2+b^2=5$를 만족할 때, $2a+b$의 최댓값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>코시-슈바르츠 $(2^2+1^2)(a^2+b^2) \ge (2a+b)^2$을 적용합니다.<div class="why">제곱의 합이 일정($a^2+b^2=5$)하고 1차식의 최댓값을 구하는 상황은 코시-슈바르츠의 전형적인 신호입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>좌변 $=5\times5=25$이므로 $(2a+b)^2 \le 25$, 즉 $-5\le2a+b\le5$.<div class="why">제곱이 25 이하이면 원래 값은 $-5$에서 $5$ 사이에 있습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>등호는 $\dfrac a2=\dfrac b1$, 즉 $a=2b$. $a^2+b^2=5$에 대입하면 $4b^2+b^2=5 \to b^2=1$, 최댓값 기준으로 $b=1,\ a=2$.<div class="why">등호 조건을 제약식에 대입해 실제로 도달 가능한 값을 찾습니다.</div></div></div>
+          <p class="warn">오답 주의: 코시-슈바르츠의 등호 조건을 무조건 $a=b$로 기억하면 안 됩니다 — 반드시 계수의 비 $a:b=2:1$로 와야 합니다.</p>
+          <span class="answer-tag">정답: 최댓값 5 (a=2, b=1일 때)</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 코시-슈바르츠 변형(분수식)</div>
+        <div class="problem-body"><strong>문제:</strong> $x>0,\ y>0$이고 $x+y=6$일 때, $\dfrac1x+\dfrac4y$의 최솟값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$\dfrac1x=\dfrac{1^2}{x},\ \dfrac4y=\dfrac{2^2}{y}$로 보면 $\left(\dfrac1x+\dfrac4y\right)(x+y) \ge (1+2)^2=9$인 코시-슈바르츠 변형을 쓸 수 있습니다.<div class="why">분수식의 분자를 제곱 꼴로 바꿔야 코시-슈바르츠 형태가 보입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x+y=6$이므로 $\left(\dfrac1x+\dfrac4y\right)\times6 \ge 9$, 즉 $\dfrac1x+\dfrac4y \ge \dfrac32$.<div class="why">양변을 6으로 나누면 구하는 식이 바로 분리됩니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>등호는 $\dfrac x1=\dfrac y2$, 즉 $y=2x$. $x+y=6$에 대입하면 $x=2,\ y=4$.<div class="why">등호 조건을 연립방정식에 대입해 도달 가능한 값을 확정합니다.</div></div></div>
+          <p class="warn">오답 주의: 분수식을 제곱 꼴로 바꾸는 과정을 생략하면 등호 조건을 찾지 못해 최솟값을 구할 수 없습니다.</p>
+          <span class="answer-tag">정답: 최솟값 3/2 (x=2, y=4일 때)</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 제곱근의 합의 최댓값</div>
+        <div class="problem-body"><strong>문제:</strong> $a>0,\ b>0$이고 $a+b=16$일 때, $\sqrt a+\sqrt b$의 최댓값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>코시-슈바르츠 $(1^2+1^2)(a+b) \ge (\sqrt a+\sqrt b)^2$을 적용합니다.<div class="why">제곱근의 합은 산술기하평균이 아니라 코시-슈바르츠로 다룹니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$2\times16=32 \ge (\sqrt a+\sqrt b)^2$이므로 $\sqrt a+\sqrt b \le \sqrt{32}=4\sqrt2$.<div class="why">제곱이 32 이하이므로 양수인 원래 값도 $\sqrt{32}$ 이하입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>등호는 $a=b$. $a+b=16$과 연립하면 $a=b=8$.<div class="why">등호 조건을 제약식에 대입해 확인합니다.</div></div></div>
+          <p class="warn">오답 주의: $\sqrt a+\sqrt b$를 산술기하평균으로 바로 처리하려 하면 안 됩니다 — 제곱근의 합은 코시-슈바르츠가 필요합니다.</p>
+          <span class="answer-tag">정답: 최댓값 $4\sqrt2$ (a=b=8일 때)</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 곱이 일정할 때 합의 최솟값 유형(준킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> $a>0,\ b>0$이고 $ab=4$일 때, $a+4b$의 최솟값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$a>0,\ 4b>0$이므로 $a+4b \ge 2\sqrt{a\cdot4b}=2\sqrt{4ab}$.<div class="why">곱 $a\cdot4b=4ab$가 조건 $ab=4$ 덕분에 상수가 되는지 먼저 확인합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$ab=4$이므로 $4ab=16$, 즉 $a+4b \ge 2\sqrt{16}=8$.<div class="why">주어진 조건을 대입해야 식이 완전한 숫자로 정리됩니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>등호는 $a=4b$. $ab=4$에 대입하면 $(4b)(b)=4 \to b^2=1 \to b=1,\ a=4$.<div class="why">등호 성립 조건을 제약식 $ab=4$에 대입해 실제 값을 확정합니다.</div></div></div>
+          <p class="warn">오답 주의: 조건 $ab=4$를 식에 대입하지 않고 $2\sqrt{a\cdot4b}$ 상태로 남겨두면 숫자 답이 나오지 않습니다.</p>
+          <span class="answer-tag">정답: 최솟값 8 (a=4, b=1일 때)</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 두 식을 통째로 치환하는 유형(준킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> $x>0,\ y>0$이고 $x+2y=10$일 때, $(x+1)(2y+3)$의 최댓값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$s=x+1,\ t=2y+3$으로 치환하면 $s+t=(x+1)+(2y+3)=(x+2y)+4=10+4=14$.<div class="why">서로 다른 두 식을 각각 한 문자로 묶었을 때 합이 상수가 되는지 확인하는 것이 치환의 핵심입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$s,t>0$이고 산술기하평균을 $ab \le \left(\dfrac{a+b}{2}\right)^2$ 형태로 쓰면 $st \le \left(\dfrac{14}{2}\right)^2=49$.<div class="why">$a+b\ge2\sqrt{ab}$의 양변을 제곱하고 정리하면 곱의 최댓값을 바로 구하는 형태가 됩니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>등호는 $s=t=7$. $s=x+1=7\to x=6$, $t=2y+3=7\to y=2$. 확인: $x+2y=6+4=10$ ✓.<div class="why">치환한 문자의 등호 조건을 원래 변수로 되돌려 실제 값을 확정하고 조건을 다시 검산합니다.</div></div></div>
+          <p class="warn">오답 주의: $(x+1)(2y+3)$을 먼저 전개해서 $x,y$ 각각에 따로 산술기하평균을 적용하려 하면 식이 꼬입니다 — 전체를 두 덩어리로 치환하는 것이 핵심입니다.</p>
+          <span class="answer-tag">정답: 최댓값 49 (x=6, y=2일 때)</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상에서는 산술기하평균과 코시-슈바르츠 부등식이 "서로 포함되는" 관계임을 강조하며, 두 수(또는 식)의 곱이나 합이 일정할 때 전개 없이 최댓값·최솟값을 빠르게 구하는 전략(치환 포함)을 소개합니다. 이 자료는 그 핵심 전략(산술기하평균·코시-슈바르츠·치환)을 그대로 담았습니다.</p>
+      <p style="margin-top:8px">영상 속 자동 생성 자막은 수치가 일부 불분명해 원문제를 그대로 복원하지 않고, 같은 전략을 적용할 수 있는 새 문항으로 재구성했습니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출문제가 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="../수학Ⅰ-도형의방정식/20260806_시소이론질량점으로넓이비내분점구하기_mUGapt8h.html">시소 이론(질량점)으로 넓이비 내분점 구하기 (도형의 방정식) (mUGapt8h)</a> · <a href="../../고2/수학II-다항함수의미분법/20260901_다항함수거리곱과비율관계극값찾기_s9OQVJcd.html">다항함수 거리곱과 비율관계로 극값 빠르게 구하기 (s9OQVJcd)</a> · <a href="../../고2/수학II-다항함수의적분법/20261016_미분적분관계와정적분기본정리_R05PK9mh.html">미분과 적분의 관계로 넓이 구하기 (R05PK9mh)</a> · <a href="../../고2/수학II-도함수의활용/20260716_정수조건부등식과곱의미분정수결정_FZTeYWax.html">정수 조건 문제 — 부등식으로 정수 뽑기 · 곱의 미분 대입 (수학Ⅱ) (FZTeYWax)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-29 · 영상 출처: <a href="https://youtu.be/Pd8gtcTmTh4" style="color:var(--primary)">NJC 수학 | 내신 1타</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
