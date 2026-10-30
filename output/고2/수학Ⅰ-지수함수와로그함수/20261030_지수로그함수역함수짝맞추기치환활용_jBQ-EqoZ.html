@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지수함수와 로그함수의 역함수 짝 맞추기 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 대수 — 지수함수와 로그함수</div>
+    <h1>지수함수 $y=a^{2x}$와 로그함수의 역함수 짝 맞추기</h1>
+    <p class="sub">지수함수 $f(x)=a^{2x}$의 '진짜' 역함수는 $\log_ax$가 아니라는 함정을 짚고, $u=a^x$ 치환으로 그래프 위 두 점의 중점·합·곱 조건을 대수식으로 바꾸어 푸는 전략</p>
+    <div class="quote">"함수가 여러 개 나오면 이 관계의 싱크가 맞아야 돼." — 강사 인용 [00:17]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/jBQ-EqoZK8w" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/jBQ-EqoZK8w/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">이 문제는 역대급입니다. 수능 전에 꼭 풀어보세요</div>
+        <div class="v-meta">📺 YouTube · 8:46 · 수학강사 이정환</div>
+        <a class="v-link" href="https://youtu.be/jBQ-EqoZK8w" target="_blank" rel="noopener">https://youtu.be/jBQ-EqoZK8w</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 지수함수 $f(x)=a^{2x}$의 실제 역함수를 혼동 없이 구별하고, $u=a^x$ 치환으로 그래프 위 두 점의 중점·합·곱 조건을 대수식으로 바꾸어 풀 수 있다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">📌 도입 — 역함수라고 생각했는데, 아니었다?</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> $a>1$인 상수 $a$에 대해 $f(x)=a^{2x}$, $g(x)=\log_ax$ 라 하자. $f(g(3))$의 값을 구하라. (언뜬 보면 $g$가 $f$의 역함수처럼 보여서 답이 $3$이라고 생각하기 쉽다 — 정말 그럴까?)</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$g(3)=\log_a3$.<div class="why">$g$에 그대로 $x=3$을 대입합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(g(3))=a^{2\log_a3}=\left(a^{\log_a3}\right)^2$.<div class="why">지수법칙 $a^{2t}=(a^t)^2$를 그대로 적용한 것입니다. 지수에 곱해진 $2$를 바깥의 제곱으로 꺼낸 것뿐입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>로그의 정의에 의해 $a^{\log_a3}=3$이므로 $f(g(3))=3^2=9$.<div class="why">$a^{\log_aN}=N$은 로그의 가장 기본적인 성질입니다 — "$a$를 몇 번 곱해야 $N$이 되는지"를 구한 지수가 $\log_aN$이므로, 그걸 다시 $a$의 지수에 넣으면 $N$으로 돌아옵니다.</div></div></div>
+          <span class="answer-tag">정답: f(g(3))=9 (3이 아니다!)</span>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">0</span>선수 개념 환기 — 지수법칙 $a^{2x}=(a^x)^2$</div>
+      <p>지수법칙에 의해 $a^{2x}=a^{x\times2}=(a^x)^2$입니다. 즉 $u=a^x$로 바꿔 놓으면 $f(x)=a^{2x}=u^2$ 꼴이 되어, 마치 "$u$에 대한 이차함수"처럼 보입니다. 이 시각이 오늘 배울 모든 전략의 출발점입니다.</p>
+      <div class="formula-box">$u=a^{x}\ (u>0)$ 로 치환하면 $f(x)=a^{2x}=u^2$</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>핵심개념 1 — $f(x)=a^{2x}$의 '진짜' 역함수를 직접 구해보기</div>
+      <p>역함수를 구하는 정석 절차대로 해봅니다. $y=a^{2x}$에서 양변에 $\log_a$를 취하면 $\log_ay=2x$, 즉 $x=\dfrac12\log_ay$. $x,y$를 바꾸면 $f^{-1}(x)=\dfrac12\log_ax$ 입니다.</p>
+      <div class="formula-box">$f(x)=a^{2x}$ 의 역함수는 $f^{-1}(x)=\dfrac12\log_ax$ (즉 $\log_a\sqrt{x}$) — $\log_ax$ 그 자체가 아니다!</div>
+      <div class="caution">자주 하는 착각: "지수함수와 로그함수는 서로 역함수"라는 말만 기억하고, $f(x)=a^{2x}$의 짝도 그냥 $g(x)=\log_ax$라고 넘겨짚는 것. 지수에 곱해진 계수 $2$를 빼먹으면 짝이 되는 함수 자체가 달라집니다 — 도입 문제에서 본 것처럼 $f(g(3))=9\neq3$이 바로 그 증거입니다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>핵심개념 2 — $u=a^x$ 치환으로 그래프 위의 점을 '좌표'로 바꾸기</div>
+      <p>$f$ 위의 점 $A(s,f(s))$를 생각해봅시다. $u=a^s$로 치환하면 $f(s)=a^{2s}=(a^s)^2=u^2$이므로, 점 $A$는 $(s,\,u^2)$ 로 쓸 수 있습니다. 즉 점의 $y$좌표가 "어떤 양수 $u$의 제곱"이라는 아주 단순한 형태가 됩니다 — 지수함수라는 사실을 잠깐 잊고, $u,v$라는 평범한 양수 미지수들의 제곱·합·곱 관계로 문제를 풀 수 있게 되는 것입니다.</p>
+      <div class="concept-box">점 $A(s,f(s))$, $B(t,f(t))$ 가 $f(x)=a^{2x}$ 위에 있을 때, $u=a^s,\ v=a^t\ (u,v>0)$ 로 놓으면 $A=(s,u^2),\ B=(t,v^2)$. 이제 두 점의 $y$좌표 합·차는 $u^2+v^2$, $u^2-v^2=(u-v)(u+v)$처럼 일반 대수식 그대로 계산할 수 있습니다.</div>
+      <div class="tip">치환으로 끝이 아닙니다 — $u=a^s$, $v=a^t$이므로 $uv=a^{s+t}$, $\dfrac{u}{v}=a^{s-t}$ 라는 로그법칙도 함께 기억해두면, 좌표 문제를 풀고 난 뒤 다시 $a$나 $s+t$ 같은 지수 쪽 정보로 되돌아갈 수 있습니다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>핵심개념 3 — 중점·합 조건을 좌표식으로 바꾸는 절차</div>
+      <p>두 점의 위치 관계(중점이 특정 축 위에 있다, 중점의 높이가 얼마다 등)가 조건으로 주어지면 다음 순서로 처리합니다.</p>
+      <div class="visual">① 두 점을 미지수로 표현  (예: A(s,u²), B(t,v²))
+② 조건을 좌표식으로 번역  (중점 y좌표 = (u²+v²)/2 등)
+③ 필요하면 (u+v)² = u²+2uv+v² 같은 합차 공식을 연결
+④ u,v>0 (지수함수의 치역) 조건으로 부호를 확정</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수</div>
+      <p>① $f(x)=a^{2x}$의 짝을 $g(x)=\log_ax$로 바로 단정 — 실제 역함수는 $\dfrac12\log_ax$. ② $u=a^x$로 치환한 뒤 $u>0$이라는 조건(지수함수의 치역)을 잊고 $u+v=-6$처럼 음수 결과를 그대로 답으로 쓰는 것. ③ $(u+v)^2=u^2+2uv+v^2$에서 가운데 항 $2uv$를 빼먹는 계산 실수.</p>
+      <div class="caution">$u=a^x>0$ 이므로 $u,v$가 양수라는 조건은 답의 부호를 정할 때 반드시 마지막에 확인해야 합니다.</div>
+    </div>
+
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 치환으로 함숫값 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=2^{2x}$ 일 때, $u=2^{3}$ 로 치환하여 $f(3)$ 의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$u=2^3=8$.<div class="why">문제에서 지정한 그대로 치환합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(3)=2^{2\times3}=(2^3)^2=u^2=8^2=64$.<div class="why">$a^{2x}=(a^x)^2$ 이므로 치환한 $u$를 제곱하면 바로 함숫값이 나옵니다.</div></div></div>
+          <span class="answer-tag">정답: f(3)=64</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 역함수 직접 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=5^{2x}$ 의 역함수 $f^{-1}(x)$ 를 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$y=5^{2x}$ 에서 양변에 $\log_5$를 취하면 $\log_5y=2x$.<div class="why">지수를 변수로 꺼내려면 로그를 취하는 것이 기본 절차입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x=\dfrac12\log_5y$. $x,y$를 바꾸면 $f^{-1}(x)=\dfrac12\log_5x$.<div class="why">역함수를 구할 때는 $x$를 $y$에 대해 정리한 뒤 $x,y$ 이름을 서로 바꿉니다.</div></div></div>
+          <span class="answer-tag">정답: f⁻¹(x) = (1/2)log₅x</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 역함수 짝 판정</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=3^{2x}$, $g(x)=\log_3x$ 에 대해 $f(g(9))$ 의 값을 구하고, $g$가 $f$의 역함수인지 판정하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$g(9)=\log_39=2$.<div class="why">$3^2=9$이므로 $\log_39=2$입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(g(9))=f(2)=3^{4}=81$.<div class="why">$g(9)=2$를 그대로 $f$에 대입합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f(g(9))=81\neq9$ 이므로 $g$는 $f$의 역함수가 아니다.<div class="why">역함수라면 $f(g(x))=x$가 항상 성립해야 하는데 성립하지 않습니다.</div></div></div>
+          <span class="answer-tag">정답: f(g(9))=81, g는 f의 역함수가 아니다</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 좌표에서 u와 a 함께 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $a>1$ 이고 $f(x)=a^{2x}$ 위의 점의 $x$좌표가 $2$, $y$좌표가 $16$이다. $u=a^{2}$ 의 값과 $a$의 값을 모두 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(2)=a^{4}=(a^2)^2=u^2=16$.<div class="why">점이 함수 위에 있다는 것은 $x=2$를 대입한 값이 $16$이라는 뜻입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$u>0$이므로 $u=4$.<div class="why">$u=a^2$이고 $a>0$이므로 $u$는 반드시 양수입니다. $u^2=16$의 두 해 중 양수인 것만 취합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$a^2=4$이고 $a>1$이므로 $a=2$.<div class="why">문제에서 $a>1$이라는 조건을 줬으므로 $a=-2$는 제외합니다.</div></div></div>
+          <span class="answer-tag">정답: u=4, a=2</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 중점 조건을 u+v로 바꾸기</div>
+        <div class="problem-body"><strong>문제:</strong> $a>1$, $f(x)=a^{2x}$. 서로 다른 두 점 $A(s,f(s))$, $B(t,f(t))$ 가 $f$ 위에 있다. $u=a^s,\ v=a^t\ (u,v>0)$ 라 할 때, 선분 $AB$의 중점의 $y$좌표가 $13$이고 $uv=5$ 이다. $u+v$ 의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$A=(s,u^2)$, $B=(t,v^2)$ 이므로 중점의 $y$좌표는 $\dfrac{u^2+v^2}{2}=13$, 즉 $u^2+v^2=26$.<div class="why">$f(s)=a^{2s}=(a^s)^2=u^2$ 이므로 점의 $y$좌표가 바로 $u^2,v^2$ 입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$(u+v)^2=u^2+2uv+v^2=26+2\times5=36$.<div class="why">합차 공식 $(u+v)^2=u^2+2uv+v^2$에 이미 구한 $u^2+v^2=26$과 $uv=5$를 대입합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$u,v>0$ 이므로 $u+v>0$. 따라서 $u+v=6$.<div class="why">$u=a^s,v=a^t$는 지수함수의 함숫값이라 항상 양수이므로, $u+v=-6$은 답이 될 수 없습니다.</div></div></div>
+          <p class="warn">오답 주의: $(u+v)^2=36$에서 $u+v=\pm6$ 두 값을 모두 쓰면 틀립니다 — $u,v>0$조건으로 반드시 양수만 남깁니다.</p>
+          <span class="answer-tag">정답: u+v=6</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 다시 a와 s+t로 돌아오기</div>
+        <div class="problem-body"><strong>문제:</strong> 심화 1의 상황에서 $uv=5$ 이고 $a=\sqrt5$ 일 때, $s+t$ 의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$u=a^s,\ v=a^t$ 이므로 $uv=a^s\cdot a^t=a^{s+t}$.<div class="why">지수법칙 $a^s\times a^t=a^{s+t}$을 그대로 쓴 것입니다 — 치환을 되돌려 지수 쪽 정보로 돌아가는 핵심 연결고리입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$a=\sqrt5$ 이므로 $a^{s+t}=5$ 는 $(\sqrt5)^{s+t}=5^{1}$, 즉 $5^{\frac{s+t}{2}}=5^{1}$.<div class="why">$\sqrt5=5^{1/2}$으로 밑을 통일해야 지수를 비교할 수 있습니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>밑이 같으므로 지수도 같다: $\dfrac{s+t}{2}=1$, 따라서 $s+t=2$.<div class="why">지수함수는 일대일함수이므로 밑이 같을 때 지수를 비교해 등식을 세울 수 있습니다.</div></div></div>
+          <span class="answer-tag">정답: s+t=2</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 짝 함수 식을 방정식으로(준킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> $a>1$, $f(x)=a^{2x}$, $g(x)=\log_ax$. 점 $A(k,g(k))\ (k>1)$ 가 $g$ 위에 있고, $f(g(k))$ 의 값이 $k$ 의 $9$배라고 한다. $k$ 의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>도입 문제와 같은 원리로 $f(g(k))=a^{2\log_ak}=\left(a^{\log_ak}\right)^2=k^2$.<div class="why">$g$가 $f$의 역함수가 아니라는 사실이, 역으로 $f(g(k))=k^2$ 이라는 항등식을 만들어줍니다 — 이 식은 $a$ 값과 무관하게 항상 성립합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>조건에 의해 $k^2=9k$, 즉 $k^2-9k=0 \Rightarrow k(k-9)=0$.<div class="why">문제의 조건 "$f(g(k))$가 $k$의 9배"를 그대로 등식으로 옮긴 것입니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$k=0$ 또는 $k=9$ 인데, $k>1$ 이므로 $k=0$은 제외.<div class="why">문제의 범위 조건 $k>1$을 반드시 확인해 불필요한 해를 걸러냅니다.</div></div></div>
+          <p class="warn">오답 주의: $k^2=9k$를 $k$로 양변을 나누어 $k=9$만 바로 얻는 풀이는, $k=0$도 해라는 사실을 놓치기 쉽습니다 — 인수분해로 풀어야 빠진 해가 없습니다.</p>
+          <span class="answer-tag">정답: k=9</span>
+        </div></details>
+      </div>
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 중점 조건 + 합 조건 연립(준킬러)</div>
+        <div class="problem-body"><strong>문제:</strong> $a>1$, $f(x)=a^{2x}$. 서로 다른 두 점 $A(s,f(s))$, $B(t,f(t))$ 가 $f$ 위에 있다. $u=a^s,\ v=a^t\ (u,v>0)$ 라 하자. $u+v=7$ 이고, 선분 $AB$의 중점의 $y$좌표가 $17$ 일 때, $a^{s+t}$ 의 값을 구하라.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$A=(s,u^2)$, $B=(t,v^2)$ 이므로 중점의 $y$좌표 $\dfrac{u^2+v^2}{2}=17$, 즉 $u^2+v^2=34$.<div class="why">심화 1과 같은 방식으로 중점 조건을 좌표식으로 바꿉니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$(u+v)^2=u^2+2uv+v^2$ 에서 $7^2=34+2uv$, 즉 $49=34+2uv \Rightarrow uv=7.5$.<div class="why">이미 알고 있는 $u+v=7$과 $u^2+v^2=34$를 합차 공식으로 연결해 $uv$를 역산합니다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$a^{s+t}=a^s\cdot a^t=uv=7.5=\dfrac{15}{2}$.<div class="why">치환을 되돌리는 핵심 연결고리 $uv=a^{s+t}$를 다시 사용합니다 — $s,t$ 각각의 값을 몰라도 곱 $uv$만 알면 $a^{s+t}$를 바로 구할 수 있습니다.</div></div></div>
+          <p class="warn">오답 주의: $u^2+v^2=34$을 보고 바로 $a^{s+t}$를 구하려 하면 안 됩니다 — $a^{s+t}$는 $u^2+v^2$가 아니라 $uv$와 연결되어 있습니다.</p>
+          <span class="answer-tag">정답: a^(s+t) = 15/2</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상은 "지수함수와 로그함수는 서로 역함수"라는 사실을 $f(x)=a^{2x}$처럼 지수에 계수가 붙은 경우에 그대로 적용하면 틀린다는 함정을 짚고, $x$ 대신 $\sqrt{x}$를 넣는 치환과 로그법칙을 결합해 숨어 있는 대응 관계를 찾아내는 과정을 보여줍니다. 이 자료는 그 핵심 판단 기준—① 지수의 계수를 놓치면 역함수 짝이 달라진다, ② $u=a^x$ 치환으로 그래프 위의 점을 단순한 대수식으로 바꿀 수 있다, ③ 중점·합 조건을 좌표식으로 번역한 뒤 합차 공식으로 연결한다—을 그대로 담았습니다.</p>
+      <p style="margin-top:8px">영상 속 원문제는 음성 자동자막만으로는 화면에 제시된 정확한 계수·조건(예: 직선의 기울기, 상수 $b$의 값)이 복원되지 않아, 같은 판단 기준을 적용할 수 있는 새 문항으로 재구성했습니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출문제가 아닙니다.</strong> ⚠️ 심화 2·수능 대비 2는 여러 조건을 연립하는 다단계 풀이이므로, 학생 배포 전 교사 검토를 권장합니다.</p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20261029_로그함수의대칭과역함수관계_clujOh3B.html">로그함수의 대칭이동과 역함수 관계로 좌표 구하기 (clujOh3B)</a> · <a href="20260808_지수로그함수확대축소원점직선_G6iWQpMu.html">지수·로그함수의 확대와 축소 — 밑의 변화와 원점 지나는 직선의 비율 (G6iWQpMu)</a> · <a href="20260427_지수함수차이비율공식과도형우선해석_MJWwaaju.html">지수함수 차이·비율 공식과 도형 우선 해석 (수학Ⅰ) (MJWwaaju)</a> · <a href="20260509_지수함수점근선차이비율사다리꼴_DArDb6p7.html">지수함수 점근선과 차이·비율 공식 — 사다리꼴 넓이 (수학Ⅰ) (DArDb6p7)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-10-30 · 영상 출처: <a href="https://youtu.be/jBQ-EqoZK8w" style="color:var(--primary)">수학강사 이정환</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
