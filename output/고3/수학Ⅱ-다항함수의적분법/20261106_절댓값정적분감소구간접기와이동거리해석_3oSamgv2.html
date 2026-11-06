@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>절댓값 정적분 그래프 해석과 이동거리 해석</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+    hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+    table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고3(N수 포함) · 수학Ⅱ — 다항함수의 정적분, 절댓값 함수의 정적분</div>
+    &lt;h1>절댓값 적분 $\displaystyle\int_a^x|f(t)|\,dt$ 그래프 해석<br>— 감소구간 접어올리기와 이동거리 해석</h1>
+    <p class="sub">절댓값이 씌워진 정적분 함수의 그래프는 "일단 절댓값 없는 원래 함수의 정적분을 그린 뒤, 감소하는 구간만 위로 접어 올리면" 완성된다. 그리고 적분의 아래끝 $a$는 그 그래프 위에서 "x축이 어디에 있는지"를 알려주는 기준점이다.</p>
+    <div class="quote">"a의 역할 그죠? x축의 위치를 쾅 찍는 거야." — 영상 핵심 멘트 재구성 [03:17]</div>
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/3oSamgv2aHU" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/3oSamgv2aHU/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">적분 기호 안에 절댓값이? 당황하지 않고 '이것'만 확인하세요</div>
+        <div class="v-meta">📺 YouTube · 약 15분 · 수수컷</div>
+        <a class="v-link" href="https://youtu.be/3oSamgv2aHU" target="_blank" rel="noopener">https://youtu.be/3oSamgv2aHU</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: $h(x)=\int_a^x f(t)dt$ 의 증가·감소가 $f$의 부호를 따른다는 사실로부터, $H(x)=\int_a^x|f(t)|dt$ 의 그래프를 "감소구간 접어올리기"로 직접 그릴 수 있다. 접는 기준이 $f$의 극값 위치가 아니라 $f$의 부호가 바뀌는 자리(근)라는 것을 구분할 수 있다. 적분의 아래끝 $a$가 그래프 위에서 x축(높이 0)의 위치를 결정한다는 것을 이용해 $H(x)$의 부호를 판단할 수 있다. 속도·거리의 물리적 해석으로 절댓값 정적분의 의미와, 아래끝이 0이 아닐 때 음수가 나올 수 있다는 주의점을 설명할 수 있다 · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — "감소하는 부분만 접어 올리면" 절댓값 정적분의 그래프가 완성된다</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제(영상 속 풀이 기법을 자체 예시로 재구성):</strong> 삼차함수 $f(x)=x^3-4x$ 에 대하여 $\displaystyle H(x)=\int_{-2}^{x}|f(t)|\,dt$ 라 하자. $H(4)$의 값을 구하시오.</div>
+      <div class="visual">  STEP 1. f(t)=t(t-2)(t+2), 근은 t=-2,0,2.
+       부호:  (-2,0)에서 f>0,  (0,2)에서 f<0,  (2,4)에서 f>0
+
+  STEP 2. h(x)=∫[-2→x] f(t)dt  (절댓값 없이 먼저 그린다)
+       h'=f 이므로  (-2,0)에서 h 증가 → x=0에서 "꺾임"(극대)
+                     (0,2)에서 h 감소 → x=2에서 "꺾임"(극소)
+                     (2,4)에서 h 다시 증가
+       ※ 이 꺾이는 자리는 f의 극값 위치가 아니라 f=0(부호 바뀌는 자리)!
+
+  STEP 3. 실제 h값:  h(-2)=0,  h(0)=4,  h(2)=0,  h(4)=36
+
+  STEP 4. H는 h가 감소하는 구간 (0,2)만 "h(0)=4" 높이를 기준으로 접어 올림
+       H(x)=h(x)            x∈[-2,0]  →  H(0)=4
+       H(x)=2·h(0)-h(x)=8-h(x)  x∈[0,2]  →  H(2)=8-0=8
+       H(x)=H(2)+(h(x)-h(2))   x∈[2,4]  →  H(4)=8+(36-0)=44</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(t)=t^3-4t=t(t-2)(t+2)$ 이므로 근은 $t=-2,0,2$. 간단히 값을 대입해 부호를 확인하면 $(-2,0)$에서 $f>0$, $(0,2)$에서 $f<0$, $(2,4)$에서 $f>0$이다.<div class="why">절댓값 정적분을 그리는 첫 단계는 언제나 $f(t)$의 부호표를 그리는 것이다. 이 부호가 곧 뒤에서 그릴 $h(x)$의 증가·감소를 결정한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$h(x)=\displaystyle\int_{-2}^{x}f(t)\,dt$ 라 하면 $h'(x)=f(x)$이므로, $f>0$인 구간에서 $h$는 증가, $f<0$인 구간에서 $h$는 감소한다. 따라서 $h$는 $(-2,0)$에서 증가, $(0,2)$에서 감소, $(2,4)$에서 다시 증가하는 모양이다.<div class="why">$h$가 "꺾이는" 자리(증가↔감소가 바뀌는 자리)는 $h'(x)=f(x)=0$인 자리, 즉 $f$가 부호를 바꾸는 자리인 $x=0,2$다. $f(x)$ 자신의 극값(도함수 $f'(x)=0$인 자리)과는 전혀 다른 개념이므로 혼동하면 안 된다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>부정적분 $F(t)=\dfrac{t^4}{4}-2t^2$ 을 이용해 실제 값을 구하면 $h(-2)=0$(정의상 당연), $h(0)=F(0)-F(-2)=0-(4-8)=4$, $h(2)=F(2)-F(-2)=(4-8)-(4-8)=0$, $h(4)=F(4)-F(-2)=(64-32)-(4-8)=32+4=36$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$H(x)=\displaystyle\int_{-2}^{x}|f(t)|\,dt$ 는 $h$가 $(-2,0)$에서 증가하는 동안은 $h$와 완전히 같다($f\ge0$이므로 $|f|=f$). $(0,2)$에서는 $f<0$이므로 $h$가 감소하는데, 이 구간만 "감소가 시작된 높이" $h(0)=4$를 기준으로 접어 올린다: $H(x)=2h(0)-h(x)=8-h(x)$.<div class="why">구간 $[0,x]$($0&lt;x\le2$)에서 $H(x)-H(0)=\int_0^x|f(t)|dt=\int_0^x(-f(t))dt=-(h(x)-h(0))$인데 $H(0)=h(0)=4$이므로 $H(x)=4-(h(x)-4)=8-h(x)$가 된다. "접어 올린다"는 말은 바로 이 식, 즉 수평선 $y=4$에 대한 대칭이동을 가리킨다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>$H(2)=8-h(2)=8-0=8$. 이후 $(2,4)$에서는 다시 $f>0$이므로 $H$는 $h$와 같은 증가율로 이어진다: $H(x)=H(2)+(h(x)-h(2))$, 즉 $H(4)=8+(36-0)=44$.</div></div></div>
+          <span class="answer-tag">정답: $H(4)=44$</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명 — 절댓값 정적분, "접어 올리기"와 "x축 위치 결정"</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <ul style="margin-left:24px; margin-top:6px">
+        <li><strong>정적분의 기본정리:</strong> $h(x)=\displaystyle\int_a^x f(t)\,dt$ 이면 $h'(x)=f(x)$. 즉 $h$의 증가·감소는 $f$의 부호를 그대로 따른다 — $f(x)>0$인 구간에서 $h$는 증가, $f(x)<0$인 구간에서 $h$는 감소.</li>
+        <li><strong>절댓값의 뜻:</strong> $|y|$는 $y\ge0$이면 $y$ 그대로, $y<0$이면 $-y$(부호를 뒤집은 양수). 그래프로는 x축 아래에 있던 부분을 위로 접어 올리는 것과 같다.</li>
+        <li><strong>정적분의 성질:</strong> $\displaystyle\int_a^a f(t)\,dt=0$ (적분 구간이 한 점이면 값은 항상 $0$), $\displaystyle\int_a^b f=-\int_b^a f$ (위끝·아래끝을 바꾸면 부호가 바뀐다).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>가장 쉬운 단계 — $f(x)$ 자체를 $|f(x)|$로 바꾸면?</div>
+      <p>적분을 생각하기 전에, 그냥 함수 $f(x)$의 그래프에서 $|f(x)|$의 그래프가 어떻게 되는지부터 보자. $f(x)\ge0$인 구간은 그대로 두고, $f(x)<0$인 구간만 x축을 기준으로 위로 뒤집으면(접어 올리면) $|f(x)|$의 그래프가 된다. 이것이 "절댓값을 취하면 음수인 부분만 접힌다"는 가장 직접적인 뜻이다.</p>
+      <div class="concept-box">$f(x)\ge0$인 $x$에서는 $|f(x)|=f(x)$(그대로), $f(x)<0$인 $x$에서는 $|f(x)|=-f(x)$(x축 대칭으로 뒤집기). 그래프가 x축을 뚫고 내려간 부분만 거울처럼 위로 접어 올린 모양이 된다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>핵심 — $h(x)=\int f$ 와 $H(x)=\int|f|$ 의 관계: "감소구간만 접어 올리기"</div>
+      <p>이제 $f$ 자신이 아니라 $f$의 <strong>정적분</strong>을 절댓값 씌운 경우를 보자. $h(x)=\displaystyle\int_a^x f(t)\,dt$ 와 $H(x)=\displaystyle\int_a^x|f(t)|\,dt$ 를 비교하면, 둘은 $f(x)\ge0$인 구간(즉 $h$가 증가하는 구간)에서는 완전히 같다 — 같은 변화율로 움직이고 시작값도 같기 때문이다. 차이는 오직 $f(x)<0$인 구간, 즉 <strong>$h$가 감소하는 구간</strong>에서만 생긴다.</p>
+      <div class="formula-box">
+        구간 $[p,q]$에서 $f<0$이라 하면 ($H(p)=h(p)$라는 전제 아래)<br>
+        $$H(x)=H(p)+\int_p^x|f(t)|dt=h(p)+\int_p^x\{-f(t)\}dt=h(p)-\{h(x)-h(p)\}=2h(p)-h(x)\quad(p\le x\le q)$$
+      </div>
+      <div class="step-row"><div class="step-num">⚙</div><div class="step-body">$y=2h(p)-h(x)$ 는 $h(x)$를 수평선 $y=h(p)$(즉 감소가 시작된 바로 그 높이)에 대해 위아래로 대칭이동한 식이다. 이것이 "감소구간을 그 시작 높이를 기준으로 접어 올린다"는 말의 정확한 뜻이다. 구간이 여러 번 바뀌어도(증가→감소→증가→…) 매번 같은 방법을 그 구간의 시작점을 새 기준으로 반복하면 된다.</div></div>
+      <div class="caution"><strong>가장 흔한 실수:</strong> "접히는 자리"를 $f$ 자신의 극값(도함수 $f'(x)=0$인 자리)으로 착각하는 경우가 많다. 실제로 $h$가 꺾이는 자리는 $h'(x)=f(x)=0$인 자리, 즉 <strong>$f$가 부호를 바꾸는 자리(= $f$의 근)</strong>다. $f$의 극값 위치와 $f$의 근은 보통 서로 다른 점이므로 반드시 부호표부터 그려서 확인해야 한다.</div>
+      <div class="tip"><strong>왜 $H$는 극값이 없을까?</strong> $H'(x)=|f(x)|\ge0$ 이므로 $H$는 절대 감소하지 않는다(일정하거나 증가만 한다). 증가하다가 감소로 바뀌는 지점(극대) 또는 감소하다가 증가로 바뀌는 지점(극소)이 생기려면 도함수의 부호가 바뀌어야 하는데 $|f(x)|$는 음수가 될 수 없으므로 그런 일이 생기지 않는다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>$a$의 역할 — "모양"을 그린 뒤 x축의 위치를 정한다</div>
+      <p>개념 2의 방법은 $H$의 <strong>모양</strong>(올라가고 내려가는 패턴)만 알려줄 뿐, 그래프가 실제로 x축의 위 또는 아래 어디에 있는지는 아직 모른다. 이걸 정해주는 것이 바로 적분의 아래끝 $a$다. 정의상 $H(a)=\displaystyle\int_a^a|f(t)|\,dt=0$ 이므로, 모양을 그린 그래프 위에서 "$x=a$에 해당하는 높이"를 $0$으로 맞추면(그 지점에 x축을 그대로 덮어씌우면) 그래프의 실제 위치가 완성된다.</p>
+      <div class="formula-box">$$H(a)=0,\qquad H\text{는 절대 감소하지 않는 함수}\ \Longrightarrow\ x<a\text{이면 }H(x)\le0,\quad x>a\text{이면 }H(x)\ge0$$</div>
+      <div class="step-row"><div class="step-num">⚙</div><div class="step-body">등호는 그 사이 구간에서 $f(t)=0$이 계속될 때만 성립하고(다항함수에서는 보통 성립하지 않음), 일반적으로는 $x<a$에서 $H(x)<0$, $x>a$에서 $H(x)>0$이라고 바로 읽을 수 있다. 아래끝 $a$를 바꾸면 그래프의 모양은 그대로이고 위아래로만 평행이동한다는 것도 같은 이유다.</div></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>물리적 해석 — 속도·거리, 그리고 음수가 나오는 이유</div>
+      <p>$f(t)$를 시각 $t$에서의 속도라고 보면 $|f(t)|$는 속력이고, $\displaystyle\int_a^b|f(t)|\,dt$ 는 시각 $a$부터 $b$까지 실제로 움직인 <strong>이동거리</strong>다. 우리가 흔히 배우는 "거리=속력의 적분"이 항상 양수였던 이유는, 그때는 아래끝이 보통 "출발 시각"(예: $0$)이고 위끝이 더 나중 시각이었기 때문이다.</p>
+      <div class="concept-box">절댓값 정적분 $\displaystyle\int_a^x|f(t)|\,dt$ 는 $x<a$인 경우에도 정의되며, 이때는 적분 방향이 뒤바뀌어(위끝이 아래끝보다 작음) 값이 음수가 될 수 있다. "이동거리인데 음수"가 아니라, 개념 3의 부호 규칙 — <strong>아래끝 $a$보다 작으면 음수, 크면 양수</strong> — 로 이해하면 된다. 물리적으로는 "기준 시각 $a$보다 이전으로 거슬러 간 거리는 음수로 센다"는 뜻이다.</div>
+    </div>
+
+    <!-- ===== 수준별 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span><span style="font-weight:600; color:#2e7d32">주어진 $h$값으로 접어 올리기 · $a$의 위치 바꾸기</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 주어진 h값으로 H값 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 함수 $h(x)=\displaystyle\int_0^x f(t)\,dt$ 가 $x=0$에서 $0$, $x=1$에서 극댓값 $5$, $x=3$에서 극솟값 $1$을 가지며, $x<1$에서 증가, $1&lt;x<3$에서 감소, $x>3$에서 다시 증가한다. $H(x)=\displaystyle\int_0^x|f(t)|\,dt$ 라 할 때 $H(3)$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$h$가 증가하는 구간 $(0,1)$에서는 $f\ge0$이므로 $H=h$. 따라서 $H(1)=h(1)=5$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$(1,3)$에서는 $h$가 감소하므로 $f<0$. 이 구간만 $h(1)=5$ 높이를 기준으로 접어 올린다: $H(3)=2h(1)-h(3)=10-1=9$.</div></div>
+          <p class="warn">다른 방법: $H(3)=H(1)+(\text{감소한 만큼})=5+(5-1)=9$로도 같은 값을 얻는다.</p>
+          <span class="answer-tag">정답: $H(3)=9$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 아래끝 a를 바꾸면 x축 위치도 바뀐다</div>
+        <div class="problem-body"><strong>문제:</strong> 위와 똑같은 $f$에 대하여(즉 $h(0)=0$, $h(1)=5$ 극대, $h(3)=1$ 극소, 그 외는 계속 증가) 이번에는 $G(x)=\displaystyle\int_1^x|f(t)|\,dt$ 라 하자. $G(0)+G(3)$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$G(3)$: 구간 $[1,3]$에서 $f<0$이므로 $\displaystyle\int_1^3|f(t)|dt=-(h(3)-h(1))=5-1=4$. 즉 $G(3)=4$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$G(0)$: $x=0$은 $a=1$보다 작다. 구간 $[0,1]$에서 $f\ge0$이므로 $\displaystyle\int_0^1|f(t)|dt=h(1)-h(0)=5$이고, $G(0)=\displaystyle\int_1^0|f(t)|dt=-\int_0^1|f(t)|dt=-5$.<div class="why">아래끝이 $1$로 바뀌었으므로 $x=1$이 새로운 "x축 위치"가 된다. $0<1$이므로 $G(0)$은 음수가 되어야 한다는 것을 개념 3의 부호 규칙으로 미리 예상할 수 있다.</div></div></div>
+          <span class="answer-tag">정답: $G(0)+G(3)=-5+4=-1$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span><span style="font-weight:600; color:#1565c0">구체적인 f로 직접 계산 · 아래끝을 옮겨 부호 읽기</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 구체적인 f로 접어 올리기 계산</div>
+        <div class="problem-body"><strong>문제:</strong> $f(t)=3t^2-12$ 에 대하여 $H(x)=\displaystyle\int_{-2}^{x}|f(t)|\,dt$ 라 하자. $H(4)$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(t)=3(t-2)(t+2)$, 근은 $t=\pm2$. $(-2,2)$에서 $f<0$, $t>2$에서 $f>0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$h(x)=\displaystyle\int_{-2}^x f(t)dt=\big[t^3-12t\big]_{-2}^x=x^3-12x-16$. $h(-2)=0$, $h(2)=8-24-16=-32$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$(-2,2)$ 전체에서 $f<0$이므로 $h$는 $0$에서 $-32$까지 계속 감소한다. $h(-2)=0$을 기준으로 접어 올리면 $H(2)=2\cdot0-h(2)=-(-32)=32$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$t>2$에서는 $f>0$이므로 $H(4)=H(2)+(h(4)-h(2))$. $h(4)=64-48-16=0$이므로 $H(4)=32+(0-(-32))=32+32=64$.</div></div>
+          <span class="answer-tag">정답: $H(4)=64$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 아래끝을 옮겨 음수가 나오는 경우</div>
+        <div class="problem-body"><strong>문제:</strong> 같은 $f(t)=3t^2-12$ 에 대하여 $K(x)=\displaystyle\int_{2}^{x}|f(t)|\,dt$ 라 할 때, $K(-2)$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$K(-2)=\displaystyle\int_2^{-2}|f(t)|dt=-\int_{-2}^2|f(t)|dt$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\displaystyle\int_{-2}^2|f(t)|dt=\int_{-2}^2(12-3t^2)dt=\big[12t-t^3\big]_{-2}^2=(24-8)-(-24+8)=16-(-16)=32$ (기본 1에서 구한 $H(2)=32$와 같은 값).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>따라서 $K(-2)=-32$.</div></div>
+          <p class="warn">오답 주의: $a=2$이고 $-2<2$이므로 개념 3의 규칙대로 $K(-2)$는 음수가 되어야 한다 — 계산 전에 부호를 먼저 예상해 두면 실수를 줄일 수 있다.</p>
+          <span class="answer-tag">정답: $K(-2)=-32$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span><span style="font-weight:600; color:#6a1b9a">연속조건으로 상수 구하기 · 이동거리 해석</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 경계가 엇갈린 piecewise 함수, 연속조건으로 상수 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 삼차함수 $f(x)=x^3-4x$ 와 상수 $c$에 대하여 함수 $g(x)$를 $$g(x)=\begin{cases} f(x)+c & (x\le -2) \\ \displaystyle\int_{0}^{x}|f(t)|\,dt & (x>-2)\end{cases}$$ 로 정의하자. $g(x)$가 실수 전체의 집합에서 연속일 때, $g(-2)+g(4)$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)=x(x-2)(x+2)$이므로 $f(-2)=0$. 연속조건을 쓰려면 $x=-2$에서 (왼쪽 식의 값)=(오른쪽 식의 극한값)이어야 한다. 왼쪽: $f(-2)+c=0+c=c$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>오른쪽 극한은 $\displaystyle\int_0^x|f(t)|dt$ 에 $x=-2$를 대입한 값이다. $(-2,0)$에서 $f>0$이므로 $\displaystyle\int_{-2}^0|f(t)|dt=\int_{-2}^0 f(t)dt=\big[\tfrac{t^4}{4}-2t^2\big]_{-2}^0=0-(4-8)=4$. 따라서 $\displaystyle\int_0^{-2}|f(t)|dt=-4$.<div class="why">적분의 아래끝이 $0$으로 정의된 식에 $-2(<0)$를 대입하면 적분 방향이 뒤바뀌어 음수가 된다 — 개념 4에서 설명한 바로 그 상황이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>연속조건에서 $c=-4$. 따라서 $g(-2)=f(-2)+c=0+(-4)=-4$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$g(4)=\displaystyle\int_0^4|f(t)|dt$. $(0,2)$에서 $f<0$, $(2,4)$에서 $f>0$이므로 도입 문제와 같은 방식으로 접어 올리면: $h_0(x)=\int_0^x f(t)dt=\tfrac{x^4}{4}-2x^2$, $h_0(2)=4-8=-4$. $(0,2)$에서 접어 올림: $\int_0^2|f|dt=-h_0(2)=4$. $(2,4)$에서 $h_0(4)=64-32=32$이므로 $\int_2^4|f|dt=h_0(4)-h_0(2)=32-(-4)=36$. 따라서 $g(4)=4+36=40$.</div></div></div>
+          <span class="answer-tag">정답: $g(-2)+g(4)=-4+40=36$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 이동거리 해석으로 바로 계산하기</div>
+        <div class="problem-body"><strong>문제:</strong> 직선 위를 움직이는 점 $P$의 시각 $t\,(t\ge0)$에서의 속도가 $v(t)=3t^2-6t$ 이다. 시각 $t=0$부터 $t=3$까지 점 $P$가 움직인 거리를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>이동거리는 속력 $|v(t)|$의 정적분이다: $\displaystyle\int_0^3|v(t)|\,dt$. $v(t)=3t(t-2)$이므로 $(0,2)$에서 $v<0$, $(2,3)$에서 $v>0$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>부정적분 $\displaystyle\int v(t)dt=t^3-3t^2$을 이용하면 $\displaystyle\int_0^2 v\,dt=(8-12)-0=-4$이므로 $\displaystyle\int_0^2|v|\,dt=4$.<div class="why">$(0,2)$에서 속도가 음수라는 것은 "반대 방향으로 움직인다"는 뜻일 뿐, 움직인 거리 자체는 항상 양수로 세야 한다. 그래서 $|v|$를 적분한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\displaystyle\int_2^3 v\,dt=(27-27)-(8-12)=0-(-4)=4$. 이 구간은 $v>0$이므로 그대로 $4$가 이동거리에 더해진다.</div></div>
+          <span class="answer-tag">정답: 이동거리 $=4+4=8$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span><span style="font-weight:600; color:#b71c1c">종합 — 접어 올리기로 넓이 적분 구하기 · 거리 항등식 분석</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러(피스와이즈 함수의 정적분)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 $1$인 삼차함수 $f(x)=x^3-4x$ 에 대하여 함수 $g(x)$를 $$g(x)=\begin{cases} f(x) & (x\le 0) \\ \displaystyle\int_0^x |f(t)|\,dt & (x>0)\end{cases}$$ 로 정의하자. $\displaystyle\int_{-2}^{4}\{f(x)+g(x)\}\,dx$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$x=0$에서 왼쪽 식은 $f(0)=0$, 오른쪽 식은 $\int_0^0|f|dt=0$으로 같으므로 $g$는 자동으로 연속이다(아래끝과 경계가 같은 점이라 추가 조건이 필요 없다).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>부정적분 $F(t)=\tfrac{t^4}{4}-2t^2$ 으로 $\displaystyle\int_{-2}^4 f(x)dx=F(4)-F(-2)=(64-32)-(4-8)=32-(-4)=36$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\displaystyle\int_{-2}^4 g(x)dx=\int_{-2}^0 f(x)dx+\int_0^4 g(x)dx$. 앞 조각: $\int_{-2}^0 f\,dx=F(0)-F(-2)=0-(-4)=4$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>뒤 조각 $\displaystyle\int_0^4 g(x)dx=\int_0^4\Big(\int_0^x|f(t)|dt\Big)dx$ 는 심화 1에서 구한 $g(4)=40$과 같은 방식으로 구간별 식($0\le x\le2$에서 $g(x)=2x^2-\tfrac{x^4}{4}$, $2\le x\le4$에서 $g(x)=\tfrac{x^4}{4}-2x^2+8$)을 각각 적분해서 더하면 $\tfrac{56}{15}+\tfrac{424}{15}=32$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>따라서 $\displaystyle\int_{-2}^4 g(x)dx=4+32=36$. 최종적으로 $\displaystyle\int_{-2}^4\{f(x)+g(x)\}dx=36+36=72$.</div></div></div>
+          <span class="answer-tag">정답: $72$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 킬러(이동거리 항등식 분석)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항의 계수가 양수인 삼차함수 $f(x)$가 $x=0$에서 극대, $x=k\,(k>0)$에서 극소이고 $x>k$에서는 계속 증가한다. $2$보다 큰 모든 실수 $t$에 대하여 $$\int_0^t |f'(x)|\,dx = f(t)+f(0)$$ 이 항상 성립할 때, $k$가 가질 수 있는 값의 최댓값과 $f(k)$의 값의 합을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f'$을 "속도"로 보면 $|f'|$의 정적분은 $f$의 그래프를 따라간 "이동거리"다. $f$는 $x=0$에서 $x=k$까지 감소(극대→극소), $x=k$ 이후 증가하므로 $t\ge k$일 때 $\displaystyle\int_0^t|f'(x)|dx=\{f(0)-f(k)\}+\{f(t)-f(k)\}=f(0)+f(t)-2f(k)$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>조건식 $f(t)+f(0)$과 비교하면 $f(0)+f(t)-2f(k)=f(t)+f(0)$, 즉 $-2f(k)=0$이므로 $f(k)=0$.<div class="why">이 식은 $t$에 대한 항등식이므로 $t$가 무엇이든 $f(k)=0$이라는 결론은 변하지 않는다 — $t$를 소거하고 남는 조건만 뽑아낸 것이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>위 식($f(0)+f(t)-2f(k)$)은 $t\ge k$일 때만 성립하는 식이다. 만약 $k>2$라면 $2&lt;t&lt;k$인 $t$에서는 아직 감소 구간이 끝나지 않았으므로 $\displaystyle\int_0^t|f'(x)|dx=f(0)-f(t)$(감소만 한 거리)이어야 하는데, 조건식은 $f(t)+f(0)$이라고 말하므로 $f(0)-f(t)=f(t)+f(0)$, 즉 $f(t)=0$이 $(2,k)$의 모든 $t$에서 성립해야 한다. 삼차함수가 한 구간에서 계속 $0$일 수는 없으므로 이는 불가능하다 — 따라서 $(2,k)$ 구간 자체가 존재하지 않아야 하므로 $k\le2$.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$k$는 $0&lt;k\le2$ 범위의 실수이므로 최댓값은 $k=2$. $f(k)=0$은 STEP 2에서 이미 구했다.</div></div></div>
+          <span class="answer-tag">정답: $(k\text{의 최댓값})+f(k)=2+0=2$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <!-- ===== 정리 ===== -->
+    <div class="section-title">📝 한눈에 보는 정리</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>단계</th><th>핵심 아이디어</th><th>효과</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">부호표</td><td>$f(t)$의 부호표를 먼저 그린다(근을 기준으로)</td><td>$h(x)=\int f$의 증가·감소 구간 확정</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">접어 올리기</td><td>$h$가 감소하는 구간만 그 시작 높이를 기준으로 대칭이동</td><td>$H(x)=\int|f|$의 "모양" 완성</td></tr>
+          <tr><td style="font-weight:700">x축 위치</td><td>$H(a)=0$이므로 $x=a$ 지점을 기준으로 실제 위치 확정</td><td>$x<a$ 음수, $x>a$ 양수 — 부호 즉시 판단</td></tr>
+          <tr style="background:#e8f5e9"><td style="font-weight:700">물리적 해석</td><td>$|f|$=속력, $\int|f|$=이동거리(단, 아래끝 기준 부호 주의)</td><td>복잡한 식도 "거리" 비유로 직관적으로 접근</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px; font-size:.92em; color:var(--sub)">전략: 절댓값 정적분이 나오면 계산 전에 반드시 ① $f$의 부호표 → ② 원래 정적분 $h$의 모양(증가·감소) → ③ 감소구간 접어 올리기 → ④ 아래끝으로 x축 위치 확정, 이 네 단계를 순서대로 밟는다. 피스와이즈 함수의 연속조건이 섞여 있어도 결국은 "경계에서 좌변=우변" 하나의 식으로 귀결된다.</p>
+    </div>
+
+    <!-- ===== 검증 ===== -->
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상은 실제 모의고사·수능 문제 두 개(화면 속 정확한 수식 조건은 음성 자막만으로 완전히 복원되지 않음)를 풀이 소재로 사용했습니다. 본 자료는 그 원문제를 추측해 재현하지 않고, 영상이 강조한 핵심 판단 기준 — <strong>① 절댓값 정적분의 그래프는 원래 정적분의 "감소구간만 접어 올려서" 그린다는 것</strong>, <strong>② 접는 기준이 $f$의 극값이 아니라 $f$의 부호가 바뀌는 자리(근)라는 것</strong>, <strong>③ 적분의 아래끝이 그래프 위에서 x축의 위치를 결정한다는 것</strong>, <strong>④ 속도·거리의 물리적 해석과 그 부호 규칙</strong> — 을 중심으로 완전히 새로운 함수와 수치의 문항을 자체 제작했습니다. 모든 문항의 정답은 부정적분을 직접 계산하고 "접어 올리기" 방식과 직접 적분 방식 두 가지로 교차 검증했습니다.</p>
+      <p style="margin-top:8px">다항함수의 극값·연속·정적분 범위 내에서만 구성했습니다(삼각함수의 덧셈정리, 치환적분·부분적분, 수열의 극한 등 선택 미적분 영역은 사용하지 않았습니다). "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div><!-- /container -->
+
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260825_정적분부호변화와삼차함수비율_POOkxnRH.html">정적분 부호변화와 삼차함수 비율 관계 (POOkxnRH)</a> · <a href="20261005_정적분증가조건과넓이공식_9AgKSuCm.html">정적분 증가조건과 도함수 넓이로 구하는 미정계수 범위 (9AgKSuCm)</a> · <a href="20261102_연속함수경계조건과정적분미정계수결정_lj9J2gmh.html">연속함수의 경계조건과 자연수 판별로 푸는 정적분 미정계수 (lj9J2gmh)</a> · <a href="20260921_비율관계로여는계산단축전략_t6sJVUC5.html">비율관계와 넓이공식으로 여는 계산 단축 전략 (t6sJVUC5)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-11-06 · 영상 출처: <a href="https://youtu.be/3oSamgv2aHU" style="color:var(--primary)">수수컷</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
