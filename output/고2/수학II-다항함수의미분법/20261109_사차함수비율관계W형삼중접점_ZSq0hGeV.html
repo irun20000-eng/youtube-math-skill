@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4차함수 비율관계 - W형과 삼중접점 3초 공략법 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — 다항함수의 미분법</div>
+    <h1>4차함수 비율관계<br>W형·삼중접점을 3초에 읽는 법</h1>
+    <p class="sub">4차함수를 조립제법 없이 눈으로 읽는 두 가지 핵심 개형 — <strong>대칭 W형(1:√2, 높이차 공식)</strong>과 <strong>삼중접점(3:1 내분)</strong>을 직접 유도하고 적용한다.</p>
+    <div class="quote">"극대점의 x좌표를 0으로 두고 바깥쪽 교점까지의 거리를 d라고 해보자… k 대 루트2 k, 즉 1 대 루트2야." — 강사 인용 [02:05]</div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/ZSq0hGeVcBU" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/ZSq0hGeVcBU/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">4차함수 비율관계 마스터클래스 | 미분 없이 3초 만에 킬러 문제 끝내는 법</div>
+        <div class="v-meta">📺 YouTube · 10:41 · THE EQUATION (모세수학)</div>
+        <a class="v-link" href="https://youtu.be/ZSq0hGeVcBU" target="_blank" rel="noopener">https://youtu.be/ZSq0hGeVcBU</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 좌우대칭 W형 사차함수의 극대·극소 간격과 바깥쪽 교점 사이의 $1:\sqrt2$ 비율, 높이차 공식 $\Delta y=|a|k^4$을 유도하고, 삼중접점(변곡 접선) 개형의 $3:1$ 내분 성질을 적용한다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — "미분 없이 사차함수 그래프 읽기"</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> $f(x)=x^4-8x^2$ 은 $x=0$ 에서 극대, $x=\pm2$ 에서 극소를 갖는 좌우대칭(W형) 사차함수다. 극대-극소 간격 $k=2$ 로부터 $1:\sqrt2$ 비율을 이용해 $x$축과 만나는 바깥쪽 교점의 위치를 구하고, 직접 인수분해로 확인하시오.</div>
+      <div class="visual">        y
+        │
+    0 ──●────────●────────●── x
+      -2√2       0       2√2
+        │       (극대)
+    -16 ┤   ●────────●
+            -2       2
+           (극소, 간격 k=2)</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$1:\sqrt2$ 비율로 바깥쪽 교점까지 거리 $d=k\sqrt2=2\sqrt2$. 즉 $x=\pm2\sqrt2$ 로 예상.<div class="why">극대-극소 간격과 극대-바깥교점 간격은 늘 $1:\sqrt2$ 이기 때문.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2 (검산)</span><div>$f(x)=x^4-8x^2=x^2(x^2-8)=0 \Rightarrow x=0,\ \pm2\sqrt2.$ 예상과 정확히 일치!</div></div>
+          <span class="answer-tag">정답: $x=\pm2\sqrt2$ (예상과 일치)</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <p>다항함수를 미분하면 지수가 하나씩 줄어든다($x^4 \to 4x^3 \to \cdots$). 극대·극소는 $f'(x)=0$ 인 점 중 함숫값이 커지다 작아지거나(극대), 작아지다 커지는(극소) 지점이다.</p>
+      <p style="margin-top:6px">삼차함수가 세 실근을 가질 때 $a(x-p)(x-q)(x-r)$ 로 인수분해되는 것처럼, 중근(접점)은 $(x-p)^2$, 삼중근(변곡 접선)은 $(x-p)^3$ 으로 나타난다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>개형 1 — 대칭 W형의 $1:\sqrt2$ 비율 (유도)</div>
+      <p>극대점을 $x=0$, 극대 접선(수평선)을 뺀 차함수를 $g(x)=ax^2(x-d)(x+d)=a(x^4-d^2x^2)$ 라 하자(극대점에서 중근, 바깥쪽 교점이 $\pm d$).</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$g'(x)=4ax^3-2ad^2x=2ax(2x^2-d^2)$. $x=0$ 이외의 임계점: $x^2=\dfrac{d^2}{2} \Rightarrow x=\pm\dfrac{d}{\sqrt2}.$</div></div>
+          <div class="step-row"><span class="step-num">2</span><div class="step-body">극대-극소 간격 $k=\dfrac{d}{\sqrt2}$, 즉 $d=\sqrt2\,k$.<div class="why">식을 세우고 임계점을 구하면 $\sqrt2$ 가 자연스럽게 나온다 — 암기가 아니라 유도되는 결과.</div></div></div>
+      <div class="formula-box">극대-극소 간격 $k$ : 극대-바깥교점 거리 $d$ $=1:\sqrt2$</div>
+      <div class="concept-box">강사: <em>"어떤 대칭 W자 개형을 가져와도 마찬가지야… 극대값을 기준으로 극소와 교점까지의 가로거리 비율은 무조건 1대 루트2야."</em></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>개형 1 — 높이차 공식 $\Delta y=|a|k^4$ (유도)</div>
+      <p>위 $g(x)=a(x^4-d^2x^2)$ 에서 $d^2=2k^2$ 이므로 $g(k)=a(k^4-2k^2\cdot k^2)=a(k^4-2k^4)=-ak^4.$ $g(0)=0$ 이므로 높이차는:</p>
+      <div class="formula-box">$\Delta y=|g(0)-g(k)|=|a|k^4$</div>
+      <div class="concept-box">강사: <em>"방향을 뺀 순수한 높이의 크기는 아주 깔끔하게 절댓값 $a \times k$ 네제곱이다."</em></div>
+      <div class="tip">극대 접선이 수평이 아니라 기울어져 있어도, '차함수'(원래 함수 $-$ 직선)의 $x$좌표 비율과 높이차는 전혀 변하지 않는다 — 직선을 빼는 건 $y$값만 바꾸고 $x$좌표는 그대로 두기 때문.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>개형 2 — 삼중접점의 $3:1$ 내분 (유도)</div>
+      <p>변곡 접선이 $x=\alpha$ 에서 삼중으로 접하고 $x=\beta$ 에서 단순히 뚫고 지나가면, 차함수는 $g(x)=(x-\alpha)^3(x-\beta)$.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$g'(x)=3(x-\alpha)^2(x-\beta)+(x-\alpha)^3=(x-\alpha)^2\big[3(x-\beta)+(x-\alpha)\big]=(x-\alpha)^2(4x-\alpha-3\beta).$</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$x=\alpha$ 는 삼중접점 자체(극값이 아님). 진짜 극값은 $4x-\alpha-3\beta=0 \Rightarrow x=\dfrac{\alpha+3\beta}{4}.$</div></div>
+      <div class="formula-box">$x_{\text{극값}}=\alpha+\dfrac34(\beta-\alpha)$ → $\alpha$ 에서 극값까지 : 극값에서 $\beta$ 까지 $=3:1$</div>
+      <div class="concept-box">강사: <em>"3중 접점에서 극소점까지가 세 칸이면 극소점에서 통과하는 점까지는 한 칸이야. 무작정 외우는 공식이 아니라 식을 미분했을 때 자연스럽게 유도되는… 기하학적 구조야."</em></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수</div>
+      <div class="caution">① W형인지 확인 없이 무조건 $1:\sqrt2$ 를 적용한다 — 반드시 "완전 좌우대칭"인지 먼저 확인. ② 삼중접점에서 $3:1$ 을 반대로($1:3$으로) 적용한다 — 삼중접점 쪽이 $3$, 단순 교점 쪽이 $1$. ③ 최고차항 계수가 음수(M자 뒤집힘)인데 부호를 놓친다 — 비율 관계 자체는 그대로 유지된다.</div>
+    </div>
+
+    <!-- ===== 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — $1:\sqrt2$ 비율 바로 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 W형 사차함수의 극대-극소 간격이 $k=5$이다. 극대 접선이 바깥쪽 교점까지의 거리 $d$를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$d=\sqrt2\,k=5\sqrt2.$</p>
+          <p class="warn">오답 주의: $d$ 는 "극대 접선에서 바깥쪽 교점까지"이며, "극소에서 바깥쪽 교점까지"가 아니다.</p>
+          <span class="answer-tag">정답: $d=5\sqrt2$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — $3:1$ 내분 바로 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 사차함수의 차함수가 $g(x)=(x-2)^3(x-6)$ 꼴일 때(삼중접점 $x=2$, 교점 $x=6$), $3:1$ 내분으로 극값점의 $x$좌표를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$x_{\text{극값}}=2+\dfrac34(6-2)=2+3=5.$</p>
+          <p class="why">검산: $g'(x)=(x-2)^2(4x-20)=4(x-2)^2(x-5)$ — 극값은 $x=5$, 일치.</p>
+          <span class="answer-tag">정답: $x=5$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 높이차 공식 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$인 W형 사차함수에서 극대-극소 간격이 $k=3$이다. 극대값과 극소값의 차 $\Delta y$를 구하고, 실제 함수 $g(x)=2x^2(x-3\sqrt2)(x+3\sqrt2)$ 로 검산하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>공식: $\Delta y=|a|k^4=2\cdot3^4=2\cdot81=162.$</p>
+          <p>검산: $g(x)=2x^4-36x^2$. $g(0)=0,\ g(3)=2\cdot81-36\cdot9=162-324=-162$. $|\Delta y|=162$ — 일치.</p>
+          <span class="answer-tag">정답: $\Delta y=162$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 삼중접점, 직접 미분으로 확인</div>
+        <div class="problem-body"><strong>문제:</strong> $g(x)=(x+1)^3(x-7)$ 의 극값점의 $x$좌표를 (1) $3:1$ 내분 공식으로, (2) 직접 미분으로 각각 구해 비교하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>(1) $\alpha=-1,\ \beta=7$: $x=-1+\dfrac34(7-(-1))=-1+6=5.$</p>
+          <p>(2) $g'(x)=(x+1)^2\big[3(x-7)+(x+1)\big]=(x+1)^2(4x-20)$. $g'(x)=0 \Rightarrow x=-1$(삼중접점) 또는 $x=5$(극값).</p>
+          <span class="answer-tag">정답: 두 방법 모두 $x=5$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 높이차에서 $k,d$ 역추적</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 W형 사차함수에서 극대값과 극소값의 차가 $81$이다. 극대-극소 간격 $k$와 바깥쪽 교점까지 거리 $d$를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$\Delta y=|a|k^4=1\cdot k^4=81 \Rightarrow k^4=81 \Rightarrow k=3$ ($k>0$).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$d=\sqrt2\,k=3\sqrt2.$</div></div>
+          <span class="answer-tag">정답: $k=3,\ d=3\sqrt2$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 삼중접점 + 최고차항 계수</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$인 차함수 $g(x)=2(x-0)^3(x-8)$ 에서 극값점의 $x$좌표와 그때의 함숫값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$3:1$ 내분: $x=0+\dfrac34(8-0)=6.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$g(6)=2\cdot6^3\cdot(6-8)=2\cdot216\cdot(-2)=-864.$</div></div>
+          <p class="why">검산: $g'(x)=2(x)^2(4x-24)$, $g'(x)=0\Rightarrow x=0$ 또는 $x=6$ — 일치.</p>
+          <span class="answer-tag">정답: $x=6,\ g(6)=-864$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러형: 높이차·거리로 계수 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $a$($a>0$)인 W형 사차함수에서 극대 접선이 바깥쪽 교점까지의 거리가 $3\sqrt2$이고, 극대값과 극소값의 차가 $162$이다. $a$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$d=3\sqrt2=\sqrt2\,k \Rightarrow k=3.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\Delta y=|a|k^4=a\cdot3^4=81a=162 \Rightarrow a=2.$</div></div>
+          <p class="warn">오답 주의: $d$ 에서 바로 $k^4$ 를 쓰지 말 것 — 먼저 $d\to k$ 로 환산한 다음 높이차 공식에 대입한다.</p>
+          <span class="answer-tag">정답: $a=2$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 준킬러형: $3:1$ 내분 역산</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 차함수 $g(x)=(x-\alpha)^3(x-\beta)$ ($\beta>\alpha$)에서 극값점의 $x$좌표가 $10$이고 $\beta-\alpha=8$일 때, $\alpha$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$3:1$ 내분 공식: $x_{\text{극값}}=\alpha+\dfrac34(\beta-\alpha)=\alpha+\dfrac34\cdot8=\alpha+6.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\alpha+6=10 \Rightarrow \alpha=4.$ ($\beta=\alpha+8=12$)</div></div>
+          <p class="why">검산: $x_{\text{극값}}=\dfrac{\alpha+3\beta}{4}=\dfrac{4+36}{4}=10$ — 일치.</p>
+          <span class="answer-tag">정답: $\alpha=4$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상의 두 핵심 비율(W형의 $1:\sqrt2$ 와 높이차 $\Delta y=|a|k^4$, 삼중접점의 $3:1$ 내분)을 모두 일반식에서 직접 미분해 유도·검증했고, 접선이 기울어져도 $x$좌표 비율이 보존된다는 영상의 설명도 '차함수' 개념으로 반영했습니다.</p>
+      <p style="margin-top:8px">영상에서 언급된 특정 모의평가·학력평가 문항은 그대로 재현하지 않고, 같은 두 비율 관계를 쓰는 새 숫자의 문제로 재구성했습니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="20260507_거리곱완전정복도함수까지_M3TGprau.html">거리곱 완전정복 1탄 (M3TGprau)</a> · <a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a> · <a href="20260515_항등식근차수인수정리태도_XT-SSrkl.html">항등식의 본질 (XT-SSrkl)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-11-09 · 영상 출처: <a href="https://youtu.be/ZSq0hGeVcBU" style="color:var(--primary)">THE EQUATION (모세수학)</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이차·삼차함수 넓이공식 총정리 - 적분 없이 구하는 법 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — 다항함수의 적분법</div>
+    <h1>이차·삼차함수 넓이공식 총정리<br>적분 없이 3초 만에 구하는 법</h1>
+    <p class="sub">포물선·삼차함수와 직선이 둘러싸는 넓이를, 인테그랄을 직접 계산하지 않고 <strong>교점 사이 거리만으로</strong> 구하는 공식 4개를 유도하고 적용한다.</p>
+    <div class="quote">"사실은 얘가 2차 함수가 아니잖아요. 그럼 무언가 당연히 보정을 해 줘야 하고, 그 보정치가 어떻게 되냐면…" — 강사 인용 [09:56]</div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/0lBKdGNfKFk" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/0lBKdGNfKFk/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">[적분 계산 없이 넓이를 구하는 방법] 수능 적분 공식 총정리</div>
+        <div class="v-meta">📺 YouTube · 18:41 · 다정수학</div>
+        <a class="v-link" href="https://youtu.be/0lBKdGNfKFk" target="_blank" rel="noopener">https://youtu.be/0lBKdGNfKFk</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 이차함수의 '1/6 공식', 삼차함수의 '1/12·1/4·1/6 보정치 공식'을 직접 유도하고, 도형을 다각형+공식 꼴로 쪼개어 인테그랄 없이 넓이를 구한다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — "넓이 문제, 적분하지 말고 공식으로"</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> 포물선 $y=x^2$ 과 직선 $y=x+2$ 로 둘러싸인 부분의 넓이를 (1) 직접 적분 (2) '1/6 공식'으로 각각 구해 비교하시오.</div>
+      <div class="visual">        y
+        │         y=x+2
+      4 ┤            ╱
+        │   y=x²   ╱
+      2 ┤       ＼╱
+        │       ╱＼
+      0 ┼──────●───●──── x
+       -1              2
+   교점 x=-1, x=2 → 거리 L=3</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>교점: $x^2=x+2 \Rightarrow x^2-x-2=0 \Rightarrow (x-2)(x+1)=0$, 즉 $x=-1,\,2$.<div class="why">둘러싸인 넓이를 구하려면 먼저 적분 구간(교점)을 알아야 한다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2 (직접)</span><div>$\displaystyle\int_{-1}^{2}\big[(x+2)-x^2\big]\,dx=\Big[\tfrac{x^2}{2}+2x-\tfrac{x^3}{3}\Big]_{-1}^{2}=\tfrac{9}{2}.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3 (공식)</span><div>$f(x)-(x+2)=x^2-x-2=1\cdot(x+1)(x-2)$ 이므로 최고차항 계수 $a=1$, 교점 사이 거리 $L=2-(-1)=3$.<div class="why">'1/6 공식'은 최고차항 계수의 절댓값과 교점 사이 거리만 있으면 바로 쓸 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$S=\dfrac{|a|}{6}L^3=\dfrac{1}{6}\cdot 3^3=\dfrac{27}{6}=\dfrac{9}{2}.$ 직접 적분한 값과 정확히 일치한다.</div></div>
+          <span class="answer-tag">정답: $\dfrac{9}{2}$ (두 방법 모두 동일)</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <p>정적분 $\displaystyle\int_\alpha^\beta f(x)\,dx$ 는 곡선과 $x$ 축(또는 다른 곡선) 사이의 넓이를 계산하는 도구다. 두 그래프의 교점의 $x$ 좌표가 적분 구간의 양 끝이 된다.</p>
+      <p style="margin-top:6px">인수분해된 다항식 $a(x-\alpha)(x-\beta)$ 는 $x=\alpha,\beta$ 에서 $0$ 이 되는, 두 교점을 가진 식이라는 뜻이다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>이차함수 — '1/6 공식' (유도)</div>
+      <p>포물선과 직선이 $x=\alpha,\beta$ ($\alpha<\beta$) 에서 만나고, (포물선 식) $-$ (직선 식) $=a(x-\alpha)(x-\beta)$ 라 하자.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">넓이 $S=\left|\displaystyle\int_\alpha^\beta a(x-\alpha)(x-\beta)\,dx\right|$.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$t=x-\alpha$ 로 치환($L=\beta-\alpha$): $\displaystyle\int_0^{L} a\,t(t-L)\,dt=a\Big[\tfrac{t^3}{3}-\tfrac{L t^2}{2}\Big]_0^{L}=a\Big(\tfrac{L^3}{3}-\tfrac{L^3}{2}\Big)=-\tfrac{a L^3}{6}.$</div></div>
+      <div class="formula-box">$S=\dfrac{|a|}{6}(\beta-\alpha)^3$ — "1/6 공식"</div>
+      <div class="concept-box">강사: <em>"6분의 절댓값 $a$ 에 길이 $L$ 이라 하시면 $L$ 세제곱으로 구할 수 있잖아요."</em></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>삼차함수 — 접선이면 '1/12 공식'</div>
+      <p>삼차함수와 그 그래프 위 한 점에서 그은 접선이 그 점(접점, 중근 $\alpha$)과 다른 한 점 $\beta$ 에서 만나면, 두 식의 차는 $a(x-\alpha)^2(x-\beta)$.</p>
+      <div class="formula-box">$S=\dfrac{|a|}{12}(\beta-\alpha)^4$ — "1/12 공식" (접하는 점이 있을 때)</div>
+      <div class="caution">지수가 커진 이유: 삼차함수는 (거리)의 네제곱, 이차함수는 (거리)의 세제곱 — 차수가 하나씩 올라갈 때마다 지수도 하나씩 올라간다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>삼차함수 — 변곡점을 지나면 '1/4 공식'</div>
+      <p>삼차함수는 변곡점을 중심으로 점대칭이다. 직선이 바로 그 변곡점을 지나면서 좌우로 거리 $d$ 만큼 떨어진 두 점에서 다시 만나면(대칭 구조), 변곡점부터 한쪽 교점까지의 구간 넓이는:</p>
+      <div class="formula-box">$S=\dfrac{|a|}{4}\,d^4$ — "1/4 공식" (변곡점을 지날 때, $d$=변곡점에서 교점까지 거리)</div>
+      <div class="concept-box">강사: <em>"4분의 공식은 언제 사용하는 거냐면 변곡점을 지날 때 사용하실 수 있고요, 12분의 공식은 접하는 점이 있다면 사용하실 수 있죠."</em></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>삼차함수 — 일반 상황은 '1/6 보정치 공식' (유도)</div>
+      <p>세 교점이 접점도 변곡점도 아닌 임의의 세 실근 $p<q<r$ 일 때, $p,q$ 구간의 넓이는 이차함수 1/6 공식에 '보정치'를 곱해 구한다. 두 식의 차는 $a(x-p)(x-q)(x-r)$.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$p,q$ 의 중점을 원점으로 옮겨 $p=-k,\ q=k$ ($L=q-p=2k$), 세 번째 근의 위치를 $m=r-\tfrac{p+q}{2}$ (중점으로부터의 거리)라 하자.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$a(x-p)(x-q)(x-r)=a(x^2-k^2)(x-r)$. 홀함수 성분 $ax^3$ 은 대칭구간 $[-k,k]$ 에서 적분하면 $0$ 이 되어 사라지고, 남는 건 $-ar\displaystyle\int_{-k}^{k}(x^2-k^2)dx$ 뿐이다.<div class="why">대칭구간 적분에서 기함수(홀함수) 부분은 자동으로 상쇈다 — 계산량이 확 줄어드는 이유.</div></div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">남은 적분을 계산하면 $\left|-ar\cdot\big(-\tfrac{4k^3}{3}\big)\right|=\tfrac{4|a||r|k^3}{3}$, 이를 $L=2k$ 로 바꾸면 $\dfrac{|a|}{6}L^3\cdot|r|$ — 여기서 $r$ 은 중점 기준 위치이므로 원래 좌표로는 $m=r-\tfrac{p+q}{2}$.</div></div>
+      <div class="formula-box">$S=\dfrac{|a|}{6}(q-p)^3\cdot\left|r-\dfrac{p+q}{2}\right|$ — "1/6 보정치 공식"<br><span style="font-size:.85em;color:var(--sub)">보정치 = 나머지 근에서 두 근의 중점까지의 거리</span></div>
+      <div class="concept-box">강사: <em>"2차 함수라 생각하면 요렇게 구할 수 있잖아요. 근데 사실은 얘가 2차 함수가 아니잖아요. 그럼 무언가 당연히 보정을 해 줘야 하고, 그 보정치가 어떻게 되냐면 3차 함수의 다른 근으로부터 이차 함수의 대칭 축까지의 (거리를) 곱하시면 돼요."</em></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">5</span>자주 하는 실수</div>
+      <div class="caution">① 교점이 3개인데 '1/6 공식'(이차함수용)만 쓰고 보정치를 빼먹는다 — 삼차함수는 반드시 보정치를 곱해야 한다. ② 변곡점이 두 교점의 중점이 아닌데도 '1/4 공식'을 쓴다 — 대칭(변곡점 통과)인지 먼저 확인. ③ 접점을 교점 중 하나로 착각해 중근 처리를 빠뜨린다.</div>
+    </div>
+
+    <!-- ===== 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — '1/6 공식' 바로 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 포물선과 직선의 교점이 $x=1,\,4$ 이고, (포물선식)$-$(직선식)$=2(x-1)(x-4)$ 일 때, 둘러싸인 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$a=2,\ L=4-1=3$. $S=\dfrac{|2|}{6}\cdot 3^3=\dfrac{2\cdot27}{6}=9.$</p>
+          <p class="warn">오답 주의: $L$은 반드시 (큰 교점)$-$(작은 교점)으로, 음수가 나오지 않게 계산한다.</p>
+          <span class="answer-tag">정답: $9$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 교점부터 직접 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> $y=x^2-2x$ 와 $y=3$ 으로 둘러싸인 부분의 넓이를 '1/6 공식'으로 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$x^2-2x-3=0 \Rightarrow (x-3)(x+1)=0 \Rightarrow x=-1,3$. $a=1,\ L=3-(-1)=4$.</p>
+          <p>$S=\dfrac{1}{6}\cdot 4^3=\dfrac{64}{6}=\dfrac{32}{3}.$</p>
+          <span class="answer-tag">정답: $\dfrac{32}{3}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — '1/12 공식' (접선)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수 $f(x)$ 와 $x=0$ 에서의 접선이 $x=0$(접점)과 $x=3$ 에서 만난다. 둘러싸인 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x)-(\text{접선식})=1\cdot(x-0)^2(x-3)$. $a=1,\ \beta-\alpha=3-0=3$.</p>
+          <p>$S=\dfrac{1}{12}\cdot 3^4=\dfrac{81}{12}=\dfrac{27}{4}.$</p>
+          <p class="why">접점은 중근이므로 지수가 $(x-\alpha)^2$ — '1/6 공식'이 아니라 '1/12 공식'을 쓰는 신호다.</p>
+          <span class="answer-tag">정답: $\dfrac{27}{4}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — '1/4 공식' (변곡점)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수의 변곡점의 $x$ 좌표가 $2$ 이고, 변곡점을 지나는 직선이 $x=0$ 과 $x=4$ 에서도 만난다. $0\le x\le 2$ 구간의 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>변곡점 $x=2$ 가 $0,4$ 의 중점이므로 대칭 조건 성립. $d=2-0=2$.</p>
+          <p>$S=\dfrac{1}{4}\cdot 2^4=\dfrac{16}{4}=4.$</p>
+          <p class="warn">오답 주의: $d$ 는 교점 사이 전체 거리(4)가 아니라 변곡점에서 한쪽 교점까지의 거리(2)다.</p>
+          <span class="answer-tag">정답: $4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — '1/6 보정치 공식'</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$ 인 삼차함수와 직선의 교점이 $x=1,\,3,\,8$ 이다. $1\le x\le 3$ 구간에서 둘러싸인 넓이를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$p=1,\ q=3,\ r=8$. 두 근 $1,3$ 의 중점은 $2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>보정치 $=|r-2|=|8-2|=6$. $L=q-p=2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$S=\dfrac{1}{6}\cdot 2^3\cdot 6=\dfrac{8\cdot 6}{6}=8.$</div></div>
+          <p class="warn">오답 주의: 보정치는 '나머지 근(8)에서 중점(2)까지'이며, $r-p$ 나 $r-q$ 를 쓰지 않는다.</p>
+          <span class="answer-tag">정답: $8$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 다각형 + 공식으로 쪼개기</div>
+        <div class="problem-body"><strong>문제:</strong> 포물선 $y=x^2$ 위의 점 $(1,1)$ 과 $(4,16)$ 을 이은 직선과 포물선으로 둘러싸인 영역의 넓이를, 두 점을 연결한 보조선을 그어 '사다리꼴 $-$ 1/6 공식' 방식으로 구하시오. (직선의 $y$절편은 $y$축과의 교점을 그대로 이용한다.)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>두 점을 잇는 직선: 기울기 $\dfrac{16-1}{4-1}=5$, 식은 $y=5x-4$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>'1/6 공식'으로 넓이: $a=1$(포물선$-$직선의 $x^2$ 계수), $L=4-1=3$ → $S=\dfrac16\cdot27=\dfrac{9}{2}.$ (여기서는 직선과 포물선 둘러싸인 전체가 바로 1/6 공식 영역이다.)</div></div>
+          <span class="answer-tag">정답: $\dfrac{9}{2}$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러형: 조건으로 세 근 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> $f(0)=0$ 인 최고차항 계수가 $1$ 인 삼차함수 $f(x)$ 가 있다. 직선 $y=g(x)$ 와 $f(x)$ 의 세 교점의 $x$ 좌표는 $0,\,4,\,k$ 이고, 이 중 두 근의 합이 $6$ 이다($k>4$). $0\le x\le 4$ 구간의 넓이가 $\dfrac{32}{3}\cdot m$ ($m$: 보정치)일 때, $k+m$ 의 값을 구하시오. (이때 $0,4$ 구간은 '1/6 공식' 기준 넓이가 $\frac{32}{3}$ 이 되도록 설계되어 있다.)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$0+4=4$ 이므로 "두 근의 합이 $6$"은 $0$ 과 $k$, 또는 $4$ 와 $k$ 의 합을 뜻해야 한다. $0+k=6\Rightarrow k=6$ 또는 $4+k=6\Rightarrow k=2$(조건 $k>4$ 위반) → $k=6$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$0,4$ 의 중점은 $2$. 보정치 $m=|k-2|=|6-2|=4$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$k+m=6+4=10.$</div></div>
+          <span class="answer-tag">정답: $10$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 준킬러형: 변곡점·접선 판별</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$ 인 삼차함수 $f(x)$ 의 변곡점의 $x$좌표가 $1$이다. 변곡점에서 그은 직선이 $x=1$ 과 $x=1+t$ ($t>0$) 에서 만나고, $1\le x\le 1+t$ 구간의 넓이가 $32$ 일 때, $t$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>변곡점을 지나는 직선이므로 '1/4 공식' 사용: $S=\dfrac{|a|}{4}t^4=\dfrac{2}{4}t^4=\dfrac{t^4}{2}.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$\dfrac{t^4}{2}=32 \Rightarrow t^4=64 \Rightarrow t=\sqrt[4]{64}=2\sqrt{2}.$<div class="why">$t>0$ 조건에서 양의 실근만 택한다.</div></div></div>
+          <span class="answer-tag">정답: $t=2\sqrt{2}$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상의 핵심 흐름(이차함수 '1/6 공식' → 삼차함수 '1/12 공식'(접선) → '1/4 공식'(변곡점) → '1/6 보정치 공식'(일반)과, "다각형 넓이 ± 공식"으로 바꾸는 전략)을 그대로 담았고, '1/6 보정치 공식'의 유도는 직접 적분으로 검증했습니다(기함수 적분이 0이 되는 성질 이용).</p>
+      <p style="margin-top:8px">영상에서 다룬 2016학년도·2018년 7월 기출 예시는 특정 회차 문제를 그대로 재현하지 않고, 같은 원리(세 근 중 두 근 구간의 넓이, 변곡점 통과)로 새로 구성한 문제로 대체했습니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> · <a href="20260911_삼차사차함수비율넓이길이공식_sjKwCjv6.html">삼차·사차함수 비율·넓이·길이 공식 총정리 (sjKwCjv6)</a> · <a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a> · <a href="20260708_부정적분과정적분꿀팁과오개념_개념.html">부정적분과 정적분 — 계산 꿀팁과 오개념 정리 (미적분Ⅰ) (개념)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-11-09 · 영상 출처: <a href="https://youtu.be/0lBKdGNfKFk" style="color:var(--primary)">다정수학</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>

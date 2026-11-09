@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>삼차함수에 숨은 비율의 비밀 - 접선과 대칭 성질 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — 다항함수의 미분법</div>
+    <h1>삼차함수에 숨은 비율의 비밀<br>접선·대칭이 알려주는 지름길</h1>
+    <p class="sub">세 실근을 가진 삼차함수의 <strong>접선이 세 번째 근을 통과하는 성질</strong>과, 변곡점을 중심으로 한 <strong>등간격·1:√3 비율</strong>을 증명하고 문제에 적용한다.</p>
+    <div class="quote">"제일 작은 실근과 중간 실근의 평균값인 $-1$ 이라는 점에서… 이 점을 지나는 3차 함수의 접선을 그리면 신기하게도 가장 큰 실근인 $(2,0)$을 지나게 됩니다." — 강사 인용 [00:11]</div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/J15bstCAzzI" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/J15bstCAzzI/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">99% 모르는 3차 함수의 비밀</div>
+        <div class="v-meta">📺 YouTube · 6:41 · 12 Math</div>
+        <a class="v-link" href="https://youtu.be/J15bstCAzzI" target="_blank" rel="noopener">https://youtu.be/J15bstCAzzI</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: 세 실근 $a<b<c$ 인 삼차함수에서 $a,b$ 의 평균에서 그은 접선이 항상 $(c,0)$ 을 지난다는 성질과, 변곡점을 중심으로 극값·동일 함숫값 지점이 등간격(1:1:1:1)이라는 성질을 직접 증명하고 적용한다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — "두 근의 평균에서 그은 접선이 세 번째 근을 지난다?"</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> $0,\,-2,\,2$ 에서 근을 가지는 삼차함수 $f(x)=x^3-4x$ 가 있다. 가장 작은 두 근 $-2,0$ 의 평균인 $x=-1$ 에서 접선을 그리면, 이 접선이 가장 큰 근 $x=2$ 를 지나는지 확인하시오.</div>
+      <div class="visual">   y
+   │
+   │      ╭──╮ f(x)=x³-4x
+───●──────●──┼──●──→ x
+  -2      -1  0   2
+           (평균점, 접선 시작)
+   접선이 정말 x=2 를 지날까?</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)=x^3-4x$. $f(-1)=-1+4=3$.<div class="why">접선을 그리려면 먼저 그 점에서의 함숫값이 필요하다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f'(x)=3x^2-4$. $f'(-1)=3-4=-1$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>접선: $y=-1\cdot(x+1)+3=-x+2.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$y=0$ 이면 $x=2$. 정확히 가장 큰 근 $x=2$ 를 지난다!</div></div>
+          <span class="answer-tag">정답: 지난다 (접선의 $x$절편이 정확히 $2$)</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <p>삼차함수를 두 번 미분하면 일차식이 되고, 그 식이 $0$ 이 되는 점이 <strong>변곡점</strong>이다. 변곡점을 중심으로 삼차함수 그래프는 <strong>점대칭</strong>이다(한 점을 변곡점 반대쪽으로 같은 거리 옮겨도 그래프 위에 있다).</p>
+      <p style="margin-top:6px">접선의 방정식은 $y=f'(x_0)(x-x_0)+f(x_0)$ — 기울기 $f'(x_0)$ 와 접점에서의 함숫값 $f(x_0)$ 만 있으면 바로 쓸 수 있다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>성질 A — "두 근의 평균 → 접선 → 세 번째 근" (유도)</div>
+      <p>세 실근 $a,b,c$ 를 가진 삼차함수(최고차항 계수 $k$)는 $f(x)=k(x-a)(x-b)(x-c)$. 이때 $a,b$ 의 평균 $m=\dfrac{a+b}{2}$ 에서 그은 접선은 <strong>항상</strong> $(c,0)$ 을 지난다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$d=\dfrac{b-a}{2}$ 라 하면 $x-a=(x-m)+d,\ x-b=(x-m)-d$. 그래서 $(x-a)(x-b)=(x-m)^2-d^2$.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$t=x-m$ 으로 치환: $f=k(t^2-d^2)(x-c)$. $f'(x)=k\big[2t(x-c)+(t^2-d^2)\big]$. $t=0$($x=m$)에서 $f'(m)=-k d^2,\ f(m)=-kd^2(m-c)$.<div class="why">접점에서 $t=0$ 이라 $(t^2-d^2)$ 항만 남아 계산이 단순해진다.</div></div></div>
+      <div class="step-row"><span class="step-num">3</span><div class="step-body">접선: $y=-kd^2(x-m)-kd^2(m-c)=-kd^2(x-c)$. $y=0$ 이면 $x=c$.</div></div>
+      <div class="formula-box">$f'(m)=-k\left(\dfrac{b-a}{2}\right)^2,\qquad$ 접선은 항상 $x=c$ 에서 $x$ 축과 만난다.</div>
+      <div class="concept-box">강사: <em>"세 실근을 가지는 함수는 최고차항이 $a$, 세 개의 실근을 $b,c,d$ 라고 한다면… $b$ 와 $c$ 의 평균값에서 접선을 그릴 텐데, 세 번째 근인 $(d,0)$ 에서 만난다는 사실을 확인하고 싶다."</em></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>성질 B — 변곡점 중심 등간격(1:1:1:1)</div>
+      <p>극대점 $x$좌표와 극소점 $x$좌표는 변곡점을 기준으로 대칭이다(같은 거리 $k$). 그리고 <strong>극대값과 같은 함숫값을 다시 갖는 점</strong>, <strong>극소값과 같은 함숫값을 다시 갖는 점</strong>까지 고려하면, 변곡점을 중심으로 다섯 점이 전부 등간격(간격 $k$)으로 나열된다.</p>
+      <div class="visual">  twin-min  극대   변곡점   극소   twin-max
+    p-2k     p-k      p       p+k     p+2k
+     ●───k───●───k────●───k────●───k────●
+            (모든 간격이 똑같이 k)</div>
+      <div class="concept-box">강사: <em>"극대값을 가지는 또 다른 함수값… 이 x좌표들이 길이가 다 같아요. 이게 1대1대1대1이 됩니다."</em></div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>성질 C — 변곡점이 근일 때의 1:√3 비율</div>
+      <p>변곡점의 함숫값이 $0$(즉 변곡점이 삼차함수의 근 중 하나)이면, 나머지 두 근은 변곡점으로부터 <strong>극값점까지의 거리의 $\sqrt3$ 배</strong>인 곳에 대칭으로 생긴다.</p>
+      <div class="formula-box">극값까지 거리 : 나머지 근까지 거리 $= 1:\sqrt3$</div>
+      <div class="concept-box">강사: <em>"이 길이와 요 점까지의 길이비가 1대 루트 3이 되어요."</em> (영상 예시 $f(x)=x^3-3x$: 극값 $x=\pm1$, 근 $x=0,\pm\sqrt3$ — 정확히 $1:\sqrt3$.)</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>왜 특정 값(이를테면 $a=1$)만 확인해도 될까?</div>
+      <p>최고차항 계수를 바꾸면 그래프가 $y$축 방향으로 늘었다 줄었다 할 뿐, $x$좌표(근·변곡점·극값점의 위치)는 전혀 바뀌지 않는다. 마찬가지로 그래프를 $x$축 방향으로 평행이동해도 '간격'이나 '비율' 같은 상대적 성질은 변하지 않는다.</p>
+      <div class="caution">그래서 "$a=1$일 때만, 또 특정 숫자로 평행이동해서 확인해도 충분하다"는 논리가 성립한다 — 모든 성질을 일반적으로 증명할 때 자주 쓰는 전략이다.</div>
+    </div>
+
+    <!-- ===== 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 성질 A 바로 확인</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수가 세 실근 $-3,-1,4$를 가진다($f(x)=(x+3)(x+1)(x-4)$). $-3,-1$의 평균인 $x=-2$에서의 접선의 방정식을 구하고, 이 접선이 $x=4$를 지나는지 확인하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x)=x^3-13x-12$. $f(-2)=-8+26-12=6$, $f'(x)=3x^2-13$, $f'(-2)=12-13=-1$.</p>
+          <p>접선: $y=-1(x+2)+6=4-x$. $y=0 \Rightarrow x=4$ — 정확히 지난다.</p>
+          <p class="warn">오답 주의: 평균을 구할 때 세 근 중 "가장 작은 두 근"의 평균이어야 한다 (가장 큰 근과의 평균이 아니다).</p>
+          <span class="answer-tag">정답: $y=4-x$, $x=4$를 지남</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 성질 B 바로 확인 (등간격)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수에서 극대점의 $x$좌표가 $-2$, 극소점의 $x$좌표가 $4$이다. 극대값과 같은 함숫값을 다시 갖는 점(twin), 극소값과 같은 함숫값을 다시 갖는 점(twin)의 $x$좌표를 각각 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>변곡점 $x=\dfrac{-2+4}{2}=1$, 간격 $k=4-1=3$.</p>
+          <p>등간격 성질: $p-2k,\,p-k,\,p,\,p+k,\,p+2k$ = $-5,\,-2,\,1,\,4,\,7$.</p>
+          <p>극대($-2$)의 twin은 $p+2k=7$, 극소($4$)의 twin은 $p-2k=-5$.</p>
+          <span class="answer-tag">정답: 극대의 twin $=7$, 극소의 twin $=-5$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — 성질 A로 새 함수 적용</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수가 세 실근 $-2,0,6$을 가진다. $-2,0$의 평균 $x=-1$에서 접선의 방정식을 구하고, $x$절편을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$f(x)=(x+2)x(x-6)=x^3-4x^2-12x$. $f(-1)=-1-4+12=7$, $f'(x)=3x^2-8x-12$, $f'(-1)=3+8-12=-1$.</p>
+          <p>접선: $y=-1(x+1)+7=6-x$. $x$절편: $x=6$ — 가장 큰 근과 정확히 일치.</p>
+          <span class="answer-tag">정답: $y=6-x$, $x$절편 $6$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — 성질 B로 역추적</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수의 변곡점의 $x$좌표가 $-2$이고, 극대점의 $x$좌표가 $-5$이다. 극소점의 $x$좌표와, 극대값의 twin 점의 $x$좌표를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>간격 $k=-2-(-5)=3$. 극소점 $=-2+3=1$.</p>
+          <p>극대의 twin $=$ 변곡점$+2k=-2+6=4$.</p>
+          <p class="why">극소의 twin까지 구하면 $-2-6=-8$ — 다섯 점 $-8,-5,-2,1,4$가 간격 $3$으로 등간격인지 확인해 보면 검산이 된다.</p>
+          <span class="answer-tag">정답: 극소점 $x=1$, 극대 twin $x=4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 성질 A + 변곡점(센트로이드)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수가 세 실근 $-5,1,9$를 가진다. (1) $-5,1$의 평균에서의 접선이 $x$축과 만나는 점의 좌표를 구하고, (2) 변곡점의 $x$좌표(세 근의 평균 $\frac{a+b+c}{3}$)를 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$f(x)=(x+5)(x-1)(x-9)=x^3-5x^2-41x+45$. 평균 $m=\dfrac{-5+1}{2}=-2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$f(-2)=-8-20+82+45=99$, $f'(x)=3x^2-10x-41$, $f'(-2)=12+20-41=-9$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>접선: $y=-9(x+2)+99=81-9x$. $y=0\Rightarrow x=9$ — 성질 A로 확인되는 가장 큰 근.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>변곡점 $x$좌표(세 근의 평균): $\dfrac{-5+1+9}{3}=\dfrac{5}{3}.$<div class="why">$f''(x)=6x-2(a+b+c)=0$에서 변곡점 $x$좌표는 늘 세 근의 평균과 같다.</div></div></div>
+          <span class="answer-tag">정답: 접선의 $x$절편 $=9$, 변곡점 $x=\dfrac{5}{3}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 성질 C (1:√3 비율)</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수의 극대점이 $x=0$, 극소점이 $x=4$이고, 변곡점에서의 함숫값이 $0$이다. 나머지 두 근을 모두 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>변곡점 $x=\dfrac{0+4}{2}=2$, 극값까지 거리 $k=2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>성질 C: 나머지 두 근은 변곡점으로부터 $\sqrt3 k=2\sqrt3$ 떨어진 대칭 위치.</div></div>
+          <div class="sol-step"><span class="sol-step-label">검산</span><div>실제로 $f'(x)=3x(x-4)$ 적분 후 $f(2)=0$ 조건을 맞추면 $f(x)=x^3-6x^2+16=(x-2)(x^2-4x-8)$, $x^2-4x-8=0\Rightarrow x=2\pm2\sqrt3$ — 일치.</div></div>
+          <span class="answer-tag">정답: $x=2+2\sqrt3,\ \ 2-2\sqrt3$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러형: 성질 A로 미지수 찾기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $2$인 삼차함수 $f(x)=2(x+1)(x-3)(x-m)$ ($m>3$)이 있다. $-1,3$의 평균인 $x=1$에서의 접선의 $y$절편이 $40$일 때, $m$의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>성질 A에 의해 이 접선은 항상 $x=m$을 지난다 — 즉 접선은 $(0, y_0)$과 $(m,0)$을 잇는 직선이므로, 기울기 $=-\dfrac{y_0}{m}$ 꼴이 된다는 사실을 미리 안다.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>직접 계산: $f(1)=2\cdot2\cdot(-2)\cdot(1-m)=8(m-1)$, $f'(x)=2\big[(x-3)(x-m)+(x+1)(x-m)+(x+1)(x-3)\big]$, $f'(1)=2\big[(-2)(1-m)+2(1-m)+(2)(-2)\big]=2\big[0-4\big]=-8$.<div class="why">$(1-3)(1-m)+(1+1)(1-m)=0$ 이 되는 건 성질 A 증명에서 쓴 $f'(m\text{지점})=-kd^2$ 관계 때문이다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>접선: $y=f'(1)(x-1)+f(1)=-8(x-1)+8(m-1)=-8x+8m$ (정리). $y$절편(= $x=0$일 때 $y$) $=8m=40 \Rightarrow m=5$.</div></div>
+          <span class="answer-tag">정답: $m=5$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 준킬러형: 성질 C로 곱 구하기</div>
+        <div class="problem-body"><strong>문제:</strong> 최고차항 계수가 $1$인 삼차함수 $f(x)$의 극대점이 $x=-3$, 극소점이 $x=3$이고, 변곡점에서의 함숫값이 $0$이다. $f(x)=0$의 나머지 두 근의 곱을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>변곡점 $x=0$, 극값까지 거리 $k=3$. 성질 C로 나머지 두 근은 $\pm\sqrt3\cdot3=\pm3\sqrt3$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>곱 $=(3\sqrt3)(-3\sqrt3)=-27.$</div></div>
+          <p class="why">검산: $f'(x)=3(x+3)(x-3)=3x^2-27$, 적분 후 $f(0)=0$ 맞추면 $f(x)=x^3-27x=x(x-3\sqrt3)(x+3\sqrt3)$ — 일치.</p>
+          <span class="answer-tag">정답: $-27$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상의 핵심 증명 흐름(최고차항 계수와 평행이동이 '비율' 성질에 영향을 주지 않는다는 논리로 특수한 경우만 확인해도 충분하다는 전략, 성질 A·B·C의 유도와 영상 속 예시 $f(x)=x^3-4x,\ x^3-3x$)을 그대로 반영했고, 모든 수치는 기호 계산으로 직접 검산했습니다.</p>
+      <p style="margin-top:8px">심화·수능 대비 문항은 영상에 나온 숫자가 아니라, 같은 세 가지 성질을 쓰는 새 숫자로 재구성했습니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20261015_미분계수인식0분의0극한_a5WAGfdU.html">0/0 꼴 극한 속에 숨은 미분계수 찾기 (a5WAGfdU)</a> · <a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="20260507_거리곱완전정복도함수까지_M3TGprau.html">거리곱 완전정복 1탄 (M3TGprau)</a> · <a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-11-09 · 영상 출처: <a href="https://youtu.be/J15bstCAzzI" style="color:var(--primary)">12 Math</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
