@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>거리곱 심화 - 차함수 보정과 스마일 거리곱</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });"></script>
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <style>
+  hr.divider{border:none;border-top:1px solid var(--border);margin:30px 0;}
+  table{border-collapse:collapse;width:100%;} th,td{padding:10px;border:1px solid var(--border);text-align:center;} th{background:var(--box-blue);}
+  .step{margin:10px 0;}
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+
+<div class="hero">
+  <div class="tag">고2 · 수학II — 다항함수의 미분법</div>
+  <h1>거리곱 심화편<br>차함수 보정과 스마일 거리곱</h1>
+  <p class="sub">거리곱이 기울어진 직선을 만나면? 극점을 모를 때는? — 시험장 마지막 무기 두 가지</p>
+  <div class="quote">
+    "거리곱이 대체 뭐냐? 인수정리를 기하학적 길이로 번역한 거야." — 강사 인용
+  </div>
+
+  <div class="video-card">
+    <a class="thumb" href="https://youtu.be/jENkl2bTJX0" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/jENkl2bTJX0/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+      <span class="play-icon">▶</span>
+    </a>
+    <div class="info">
+      <div class="v-title">거리곱 마스터클래스 | 다항함수 '거리곱'의 모든 것 총정리</div>
+      <div class="v-meta">📺 YouTube · 약 13분 · THE EQUATION (모세수학)</div>
+      <a class="v-link" href="https://youtu.be/jENkl2bTJX0" target="_blank" rel="noopener">https://youtu.be/jENkl2bTJX0</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 개념 설명 ===== -->
+  <div class="section-title">📐 개념 설명</div>
+
+  <!-- 복습: 거리곱 기본 공식 -->
+  <div class="card">
+    <div class="concept-title">⚡ 선수 학습 1분 환기 — 거리곱 기본 공식</div>
+    <p><strong>인수정리:</strong> 최고차항 계수가 $a$이고 실수 근이 $r_1, r_2, \dots, r_n$인 다항함수는
+    $f(x) = a(x-r_1)(x-r_2)\cdots(x-r_n)$ 로 쓸 수 있다. 수직선 위 점 $c$와 근 $r_i$ 사이의 거리는 $|c-r_i|$이다.</p>
+    <div class="formula-box">
+      함숫값: $|f(c)| = |a|\cdot|c-r_1|\cdots|c-r_n|$ &nbsp;&nbsp;|&nbsp;&nbsp;
+      근에서의 미분계수: $|f'(r_k)| = |a|\cdot\displaystyle\prod_{j\neq k}|r_k-r_j|$ (자기 자신은 빼고 곱한다)
+    </div>
+    <p style="margin-top:6px"><strong>중근(접하는 근):</strong> $r_k$가 $m$중근이면 거리 $|c-r_k|$가 $m$제곱으로 들어간다. 이 두 공식과 중근 규칙을 이 자료 전체에서 "이미 아는 도구"로 쓴다.</p>
+  </div>
+
+  <!-- CONCEPT 1: 차함수 거리곱 보정 - 함숫값 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">1</span>차함수 거리곱 — 기울어진 직선 위에서의 함숫값 보정</div>
+
+    <p><strong>정의:</strong> 삼차함수 $f(x)$의 그래프가 직선 $g(x)=mx+k$와 세 점 $x=r_1, r_2, r_3$에서 만난다고 하자.
+    $h(x) = f(x) - g(x)$ (차함수, "두 그래프의 높이 차")를 만들면, $h(x)$도 거리곱 공식을 그대로 쓸 수 있는 다항함수가 된다.</p>
+
+    <div class="concept-box">
+      <strong>비유:</strong> 비스듬한 책상 위에 올라간 공의 "진짜 높이"를 알고 싶은데 책상이 기울어져 있어 헷갈린다.
+      그럼 책상을 "새로운 바닥"이라 생각하고 공이 바닥에서 얼마나 떠 있는지(차함수)부터 구한 다음, 마지막에 책상 자체의 높이($g(x)$)를 더해주면 진짜 높이가 나온다.
+    </div>
+
+    <p style="margin-top:4px"><strong>작동 원리 (유도):</strong> 교점에서는 $f(r_i)=g(r_i)$이므로 $h(r_i)=f(r_i)-g(r_i)=0$, 즉 $r_1,r_2,r_3$은 $h(x)$의 근이다.
+    또한 $g(x)$는 1차식이라 $f$가 2차 이상이면 빼줘도 최고차항 계수는 그대로 $a$다. 인수정리로 바로 쓸 수 있다.</p>
+
+    <div class="step">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">$h(x) = f(x)-g(x)$ 로 정의한다. 교점 $r_1,r_2,r_3$에서 $h=0$이므로 $h(x)=a(x-r_1)(x-r_2)(x-r_3)$.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">점 $c$에서 $h(c)$를 거리곱으로 빠르게 계산한다 (식을 전개하지 않고 숫자만 곱한다).</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">마지막에 "바닥 높이" $g(c)$를 더해 진짜 함숫값을 복원한다: $f(c) = h(c) + g(c)$.</div>
+      </div>
+    </div>
+
+    <div class="formula-box">
+      $$f(c) = \underbrace{a(c-r_1)(c-r_2)(c-r_3)}_{\text{거리곱 (부호 포함)}} \;+\; \underbrace{g(c)}_{\text{직선 높이 보정}}$$
+    </div>
+
+    <div class="visual">예: f와 g(x)=x+1이 x=1,3,6에서 만남. f(4)는?
+h(x) = (x-1)(x-3)(x-6)
+h(4) = (3)(1)(-2) = -6   ← 식 전개 없이 숫자만 곱함
+g(4) = 4+1 = 5
+f(4) = h(4) + g(4) = -6 + 5 = -1</div>
+
+    <div class="caution">
+      <strong>자주 하는 실수:</strong> $h(c)$만 계산하고 끝내버리는 것. $h(c)$는 "직선 기준 상대 높이"일 뿐, $f(c)$가 아니다.
+      반드시 $g(c)$를 더해 "바닥을 복원"해야 진짜 함숫값이 된다.
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: 스마일 거리곱 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">2</span>스마일 거리곱 — 극점을 몰라도 구하는 미분계수</div>
+
+    <p><strong>정의:</strong> $f(x)=a(x-r_1)(x-r_2)(x-r_3)$에서, 근이 <em>아닌</em> 임의의 점 $p$에서의 미분계수 $f'(p)$를
+    세 근까지의 "신호가 붙은 거리"를 <strong>둘씩 짝지어 곱한 뒤 모두 더하는</strong> 방법으로 구하는 공식.</p>
+
+    <div class="concept-box">
+      <strong>비유:</strong> 극댓값·극솟값의 정확한 위치(도함수의 근)를 몰라도 상관없다. 세 근까지의 거리만 알면,
+      마치 세 사람이 둘씩 짝지어 하이파이브(둥글게 이으면 웃는 입 모양 — "스마일")하듯 곱해서 더하면 끝난다.
+    </div>
+
+    <p style="margin-top:4px"><strong>작동 원리 (유도):</strong> $f(x)=a(x-r_1)(x-r_2)(x-r_3)$을 곱의 미분법으로 미분하면 세 항의 합이 된다.</p>
+
+    <div class="step">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">$f'(x) = a\big[(x-r_2)(x-r_3) + (x-r_1)(x-r_3) + (x-r_1)(x-r_2)\big]$ (각 항은 "한 인수만 미분해서 사라지고 나머지 두 인수가 남은" 형태).</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">$x=p$를 대입하고 $L_1=p-r_1,\,L_2=p-r_2,\,L_3=p-r_3$ (신호 있는 거리, 오른쪽 근이면 음수)로 이름 붙이면:
+        $$f'(p) = a\big(L_1L_2 + L_1L_3 + L_2L_3\big)$$</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body">즉 세 거리를 <strong>둘씩 짝지어 곱한 값 세 개를 모두 더하면</strong> 끝이다. 괄호 전개가 전혀 필요 없다.</div>
+      </div>
+    </div>
+
+    <div class="formula-box">
+      $$f'(p) = a\big(L_1L_2+L_1L_3+L_2L_3\big), \quad L_i = p-r_i \;\text{(부호 있는 거리)}$$
+    </div>
+
+    <div class="visual">예: 근이 1,2,4인 삼차함수(a=1), f'(3) 구하기
+p=3 기준: L1=3-1=+2, L2=3-2=+1, L3=3-4=-1
+  (왼쪽 근이면 +, 오른쪽 근이면 -)
+짝지어 곱하기: L1L2=2, L1L3=-2, L2L3=-1
+f'(3) = 1·(2 + (-2) + (-1)) = -1</div>
+
+    <div class="caution">
+      <strong>자주 하는 실수 — 방향 부호:</strong> $p$가 근들 사이의 어중간한 지점이면 그래프만 보고 부호(+/-)를 바로 못 읽는다.
+      이때는 거리에 <strong>방향</strong>을 꼭 넣어야 한다: $p$보다 왼쪽에 있는 근까지는 $+$, 오른쪽에 있는 근까지는 $-$.
+      $p$가 모든 근보다 바깥쪽(왼쪽 끝 또는 오른쪽 끝)에 있으면 모든 거리가 같은 부호라 헷갈릴 일이 없다.
+    </div>
+
+    <div class="tip">
+      <strong>중근이 있을 때도 그대로:</strong> $r_2$가 중근이면 그냥 $(x-r_2)$를 <em>두 번</em> 쓴 목록으로 생각하고 똑같이 둘씩 짝지어 곱하면 된다
+      (심화 2에서 직접 확인한다).
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: 차함수 미분계수 보정 -->
+  <div class="card">
+    <div class="concept-title"><span class="concept-num">3</span>차함수 거리곱 — 기울어진 직선 위에서의 미분계수(접선의 기울기) 보정</div>
+
+    <p><strong>정의:</strong> 개념 1의 차함수 $h(x)=f(x)-g(x)$ 는 미분계수에도 똑같이 쓸 수 있다.
+    $h'(x) = f'(x) - g'(x)$ 이고 $g(x)=mx+k$ 이므로 $g'(x)=m$ (상수)이다. 따라서 $f'(c) = h'(c) + m$.</p>
+
+    <div class="concept-box">
+      <strong>비유:</strong> 기울어진 바닥(책상) 위에서 측정한 "상대 기울기"는 진짜 기울기가 아니다.
+      바닥 자체가 기울어진 정도($m$)를 마지막에 더해줘야 진짜 접선의 기울기가 나온다.
+    </div>
+
+    <div class="step">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body">$h(x)=a(x-r_1)(x-r_2)(x-r_3)$의 미분계수는 (근이면) 자기 빼고 거리곱, (근이 아니면) 스마일 거리곱으로 구한다.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body">직선의 기울기 $m$을 더한다: $f'(c) = h'(c) + m$.</div>
+      </div>
+    </div>
+
+    <div class="formula-box">
+      $$f'(c) = h'(c) + m$$
+    </div>
+
+    <div class="caution">
+      <strong>중요한 성질 — 접점에서는 자동으로 같다:</strong> $f$와 $g$가 $x=t$에서 <em>접한다</em>면($t$가 $h$의 중근)
+      $h'(t)=0$ 이므로 $f'(t) = m$, 즉 <strong>접점에서는 애초에 f의 접선 기울기와 직선의 기울기가 같다</strong>(당연한 성질을 거리곱으로 재확인한 것).
+      접하지 않는 교점에서는 $h'(c)\neq 0$이니 반드시 거리곱으로 계산 후 $m$을 더해야 한다.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ===== 기초 문항 ===== -->
+  <div class="level-header filterable basic">
+    <span class="level-badge badge-basic">기초</span>
+    <span style="font-weight:600; color:#2e7d32">차함수 보정 · 스마일 거리곱 기본 적용</span>
+  </div>
+
+  <div class="problem-card filterable basic">
+    <div class="problem-num">기초 1 — 차함수 함숫값 보정</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$의 그래프가 직선 $g(x)=x+1$과 $x=1,\,3,\,6$에서 만난다. $f(4)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 설정</div>
+          <div>$h(x)=f(x)-g(x)=(x-1)(x-3)(x-6)$ ($a=1$)</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">거리곱</div>
+          <div>$h(4)=(4-1)(4-3)(4-6)=3\cdot 1\cdot(-2)=-6$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">바닥 복원</div>
+          <div>$g(4)=4+1=5$ &nbsp;→&nbsp; $f(4)=h(4)+g(4)=-6+5=\mathbf{-1}$</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: -1</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card filterable basic">
+    <div class="problem-num">기초 2 — 차함수 미분계수 보정 (접점 vs 일반점)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$의 그래프가 직선 $g(x)=2x-3$과 $x=2$에서 접하고 $x=5$에서 만난다.
+      (1) $f'(2)$ &nbsp;&nbsp; (2) $f'(5)$ 의 값을 각각 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 설정</div>
+          <div>접점 $2$는 중근이므로 $h(x)=(x-2)^2(x-5)$. $g'(x)=2$ (상수).</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(1) 접점</div>
+          <div>접점에서는 $h'(2)=0$ (중근의 성질). $f'(2)=h'(2)+2=0+2=\mathbf{2}$ — 직선의 기울기와 똑같다.</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(2) 일반 교점</div>
+          <div>
+            $h'(x)=2(x-2)(x-5)+(x-2)^2$ 이므로 $h'(5)=2(3)(0)+9=9$.<br>
+            $f'(5)=h'(5)+2=9+2=\mathbf{11}$
+          </div>
+        </div>
+        <div class="why">접점에서는 보정 없이도 답이 직선 기울기와 같다 — 이게 "접한다"는 말의 진짜 의미다.</div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: (1) 2, (2) 11</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card filterable basic">
+    <div class="problem-num">기초 3 — 스마일 거리곱 (바깥쪽 점, 부호 걱정 없음)</div>
+    <div class="problem-body">
+      최고차항의 계수가 $2$인 삼차함수 $f(x)$의 세 근이 $-1, 2, 5$이다. $f'(6)$의 값을 스마일 거리곱으로 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">신호 있는 거리</div>
+          <div>$p=6$은 세 근보다 모두 오른쪽(바깥쪽)이므로 전부 $+$: $L_1=6-(-1)=7,\;L_2=6-2=4,\;L_3=6-5=1$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">둘씩 짝지어 더하기</div>
+          <div>$L_1L_2+L_1L_3+L_2L_3 = 28+7+4=39$</div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">최고차항 계수 곱하기</div>
+          <div>$f'(6) = 2\times 39 = \mathbf{78}$</div>
+        </div>
+        <div class="why">바깥쪽 점은 모든 거리가 같은 방향(+)이라 부호 걱정이 없다 — 스마일 거리곱이 가장 편한 상황이다.</div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: 78</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 기본 문항 ===== -->
+  <div class="level-header filterable standard">
+    <span class="level-badge badge-standard">기본</span>
+    <span style="font-weight:600; color:#1565c0">조건 → 미지수 결정 → 적용</span>
+  </div>
+
+  <div class="problem-card filterable standard">
+    <div class="problem-num">기본 1 — 차함수 함숫값 보정 + 미지수 결정</div>
+    <div class="problem-body">
+      최고차항의 계수가 양수 $a$인 삼차함수 $f(x)$의 그래프가 직선 $g(x)=3x-2$와 $x=1,\,4,\,7$에서 만난다. $f(0)=-58$일 때,
+      (1) $a$의 값 &nbsp;&nbsp; (2) $f'(4)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">(1) 차함수로 a 결정</div>
+          <div>
+            $h(x)=a(x-1)(x-4)(x-7)$. $h(0)=a(-1)(-4)(-7)=-28a$, $g(0)=-2$.<br>
+            $f(0)=h(0)+g(0)=-28a-2=-58 \;\Rightarrow\; -28a=-56 \;\Rightarrow\; a=\mathbf{2}$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(2) 미분계수 보정</div>
+          <div>
+            $x=4$는 $h$의 근(자기 빼고 거리곱): $h'(4)=a(4-1)(4-7)=2\cdot 3\cdot(-3)=-18$.<br>
+            $g'(x)=3$ &nbsp;→&nbsp; $f'(4)=h'(4)+g'(4)=-18+3=\mathbf{-15}$
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: (1) 2, (2) -15</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card filterable standard">
+    <div class="problem-num">기본 2 — 접점의 성질 + 미지수 결정</div>
+    <div class="problem-body">
+      최고차항의 계수가 양수 $a$인 삼차함수 $f(x)$의 그래프가 직선 $g(x)=-2x+9$와 $x=1$에서 접하고 $x=4$에서 만난다.
+      $|f'(4)|=25$일 때, (1) $a$의 값 &nbsp;&nbsp; (2) $f'(1)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">(1) 차함수로 a 결정</div>
+          <div>
+            접점 $1$이 중근: $h(x)=a(x-1)^2(x-4)$, $g'(x)=-2$.<br>
+            $h'(x)=a\big[2(x-1)(x-4)+(x-1)^2\big]=a(x-1)(3x-9)$<br>
+            $h'(4)=a(3)(3)=9a$. $f'(4)=9a-2$. $|9a-2|=25$<br>
+            $9a-2=25\Rightarrow a=3$ (양수, 채택) &nbsp;/&nbsp; $9a-2=-25\Rightarrow a=-\frac{23}{9}$ (양수 조건에 위배, 버림)<br>
+            $\therefore a=\mathbf{3}$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(2) 접점 성질</div>
+          <div>접점에서는 $h'(1)=0$이므로 $f'(1)=0+g'(1)=\mathbf{-2}$ — $a$ 값과 무관하게 직선의 기울기와 같다.</div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: (1) 3, (2) -2</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card filterable standard">
+    <div class="problem-num">기본 3 — 스마일 거리곱, 중간점 vs 바깥점 대조</div>
+    <div class="problem-body">
+      최고차항의 계수가 양수 $a$인 삼차함수 $f(x)$의 세 근이 $0,\,3,\,8$이다. $f'(5)=-22$일 때,
+      (1) $a$의 값 &nbsp;&nbsp; (2) $f'(10)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">(1) 중간점 $p=5$ — 방향 부호 주의</div>
+          <div>
+            $5$는 $3$보다 오른쪽, $8$보다 왼쪽이므로: $L_1=5-0=5(+),\;L_2=5-3=2(+),\;L_3=5-8=-3(-)$<br>
+            $L_1L_2+L_1L_3+L_2L_3 = 10+(-15)+(-6)=-11$<br>
+            $f'(5)=a\cdot(-11)=-22 \;\Rightarrow\; a=\mathbf{2}$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(2) 바깥점 $p=10$ — 모두 $+$</div>
+          <div>
+            $L_1=10,\;L_2=7,\;L_3=2$ (전부 $+$)<br>
+            $L_1L_2+L_1L_3+L_2L_3 = 70+20+14=104$<br>
+            $f'(10)=2\times 104=\mathbf{208}$
+          </div>
+        </div>
+        <div class="why">같은 공식인데 점의 위치에 따라 부호 패턴이 완전히 달라진다 — 계산 전 그림부터 그리는 습관이 중요하다.</div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: (1) 2, (2) 208</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 심화 문항 ===== -->
+  <div class="level-header filterable advanced">
+    <span class="level-badge badge-advanced">심화</span>
+    <span style="font-weight:600; color:#6a1b9a">차함수 + 스마일 거리곱 결합</span>
+  </div>
+
+  <div class="problem-card filterable advanced">
+    <div class="problem-num">심화 1 — 미지수 교점 결정 후 스마일 거리곱</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)$의 그래프가 직선 $g(x)=4x-5$와 $x=-1,\,3,\,t$ ($t$는 $3$보다 큰 정수)에서 만난다.
+      $|f'(3)|=8$일 때, (1) $t$의 값 &nbsp;&nbsp; (2) $f'(1)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">(1) t 결정</div>
+          <div>
+            $h(x)=(x+1)(x-3)(x-t)$, $g'(x)=4$. $x=3$은 $h$의 근이므로 자기 빼고 거리곱:<br>
+            $h'(3)=(3+1)(3-t)=4(3-t)$. $f'(3)=4(3-t)+4$. $|4(3-t)+4|=8$<br>
+            $4(3-t)+4=8\Rightarrow 3-t=1\Rightarrow t=2$ ($t>3$ 조건 위배, 버림)<br>
+            $4(3-t)+4=-8\Rightarrow 3-t=-3\Rightarrow t=6$ ($t>3$ 만족) &nbsp;→&nbsp; $t=\mathbf{6}$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(2) 스마일 거리곱 (근이 아닌 점 $p=1$)</div>
+          <div>
+            근: $-1,3,6$. $L_1=1-(-1)=2(+),\;L_2=1-3=-2(-),\;L_3=1-6=-5(-)$<br>
+            $L_1L_2+L_1L_3+L_2L_3=(-4)+(-10)+10=-4$<br>
+            $h'(1)=1\times(-4)=-4$. $f'(1)=h'(1)+g'(1)=-4+4=\mathbf{0}$
+          </div>
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: (1) 6, (2) 0</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="problem-card filterable advanced">
+    <div class="problem-num">심화 2 — 중근을 포함한 스마일 거리곱</div>
+    <div class="problem-body">
+      최고차항의 계수가 $1$인 삼차함수 $f(x)=(x-2)^2(x-k)$ ($k$는 $2$보다 큰 정수)에서 $f'(5)=-9$일 때,
+      (1) $k$의 값 &nbsp;&nbsp; (2) $|f(0)|$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">(1) 중근을 "두 번 쓴 근 목록"으로 간주</div>
+          <div>
+            근 목록을 $2, 2, k$로 보고 스마일 거리곱(둘씩 짝지어 더하기)을 그대로 적용:<br>
+            $p=5$에서 $L_1=5-2=3,\;L_2=5-2=3,\;L_3=5-k$<br>
+            $L_1L_2+L_1L_3+L_2L_3 = 9 + 3(5-k) + 3(5-k) = 9+6(5-k)=39-6k$<br>
+            $f'(5)=39-6k=-9 \;\Rightarrow\; k=\mathbf{8}$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">(2) 함숫값 거리곱</div>
+          <div>$f(0)=(0-2)^2(0-8)=4\times(-8)=-32$ &nbsp;→&nbsp; $|f(0)|=\mathbf{32}$</div>
+        </div>
+        <div class="why">중근은 공식을 따로 외울 필요 없이, "같은 근을 목록에 두 번 적어 놓고" 스마일 거리곱을 그대로 돌리면 된다 — 곱의 미분법 자체가 원래 그렇게 작동하기 때문이다.</div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: (1) 8, (2) 32</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 수능 대비 ===== -->
+  <div class="level-header filterable csat">
+    <span class="level-badge badge-csat">수능 대비</span>
+    <span style="font-weight:600; color:#b71c1c">준킬러 — 차함수 거리곱 종합(4점 유형)</span>
+  </div>
+
+  <div class="problem-card filterable csat">
+    <div class="problem-num">수능 대비 1 — 준킬러 (단답형 4점 유형)</div>
+    <div class="problem-body">
+      최고차항의 계수가 양수인 삼차함수 $f(x)$의 그래프가 직선 $g(x)=12x-7$과 $x=-2,\,1,\,5$에서 만난다.
+      $|f'(1)|=36$일 때, $f(3)$의 값을 구하시오.
+    </div>
+    <details>
+      <summary>풀이 보기</summary>
+      <div class="solution">
+        <div class="sol-step">
+          <div class="sol-step-label">차함수 + 미분계수 보정으로 계수 결정</div>
+          <div>
+            $h(x)=a(x+2)(x-1)(x-5)$, $g'(x)=12$. $x=1$은 $h$의 근이므로 자기 빼고 거리곱:<br>
+            $h'(1)=a(1-(-2))(1-5)=a\cdot 3\cdot(-4)=-12a$<br>
+            $f'(1)=-12a+12$. $|-12a+12|=36$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">두 경우 중 "최고차항 계수 양수" 조건으로 거르기</div>
+          <div>
+            $-12a+12=36 \Rightarrow a=-2$ (양수 조건 위배, 버림)<br>
+            $-12a+12=-36 \Rightarrow a=4$ (양수 조건 만족) &nbsp;→&nbsp; $a=4$
+          </div>
+        </div>
+        <div class="sol-step">
+          <div class="sol-step-label">함숫값 보정으로 $f(3)$ 계산</div>
+          <div>
+            $h(3)=4(3+2)(3-1)(3-5)=4\cdot 5\cdot 2\cdot(-2)=-80$<br>
+            $g(3)=12\times 3-7=29$<br>
+            $f(3)=h(3)+g(3)=-80+29=\mathbf{-51}$
+          </div>
+        </div>
+        <div class="tip">
+          <strong>이 유형의 핵심 4원칙:</strong> ① 부호는 식으로 나온 두 후보 중 그래프/조건으로 하나를 가려낸다,
+          ② 접점은 거리 제곱(중근), ③ 최고차항 계수를 끝까지 들고 간다, ④ 차함수의 결과엔 반드시 직선의 값·기울기를 더해 "바닥"을 복원한다.
+        </div>
+        <div style="margin-top:4px"><span class="answer-tag">정답: -51</span></div>
+      </div>
+    </details>
+  </div>
+
+</div>
+
+
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260505_거리곱으로함숫값미분계수_9XCRS9gd.html">다항함수 거리곱(Distance Product) — 함숫값·미분계수를 눈으로 푸는 법 (9XCRS9gd)</a> · <a href="20260507_거리곱완전정복도함수까지_M3TGprau.html">거리곱 완전정복 1탄 (M3TGprau)</a> · <a href="20260515_미분기호본질해석과미적분기본정리_eBKyLDKZ.html">미분 기호의 본질과 미적분 제1기본정리 (eBKyLDKZ)</a> · <a href="20260515_항등식근차수인수정리태도_XT-SSrkl.html">항등식의 본질 (XT-SSrkl)</a></div><!--REL_END-->
+<footer>
+  <div class="review-box" style="max-width:880px; margin-left:auto; margin-right:auto;">
+    <div class="rv-title">⚠️ 사용자 검토 권고</div>
+    <p>이 자료는 AI가 자동 생성한 초안입니다. 학생 배포 전 교사가 다음 항목을 검토해 주세요.</p>
+    <ul style="margin:8px 0 0 20px; line-height:1.8;">
+      <li>심화 2 — "중근을 목록에 두 번 적어 스마일 거리곱을 그대로 돌린다"는 설명은 곱의 미분법 전개와 수학적으로 동치임을 재확인했으나(★★☆, 직접 재검산 완료), 학생이 처음 접하면 생소할 수 있어 교사의 보충 설명을 권장합니다.</li>
+      <li>수능 대비 1은 실제 기출문제가 아닌 "거리곱 4점 유형"을 모방해 새로 구성한 문항입니다.</li>
+    </ul>
+  </div>
+  <p>본 자료는 YouTube 영상 자막을 기반으로 AI가 생성한 학습 보조 자료입니다. 출처: THE EQUATION (모세수학)</p>
+</footer>
+
+<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  function toggleDark() {
+    document.body.classList.toggle('dark');
+    try { localStorage.setItem('mathlesson-dark', document.body.classList.contains('dark') ? '1' : '0'); } catch(e) {}
+  }
+  try { if (localStorage.getItem('mathlesson-dark') === '1') document.body.classList.add('dark'); } catch(e) {}
+
+  function filterLevel(level, btn) {
+    document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.filterable').forEach(el => {
+      if (level === 'all' || el.classList.contains(level)) {
+        el.style.display = '';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+  });
+</script>
+
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
