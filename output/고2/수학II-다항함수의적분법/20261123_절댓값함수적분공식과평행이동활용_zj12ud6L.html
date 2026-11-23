@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>절댓값 함수 적분 공식과 평행이동 활용 | 학습자료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --primary: #1a73e8; --primary-dark: #0d47a1; --accent: #e53935;
+      --green: #2e7d32; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f8f9fa; --card: #ffffff; --border: #e0e0e0; --text: #212121; --sub: #616161;
+      --box-blue: #e3f2fd; --box-amber: #fff8e1; --amber-bd: #ffa000;
+      --sol-bg: #f5f5f5; --visual-bg: #fafafa; --caution-bg: #fff3e0; --tip-bg: #f3e5f5;
+      --btn-bg: #eef1f4; --btn-active: #1a73e8;
+    }
+    body.dark {
+      --bg: #15171a; --card: #1e2227; --border: #363b42; --text: #e4e6e9; --sub: #9aa0a6;
+      --box-blue: #16304a; --box-amber: #38321d; --amber-bd: #b38600;
+      --sol-bg: #23272d; --visual-bg: #191c20; --caution-bg: #3a2e1c; --tip-bg: #2c2236;
+      --primary: #5b9dff; --primary-dark: #9ec4ff; --btn-bg: #2a2f36; --btn-active: #5b9dff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard','Noto Sans KR','Apple SD Gothic Neo',sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; transition: background .2s, color .2s; }
+    .toolbar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a.back, .toolbar button { font-family: inherit; font-size: .9em; cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--btn-bg); color: var(--text); text-decoration: none; font-weight: 600; }
+    .toolbar a.back { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .toolbar button:hover { opacity: .85; }
+    .toolbar button.flt.active { background: var(--btn-active); color: #fff; border-color: var(--btn-active); }
+    .pdf-toolbar { top: 64px !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%); color: #fff; padding: 44px 24px 38px; text-align: center; }
+    .hero .tag { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 16px; font-size: 13px; margin-bottom: 14px; letter-spacing: .04em; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+    .hero p.sub { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto; }
+    .quote { background: rgba(255,255,255,0.12); border-left: 3px solid #ffd54f; padding: 10px 16px; font-size: 14px; max-width: 620px; margin: 16px auto 0; text-align: left; border-radius: 0 8px 8px 0; }
+    .video-card { max-width: 720px; margin: 26px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.12); text-align: left; }
+    .video-card a.thumb { flex-shrink: 0; position: relative; display: block; width: 200px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-card .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(229,57,53,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+    .video-card .info { flex: 1; min-width: 0; color: var(--text); }
+    .video-card .info .v-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; line-height: 1.4; }
+    .video-card .info .v-meta { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .video-card .info .v-link { font-size: 13px; color: var(--primary); word-break: break-all; }
+    .hero .learn { max-width: 720px; margin: 16px auto 0; font-size: 13.5px; opacity: .9; text-align: left; }
+    @media (max-width: 600px) { .video-card { flex-direction: column; align-items: stretch; } .video-card a.thumb { width: 100%; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px 60px; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--primary); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .concept-title { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .concept-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+    .concept-box { background: var(--box-blue); border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 14px 0; }
+    .formula-box { background: var(--box-amber); border: 2px solid var(--amber-bd); border-radius: 10px; padding: 16px 22px; margin: 14px 0; text-align: center; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .caution { background: var(--caution-bg); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .tip { background: var(--tip-bg); border-left: 4px solid var(--purple); border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0; font-size: 14px; }
+    .visual { background: var(--visual-bg); border: 1px dashed #999; border-radius: 8px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre; overflow-x: auto; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin: 36px 0 14px; }
+    .level-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #fff; }
+    .badge-basic { background: #43a047; } .badge-standard { background: #1e88e5; }
+    .badge-advanced { background: #8e24aa; } .badge-csat { background: #c62828; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+    .problem-num { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+    .problem-body { margin-bottom: 14px; line-height: 1.9; }
+    details { margin-top: 10px; }
+    summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; user-select: none; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "▶ "; font-size: .8em; }
+    details[open] summary::before { content: "▼ "; }
+    .solution { margin-top: 14px; background: var(--sol-bg); border-radius: 10px; padding: 18px 22px; line-height: 2; }
+    .sol-step { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+    .sol-step-label { flex-shrink: 0; background: var(--primary-dark); color: #fff; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-top: 5px; white-space: nowrap; }
+    .why { font-size: .92em; color: var(--sub); margin: 4px 0 4px 10px; padding-left: 10px; border-left: 3px solid var(--amber-bd); }
+    .why::before { content: "↳ 왜? "; font-weight: 700; color: var(--orange); }
+    .answer-tag { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 12px; font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .warn { color: var(--accent); font-size: .95em; }
+    .related-box { max-width: 880px; margin: 26px auto 0; padding: 14px 20px; background: var(--box-blue); border: 1px solid var(--border); border-radius: 10px; font-size: .95em; }
+    .related-box .rb-title { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+    .related-box a { color: var(--primary); text-decoration: none; }
+    .related-box a:hover { text-decoration: underline; }
+    .review-box { border: 2px solid var(--green); background: var(--box-blue); border-radius: 12px; padding: 18px 24px; margin: 30px 0 16px; }
+    .review-box .rv-title { font-weight: 700; color: var(--green); margin-bottom: 8px; }
+    footer { text-align: center; color: var(--sub); font-size: .9em; padding: 30px 16px 10px; }
+    #scrollTopBtn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2em; cursor: pointer; display: none; z-index: 60; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    @media (max-width: 600px) { .card, .problem-card { padding: 16px; } .hero { padding: 34px 16px 28px; } }
+    @media print { .toolbar, #scrollTopBtn, .video-card .play-icon { display: none !important; } body { background: #fff; color: #000; } .hero { background: #1565c0 !important; } details > .solution { display: block !important; } summary { display: none; } .problem-card, .card { page-break-inside: avoid; box-shadow: none; } }
+  </style>
+  <link rel="stylesheet" href="../../pdf-mode.css">
+</head>
+<body>
+<nav id="brand-bar" style="max-width:848px;width:calc(100% - 32px);margin:0 auto;padding:14px 20px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:'Pretendard','Noto Sans KR',sans-serif;"><a href="../../index.html" aria-label="aftermath — 갤러리 홈" style="line-height:0;flex-shrink:0;"><img src="../../assets/brand/wordmark.png" alt="aftermath" style="width:132px;height:auto;display:block;"></a><button class="gb-copy" type="button" style="min-height:38px;padding:7px 14px;border-radius:8px;border:1px solid #d0d7de;background:transparent;color:#57606a;font:inherit;font-size:0.88em;cursor:pointer;">🔗 링크 복사</button><style>.controls.hybrid-toolbar{margin-top:0!important}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}.formula-box,.step-derive,.visual,.mini-ex{overflow-x:auto}table{display:block;overflow-x:auto;max-width:100%}body{overflow-wrap:break-word}body div{min-width:0}@media print{#brand-bar .gb-link,#brand-bar .gb-copy{display:none!important}#brand-bar{padding-top:0!important;margin-bottom:6px}#brand-bar img{width:104px!important}}</style><script>(function(){var b=document.querySelector('#brand-bar .gb-copy');if(!b)return;b.addEventListener('click',function(){var u=location.href,done=function(ok){var t=b.textContent;b.textContent=ok?'✅ 복사됨':'복사 실패';setTimeout(function(){b.textContent=t;},1600);};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(u).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement('textarea');ta.value=u;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);}});})();</script></nav>
+
+
+  <div class="toolbar">
+    <a class="back" id="gallery-back" href="../../index.html">🏠 갤러리</a>
+    <button onclick="toggleDark()">🌙 다크모드</button>
+    <span class="spacer"></span>
+    <button class="flt active" onclick="filterLevel('all', this)">전체</button>
+    <button class="flt" onclick="filterLevel('basic', this)">기초</button>
+    <button class="flt" onclick="filterLevel('standard', this)">기본</button>
+    <button class="flt" onclick="filterLevel('advanced', this)">심화</button>
+    <button class="flt" onclick="filterLevel('csat', this)">수능 대비</button>
+  </div>
+
+  <div class="hero">
+    <div class="tag">고2 · 미적분Ⅰ(수학Ⅱ) — 다항함수의 적분법</div>
+    <h1>절댓값 함수의 정적분 공식<br>구간을 나누지 않고 한 줄로 끝내기</h1>
+    <p class="sub">$\int |x|\,dx$ 가 왜 $\dfrac{x|x|}{2}$ 가 되는지 미분으로 직접 증명하고, 이를 평행이동한 $\int|t-x|\,dt$ 형태에 적용해 절댓값이 포함된 정적분을 구간 분할 없이 바로 계산하는 방법을 익힌다.</p>
+    <div class="quote">"요거 미분하면 x인 거고, 요거 미분하면 -x인 거니까 이 두 개를 합체시키면 절댓값 x인 거잖아요." — 강사 인용 [03:34]</div>
+
+    <div class="video-card">
+      <a class="thumb" href="https://youtu.be/zj12ud6LcoA" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/zj12ud6LcoA/hqdefault.jpg" alt="영상 썸네일" loading="lazy" />
+        <span class="play-icon">▶</span>
+      </a>
+      <div class="info">
+        <div class="v-title">이거 푸는 경악할 비법 (이거 알면 미친듯이 빨라집니다.)</div>
+        <div class="v-meta">📺 YouTube · 4:45 · NJC 수학 | 내신 1타</div>
+        <a class="v-link" href="https://youtu.be/zj12ud6LcoA" target="_blank" rel="noopener">https://youtu.be/zj12ud6LcoA</a>
+      </div>
+    </div>
+    <p class="learn">🎯 <strong>학습 목표</strong>: $\int|x|\,dx=\dfrac{x|x|}{2}+C$ 공식을 미분으로 직접 증명하고, 평행이동한 $\int|t-x|\,dt=\dfrac{(t-x)|t-x|}{2}+C$ 형태로 바꿔 절댓값 정적분을 구간 분할 없이 계산한다. · 대상: <strong>중수준(하위 40%)도 따라갈 수 있는 호흡</strong></p>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== 도입 ===== -->
+    <div class="section-title">📌 도입 — "절댓값 적분, 구간 나누지 않고 한 줄로"</div>
+    <div class="card">
+      <div class="problem-body"><strong>문제:</strong> $\displaystyle\int_0^2 |x-1|\,dx$ 를 (1) 구간을 나눠 직접 적분 (2) 평행이동 공식 $\dfrac{(x-1)|x-1|}{2}$ 으로 각각 구해 비교하시오.</div>
+      <div class="visual">        y
+        │
+      1 ┤＼      ╱
+        │ ＼    ╱
+      0 ┼──●──●──── x
+        0   1   2
+   꼭짓점(부호 바뀌는 점) x=1</div>
+      <details open>
+        <summary>풀이 보기</summary>
+        <div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1 (직접)</span><div>$x=1$ 에서 절댓값 속 부호가 바뀌므로 구간을 나눈다: $\displaystyle\int_0^1(1-x)\,dx+\int_1^2(x-1)\,dx$.<div class="why">$|x-1|$ 은 $x<1$ 이면 $1-x$, $x\ge 1$ 이면 $x-1$ 로 식이 달라지므로 구간을 쪼개야 직접 적분할 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2 (직접)</span><div>$\Big[x-\tfrac{x^2}{2}\Big]_0^1=\tfrac12$, $\Big[\tfrac{x^2}{2}-x\Big]_1^2=\tfrac12$. 합은 $\tfrac12+\tfrac12=1$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3 (공식)</span><div>$G(x)=\dfrac{(x-1)|x-1|}{2}$ 에 바로 대입: $G(2)-G(0)=\dfrac{(1)(1)}{2}-\dfrac{(-1)(1)}{2}=\tfrac12-(-\tfrac12)=1.$<div class="why">구간을 나누지 않고 끝점 2개만 식에 넣으면 끝 — 이것이 영상에서 말하는 "한 줄 컷" 방법이다.</div></div></div>
+          <span class="answer-tag">정답: $1$ (두 방법 모두 동일)</span>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== 개념 설명 ===== -->
+    <div class="section-title">💡 개념 설명</div>
+
+    <div class="card">
+      <div class="concept-title">⚡ 선수 학습 1분 환기</div>
+      <p>미적분의 기본정리에 따르면, 함수 $f(x)$ 의 한 부정적분(원시함수)을 $F(x)$ 라 할 때 정적분은 $\displaystyle\int_a^b f(x)\,dx=F(b)-F(a)$ 로 끝점 값의 차로 계산된다. 즉 $F'(x)=f(x)$ 를 만족하는 $F$ 를 하나 찾으면, 그 뒤로는 양 끝 숫자만 대입하면 된다.</p>
+      <p style="margin-top:6px">절댓값의 정의도 다시 떠올리자: $|x|=x$ ($x\ge 0$), $|x|=-x$ ($x<0$) — 부호에 따라 식이 둘로 나뉜다.</p>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">1</span>$\int|x|\,dx=\dfrac{x|x|}{2}+C$ 인 이유 (유도)</div>
+      <p>적분은 미분의 역과정이므로, $F(x)=\dfrac{x|x|}{2}$ 를 <strong>미분해서 $|x|$ 가 나오는지</strong> 거꾸로 확인하면 공식이 성립함을 증명할 수 있다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$x>0$ 이면 $|x|=x$ 이므로 $F(x)=\dfrac{x\cdot x}{2}=\dfrac{x^2}{2}$. 미분하면 $F'(x)=x$, 이때 $x>0$ 이므로 $x=|x|$.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$x<0$ 이면 $|x|=-x$ 이므로 $F(x)=\dfrac{x\cdot(-x)}{2}=-\dfrac{x^2}{2}$. 미분하면 $F'(x)=-x$, 이때 $x<0$ 이므로 $-x=|x|$.</div></div>
+      <div class="formula-box">두 경우 모두 $F'(x)=|x|$ 이므로 $\displaystyle\int|x|\,dx=\frac{x|x|}{2}+C$</div>
+      <div class="concept-box">강사: <em>"요거 미분하면 x인 거고, 요거 미분하면 -x인 거니까 이 두 개를 합체시키면 절댓값 x인 거잖아요."</em> — 구간별로 미분한 결과 2개를 '합체'하면 하나의 식 $|x|$가 된다는 뜻이다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">2</span>평행이동 — $\int|x-a|\,dx$ 공식 (유도)</div>
+      <p>$|x-a|$ 는 $|x|$ 를 $x$축 방향으로 $a$만큼 평행이동한 그래프다. 평행이동한 함수의 부정적분도 똑같이 평행이동되므로, 앞서 구한 공식의 $x$ 자리에 $(x-a)$를 통째로 바꿔 넣으면 된다.</p>
+      <div class="formula-box">$G(x)=\dfrac{(x-a)|x-a|}{2}$ 이면 $\displaystyle\int_p^q|x-a|\,dx=G(q)-G(p)$</div>
+      <div class="caution">주의: 식 전체에서 $x$ 를 $(x-a)$ 로 바꿔야 한다. $\dfrac{x|x-a|}{2}$ 처럼 앞의 $x$만 남기고 뒤만 바꾸는 실수를 자주 한다.</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">3</span>변수를 바꿔 적용하기 — $\int|t-x|\,dt$</div>
+      <p>$f(x)=\displaystyle\int_0^L|t-x|\,dt$ 처럼 <strong>적분 변수가 $t$</strong>이고 $x$ 는 적분이 끝날 때까지 상수처럼 취급되는 식이 자주 나온다. 이때는 공식의 $a$ 자리에 $x$를 넣고, $t$에 대해 끝점만 대입한다.</p>
+      <div class="step-row"><span class="step-num">1</span><div class="step-body">$g(t)=|t-x|$ 의 부정적분은 (2번 공식에서 변수만 $t$로) $G(t)=\dfrac{(t-x)|t-x|}{2}$.</div></div>
+      <div class="step-row"><span class="step-num">2</span><div class="step-body">$f(x)=G(L)-G(0)=\dfrac{(L-x)|L-x|}{2}-\dfrac{(-x)|-x|}{2}=\dfrac{(L-x)|L-x|}{2}+\dfrac{x|x|}{2}$.<div class="why">$x$ 가 적분 구간 $[0,L]$ 안에 있는지 밖에 있는지 신경 쓰지 않아도, 이 식 하나로 모든 경우가 자동으로 처리된다 — 영상이 강조하는 핵심 장점.</div></div></div>
+      <div class="formula-box">$\displaystyle\int_0^L|t-x|\,dt=\dfrac{(L-x)|L-x|}{2}+\dfrac{x|x|}{2}$ (모든 실수 $x$ 에서 성립)</div>
+    </div>
+
+    <div class="card">
+      <div class="concept-title"><span class="concept-num">4</span>자주 하는 실수</div>
+      <div class="caution">① $|t-x|$ 를 $|x-t|$ 로 착각해 부호를 반대로 적용한다 — $|t-x|=|x-t|$ 이므로 값은 같지만, 어느 변수에 대해 적분하는지($dt$ 인지 $dx$ 인지)는 반드시 확인해야 한다. ② $f(x)$ 자체는 구간 분할 없이 구했더라도, 그 $f(x)$ 를 다시 $x$ 에 대해 적분하거나 최솟값을 구할 때는 $|L-x|$, $|x|$ 의 부호가 바뀌는 지점(경계)에서 또 구간을 나눠야 한다 — 이 두 단계를 혼동하지 않는다. ③ 평행이동 공식에서 $(x-a)$ 를 일부만 바꾸는 실수.</div>
+    </div>
+
+    <!-- ===== 문항 ===== -->
+    <div class="section-title">📝 수준별 문항 (기초 2 / 기본 2 / 심화 2 / 수능 대비 2)</div>
+    <div id="problems">
+
+      <div class="level-header filterable basic"><span class="level-badge badge-basic">기초</span></div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 1 — 기본 공식 바로 적용</div>
+        <div class="problem-body"><strong>문제:</strong> $F(x)=\dfrac{x|x|}{2}$ 를 이용하여 $\displaystyle\int_{-2}^{3}|x|\,dx$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$F(3)-F(-2)=\dfrac{3\cdot 3}{2}-\dfrac{(-2)\cdot 2}{2}=\dfrac{9}{2}-(-2)=\dfrac{13}{2}.$</p>
+          <p class="warn">오답 주의: $F(-2)=\dfrac{(-2)|-2|}{2}=\dfrac{(-2)(2)}{2}=-2$ — 음수 대입 시 부호를 빠뜨리기 쉽다.</p>
+          <span class="answer-tag">정답: $\dfrac{13}{2}$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable basic">
+        <div class="problem-num">기초 2 — 평행이동 공식 적용</div>
+        <div class="problem-body"><strong>문제:</strong> $G(x)=\dfrac{(x-3)|x-3|}{2}$ 를 이용하여 $\displaystyle\int_{1}^{5}|x-3|\,dx$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>$G(5)-G(1)=\dfrac{(2)(2)}{2}-\dfrac{(-2)(2)}{2}=2-(-2)=4.$</p>
+          <p class="warn">오답 주의: $a=3$ 이므로 공식의 $x$ 자리에 반드시 $(x-3)$ 을 통째로 넣어야 한다.</p>
+          <span class="answer-tag">정답: $4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable standard"><span class="level-badge badge-standard">기본</span></div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 1 — $t$에 대한 적분, $x$는 구간 안</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\displaystyle\int_0^2|t-x|\,dt$ 일 때, $f(1)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <p>공식 $f(x)=\dfrac{(2-x)|2-x|}{2}+\dfrac{x|x|}{2}$ 에 $x=1$ 대입: $f(1)=\dfrac{(1)(1)}{2}+\dfrac{(1)(1)}{2}=\dfrac12+\dfrac12=1.$</p>
+          <p class="why">직접 확인: $\int_0^1(1-t)\,dt+\int_1^2(t-1)\,dt=\tfrac12+\tfrac12=1$ — 공식과 일치한다.</p>
+          <span class="answer-tag">정답: $1$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable standard">
+        <div class="problem-num">기본 2 — $x$가 구간 밖인 경우</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\displaystyle\int_0^2|t-x|\,dt$ 일 때, $f(3)$ 의 값을 구하시오. ($x=3$ 은 적분 구간 $[0,2]$ 밖에 있다.)</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>공식에 그대로 $x=3$ 대입: $f(3)=\dfrac{(2-3)|2-3|}{2}+\dfrac{3|3|}{2}=\dfrac{(-1)(1)}{2}+\dfrac{9}{2}=-\dfrac12+\dfrac92=4.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2 (검증)</span><div>$x=3>2$ 이므로 구간 $[0,2]$ 전체에서 $t<3$, 즉 $|t-3|=3-t$. $\int_0^2(3-t)\,dt=\big[3t-\tfrac{t^2}{2}\big]_0^2=6-2=4.$ 공식과 일치.<div class="why">$x$ 가 적분 구간 밖에 있어도 공식에 "구간 안인지 미리 판단"하는 과정 없이 바로 대입할 수 있다 — 이것이 공식의 진짜 장점이다.</div></div></div>
+          <span class="answer-tag">정답: $4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable advanced"><span class="level-badge badge-advanced">심화</span></div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 1 — 일반식으로 구하고 특정값 확인</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\displaystyle\int_0^4|t-x|\,dt$ 를 모든 실수 $x$ 에 대한 식으로 나타내고, 이를 이용해 $f(2)$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$L=4$ 를 공식에 대입: $f(x)=\dfrac{(4-x)|4-x|}{2}+\dfrac{x|x|}{2}$ (모든 실수 $x$ 에서 성립).</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$x=2$ 대입: $f(2)=\dfrac{(2)(2)}{2}+\dfrac{(2)(2)}{2}=2+2=4.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3 (검증)</span><div>직접: $\int_0^2(2-t)\,dt+\int_2^4(t-2)\,dt=2+2=4.$ 일치.</div></div>
+          <p class="why">출제 의도: $f(x)$ 자체를 하나의 식으로 완성해 두면, 이후 어떤 $x$ 값을 묻든 대입만 하면 된다는 것을 확인시키는 문항.</p>
+          <span class="answer-tag">정답: $4$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable advanced">
+        <div class="problem-num">심화 2 — 적분과 미분의 결합, 최솟값</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\displaystyle\int_0^4|t-x|\,dt$ 가 $0\le x\le 4$ 에서 최솟값을 가질 때, 그 $x$ 의 값과 최솟값을 각각 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>$0\le x\le 4$ 에서는 $4-x\ge 0,\ x\ge 0$ 이므로 절댓값을 그대로 벗길 수 있다: $f(x)=\dfrac{(4-x)^2}{2}+\dfrac{x^2}{2}.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>미분: $f'(x)=-(4-x)+x=2x-4.$<div class="why">정적분으로 만들어진 함수도 다항함수이므로 보통의 미분법으로 극값을 찾을 수 있다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$f'(x)=0 \Rightarrow x=2$. $f''(x)=2>0$ 이므로 $x=2$ 에서 최소.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$f(2)=\dfrac{2^2}{2}+\dfrac{2^2}{2}=2+2=4.$</div></div>
+          <p class="warn">오답 주의: $0\le x\le4$ 밖까지 고려해 절댓값을 함부로 벗기면 식이 달라진다 — 구간을 반드시 먼저 확인한다.</p>
+          <span class="answer-tag">정답: $x=2$ 일 때 최솟값 $4$</span>
+        </div></details>
+      </div>
+
+      <div class="level-header filterable csat"><span class="level-badge badge-csat">수능 대비</span></div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 1 — 준킬러형: 이중 적분 구조</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\displaystyle\int_0^3|t-x|\,dt$ 일 때, $\displaystyle\int_0^3 f(x)\,dx$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>공식: $f(x)=\dfrac{(3-x)|3-x|}{2}+\dfrac{x|x|}{2}$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>적분 구간이 $0\le x\le 3$ 이므로 $3-x\ge0,\ x\ge0$ — 절댓값을 그대로 벗길 수 있다: $f(x)=\dfrac{(3-x)^2}{2}+\dfrac{x^2}{2}.$<div class="why">바깥 적분의 구간($[0,3]$)이 안쪽 공식의 구간과 똑같을 때는 절댓값 부호가 안쪽에서 이미 정리돼 있어 추가로 쪼갤 필요가 없다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$\displaystyle\int_0^3\dfrac{(3-x)^2}{2}\,dx=\dfrac12\cdot\Big[-\dfrac{(3-x)^3}{3}\Big]_0^3=\dfrac12\cdot 9=\dfrac92$, 같은 방법으로 $\displaystyle\int_0^3\dfrac{x^2}{2}\,dx=\dfrac92.$</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>둘을 더하면 $\dfrac92+\dfrac92=9.$</div></div>
+          <p class="why">출제 의도: 절댓값 정적분 공식을 "안쪽(한 번)"과 "바깥쪽(한 번)" 두 번 연속 적용하는 구조로, 공식을 기계적으로만 외운 학생과 원리를 이해한 학생을 가르는 문항.</p>
+          <span class="answer-tag">정답: $9$</span>
+        </div></details>
+      </div>
+
+      <div class="problem-card filterable csat">
+        <div class="problem-num">수능 대비 2 — 준킬러형: 바깥 적분 구간이 더 넓은 경우</div>
+        <div class="problem-body"><strong>문제:</strong> $f(x)=\displaystyle\int_0^2|t-x|\,dt$ 일 때, $\displaystyle\int_{-1}^{3} f(x)\,dx$ 의 값을 구하시오.</div>
+        <details><summary>풀이 보기</summary><div class="solution">
+          <div class="sol-step"><span class="sol-step-label">STEP 1</span><div>공식: $f(x)=\dfrac{(2-x)|2-x|}{2}+\dfrac{x|x|}{2}$. 이번엔 바깥 적분 구간 $[-1,3]$ 이 안쪽 구간 $[0,2]$ 보다 넓어서, $x=0$ 과 $x=2$ 에서 절댓값 부호가 각각 바뀐다 — 세 구간으로 나눠야 한다.<div class="why">앞 문제(수능 대비 1)와 달리 바깥 구간이 안쪽 구간을 벗어나므로, 이번엔 $f(x)$ 를 $x$ 에 대해 적분하기 전에 구간을 쪼개는 단계가 반드시 필요하다.</div></div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 2</span><div>$-1\le x\le0$: $|x|=-x,\ |2-x|=2-x$ → $f(x)=\dfrac{(2-x)^2}{2}-\dfrac{x^2}{2}=2-2x$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 3</span><div>$0\le x\le2$: $|x|=x,\ |2-x|=2-x$ → $f(x)=\dfrac{(2-x)^2}{2}+\dfrac{x^2}{2}=x^2-2x+2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 4</span><div>$2\le x\le3$: $|x|=x,\ |2-x|=x-2$ → $f(x)=\dfrac{(x-2)^2}{2}+\dfrac{x^2}{2}=2x-2$.</div></div>
+          <div class="sol-step"><span class="sol-step-label">STEP 5</span><div>각 구간을 적분: $\int_{-1}^0(2-2x)dx=3$, $\int_0^2(x^2-2x+2)dx=\dfrac83$, $\int_2^3(2x-2)dx=3$. 합: $3+\dfrac83+3=\dfrac{26}{3}.$</div></div>
+          <p class="warn">오답 주의: 바깥 적분 구간이 안쪽 구간보다 넓으면 반드시 경계점(여기서는 $x=0,\,2$)에서 쪼개야 한다 — 수능 대비 1처럼 구간이 똑같은 경우와 혼동하면 안 된다.</p>
+          <span class="answer-tag">정답: $\dfrac{26}{3}$</span>
+        </div></details>
+      </div>
+
+    </div>
+
+    <div class="review-box">
+      <div class="rv-title">✅ 검증 / 교사 검토 권장</div>
+      <p>영상의 핵심 흐름(정석 풀이의 90%가 $f(x)$ 의 정체를 파악하는 과정이라는 점 → $\int|x|\,dx=\tfrac{x|x|}{2}$ 공식을 미분으로 직접 증명 → 평행이동해 $\int|t-x|\,dt$ 형태에 적용 → 구간 분할 없이 $f(x)$ 를 바로 얻는 "한 줄 컷")을 그대로 담았습니다. 공식 유도(개념 1)는 직접 미분으로, 문항 풀이는 모두 직접 계산(구간 분할 적분)으로 교차 검증했습니다.</p>
+      <p style="margin-top:8px">영상은 말로 설명한 강의이고 판서 속 정확한 숫자(원문제의 $f(x)$ 정의, 적분 구간)는 자막만으로 복원할 수 없어, 같은 원리(절댓값 적분 공식 + 평행이동 + 구간 분할)로 숫자를 새로 구성한 문제로 대체했습니다. "수능 대비"는 난이도 라벨일 뿐 <strong>실재 기출이 아닙니다.</strong></p>
+    </div>
+
+  </div>
+
+  
+<!--REL_START--><div class="related-box" id="related-box" style="max-width:848px;width:calc(100% - 32px);margin:26px auto 0;padding:14px 20px;background:#e3f2fd;border:1px solid #e0e0e0;border-radius:10px;font-size:.95em;font-family:'Pretendard','Noto Sans KR',sans-serif;"><div class="rb-title" style="font-weight:700;margin-bottom:6px;">🔗 관련 자료</div><a href="20260515_삼차함수점대칭적분차함수관점_C3o6VJbn.html">삼차함수 점대칭 적분 (C3o6VJbn)</a> · <a href="20260817_적분넓이팩토리얼일반화공식_X-cjFae.html">적분 넓이 팩토리얼 일반화공식과 3차함수 중간선 보정법 (X-cjFae)</a> · <a href="20261120_적분거리곱과비율관계로넓이빠르게구하기_bg_UpFIA.html">적분 거리곱 (UpFIA)</a> · <a href="20260520_이차삼차넓이공식과도함수비율_n3s7P4y3.html">다항함수의 넓이 공식 (n3s7P4y3)</a></div><!--REL_END-->
+<footer>
+    생성일 2026-11-23 · 영상 출처: <a href="https://youtu.be/zj12ud6LcoA" style="color:var(--primary)">NJC 수학 | 내신 1타</a><br>
+    AI가 영상 분석 기초자료로 자동 생성한 학습자료입니다. 학생 배포 전 교사 검토 권장. · 단축키 <kbd>D</kbd> 다크모드
+  </footer>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+
+  <script>
+    function toggleDark() { document.body.classList.toggle('dark'); }
+    function filterLevel(level, btn) {
+      document.querySelectorAll('.toolbar .flt').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('#problems .filterable').forEach(el => {
+        el.style.display = (level === 'all' || el.classList.contains(level)) ? '' : 'none';
+      });
+      if (level !== 'all') document.getElementById('problems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') toggleDark();
+    });
+  </script>
+  <script defer src="../../pdf-mode.js"></script>
+</body>
+</html>
